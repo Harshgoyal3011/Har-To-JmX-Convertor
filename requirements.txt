@@ -1,0 +1,7 @@
+# Self-Healing HAR → JMeter
+# Python 3.10+ recommended.
+#
+# This project uses the standard library only.
+# `pip install -r requirements.txt` completes successfully with nothing extra to install.
+#
+# Optional future deps can be listed below (one package per line).
