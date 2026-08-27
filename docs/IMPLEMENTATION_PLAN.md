@@ -59,5 +59,8 @@ immediate IR-flatten.
 - **M4 — workflow / transaction discovery:** ✅ done (6 tests). Groups requests into user actions
   (supporting calls nested), generic business-meaningful names from endpoint semantics, no per-API
   inflation; annotates `context.transaction`. Additive, no behavior change.
+- **M5 — business entity discovery:** ✅ done (6 tests). Discovers entities + attributes from payload
+  structure (nested-key / path-noun / id-prefix naming), identifier detection, instance counts,
+  wrappers/tokens excluded. Additive, no behavior change.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
