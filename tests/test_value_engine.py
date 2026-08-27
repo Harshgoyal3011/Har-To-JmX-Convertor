@@ -48,6 +48,18 @@ def test_ambiguous_value_is_unknown_not_wired():
     assert v not in r.parameters()
 
 
+def test_echoed_user_input_is_master_data_not_runtime():
+    # customerName is sent by the client, echoed in the create response, then reused in a PUT.
+    # It must stay BUSINESS_MASTER_DATA — not become a runtime correlation just because the server
+    # echoed it. Only the server-generated orderId is runtime.
+    r = _result("sample_echo.har")
+    name = r.by_value("Sally")
+    assert name.classification == ValueClass.BUSINESS_MASTER_DATA
+    assert name.lifecycle == Lifecycle.USER_INPUT
+    oid = r.by_value("NEW1")
+    assert oid.classification == ValueClass.RUNTIME_GENERATED
+
+
 def test_every_verdict_has_reason():
     for name in ("sample_lineage.har", "sample_flow.har", "sample_entities.har"):
         for v in _result(name).verdicts:
