@@ -3,7 +3,10 @@
 **Status:** design only. No core behavior is changed by this document.
 **Companion:** [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md) (milestones, file changes, tests).
 **Audit basis:** the full codebase (see [`ARCHITECTURE.md`](ARCHITECTURE.md) and the Phase-1 context map) plus a
-real defect analysis of the Max Healthcare HIS capture (`generated/*_b3be1bfd50.md`).
+defect analysis of the current engine's output on a real enterprise capture. **The engine must stay
+application-agnostic** — no capture is treated as a reference to tune toward. Sample output is used
+only to surface *general* failure patterns; detectors are evidence/heuristic-based, never hardcoded
+to any app, vendor, or domain, and are validated across multiple app types.
 
 ---
 
@@ -50,7 +53,8 @@ HAR bytes
 
 ## 2. Root causes of the current defects (evidence-based)
 
-Diagnosed from the real Max Healthcare output, not assumed:
+Diagnosed from the current engine's output on a real enterprise capture — these are **general**
+failure patterns of the algorithms, not tied to any one application:
 
 | # | Defect (observed) | Root cause | Where |
 |---|---|---|---|
@@ -58,7 +62,7 @@ Diagnosed from the real Max Healthcare output, not assumed:
 | R2 | Static `.svg`/`.json` act as correlation producers & consumers | Filter is binary keep/drop; kept requests fully participate in correlation | `har/filter.py`, `correlations/` |
 | R3 | List responses explode (`submenuId`×22, `bedStatusId`×9) | Each array element's id becomes a separate rule; dedup keys on (var,value) so distinct values survive | `correlations/discover.py` |
 | R4 | "+321 consumers" incl. static fetches; `bedStatusId` "consumed by /connect/token" | `_find_consumers` = loose substring match anywhere; short/numeric values collide | `correlations/discover.py` |
-| R5 | Static reference data (`/HISJson/*.json`) becomes CSV "business entity" | `classify_producer_as_existing_entity` returns True for any GET+JSON+id | `correlations/reclassify.py` |
+| R5 | Static reference-data JSON (lookup/master tables served as files) becomes CSV "business entity" | `classify_producer_as_existing_entity` returns True for any GET+JSON+id | `correlations/reclassify.py` |
 | R6 | 157 params / 20 CSVs; placeholders (`"string"`, `"Address"`) captured | Name-keyword net + sibling-field dragging; no value-quality gate; no dataset-need gate | `parameters/`, `entities.py` |
 | R7 | Misclassification (`bedStatusId` = "Security Identifier") | Classification from shallow name/shape rules, not lifecycle/evidence | `correlations/discover.py:classify_identifier` |
 
@@ -160,7 +164,8 @@ The prompt's rule "preserve working functionality unless intentionally replaced"
 4. **Cut over per stage**: as each new stage lands and beats the old on precision, route the live
    pipeline through it; delete the superseded code only after cutover.
 
-**Hard dependency:** stages P7–P18 are tuned and *measured* against a real capture. We need the Max
-Healthcare `.har` (and ideally 2–3 others) in `examples/` to make "less rubbish" a number, not an
-opinion. Milestones 1–2 (IR + noise) can begin without it; accuracy milestones cannot be validated
-without it.
+**Hard dependency:** stages P7–P18 are *measured*, not guessed. We need representative real captures
+in `examples/` — **ideally 2–3 spanning different app types/domains** so detectors are validated for
+generality rather than tuned to any single app — to make "less rubbish" a number, not an opinion.
+Milestones 1–2 (IR + noise) can begin without them; accuracy milestones cannot be signed off without
+them.

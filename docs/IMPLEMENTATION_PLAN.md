@@ -20,7 +20,7 @@ and do not proceed on a regression.
 |---|---|---|---|---|
 | **1** | **IR + parser normalization** | `ir/normalized.py`*, `ir/build.py`* (reuse `har/reader.py` primitives) | `tests/test_ir_build.py` | Rich IR builds from HAR; request/response/context fields populated; body type (json/form/multipart/graphql/soap/xml) detected. Live path untouched. |
 | 0.5 | Golden regression net | `tests/test_golden_jmx.py`* + `tests/fixtures/` | golden test | Current JMX for a fixed HAR is snapshotted and locked. |
-| 2 | Request noise classification | `classify/request_noise.py`* | `tests/test_request_noise.py` | Each request tagged static/telemetry/auth/business/poll/upload/download; beacons (`/eum/`, mPulse, `ak_*`) and statics tagged, not deleted. `RequestClassificationReport`. |
+| 2 | Request noise classification | `classify/request_noise.py`* | `tests/test_request_noise.py` | Each request tagged static/telemetry/auth/business/poll/upload/download using **general vendor + shape patterns** (known RUM/telemetry vendors — Akamai mPulse/boomerang, GA, Adobe, Dynatrace, AppDynamics…; static extensions/paths), tagged not deleted. `RequestClassificationReport`. |
 | 3 | Application & auth understanding | `understand/application.py`*, `understand/auth.py`* | tests | App style + auth mechanism detected **only** with HAR evidence. |
 | 4 | Workflow / transaction discovery | `workflow/transactions.py`* | tests | Transactions = user actions; supporting calls nested; no per-API inflation; business-meaningful names. |
 | 5 | Business entity discovery | `entities/discovery.py`* | tests | Entities + attributes grouped from payload/URL/response structure. |
@@ -40,12 +40,13 @@ immediate IR-flatten.
 
 ## Knowledge / inputs still needed
 
-1. **Real HAR(s) in `examples/`** — the Max Healthcare capture at minimum (local, git-ignored). Blocks
-   sign-off of M7–M12.
-2. **Rough ground truth** — 3–5 values that truly matter for replay + "the `ak_*`/`mob_*` beacons are
-   noise," so precision can be scored.
-3. **Target scope confirmation** — primary app families to optimize first (Healthcare/HIS given the
-   sample; confirm if SAP/Salesforce/Guidewire are near-term targets so detectors are prioritized).
+1. **Representative real HAR(s) in `examples/`** — one or more, **ideally 2–3 across different app
+   types/domains** so detectors are validated for generality and nothing overfits (local, git-ignored).
+   No single capture is a reference target. Blocks sign-off of M7–M12.
+2. **Rough ground truth per capture** — 3–5 values that truly matter for replay, plus which traffic is
+   noise (e.g. known RUM/telemetry vendors), so precision can be scored objectively.
+3. **Target scope** — which app families to prioritize first (e.g. REST/JSON SPA, SAP, Salesforce,
+   Guidewire, ServiceNow). No default is assumed; detectors stay evidence-based and app-agnostic.
 
 ## Status
 
