@@ -50,5 +50,8 @@ immediate IR-flatten.
 
 ## Status
 
-- **M1: in progress** (this change) — additive IR, no behavior change.
+- **M1 — normalized IR:** ✅ done (8 tests). Additive, no behavior change.
+- **M2 — request noise classification:** ✅ done (8 tests). Tags roles + exclusion on the IR;
+  `build_request_classification_report`. Additive, no behavior change.
+- **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.

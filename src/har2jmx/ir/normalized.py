@@ -102,6 +102,11 @@ class RequestClassification:
     polling_candidate: bool = False
     upload_candidate: bool = False
     download_candidate: bool = False
+    # Decision (Milestone 2): should this request be excluded from business replay/scripting?
+    # A request is only excluded when it does not contribute to business replay. Never deleted —
+    # excluded requests remain in the capture and are listed in the classification report.
+    excluded: bool = False
+    exclusion_reason: str = ""
 
 
 @dataclass
