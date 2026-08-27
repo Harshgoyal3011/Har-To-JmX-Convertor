@@ -1,0 +1,327 @@
+"""Milestone 12 (cutover) — JMX emitter.
+
+Turns an ``EngineResult`` into a runnable JMeter test plan: an N-user Thread Group, HTTP defaults,
+Cookie Manager, one CSV Data Set per parameter dataset, Transaction Controllers per user action, one
+HTTP sampler per business request with correlated/parameterized values substituted (``${var}``), and
+JSON/Regex extractors attached to the producing sampler for each correlation.
+
+Substitution is whole-slot (a captured value is replaced only where it appears as a complete
+path segment / query value / body field / header / cookie), reusing the M7 discipline.
+"""
+
+from __future__ import annotations
+
+import csv as _csv
+import json as _json
+from collections import Counter
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+from xml.dom import minidom
+from xml.etree.ElementTree import Element, SubElement, tostring
+
+from har2jmx.correlate import ExtractorType
+from har2jmx.engine import EngineResult
+from har2jmx.ir.normalized import BodyKind, NormalizedRequest
+
+
+# ---------------------------------------------------------------- xml prop helpers
+
+def _s(parent, name, value=""):
+    el = SubElement(parent, "stringProp", {"name": name}); el.text = value; return el
+
+
+def _b(parent, name, value):
+    el = SubElement(parent, "boolProp", {"name": name}); el.text = "true" if value else "false"; return el
+
+
+def _elem(parent, name, etype):
+    return SubElement(parent, "elementProp", {"name": name, "elementType": etype})
+
+
+def _coll(parent, name):
+    return SubElement(parent, "collectionProp", {"name": name})
+
+
+# ---------------------------------------------------------------- substitution
+
+def _build_sub_map(result: EngineResult) -> dict[str, str]:
+    sub: dict[str, str] = {}
+    for c in result.correlations:                       # correlations win over parameters
+        sub[str(c.value)] = f"${{{c.variable}}}"
+    for d in result.parameterization.datasets:
+        for col in d.columns:
+            for row in d.rows:
+                v = row.get(col.name)
+                if v not in (None, ""):
+                    sub.setdefault(str(v), f"${{{col.name}}}")
+            if col.sample:
+                sub.setdefault(str(col.sample), f"${{{col.name}}}")
+    return sub
+
+
+def _apply(value: Any, sub: dict[str, str]) -> str:
+    return sub.get(str(value), str(value))
+
+
+def _sub_json(obj: Any, sub: dict[str, str]) -> Any:
+    if isinstance(obj, dict):
+        return {k: _sub_json(v, sub) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sub_json(v, sub) for v in obj]
+    if isinstance(obj, bool) or obj is None:
+        return obj
+    if isinstance(obj, (str, int, float)):
+        s = str(obj)
+        return sub[s] if s in sub else obj
+    return obj
+
+
+def _sub_path(path: str, sub: dict[str, str]) -> str:
+    parts = path.split("/")
+    return "/".join(_apply(p, sub) if p else p for p in parts)
+
+
+# ---------------------------------------------------------------- samplers & extractors
+
+def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str]) -> None:
+    http = SubElement(parent_ht, "HTTPSamplerProxy", {
+        "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
+        "testname": f"{req.method} {_sub_path(req.request.path, sub)}",
+        "enabled": "true",
+    })
+    args = _elem(http, "HTTPsampler.Arguments", "Arguments")
+    coll = _coll(args, "Arguments.arguments")
+
+    raw_body = ""
+    if req.request.body.kind in {BodyKind.JSON, BodyKind.GRAPHQL} and req.request.body.json is not None:
+        raw_body = _json.dumps(_sub_json(req.request.body.json, sub))
+    elif req.request.body.kind in {BodyKind.XML, BodyKind.SOAP, BodyKind.TEXT} and req.request.body.raw:
+        raw_body = _apply(req.request.body.raw, sub)
+
+    _b(http, "HTTPSampler.postBodyRaw", bool(raw_body))
+    if raw_body:
+        arg = _elem(coll, "", "HTTPArgument")
+        _b(arg, "HTTPArgument.always_encode", False)
+        _s(arg, "Argument.value", raw_body)
+        _s(arg, "Argument.metadata", "=")
+    else:
+        for name, value in list(req.request.query) + list(req.request.body.form):
+            arg = _elem(coll, name, "HTTPArgument")
+            _b(arg, "HTTPArgument.always_encode", False)
+            _s(arg, "Argument.name", name)
+            _s(arg, "Argument.value", _apply(value, sub))
+            _s(arg, "Argument.metadata", "=")
+            _b(arg, "HTTPArgument.use_equals", True)
+
+    _s(http, "HTTPSampler.domain", req.request.host)
+    _s(http, "HTTPSampler.port", req.request.port)
+    _s(http, "HTTPSampler.protocol", req.request.scheme)
+    _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub))
+    _s(http, "HTTPSampler.method", req.method)
+    _b(http, "HTTPSampler.follow_redirects", True)
+    _b(http, "HTTPSampler.use_keepalive", True)
+
+    sampler_ht = SubElement(parent_ht, "hashTree")
+    _add_header_manager(sampler_ht, req, sub)
+
+
+def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str]) -> None:
+    headers = [(n, v) for n, v in req.request.headers
+               if n.lower() not in {"host", "content-length", "cookie"} and v]
+    if req.request.cookies:
+        cookie_val = "; ".join(f"{n}={_apply(v, sub)}" for n, v in req.request.cookies)
+        headers.append(("Cookie", cookie_val))
+    if not headers:
+        return
+    mgr = SubElement(parent_ht, "HeaderManager", {
+        "guiclass": "HeaderPanel", "testclass": "HeaderManager",
+        "testname": "HTTP Header Manager", "enabled": "true"})
+    coll = _coll(mgr, "HeaderManager.headers")
+    for name, value in headers:
+        h = _elem(coll, "", "Header")
+        _s(h, "Header.name", name)
+        _s(h, "Header.value", value if name == "Cookie" else _apply(value, sub))
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_json_extractor(parent_ht, variable: str, expr: str) -> None:
+    ex = SubElement(parent_ht, "JSONPostProcessor", {
+        "guiclass": "JSONPostProcessorGui", "testclass": "JSONPostProcessor",
+        "testname": f"Extract {variable} (JSON)", "enabled": "true"})
+    _s(ex, "JSONPostProcessor.referenceNames", variable)
+    _s(ex, "JSONPostProcessor.jsonPathExprs", expr)
+    _s(ex, "JSONPostProcessor.match_numbers", "1")
+    _s(ex, "JSONPostProcessor.defaultValues", f"NOT_FOUND_{variable}")
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_regex_extractor(parent_ht, variable: str, expr: str, use_headers: bool) -> None:
+    ex = SubElement(parent_ht, "RegexExtractor", {
+        "guiclass": "RegexExtractorGui", "testclass": "RegexExtractor",
+        "testname": f"Extract {variable} (Regex)", "enabled": "true"})
+    _s(ex, "RegexExtractor.useHeaders", "true" if use_headers else "false")
+    _s(ex, "RegexExtractor.refname", variable)
+    _s(ex, "RegexExtractor.regex", expr)
+    _s(ex, "RegexExtractor.template", "$1$")
+    _s(ex, "RegexExtractor.default", f"NOT_FOUND_{variable}")
+    _s(ex, "RegexExtractor.match_number", "1")
+    SubElement(parent_ht, "hashTree")
+
+
+# ---------------------------------------------------------------- config elements
+
+def _add_test_plan(root_ht, name, config):
+    tp = SubElement(root_ht, "TestPlan", {
+        "guiclass": "TestPlanGui", "testclass": "TestPlan", "testname": name, "enabled": "true"})
+    _s(tp, "TestPlan.comments", "Generated by har2jmx from a HAR capture.")
+    _b(tp, "TestPlan.functional_mode", False)
+    _b(tp, "TestPlan.serialize_threadgroups", False)
+    args = _elem(tp, "TestPlan.user_defined_variables", "Arguments")
+    coll = _coll(args, "Arguments.arguments")
+    for var, val, desc in [("THREADS", config.get("threads", "10"), "Concurrent users"),
+                           ("LOOPS", config.get("loops", "1"), "Iterations per user"),
+                           ("RAMP", config.get("ramp", "5"), "Ramp-up seconds")]:
+        a = _elem(coll, var, "Argument")
+        _s(a, "Argument.name", var); _s(a, "Argument.value", val)
+        _s(a, "Argument.metadata", "="); _s(a, "Argument.desc", desc)
+    _s(tp, "TestPlan.user_define_classpath", "")
+    return tp
+
+
+def _add_thread_group(parent_ht):
+    tg = SubElement(parent_ht, "ThreadGroup", {
+        "guiclass": "ThreadGroupGui", "testclass": "ThreadGroup",
+        "testname": "Users", "enabled": "true"})
+    _s(tg, "ThreadGroup.on_sample_error", "continue")
+    loop = _elem(tg, "ThreadGroup.main_controller", "LoopController")
+    _b(loop, "LoopController.continue_forever", False)
+    _s(loop, "LoopController.loops", "${LOOPS}")
+    _s(tg, "ThreadGroup.num_threads", "${THREADS}")
+    _s(tg, "ThreadGroup.ramp_time", "${RAMP}")
+    _b(tg, "ThreadGroup.scheduler", False)
+
+
+def _add_http_defaults(parent_ht, result: EngineResult):
+    business = [r for r in result.capture.requests if not r.classification.excluded]
+    hosts = Counter(r.request.host for r in business if r.request.host)
+    if not hosts:
+        return
+    host, _ = hosts.most_common(1)[0]
+    proto = next((r.request.scheme for r in business if r.request.host == host), "https")
+    cfg = SubElement(parent_ht, "ConfigTestElement", {
+        "guiclass": "HttpDefaultsGui", "testclass": "ConfigTestElement",
+        "testname": "HTTP Request Defaults", "enabled": "true"})
+    _elem(cfg, "HTTPsampler.Arguments", "Arguments")
+    _s(cfg, "HTTPSampler.domain", host)
+    _s(cfg, "HTTPSampler.protocol", proto)
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_cookie_manager(parent_ht):
+    mgr = SubElement(parent_ht, "CookieManager", {
+        "guiclass": "CookiePanel", "testclass": "CookieManager",
+        "testname": "HTTP Cookie Manager", "enabled": "true"})
+    _coll(mgr, "CookieManager.cookies")
+    _b(mgr, "CookieManager.clearEachIteration", True)
+    _s(mgr, "CookieManager.policy", "standard")
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_csv_dataset(parent_ht, dataset_name, filename, columns):
+    cfg = SubElement(parent_ht, "CSVDataSet", {
+        "guiclass": "TestBeanGUI", "testclass": "CSVDataSet",
+        "testname": f"Test Data - {dataset_name}", "enabled": "true"})
+    _s(cfg, "filename", filename)
+    _s(cfg, "fileEncoding", "UTF-8")
+    _s(cfg, "variableNames", ",".join(columns))
+    _s(cfg, "delimiter", ",")
+    _b(cfg, "quotedData", True)
+    _b(cfg, "recycle", True)
+    _b(cfg, "stopThread", False)
+    _s(cfg, "shareMode", "shareMode.all")
+    SubElement(parent_ht, "hashTree")
+
+
+# ---------------------------------------------------------------- top level
+
+def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
+                  csv_files: dict[str, str] | None = None) -> bytes:
+    config = config or {}
+    csv_files = csv_files or {}
+    sub = _build_sub_map(result)
+    producer_map: dict[int, list] = {}
+    for c in result.correlations:
+        if c.extractor != ExtractorType.COOKIE_MANAGER:
+            producer_map.setdefault(c.producer_index, []).append(c)
+
+    root = Element("jmeterTestPlan", {"version": "1.2", "properties": "5.0", "jmeter": "5.6.3"})
+    root_ht = SubElement(root, "hashTree")
+    name = f"har2jmx Plan {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+    _add_test_plan(root_ht, name, config)
+    plan_ht = SubElement(root_ht, "hashTree")
+
+    _add_thread_group(plan_ht)
+    tg_ht = SubElement(plan_ht, "hashTree")
+
+    _add_http_defaults(tg_ht, result)
+    _add_cookie_manager(tg_ht)
+    for d in result.parameterization.datasets:
+        fname = csv_files.get(d.name, f"{d.name.lower()}.csv")
+        _add_csv_dataset(tg_ht, d.name, fname, [c.name for c in d.columns])
+
+    cap = result.capture
+    for txn in result.transactions:
+        biz = [i for i in txn.request_indices if not cap.requests[i].classification.excluded]
+        if not biz:
+            continue
+        tc = SubElement(tg_ht, "TransactionController", {
+            "guiclass": "TransactionControllerGui", "testclass": "TransactionController",
+            "testname": txn.name, "enabled": "true"})
+        _b(tc, "TransactionController.parent", True)
+        _b(tc, "TransactionController.includeTimers", False)
+        tc_ht = SubElement(tg_ht, "hashTree")
+        for idx in biz:
+            req = cap.requests[idx]
+            _add_http_sampler(tc_ht, req, sub)
+            # the sampler's own hashTree is the last child of tc_ht
+            sampler_ht = list(tc_ht)[-1]
+            for c in producer_map.get(idx, []):
+                if c.extractor == ExtractorType.JSON:
+                    _add_json_extractor(sampler_ht, c.variable, c.expression)
+                else:
+                    use_headers = c.producer_location.startswith(("set-cookie:", "response.header:"))
+                    _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)
+
+    rough = tostring(root, encoding="utf-8")
+    return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")
+
+
+def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] | None = None,
+             name: str = "test_plan") -> tuple[Path, list[Path]]:
+    """Write the .jmx and its CSV files to out_dir. Returns (jmx_path, [csv_paths])."""
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    csv_files: dict[str, str] = {}
+    csv_paths: list[Path] = []
+    for d in result.parameterization.datasets:
+        fname = f"{name}_{d.name.lower()}.csv"
+        csv_files[d.name] = fname
+        path = out / fname
+        with path.open("w", newline="", encoding="utf-8") as fh:
+            w = _csv.writer(fh)
+            cols = [c.name for c in d.columns]
+            w.writerow(cols)
+            seen: set[tuple] = set()
+            for row in d.rows:
+                cells = tuple(row.get(c, "") for c in cols)
+                if cells in seen:                       # drop duplicate rows (echoed occurrences)
+                    continue
+                seen.add(cells)
+                w.writerow(cells)
+        csv_paths.append(path)
+
+    xml = build_jmx_xml(result, config, csv_files)
+    jmx_path = out / f"{name}.jmx"
+    jmx_path.write_bytes(xml)
+    return jmx_path, csv_paths
