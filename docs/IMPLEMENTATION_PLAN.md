@@ -68,5 +68,9 @@ immediate IR-flatten.
 - **M7 — value lineage / dependency graph:** ✅ done (6 tests). Producer→value→consumers across all
   locations; **whole-slot** (no substring) matching + transform-aware equality (int/str/encoded/path).
   Kills the loose-match false-consumer defect. Additive, no behavior change.
+- **M8 — value classification engine:** ✅ done (6 tests). Every significant value →
+  STATIC / BUSINESS_MASTER_DATA / RUNTIME_GENERATED / UNKNOWN by lifecycle (existed-before vs
+  created-this-run) + entity association; UNKNOWN never auto-wired; correlations/parameters
+  partitioned. Additive, no behavior change.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
