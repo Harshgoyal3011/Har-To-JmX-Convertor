@@ -88,6 +88,7 @@ class RequestContext:
     pageref: str = ""
     referer: str = ""
     initiator: str = ""                  # best-effort from HAR _initiator
+    transaction: str = ""                # user-action name (Milestone 4)
 
 
 @dataclass

@@ -56,5 +56,8 @@ immediate IR-flatten.
 - **M3 — application & auth understanding:** ✅ done (6 tests). Evidence-gated `ApplicationProfile`
   (API style / server stack / SPA / enterprise platform) + `AuthProfile` (mechanisms, token refresh,
   primary). Nothing claimed without evidence. Additive, no behavior change.
+- **M4 — workflow / transaction discovery:** ✅ done (6 tests). Groups requests into user actions
+  (supporting calls nested), generic business-meaningful names from endpoint semantics, no per-API
+  inflation; annotates `context.transaction`. Additive, no behavior change.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
