@@ -65,5 +65,8 @@ immediate IR-flatten.
 - **M6 — entity relationships:** ✅ done (6 tests). Links entities via foreign keys / path nesting /
   JSON nesting / co-response; preserves aligned instance rows (merged across list+detail); topological
   ordering. Additive, no behavior change.
+- **M7 — value lineage / dependency graph:** ✅ done (6 tests). Producer→value→consumers across all
+  locations; **whole-slot** (no substring) matching + transform-aware equality (int/str/encoded/path).
+  Kills the loose-match false-consumer defect. Additive, no behavior change.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
