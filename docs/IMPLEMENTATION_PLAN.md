@@ -78,5 +78,8 @@ immediate IR-flatten.
 - **M10 — entity parameterization + CSV optimizer:** ✅ done (5 tests). Entity-centric datasets with
   aligned rows; need-gated (unused master data skipped, not a CSV); runtime values excluded;
   non-entity inputs consolidated into one dataset; no per-field explosion. Additive.
+- **M11 — replay validator:** ✅ done (5 tests). Static checks: consumed-before-extracted, runtime-in-
+  CSV (critical), master-data-correlated, missing correlations, session repeatability, per-iteration
+  data variation; weighted score + gate; ambiguities flagged not guessed. Additive.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
