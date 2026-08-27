@@ -123,16 +123,19 @@ class _Record:
     scalars: dict[str, Any]
     identifier_field: str | None
     source_index: int
-    source_kind: str  # "request" | "response"
+    source_kind: str            # "request" | "response"
+    parent_entity: str | None = None   # nearest enclosing emitted entity (nesting evidence)
 
 
 def _extract_records(obj: Any, key_context: str | None, path_noun: str,
-                     source_index: int, source_kind: str, out: list[_Record], depth: int = 0) -> None:
+                     source_index: int, source_kind: str, out: list[_Record], depth: int = 0,
+                     ancestor: str | None = None) -> None:
     if depth > _MAX_DEPTH:
         return
     if isinstance(obj, dict):
         scalars = {k: v for k, v in obj.items() if _scalar(v) and str(v).strip() != ""}
         id_fields = [k for k in scalars if _is_id_field(k)]
+        emitted = ancestor
         if scalars and (id_fields or len(scalars) >= 2):
             name = _entity_name(scalars, key_context, path_noun)
             if name:
@@ -142,13 +145,29 @@ def _extract_records(obj: Any, key_context: str | None, path_noun: str,
                     identifier_field=_pick_identifier(name, list(scalars)),
                     source_index=source_index,
                     source_kind=source_kind,
+                    parent_entity=ancestor,
                 ))
+                emitted = name
         for k, v in obj.items():
             if isinstance(v, (dict, list)):
-                _extract_records(v, k, path_noun, source_index, source_kind, out, depth + 1)
+                _extract_records(v, k, path_noun, source_index, source_kind, out, depth + 1, emitted)
     elif isinstance(obj, list):
         for item in obj[:_MAX_LIST_ITEMS]:
-            _extract_records(item, key_context, path_noun, source_index, source_kind, out, depth + 1)
+            _extract_records(item, key_context, path_noun, source_index, source_kind, out, depth + 1, ancestor)
+
+
+def extract_entity_records(cap: NormalizedCapture) -> list[_Record]:
+    """Extract raw entity records (aligned scalar rows) from all non-excluded payloads."""
+    records: list[_Record] = []
+    for req in cap.requests:
+        if req.classification.excluded:
+            continue
+        noun = _path_noun(req)
+        if req.request.body.json is not None:
+            _extract_records(req.request.body.json, None, noun, req.index, "request", records)
+        if req.response.body.json is not None:
+            _extract_records(req.response.body.json, None, noun, req.index, "response", records)
+    return records
 
 
 def _pick_identifier(entity_name: str, fields: list[str]) -> str | None:
@@ -224,15 +243,7 @@ class _Agg:
 
 def discover_entities(cap: NormalizedCapture) -> list[BusinessEntity]:
     """Discover business entities and their attributes from request/response payloads."""
-    records: list[_Record] = []
-    for req in cap.requests:
-        if req.classification.excluded:
-            continue
-        noun = _path_noun(req)
-        if req.request.body.json is not None:
-            _extract_records(req.request.body.json, None, noun, req.index, "request", records)
-        if req.response.body.json is not None:
-            _extract_records(req.response.body.json, None, noun, req.index, "response", records)
+    records = extract_entity_records(cap)
 
     aggs: dict[str, _Agg] = {}
     for rec in records:

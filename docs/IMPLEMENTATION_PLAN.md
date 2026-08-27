@@ -62,5 +62,8 @@ immediate IR-flatten.
 - **M5 — business entity discovery:** ✅ done (6 tests). Discovers entities + attributes from payload
   structure (nested-key / path-noun / id-prefix naming), identifier detection, instance counts,
   wrappers/tokens excluded. Additive, no behavior change.
+- **M6 — entity relationships:** ✅ done (6 tests). Links entities via foreign keys / path nesting /
+  JSON nesting / co-response; preserves aligned instance rows (merged across list+detail); topological
+  ordering. Additive, no behavior change.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
