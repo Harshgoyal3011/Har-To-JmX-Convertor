@@ -81,10 +81,16 @@ def build_parameterization(cap: NormalizedCapture,
             cols.setdefault(variable_name(idf), idf)          # keep identity for referential meaning
         rows_src = model.instances.get(ent, [])
         rows = []
+        seen_rows: set[tuple] = set()
         for r in rows_src:
             row = {col: ("" if r.get(fld) is None else str(r.get(fld))) for col, fld in cols.items()}
-            if any(val != "" for val in row.values()):
-                rows.append(row)
+            if not any(val != "" for val in row.values()):
+                continue
+            key = tuple(row[col] for col in cols)
+            if key in seen_rows:                      # distinct rows only — no duplicate test data
+                continue
+            seen_rows.add(key)
+            rows.append(row)
         if not cols or not rows:
             plan.skipped.append((ent, "no usable rows for parameterization"))
             continue

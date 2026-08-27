@@ -2,15 +2,25 @@ from __future__ import annotations
 
 import functools
 import json
+import uuid
+import zipfile
 from html import escape
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+from har2jmx.emit import emit_jmx
+from har2jmx.engine import analyze
 from har2jmx.paths import OUTPUT_DIR, ROOT
-from har2jmx.pipeline_v2 import convert_har_v2
-from har2jmx.reports import build_summary
 from har2jmx.server.multipart import parse_multipart
+from har2jmx.webreport import build_web_summary
+
+
+def _clamp(raw: str, minimum: int, default: int) -> str:
+    try:
+        return str(max(minimum, int(str(raw).strip())))
+    except (TypeError, ValueError):
+        return str(default)
 
 
 class AppHandler(SimpleHTTPRequestHandler):
@@ -30,20 +40,28 @@ class AppHandler(SimpleHTTPRequestHandler):
             length = int(self.headers.get("Content-Length", "0"))
             upload, fields = parse_multipart(self.headers, self.rfile.read(length))
             config = {
-                "threads": fields.get("threads", "1"),
-                "loops": fields.get("loops", "1"),
-                "ramp": fields.get("ramp", "1"),
-                "clearCookies": fields.get("clearCookies", "false"),
+                "threads": _clamp(fields.get("threads", "10"), 1, 10),
+                "loops": _clamp(fields.get("loops", "1"), 1, 1),
+                "ramp": _clamp(fields.get("ramp", "5"), 0, 5),
             }
-            # Use new pipeline with AI review layer
-            result = convert_har_v2(upload, config)
-            payload = build_summary(result)
-            payload.update({
-                "threads": result.thread_count,
-                "loops": result.loops,
-                "ramp": result.ramp_time,
-                "clearCookies": result.clear_cookies,
-            })
+            # New reasoning engine → runnable JMX + parameter CSVs + downloadable bundle.
+            result = analyze(upload)
+            result_id = uuid.uuid4().hex[:10]
+            jmx_path, csv_paths = emit_jmx(result, OUTPUT_DIR, config, name=f"har2jmx_{result_id}")
+
+            bundle_path = OUTPUT_DIR / f"har2jmx_{result_id}.zip"
+            with zipfile.ZipFile(bundle_path, "w", zipfile.ZIP_DEFLATED) as zf:
+                zf.write(jmx_path, arcname=jmx_path.name)
+                for c in csv_paths:
+                    zf.write(c, arcname=c.name)
+
+            downloads = {
+                "jmx": jmx_path.name,
+                "zip": bundle_path.name,
+                "csvs": [c.name for c in csv_paths],
+            }
+            payload = build_web_summary(result, result_id, downloads)
+            payload["config"] = config
             self.respond_json(payload)
         except Exception as exc:
             self.respond_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
