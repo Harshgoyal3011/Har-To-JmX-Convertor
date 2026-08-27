@@ -72,5 +72,8 @@ immediate IR-flatten.
   STATIC / BUSINESS_MASTER_DATA / RUNTIME_GENERATED / UNKNOWN by lifecycle (existed-before vs
   created-this-run) + entity association; UNKNOWN never auto-wired; correlations/parameters
   partitioned. Additive, no behavior change.
+- **M9 — lifecycle-aware correlation:** ✅ done (5 tests). RUNTIME_GENERATED + consumed → correlation
+  decisions with structured-first extractors (JSON > header regex > Set-Cookie); cookies via Cookie
+  Manager; no extractor without a consumer; no duplicates; master data never correlated. Additive.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
