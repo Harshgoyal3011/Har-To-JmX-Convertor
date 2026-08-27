@@ -87,9 +87,14 @@ immediate IR-flatten.
 
 **All 12 milestones complete — new reasoning pipeline built & tested (71 tests, 0 regressions).**
 
-## Remaining: cutover (integration, not a reasoning milestone)
-The new engine (`har2jmx.engine.analyze`) runs alongside the legacy live path. Remaining work to
-ship it: emit JMX from `EngineResult` (reuse `jmx/builder`), route `pipeline`/`server` through
-`analyze`, add the golden-file test, then retire the legacy `correlations/`, `parameters/`, and dead
-`pipeline.py`. This is the productization step (CLI + cutover), gated on a real-HAR precision check.
+## Cutover status
+- **JMX emitter** ✅ `emit/jmx.py` — `EngineResult` → runnable `.jmx` (N-user thread group,
+  correlation extractors, entity CSV datasets, transaction controllers, whole-slot substitution).
+- **Web server cutover** ✅ `server/handler.py` now runs `engine.analyze` → `emit_jmx` and returns a
+  rich summary (`webreport.py`); the modern console UI (`static/`) renders it. Legacy `pipeline_v2`
+  no longer touched by the server.
+- **Real-HAR validation** ✅ live restful-booker capture → `{token, bookingid}` correlated, entity
+  datasets, replay 97, downloadable bundle.
+- **Remaining (optional):** a `har2jmx convert` CLI + golden-file test, then retire legacy
+  `correlations/`, `parameters/`, `pipeline*.py`, `reports/`, `analyzer/` once nothing imports them.
 - Everything else: designed, not started.
