@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from har2jmx.engine import EngineResult
+
+_TOKENISH = re.compile(r"token|session|auth|jwt|sid", re.IGNORECASE)
 
 
 def _mask(value: str) -> str:
@@ -12,6 +15,18 @@ def _mask(value: str) -> str:
     if len(v) > 10:
         return f"{v[:4]}…{v[-3:]}"
     return v
+
+
+def _derived_auth_list(result: EngineResult) -> list[str]:
+    # If no standard mechanism matched but a token-like value is correlated, report it (evidence-backed).
+    if any(_TOKENISH.search(c.variable) for c in result.correlations):
+        return ["Token session"]
+    return []
+
+
+def _derived_auth(result: EngineResult) -> str | None:
+    d = _derived_auth_list(result)
+    return d[0] if d else None
 
 
 def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str, Any]) -> dict[str, Any]:
@@ -45,8 +60,8 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             "enterprise": [d.name for d in app.enterprise_platforms],
         },
         "auth": {
-            "primary": result.auth.primary,
-            "mechanisms": [d.name for d in result.auth.mechanisms],
+            "primary": result.auth.primary or _derived_auth(result),
+            "mechanisms": [d.name for d in result.auth.mechanisms] or _derived_auth_list(result),
             "tokenRefresh": result.auth.token_refresh,
         },
         "transactions": [
