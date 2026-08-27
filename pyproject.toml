@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "har2jmx"
+version = "0.1.0"
+description = "Convert a browser HAR capture into a correlated, parameterized Apache JMeter test plan."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+keywords = ["jmeter", "har", "load-testing", "performance", "correlation", "parameterization"]
+
+# Runtime uses the Python standard library only — no third-party dependencies.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]
+
+[project.scripts]
+# Today this launches the local web UI. Phase 3 turns it into `convert` / `serve`
+# subcommands (see docs/ARCHITECTURE.md → Roadmap).
+har2jmx = "har2jmx.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+har2jmx = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+src = ["src"]
+
+[tool.mypy]
+python_version = "3.10"
+packages = ["har2jmx"]
+mypy_path = "src"
+ignore_missing_imports = true

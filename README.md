@@ -1,57 +1,73 @@
-# Self-Healing HAR → JMeter
+# har2jmx — Self-Healing HAR → JMeter
 
-Convert a browser HAR capture into a correlated, parameterized JMeter test plan.
+Convert a browser **HAR** capture into a correlated, parameterized **Apache JMeter** test plan
+(`.jmx` + CSV data + reports). Record a real business journey in the browser; `har2jmx`
+reconstructs it as a replayable load test — automatically handling the two hard parts of
+JMeter scripting:
 
-## Stack
+- **Correlation** — captures server-generated dynamic values (session cookies, CSRF tokens,
+  object IDs) and replays them, *only* when it can prove the value is reused downstream.
+- **Parameterization** — lifts user inputs (emails, search terms, chosen IDs) into CSV data
+  so each virtual user varies, and clusters related fields into coherent records.
 
-- Python 3.10+ (stdlib only — no third-party packages)
-- Stdlib HTTP server (`ThreadingHTTPServer`)
-- Vanilla HTML / CSS / JS frontend
+Python 3.10+, **standard library only** — no third-party runtime dependencies.
 
-## Setup & run
-
-From the project folder:
-
-```bash
-cd "/Users/mrmed/Desktop/python project"
-
-# Create a virtual environment (skip if .venv already exists)
-python3 -m venv .venv
-
-# Activate it
-source .venv/bin/activate
-
-# Install dependencies (stdlib-only; this step is safe and keeps the workflow consistent)
-pip install -r requirements.txt
-
-# Start the app
-python -m app
-```
-
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000), upload a HAR, set workload options, and download the generated zip (JMX + CSV + reports).
-
-Stop the server with `Ctrl+C`.
-
-### Already have `.venv`?
+## Quick start
 
 ```bash
-cd "/Users/mrmed/Desktop/python project"
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m app
+# from the repo root
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -e .                 # installs the `har2jmx` package + command
+
+har2jmx                          # starts the local web UI at http://127.0.0.1:8000
 ```
 
-## Package layout
+Open <http://127.0.0.1:8000>, upload a HAR, set the workload (threads / loops / ramp), and
+download the generated zip. Stop the server with `Ctrl+C`.
 
-| Path | Role |
-|------|------|
-| `app/har/` | HAR parse, filter, transaction grouping |
-| `app/parameters/` | Business-input discovery and CSV entities |
-| `app/correlations/` | Dynamic-value correlation engine |
-| `app/validation/` | Rules 8–10 quality gate |
-| `app/jmx/` | JMX XML builder |
-| `app/reports/` | Summary JSON and markdown reports |
-| `app/pipeline.py` | End-to-end `convert_har` |
-| `app/server/` | HTTP API and static file serving |
-| `static/` | Upload UI |
-| `generated/` | Runtime output |
+> Running from source without installing? Use `PYTHONPATH=src python -m har2jmx`.
+
+## Project layout
+
+```
+har2jmx/
+├── src/har2jmx/         ← the package (importable, installable)
+│   ├── pipeline_v2.py       end-to-end conversion: convert_har_v2()
+│   ├── models.py            core dataclasses (SamplerModel, CorrelationRule, …)
+│   ├── patterns.py          the regex/rule knowledge base
+│   ├── har/                 parse HAR, filter static noise, group transactions
+│   ├── analyzer/            structure, dependency graph, value-origin, review
+│   ├── correlations/        find & classify server-generated dynamic values
+│   ├── parameters/          discover business inputs, cluster entities, write CSVs
+│   ├── validation/          Rules 8–10 quality gate + auto-corrections
+│   ├── jmx/                 assemble the JMeter XML test plan
+│   ├── reports/             markdown reports + JSON summary
+│   ├── server/              stdlib HTTP API + static/ web UI
+│   └── ir/                  intermediate representation (migration in progress)
+├── tests/               ← test suite (+ fixtures/)
+├── examples/            ← sample HAR captures
+├── docs/                ← ARCHITECTURE.md and archived design notes
+├── generated/           ← runtime output (git-ignored)
+└── pyproject.toml
+```
+
+## The pipeline
+
+One call, six stages (`src/har2jmx/pipeline_v2.py`):
+
+```
+HAR bytes → analyze → correlate → parameterize → validate → review → emit → zip
+```
+
+See **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** for the full design, the stage
+contracts, and the roadmap to a market-ready CLI.
+
+## Development
+
+```bash
+pip install -e ".[dev]"
+pytest            # run the tests
+ruff check src    # lint
+mypy              # type-check
+```
