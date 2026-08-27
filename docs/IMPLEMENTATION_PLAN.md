@@ -53,5 +53,8 @@ immediate IR-flatten.
 - **M1 — normalized IR:** ✅ done (8 tests). Additive, no behavior change.
 - **M2 — request noise classification:** ✅ done (8 tests). Tags roles + exclusion on the IR;
   `build_request_classification_report`. Additive, no behavior change.
+- **M3 — application & auth understanding:** ✅ done (6 tests). Evidence-gated `ApplicationProfile`
+  (API style / server stack / SPA / enterprise platform) + `AuthProfile` (mechanisms, token refresh,
+  primary). Nothing claimed without evidence. Additive, no behavior change.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
