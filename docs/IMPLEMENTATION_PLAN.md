@@ -75,5 +75,8 @@ immediate IR-flatten.
 - **M9 — lifecycle-aware correlation:** ✅ done (5 tests). RUNTIME_GENERATED + consumed → correlation
   decisions with structured-first extractors (JSON > header regex > Set-Cookie); cookies via Cookie
   Manager; no extractor without a consumer; no duplicates; master data never correlated. Additive.
+- **M10 — entity parameterization + CSV optimizer:** ✅ done (5 tests). Entity-centric datasets with
+  aligned rows; need-gated (unused master data skipped, not a CSV); runtime values excluded;
+  non-entity inputs consolidated into one dataset; no per-field explosion. Additive.
 - **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
 - Everything else: designed, not started.
