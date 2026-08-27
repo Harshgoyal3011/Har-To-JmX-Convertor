@@ -8,7 +8,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from app.paths import OUTPUT_DIR, ROOT
-from app.pipeline import convert_har
+from app.pipeline_v2 import convert_har_v2
 from app.reports import build_summary
 from app.server.multipart import parse_multipart
 
@@ -35,7 +35,8 @@ class AppHandler(SimpleHTTPRequestHandler):
                 "ramp": fields.get("ramp", "1"),
                 "clearCookies": fields.get("clearCookies", "false"),
             }
-            result = convert_har(upload, config)
+            # Use new pipeline with AI review layer
+            result = convert_har_v2(upload, config)
             payload = build_summary(result)
             payload.update({
                 "threads": result.thread_count,

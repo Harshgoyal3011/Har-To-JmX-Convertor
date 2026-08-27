@@ -237,9 +237,12 @@ def _find_consumers(
 ) -> list[str]:
     if not value:
         return []
+    # Get indices from reverse index (already filtered > producer_index)
     found_indices: set[int] = {idx for idx in reverse_index.get(value, []) if idx > producer_index}
+    # Only scan samplers not already found in reverse_index
+    scanned_indices = set(reverse_index.get(value, []))
     for idx in range(producer_index + 1, len(samplers)):
-        if idx in found_indices:
+        if idx in found_indices or idx in scanned_indices:
             continue
         if value in scan_texts[idx]:
             found_indices.add(idx)
@@ -269,6 +272,10 @@ def discover_correlations(samplers: list[SamplerModel]) -> list[CorrelationRule]
     scan_texts = _build_scan_texts(samplers)
     rules: list[CorrelationRule] = []
     claimed_values: set[str] = set()
+    
+    # Pre-build sampler lookup and correlation tracking dicts for O(1) access
+    sampler_by_name: dict[str, SamplerModel] = {s.name: s for s in samplers}
+    correlations_by_sampler: dict[str, list[CorrelationRule]] = {s.name: [] for s in samplers}
 
     for rv in inventory:
         if rv.value in claimed_values:
@@ -305,8 +312,8 @@ def discover_correlations(samplers: list[SamplerModel]) -> list[CorrelationRule]
             confidence = "Medium"
             reason = f"Value from '{rv.field_name}' ({rv.source}) proven to appear in a later request"
 
-        producer_sampler = samplers[rv.sampler_index] if 0 <= rv.sampler_index < len(samplers) else None
-        rules.append(CorrelationRule(
+        producer_sampler = sampler_by_name.get(rv.sampler_name)
+        rule = CorrelationRule(
             variable=variable_name(rv.field_name),
             source_sampler=rv.sampler_name,
             pattern=rv.pattern,
@@ -323,9 +330,12 @@ def discover_correlations(samplers: list[SamplerModel]) -> list[CorrelationRule]
             producer_sampler_path=producer_sampler.path if producer_sampler else "",
             producer_method=producer_sampler.method if producer_sampler else "",
             producer_status=str(producer_sampler.status) if producer_sampler else "",
-        ))
+        )
+        rules.append(rule)
+        correlations_by_sampler[rv.sampler_name].append(rule)
 
+    # Assign correlations directly from pre-built dict
     for sampler in samplers:
-        sampler.correlations = [r for r in rules if r.source_sampler == sampler.name]
+        sampler.correlations = correlations_by_sampler[sampler.name]
 
     return rules

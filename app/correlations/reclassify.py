@@ -51,9 +51,12 @@ def reclassify_existing_business_entities(
 ) -> tuple[list[CorrelationRule], list[Parameter]]:
     remaining: list[CorrelationRule] = []
     promoted: list[Parameter] = []
+    
+    # Pre-build sampler lookup dict for O(1) access instead of O(n) linear search
+    sampler_by_name: dict[str, SamplerModel] = {s.name: s for s in samplers}
 
     for rule in correlations:
-        producer_sampler = next((s for s in samplers if s.name == rule.source_sampler), None)
+        producer_sampler = sampler_by_name.get(rule.source_sampler)
         is_existing_entity = (
             rule.classification == "B"
             and producer_sampler is not None
@@ -114,13 +117,17 @@ def resolve_correlation_overlap(
     parameters: list[Parameter],
     correlations: list[CorrelationRule],
 ) -> tuple[list[Parameter], int]:
+    # Pre-build sets for efficient O(1) lookups
     correlated_values = {rule.value for rule in correlations if rule.value}
     correlated_names = {rule.variable for rule in correlations}
+    
     kept: list[Parameter] = []
     removed = 0
+    
     for parameter in parameters:
-        if parameter.value in correlated_values or parameter.name in correlated_names:
+        if parameter.value not in correlated_values and parameter.name not in correlated_names:
+            kept.append(parameter)
+        else:
             removed += 1
-            continue
-        kept.append(parameter)
+    
     return kept, removed
