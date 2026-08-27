@@ -81,5 +81,15 @@ immediate IR-flatten.
 - **M11 — replay validator:** ✅ done (5 tests). Static checks: consumed-before-extracted, runtime-in-
   CSV (critical), master-data-correlated, missing correlations, session repeatability, per-iteration
   data variation; weighted score + gate; ambiguities flagged not guessed. Additive.
-- **M0.5 — golden regression net:** recommended before the accuracy milestones (M9+) cut over.
+- **M12 — engine orchestration + metrics:** ✅ done (4 tests). `engine.analyze(har) -> EngineResult`
+  runs the whole M1–M11 pipeline (pure core, no I/O) with measured metrics (estimates labelled).
+  Additive, no behavior change.
+
+**All 12 milestones complete — new reasoning pipeline built & tested (71 tests, 0 regressions).**
+
+## Remaining: cutover (integration, not a reasoning milestone)
+The new engine (`har2jmx.engine.analyze`) runs alongside the legacy live path. Remaining work to
+ship it: emit JMX from `EngineResult` (reuse `jmx/builder`), route `pipeline`/`server` through
+`analyze`, add the golden-file test, then retire the legacy `correlations/`, `parameters/`, and dead
+`pipeline.py`. This is the productization step (CLI + cutover), gated on a real-HAR precision check.
 - Everything else: designed, not started.
