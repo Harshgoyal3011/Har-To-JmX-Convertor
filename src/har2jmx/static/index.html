@@ -1,187 +1,162 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Self Healing HAR to JMeter</title>
-    <link rel="stylesheet" href="/static/styles.css">
-  </head>
-  <body>
-    <main class="shell">
-      <div class="workspace">
-        <aside class="rail">
-          <div class="brand">
-            <span class="brand-mark" aria-hidden="true">SH</span>
-            <div class="brand-text">
-              <strong>Self Healing</strong>
-              <span>HAR &rarr; JMeter engine</span>
-            </div>
-          </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>har2jmx — HAR to JMeter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
 
-          <ol class="stepper" id="stepper" aria-label="Conversion stages">
-            <li id="step-upload" class="is-active">Upload HAR</li>
-            <li id="step-detect">Detect flows</li>
-            <li id="step-correlate">Correlate &amp; parameterize</li>
-            <li id="step-generate">Generate JMX</li>
-          </ol>
-
-          <div class="status-line">
-            <span class="status-dot" aria-hidden="true"></span>
-            Engine ready
-          </div>
-        </aside>
-
-        <section class="panel">
-          <header class="page-header">
-            <div class="page-header__copy">
-              <p class="eyebrow">Performance engineering workbench</p>
-              <h1>Self-healing JMeter automation for enterprise validation</h1>
-              <p>Upload a HAR capture and get a correlated, parameterized JMeter test plan with confidence scoring, a CSV data file, and a stakeholder-ready readiness report.</p>
-            </div>
-            <div class="badges">
-              <span class="badge"><span class="dot" aria-hidden="true"></span>JMX 5.6+</span>
-              <span class="badge"><span class="dot" aria-hidden="true"></span>Auto correlation</span>
-              <span class="badge"><span class="dot" aria-hidden="true"></span>Confidence-scored</span>
-            </div>
-          </header>
-
-          <form id="uploadForm" class="upload-card" novalidate>
-            <div class="dropzone">
-              <input id="harfile" name="harfile" type="file" accept=".har,application/json">
-              <label for="harfile" class="drop-target" id="dropTarget">
-                <span class="drop-icon" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.6 4.6 0 0 1-1.3-9 5.5 5.5 0 0 1 10.6-1.8A4.5 4.5 0 0 1 18 18H7Z"/><path d="M12 12v6"/><path d="m9.5 14.5 2.5-2.5 2.5 2.5"/></svg>
-                </span>
-                <strong id="fileLabel">Drop or choose a HAR file</strong>
-                <small>Capture the full login and business journey. The converter keeps application/API calls and removes static browser noise automatically.</small>
-                <p class="field-error hidden" id="fileError">Choose a HAR file before generating the script.</p>
-              </label>
-
-              <div class="workload-panel">
-                <div class="workload-panel__header">
-                  <strong>Workload settings</strong>
-                  <span>Sets the thread group profile before generating the JMX.</span>
-                </div>
-                <div class="workload-grid">
-                  <div class="field">
-                    <label for="threads">Concurrent users</label>
-                    <input id="threads" name="threads" type="number" min="1" value="1" inputmode="numeric">
-                  </div>
-                  <div class="field">
-                    <label for="loops">Iterations per user</label>
-                    <input id="loops" name="loops" type="number" min="1" value="1" inputmode="numeric">
-                  </div>
-                  <div class="field">
-                    <label for="ramp">Ramp-up (seconds)</label>
-                    <input id="ramp" name="ramp" type="number" min="0" value="1" inputmode="numeric">
-                  </div>
-                  <label class="checkbox-field">
-                    <input id="clearCookies" name="clearCookies" type="checkbox">
-                    Clear cookies every iteration (simulate a fresh login per loop)
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-actions">
-                <button type="submit" class="btn" id="submitBtn">
-                  <span class="spinner" aria-hidden="true"></span>
-                  <span id="submitLabel">Generate JMeter script</span>
-                </button>
-                <div class="progress-rail hidden" id="progressRail"><span></span></div>
-              </div>
-            </div>
-          </form>
-
-          <section id="errorBox" class="alert alert-error hidden" role="alert" aria-live="assertive">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
-            <div>
-              <strong>Conversion failed</strong>
-              <span id="errorMessage"></span>
-            </div>
-          </section>
-
-          <section id="results" class="results hidden" aria-live="polite">
-            <div class="score-section">
-              <div class="score-card">
-                <span class="score-label">Script readiness <span id="qualityGateBadge" class="pill pill-neutral"></span></span>
-                <span class="score-value" id="readinessScore">0%</span>
-                <div class="score-track"><span id="scoreBar"></span></div>
-                <p id="qualityText">Waiting for a HAR file.</p>
-              </div>
-              <div class="category-card">
-                <h2>Readiness breakdown</h2>
-                <div id="categoryBars"></div>
-              </div>
-            </div>
-
-            <div class="metric-grid">
-              <div class="metric-card"><span id="samplerCount">0</span><p>HTTP samplers</p></div>
-              <div class="metric-card"><span id="transactionCount">0</span><p>Transactions</p></div>
-              <div class="metric-card"><span id="parameterCount">0</span><p>Parameters</p></div>
-              <div class="metric-card"><span id="correlationCount">0</span><p>Correlations</p></div>
-              <div class="metric-card"><span id="filteredCount">0</span><p>Filtered requests</p></div>
-              <div class="metric-card"><span id="avgTime">0</span><p>Avg response (ms)</p></div>
-            </div>
-
-            <div id="autoCorrectionsSection" class="section-card hidden">
-              <h2>Auto-corrections applied</h2>
-              <div id="autoCorrectionsList" class="checklist"></div>
-            </div>
-
-            <div id="enterpriseSection" class="hidden">
-              <h2>Detected platforms</h2>
-              <div id="appBadges" class="app-badges"></div>
-            </div>
-
-            <div class="split">
-              <section class="section-card">
-                <h2>Parameterization</h2>
-                <div id="parameterList" class="list"></div>
-              </section>
-              <section class="section-card">
-                <h2>Correlation extractors</h2>
-                <div id="correlationList" class="list"></div>
-              </section>
-            </div>
-
-            <div class="split">
-              <section class="section-card">
-                <h2>Traffic profile</h2>
-                <div id="trafficProfile" class="list"></div>
-              </section>
-              <section class="section-card">
-                <h2>Manual review checklist</h2>
-                <div id="reviewNotes" class="checklist"></div>
-              </section>
-            </div>
-
-            <section class="section-card">
-              <h2>Replay validation checklist</h2>
-              <div id="validationChecklist" class="checklist"></div>
-            </section>
-
-            <section class="section-card">
-              <h2>Generated flow preview</h2>
-              <div id="endpointList" class="waterfall"></div>
-            </section>
-
-            <div class="download-card">
-              <div class="download-card__copy">
-                <strong id="downloadTitle">Download generated .jmx</strong>
-                <p id="downloadNote"></p>
-                <ul id="reportsList" class="reports-list"></ul>
-              </div>
-              <a id="downloadLink" class="btn" href="#">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-                Download
-              </a>
-            </div>
-
-            <p class="meta-line" id="generatedAt"></p>
-          </section>
-        </section>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10"/><path d="M4 12h7"/><path d="M4 17h10"/><path d="m16 8 4 4-4 4"/></svg>
+      </span>
+      <div class="brand-text">
+        <strong>har2jmx</strong>
+        <span>HAR → JMeter engine</span>
       </div>
-    </main>
-    <script src="/static/app.js"></script>
-  </body>
+    </div>
+    <div class="topbar-meta">
+      <span class="pill pill-ghost">Correlation-aware</span>
+      <span class="pill pill-ghost">Entity parameterization</span>
+      <span class="pill pill-ghost">JMeter 5.6</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- Intro / upload -->
+    <section class="intro" id="introSection">
+      <div class="intro-copy">
+        <p class="eyebrow">Performance engineering, automated</p>
+        <h1>Turn a browser capture into a <span class="grad">production-ready</span> load test.</h1>
+        <p class="lede">Upload a HAR. har2jmx understands the user journey, correlates the runtime values, parameterizes the business data, and emits a clean JMeter plan that runs for any number of users — the way an experienced performance engineer would build it by hand.</p>
+        <ul class="intro-points">
+          <li><span class="tick" aria-hidden="true"></span> Filters telemetry &amp; static noise automatically</li>
+          <li><span class="tick" aria-hidden="true"></span> Correlates only server-issued runtime values — no guessing</li>
+          <li><span class="tick" aria-hidden="true"></span> Entity-centric CSV test data, not one file per field</li>
+        </ul>
+      </div>
+
+      <form id="uploadForm" class="upload-card" novalidate>
+        <label class="dropzone" id="dropzone" for="harfile">
+          <input id="harfile" name="harfile" type="file" accept=".har,application/json" hidden>
+          <span class="drop-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
+          </span>
+          <strong id="dropTitle">Drop your .har file</strong>
+          <small id="dropHint">or click to browse — capture the full flow incl. login</small>
+        </label>
+
+        <div class="workload">
+          <div class="field">
+            <label for="threads">Users</label>
+            <input id="threads" name="threads" type="number" min="1" value="50" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="loops">Loops</label>
+            <input id="loops" name="loops" type="number" min="1" value="5" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="ramp">Ramp (s)</label>
+            <input id="ramp" name="ramp" type="number" min="0" value="20" inputmode="numeric">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          <span class="btn-spinner" aria-hidden="true"></span>
+          <span id="submitLabel">Generate JMeter plan</span>
+        </button>
+        <p class="micro" id="fileMeta"></p>
+      </form>
+    </section>
+
+    <!-- Pipeline progress -->
+    <section class="pipeline hidden" id="pipeline" aria-hidden="true">
+      <ol class="pipeline-steps" id="pipelineSteps">
+        <li data-step="parse">Parse</li>
+        <li data-step="filter">Filter noise</li>
+        <li data-step="flow">Map flow</li>
+        <li data-step="correlate">Correlate</li>
+        <li data-step="parameterize">Parameterize</li>
+        <li data-step="validate">Validate</li>
+        <li data-step="emit">Emit JMX</li>
+      </ol>
+    </section>
+
+    <!-- Error -->
+    <section class="alert hidden" id="errorBox" role="alert">
+      <strong>Conversion failed.</strong> <span id="errorMsg"></span>
+    </section>
+
+    <!-- Results -->
+    <section class="results hidden" id="results">
+      <div class="results-head">
+        <div>
+          <p class="eyebrow">Analysis complete</p>
+          <h2 id="resultTitle">Your test plan is ready</h2>
+        </div>
+        <div class="download-actions">
+          <a id="dlZip" class="btn btn-primary" href="#" download>Download bundle (.zip)</a>
+          <a id="dlJmx" class="btn btn-ghost" href="#" download>.jmx only</a>
+        </div>
+      </div>
+
+      <!-- Readiness + metric tiles -->
+      <div class="metrics" id="metrics"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Business flow</h3><span class="muted" id="flowCount"></span></div>
+          <ol class="flow" id="flow"></ol>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Detected stack</h3></div>
+          <div class="stack" id="stack"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Correlations</h3><span class="muted" id="corrCount"></span></div>
+        <div class="table-wrap">
+          <table class="data-table" id="corrTable">
+            <thead><tr><th>Variable</th><th>Extractor</th><th>Value</th><th>Confidence</th><th>Produced in</th><th>Consumers</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Parameter datasets</h3><span class="muted" id="paramCount"></span></div>
+        <div class="datasets" id="datasets"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Replay validation</h3><span class="pill" id="replayBadge"></span></div>
+          <div class="checklist" id="replay"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Filtered as noise</h3><span class="muted" id="excludedCount"></span></div>
+          <div class="excluded" id="excluded"></div>
+        </div>
+      </div>
+
+      <div class="restart">
+        <button class="btn btn-ghost" id="restartBtn" type="button">Convert another HAR</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>har2jmx</span> · standard-library engine · runs locally
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
 </html>
