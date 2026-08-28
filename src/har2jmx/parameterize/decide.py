@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from har2jmx.classify import ClassificationResult, classify_values
+from har2jmx.classify import ClassificationResult, ValueClass, classify_values
 from har2jmx.entities import RelationshipModel, discover_relationships
 from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import LineageGraph, build_lineage
@@ -74,12 +74,23 @@ def build_parameterization(cap: NormalizedCapture,
         else:
             inputs.setdefault(variable_name(_field_from_location(v.source)), v.value)
 
+    # Values the server generated at runtime — these are correlations and must NEVER sit in a CSV,
+    # even when they are an entity's identifier (e.g. a created orderId).
+    runtime_values = {v.value for v in classification.verdicts if v.classification == ValueClass.RUNTIME_GENERATED}
+
     ident = {e.name: e.identifier for e in model.entities}
     for ent, cols in entity_cols.items():
         idf = ident.get(ent)
         if idf:
             cols.setdefault(variable_name(idf), idf)          # keep identity for referential meaning
         rows_src = model.instances.get(ent, [])
+        # drop any column whose observed values are entirely runtime-generated (belongs in correlation)
+        dropped = set()
+        for col, fld in cols.items():
+            vals = [str(r.get(fld)) for r in rows_src if r.get(fld) not in (None, "")]
+            if vals and all(v in runtime_values for v in vals):
+                dropped.add(col)
+        cols = {c: f for c, f in cols.items() if c not in dropped}
         rows = []
         seen_rows: set[tuple] = set()
         for r in rows_src:
