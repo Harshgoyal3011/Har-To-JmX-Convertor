@@ -56,9 +56,16 @@ def _sub_ok(value: str) -> bool:
     return len(v) >= 3 and v.lower() not in {"true", "false", "null", "none"}
 
 
+def _cookie_manager_values(result: EngineResult) -> frozenset:
+    """Session cookies replayed automatically by the Cookie Manager — no variable, no manual header."""
+    return frozenset(c.value for c in result.correlations if c.extractor == ExtractorType.COOKIE_MANAGER)
+
+
 def _build_sub_map(result: EngineResult) -> dict[str, str]:
     sub: dict[str, str] = {}
     for c in result.correlations:                       # correlations win over parameters
+        if c.extractor == ExtractorType.COOKIE_MANAGER:
+            continue                                    # Cookie Manager replays it; no ${var}
         if _sub_ok(c.value):
             sub[str(c.value)] = f"${{{c.variable}}}"
     for d in result.parameterization.datasets:
@@ -122,7 +129,7 @@ def _sub_raw(text: str, sub: dict[str, str]) -> str:
 # ---------------------------------------------------------------- samplers & extractors
 
 def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True,
-                      global_headers: frozenset = frozenset()) -> None:
+                      global_headers: frozenset = frozenset(), cookie_mgr_values: frozenset = frozenset()) -> None:
     http = SubElement(parent_ht, "HTTPSamplerProxy", {
         "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
         "testname": f"{req.method} {_sub_path(req.request.path, sub)}",
@@ -161,17 +168,22 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _b(http, "HTTPSampler.use_keepalive", True)
 
     sampler_ht = SubElement(parent_ht, "hashTree")
-    _add_header_manager(sampler_ht, req, sub, global_headers)
+    _add_header_manager(sampler_ht, req, sub, global_headers, cookie_mgr_values)
 
 
 def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str],
-                        global_headers: frozenset = frozenset()) -> None:
+                        global_headers: frozenset = frozenset(),
+                        cookie_mgr_values: frozenset = frozenset()) -> None:
     # request-specific headers only — headers already carried by the global manager are skipped
     headers = [(n, v) for n, v in req.request.headers
                if n.lower() not in {"host", "content-length", "cookie"}
                and n.lower() not in global_headers and v]
-    if req.request.cookies:
-        cookie_val = "; ".join(f"{n}={_apply(v, sub)}" for n, v in req.request.cookies)
+    # cookies not replayed by the Cookie Manager are sent manually (substituted); session cookies
+    # the Cookie Manager handles are omitted so we neither hardcode a stale value nor reference a
+    # phantom variable.
+    manual_cookies = [(n, v) for n, v in req.request.cookies if v not in cookie_mgr_values]
+    if manual_cookies:
+        cookie_val = "; ".join(f"{n}={_apply(v, sub)}" for n, v in manual_cookies)
         headers.append(("Cookie", cookie_val))
     if not headers:
         return
@@ -370,6 +382,7 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     business = [r for r in cap.requests if not r.classification.excluded]
     common_headers = _collect_common_headers(business)
     global_header_names = frozenset(common_headers)
+    cookie_mgr_values = _cookie_manager_values(result)
 
     _add_http_defaults(tg_ht, result)
     _add_cookie_manager(tg_ht)
@@ -395,7 +408,8 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
             produced = producer_map.get(idx, [])
             # if this request produces a value read from its redirect, it must not follow the redirect
             follow = not any(c.from_redirect for c in produced)
-            _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names)
+            _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names,
+                              cookie_mgr_values=cookie_mgr_values)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             for c in produced:
