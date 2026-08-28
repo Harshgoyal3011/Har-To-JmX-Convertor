@@ -33,6 +33,25 @@ def test_transactions_and_extractor_present():
     assert "referenceNames" in x and "orderId" in x
 
 
+def test_global_header_manager_in_every_plan():
+    # a plan always has an HTTP Header Manager at the thread group (like the Cookie Manager),
+    # holding the headers common to all requests — not repeated on every sampler.
+    result = analyze((FIX / "sample_browser.har").read_bytes())
+    x = build_jmx_xml(result).decode()
+    assert 'testname="HTTP Header Manager"' in x
+    import re
+    block = re.search(r'HTTP Header Manager.*?</hashTree>', x, re.S).group(0)
+    globals_ = re.findall(r'Header\.name">([^<]+)<', block)
+    assert "User-Agent" in globals_ and "Accept-Language" in globals_   # shared → hoisted
+    # User-Agent must not also be repeated on individual samplers
+    assert x.count("<stringProp name=\"Header.name\">User-Agent</stringProp>") == 1
+
+
+def test_launch_transaction_named():
+    result = analyze((FIX / "sample_browser.har").read_bytes())
+    assert result.transactions[0].name == "Launch Application"
+
+
 def test_bearer_header_substituted_in_plan():
     x = _xml(FIX / "sample_bearer.har")
     assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted

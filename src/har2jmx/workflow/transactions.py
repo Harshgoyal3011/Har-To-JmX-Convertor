@@ -280,4 +280,29 @@ def discover_transactions(cap: NormalizedCapture) -> list[Transaction]:
             business_indices=[r.index for r in g if not r.classification.excluded],
         ))
 
+    _label_launch(cap, transactions)
     return transactions
+
+
+_HOME_SEGMENTS = {"home", "index", "landing", "welcome", "app", "portal", "dashboard", "main", "default"}
+
+
+def _label_launch(cap: NormalizedCapture, transactions: list[Transaction]) -> None:
+    """The first user action, when it's the app landing/home page load, reads as 'Launch Application'
+    to a stakeholder — much clearer than 'Open Home' or a raw path."""
+    if not transactions:
+        return
+    first = transactions[0]
+    # scan the first user action for a landing/home page navigation (may be a supporting request,
+    # not the anchor — the anchor can be a data call fired by the page).
+    for i in first.request_indices:
+        rq = cap.requests[i]
+        if rq.method != "GET" or "html" not in (rq.response.mime or "").lower():
+            continue
+        segs = {s.lower() for s in rq.request.path_segments}
+        if not segs or rq.request.path in ("/", "") or bool(segs & _HOME_SEGMENTS):
+            first.name = "Launch Application"
+            first.category = "Navigation"
+            for j in first.request_indices:
+                cap.requests[j].context.transaction = "Launch Application"
+            return
