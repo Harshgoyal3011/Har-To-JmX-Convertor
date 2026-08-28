@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import csv as _csv
 import json as _json
+import re as _re
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -45,23 +46,44 @@ def _coll(parent, name):
 
 # ---------------------------------------------------------------- substitution
 
+def _sub_ok(value: str) -> bool:
+    # never blanket-replace short/ambiguous values (e.g. "1", "12") — they collide everywhere
+    v = str(value)
+    return len(v) >= 3 and v.lower() not in {"true", "false", "null", "none"}
+
+
 def _build_sub_map(result: EngineResult) -> dict[str, str]:
     sub: dict[str, str] = {}
     for c in result.correlations:                       # correlations win over parameters
-        sub[str(c.value)] = f"${{{c.variable}}}"
+        if _sub_ok(c.value):
+            sub[str(c.value)] = f"${{{c.variable}}}"
     for d in result.parameterization.datasets:
         for col in d.columns:
             for row in d.rows:
                 v = row.get(col.name)
-                if v not in (None, ""):
+                if v not in (None, "") and _sub_ok(v):
                     sub.setdefault(str(v), f"${{{col.name}}}")
-            if col.sample:
+            if col.sample and _sub_ok(col.sample):
                 sub.setdefault(str(col.sample), f"${{{col.name}}}")
     return sub
 
 
 def _apply(value: Any, sub: dict[str, str]) -> str:
     return sub.get(str(value), str(value))
+
+
+_SCHEME_RE = _re.compile(r"^(\s*\S+\s+)(\S.*)$")
+
+
+def _apply_header(value: str, sub: dict[str, str]) -> str:
+    """Whole-value substitution, plus scheme-prefixed credentials (e.g. 'Bearer <token>')."""
+    s = str(value)
+    if s in sub:
+        return sub[s]
+    m = _SCHEME_RE.match(s)
+    if m and m.group(2).strip() in sub:
+        return m.group(1) + sub[m.group(2).strip()]
+    return s
 
 
 def _sub_json(obj: Any, sub: dict[str, str]) -> Any:
@@ -141,7 +163,7 @@ def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str]) 
     for name, value in headers:
         h = _elem(coll, "", "Header")
         _s(h, "Header.name", name)
-        _s(h, "Header.value", value if name == "Cookie" else _apply(value, sub))
+        _s(h, "Header.value", value if name == "Cookie" else _apply_header(value, sub))
     SubElement(parent_ht, "hashTree")
 
 

@@ -44,6 +44,24 @@ def test_runtime_userid_json_extractor():
     assert "userId" in by_var and by_var["userId"].extractor == ExtractorType.JSON
 
 
+def test_bearer_token_in_authorization_header_is_correlated():
+    # accessToken issued in the login response body, consumed as "Authorization: Bearer <token>".
+    # Whole-slot matching would miss it because of the scheme prefix — the engine must still catch it.
+    by_var, _ = _corr("sample_bearer.har")
+    assert "accessToken" in by_var
+    d = by_var["accessToken"]
+    assert d.extractor == ExtractorType.JSON and d.expression in ("$.accessToken", "$..accessToken")
+    assert 1 in d.consumers                       # consumed by GET /api/me
+    # refreshToken is never reused → must NOT be correlated
+    assert "refreshToken" not in by_var
+
+
+def test_short_values_not_correlated():
+    # a bare "7" (user id) is too ambiguous to correlate
+    by_var, _ = _corr("sample_bearer.har")
+    assert all(len(d.value) >= 3 for d in by_var.values())
+
+
 def test_no_extractor_without_consumer_and_no_duplicates():
     _, decisions = _corr("sample_flow.har")
     assert all(d.consumers for d in decisions)                # every extractor has a consumer

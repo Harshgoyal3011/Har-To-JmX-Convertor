@@ -107,6 +107,10 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
 
     verdicts: list[ValueVerdict] = []
     for flow in lineage.flows:
+        # Short values (e.g. "1", "10") are too ambiguous to correlate or parameterize — they
+        # collide across unrelated fields (a page number vs a stock count). Leave them literal.
+        if len(str(flow.value)) < 3:
+            continue
         if not flow.significant and flow.value not in value_entity:
             continue
 

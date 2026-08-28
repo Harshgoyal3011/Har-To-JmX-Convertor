@@ -15,12 +15,18 @@ of bogus consumers):
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from typing import Any, Iterator
 from urllib.parse import unquote
 
 from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest
 from har2jmx.patterns import GUID_RE
+
+# Headers whose value carries a credential after a scheme word (Bearer <token>, Token <t>, …).
+_AUTH_HEADERS = {"authorization", "proxy-authorization", "x-auth-token", "x-access-token",
+                 "x-api-key", "x-csrf-token", "x-xsrf-token"}
+_SCHEME_RE = re.compile(r"^\s*(\S+)\s+(\S.*)$")
 
 _TRIVIAL = {"", "true", "false", "null", "none", "undefined", "0", "1", "-1"}
 _MAX_LIST = 25
@@ -139,11 +145,20 @@ def _request_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
         if o:
             yield o
     for name, value in req.request.headers:
-        if name.lower() in _NOISE_HEADERS or name.lower().startswith(("sec-", "x-forwarded")):
+        nl = name.lower()
+        if nl in _NOISE_HEADERS or nl.startswith(("sec-", "x-forwarded")):
             continue
         o = _emit(value, "request", f"request.header:{name}", name, idx)
         if o:
             yield o
+        # Also expose the credential portion of auth headers (e.g. "Bearer <token>"), so a token
+        # issued in a response body is recognized as consumed here despite the scheme prefix.
+        if nl in _AUTH_HEADERS and value:
+            m = _SCHEME_RE.match(value)
+            if m and m.group(2).strip() != value.strip():
+                oc = _emit(m.group(2).strip(), "request", f"request.header:{name}", name, idx)
+                if oc:
+                    yield oc
     for name, value in req.request.cookies:
         o = _emit(value, "request", f"request.cookie:{name}", name, idx)
         if o:

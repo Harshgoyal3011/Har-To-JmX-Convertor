@@ -33,6 +33,12 @@ def test_transactions_and_extractor_present():
     assert "referenceNames" in x and "orderId" in x
 
 
+def test_bearer_header_substituted_in_plan():
+    x = _xml(FIX / "sample_bearer.har")
+    assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted
+    assert "aaaa.bbbb.cccc" not in x              # the literal token never ships in the plan
+
+
 def test_real_har_end_to_end_correlated_and_parameterized():
     har = EXAMPLES / "restful_booker.har"
     if not har.exists():

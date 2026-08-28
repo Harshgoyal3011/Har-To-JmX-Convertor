@@ -93,12 +93,17 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
         return any(s in words for s in segs)
 
     # Authentication
-    if req.classification.role == RequestRole.AUTH or has("login", "signin", "logon", "authenticate", "sso", "authorize", "token"):
-        if has("logout", "signout", "logoff"):
-            return "Logout", "Authentication"
-        return "Login", "Authentication"
     if has("logout", "signout", "logoff"):
         return "Logout", "Authentication"
+    is_login_submit = has("login", "signin", "logon", "authenticate", "sso") or \
+        (method in {"POST", "PUT"} and has("token", "authorize", "oauth"))
+    if is_login_submit:
+        return "Login", "Authentication"
+    if req.classification.role == RequestRole.AUTH:
+        # auth-tagged but not a login submit (e.g. GET /auth/me, /session, /userinfo)
+        if noun.lower() in {"me", "self", "whoami", "session", "userinfo", "user", "profile"}:
+            return "Session", "Authentication"
+        return f"{noun} Session", "Authentication"
 
     # Explicit action verbs in the path
     if has("search", "find", "lookup", "query", "browse"):
