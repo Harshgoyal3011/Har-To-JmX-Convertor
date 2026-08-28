@@ -24,6 +24,14 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from har2jmx.correlate import ExtractorType
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
+from har2jmx.patterns import GUID_RE
+
+# client-generated per-request keys — must be fresh each request, not a shared CSV value
+_UNIQUE_KEY_RE = _re.compile(
+    r"idempotenc|request.?id|correlation.?id|trace.?id|message.?id|nonce|"
+    r"x-request|x-correlation|transaction.?id|requestid|correlationid",
+    _re.IGNORECASE,
+)
 
 
 # ---------------------------------------------------------------- xml prop helpers
@@ -61,6 +69,36 @@ def _cookie_manager_values(result: EngineResult) -> frozenset:
     return frozenset(c.value for c in result.correlations if c.extractor == ExtractorType.COOKIE_MANAGER)
 
 
+def _generated_uuid_values(result: EngineResult) -> set[str]:
+    """Client-generated GUIDs in idempotency/request/correlation keys — one per request at run time."""
+    vals: set[str] = set()
+
+    def scan(name: str, value: Any) -> None:
+        if value and _UNIQUE_KEY_RE.search(name) and GUID_RE.match(str(value).strip()):
+            vals.add(str(value).strip())
+
+    def walk(obj: Any) -> None:
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                scan(k, v) if not isinstance(v, (dict, list)) else walk(v)
+        elif isinstance(obj, list):
+            for it in obj:
+                walk(it)
+
+    for req in result.capture.requests:
+        if req.classification.excluded:
+            continue
+        for n, v in req.request.headers:
+            scan(n, v)
+        for n, v in req.request.query:
+            scan(n, v)
+        for n, v in req.request.body.form:
+            scan(n, v)
+        if req.request.body.json is not None:
+            walk(req.request.body.json)
+    return vals
+
+
 def _build_sub_map(result: EngineResult) -> dict[str, str]:
     sub: dict[str, str] = {}
     for c in result.correlations:                       # correlations win over parameters
@@ -68,6 +106,8 @@ def _build_sub_map(result: EngineResult) -> dict[str, str]:
             continue                                    # Cookie Manager replays it; no ${var}
         if _sub_ok(c.value):
             sub[str(c.value)] = f"${{{c.variable}}}"
+    for uuid_val in _generated_uuid_values(result):     # fresh UUID per request (beats a CSV value)
+        sub.setdefault(uuid_val, "${__UUID()}")
     for d in result.parameterization.datasets:
         for col in d.columns:
             for row in d.rows:

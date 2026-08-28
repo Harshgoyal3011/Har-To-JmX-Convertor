@@ -88,6 +88,14 @@ def test_real_har_end_to_end_correlated_and_parameterized():
     assert "Sally" not in x                         # firstname lives in the CSV, not the plan
 
 
+def test_client_unique_key_uses_uuid_function():
+    # a client-generated idempotency/request-id UUID must be fresh per request (${__UUID()}),
+    # not a shared CSV value — else 100 users send the same key and the gateway dedups them.
+    x = _xml(FIX / "sample_idempotency.har")
+    assert "${__UUID()}" in x
+    assert "8f14e45f-ceea-467a-9f3c-3a1b2c4d5e6f" not in x   # the recorded key never ships
+
+
 def test_multipart_file_upload():
     har = EXAMPLES / "complex_upload.har"
     if not har.exists():
