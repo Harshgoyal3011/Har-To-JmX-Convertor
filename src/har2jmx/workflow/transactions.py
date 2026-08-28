@@ -302,33 +302,32 @@ def discover_transactions(cap: NormalizedCapture) -> list[Transaction]:
 
     # 3) name each group from its best anchor and annotate requests
     transactions: list[Transaction] = []
-    used_names: dict[str, int] = {}
     for g in merged:
         candidates = [r for r in g if not r.classification.excluded] or g
         anchor = max(candidates, key=_anchor_priority)
         name, category = _name_transaction(anchor)
-
-        # keep names stable + unique when the same action repeats
-        if name in used_names:
-            used_names[name] += 1
-            display = f"{name} ({used_names[name]})"
-        else:
-            used_names[name] = 1
-            display = name
-
-        for r in g:
-            r.context.transaction = display
-
         transactions.append(Transaction(
-            name=display,
+            name=name,
             category=category,
             anchor_index=anchor.index,
             request_indices=[r.index for r in g],
             business_indices=[r.index for r in g if not r.classification.excluded],
         ))
 
-    _label_launch(cap, transactions)
+    _label_launch(cap, transactions)     # rename the landing action BEFORE de-duplicating names
+    _dedupe_names(cap, transactions)
     return transactions
+
+
+def _dedupe_names(cap: NormalizedCapture, transactions: list[Transaction]) -> None:
+    """Suffix repeated names ('Login (2)') and stamp the final name on each request."""
+    counts: dict[str, int] = {}
+    for t in transactions:
+        counts[t.name] = counts.get(t.name, 0) + 1
+        if counts[t.name] > 1:
+            t.name = f"{t.name} ({counts[t.name]})"
+        for i in t.request_indices:
+            cap.requests[i].context.transaction = t.name
 
 
 _HOME_SEGMENTS = {"home", "index", "landing", "welcome", "app", "portal", "dashboard", "main", "default"}
