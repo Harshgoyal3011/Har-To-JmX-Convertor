@@ -15,7 +15,7 @@ import csv as _csv
 import json as _json
 import re as _re
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 from xml.dom import minidom
@@ -475,28 +475,108 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")
 
 
+# ---------------------------------------------------------------- CSV row synthesis
+
+_MAX_CSV_ROWS = 200
+_CRED_RE = _re.compile(r"user|pass|pwd|pin\b|otp|secret|token|login|credential|cvv|card", _re.IGNORECASE)
+_CODED_ID_RE = _re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
+_EMAIL_RE = _re.compile(r"^([^@]+)@(.+)$")
+_TRAIL_RE = _re.compile(r"^(.*?)(\d+)$")
+_DATE_FORMATS = ("%Y-%m-%d", "%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d", "%d/%m/%Y",
+                 "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M:%S.000Z", "%d-%b-%Y")
+
+
+def _is_fixed_value_column(values: list[str]) -> bool:
+    """Coded real ids / GUIDs must not be fabricated (fake ids don't exist in the system)."""
+    non_empty = [v for v in values if v]
+    return bool(non_empty) and all(GUID_RE.search(v) or _CODED_ID_RE.match(v) for v in non_empty)
+
+
+def _vary(value: str, i: int) -> str:
+    """Produce the i-th synthetic variant of a safe business value (date/number/email/text)."""
+    if i == 0 or not value:
+        return value
+    v = str(value)
+    for fmt in _DATE_FORMATS:
+        try:
+            return (datetime.strptime(v, fmt) + timedelta(days=i)).strftime(fmt)
+        except ValueError:
+            continue
+    if v.lstrip("-").isdigit():
+        return str(int(v) + i)
+    try:
+        if "." in v:
+            return f"{float(v) + i:.2f}"
+    except ValueError:
+        pass
+    m = _EMAIL_RE.match(v)
+    if m:
+        local, domain = m.group(1), m.group(2)
+        tm = _TRAIL_RE.match(local)
+        local = f"{tm.group(1)}{int(tm.group(2)) + i}" if tm else f"{local}{i}"
+        return f"{local}@{domain}"
+    tm = _TRAIL_RE.match(v)
+    if tm:
+        return f"{tm.group(1)}{int(tm.group(2)) + i}"
+    return f"{v}{i + 1}"
+
+
+def _synthesize_rows(cols: list[str], observed: list[tuple], target: int) -> list[tuple]:
+    """Grow a dataset toward `target` rows by varying safe columns; credential datasets and coded-id
+    columns are never fabricated (cycled from observed instead)."""
+    if not observed or len(observed) >= target:
+        return observed
+    if any(_CRED_RE.search(c) for c in cols):        # credentials need real, matched data — never synth
+        return observed
+    col_values = {i: [o[i] for o in observed] for i in range(len(cols))}
+    varyable = [i for i in range(len(cols)) if not _is_fixed_value_column(col_values[i])]
+    if not varyable:                                  # nothing safe to vary (all coded ids) — keep as-is
+        return observed
+    out = list(observed)
+    seen = set(observed)
+    base = observed[0]
+    idx = len(observed)
+    guard = 0
+    while len(out) < target and guard < target * 4:
+        guard += 1
+        row = tuple(_vary(base[i], idx) if i in varyable else observed[idx % len(observed)][i]
+                    for i in range(len(cols)))
+        if row not in seen:
+            seen.add(row)
+            out.append(row)
+        idx += 1
+    return out
+
+
 def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] | None = None,
              name: str = "test_plan") -> tuple[Path, list[Path]]:
     """Write the .jmx and its CSV files to out_dir. Returns (jmx_path, [csv_paths])."""
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    config = config or {}
+    try:
+        target = min(max(int(str(config.get("threads", "10")).strip()), 1), _MAX_CSV_ROWS)
+    except (TypeError, ValueError):
+        target = 10
     csv_files: dict[str, str] = {}
     csv_paths: list[Path] = []
     for d in result.parameterization.datasets:
         fname = f"{name}_{d.name.lower()}.csv"
         csv_files[d.name] = fname
         path = out / fname
+        cols = [c.name for c in d.columns]
+        observed: list[tuple] = []
+        seen: set[tuple] = set()
+        for row in d.rows:                               # unique observed rows
+            cells = tuple(str(row.get(c, "")) for c in cols)
+            if cells not in seen:
+                seen.add(cells)
+                observed.append(cells)
+        rows = _synthesize_rows(cols, observed, target)  # grow safe data toward N users
         with path.open("w", newline="", encoding="utf-8") as fh:
             w = _csv.writer(fh)
-            cols = [c.name for c in d.columns]
             w.writerow(cols)
-            seen: set[tuple] = set()
-            for row in d.rows:
-                cells = tuple(row.get(c, "") for c in cols)
-                if cells in seen:                       # drop duplicate rows (echoed occurrences)
-                    continue
-                seen.add(cells)
-                w.writerow(cells)
+            w.writerows(rows)
         csv_paths.append(path)
 
     xml = build_jmx_xml(result, config, csv_files)

@@ -88,6 +88,28 @@ def test_real_har_end_to_end_correlated_and_parameterized():
     assert "Sally" not in x                         # firstname lives in the CSV, not the plan
 
 
+def test_csv_row_synthesis_varies_safe_data_only():
+    from har2jmx.emit.jmx import _synthesize_rows
+    # safe business data (name/amount/date) is grown toward N rows, all distinct
+    rows = _synthesize_rows(["firstname", "amount", "checkin"],
+                            [("Sally", "100", "2026-01-01")], target=20)
+    assert len(rows) == 20
+    assert len(set(rows)) == 20                       # every synthesized row is distinct
+    assert rows[0] == ("Sally", "100", "2026-01-01")  # observed row preserved first
+
+    # credentials must never be fabricated (fake logins fail)
+    assert _synthesize_rows(["username", "password"], [("admin", "pw123")], target=20) == [("admin", "pw123")]
+
+    # coded real ids must never be fabricated (fake ids don't exist)
+    assert _synthesize_rows(["productId"], [("PROD-8801",)], target=20) == [("PROD-8801",)]
+
+    # a coded id alongside varyable data: id is cycled (kept real), the rest varies
+    rows = _synthesize_rows(["payeeId", "amount"], [("PAYEE-55", "1200.00")], target=5)
+    assert len(rows) == 5
+    assert all(r[0] == "PAYEE-55" for r in rows)      # real payee preserved on every row
+    assert len({r[1] for r in rows}) == 5             # amounts vary
+
+
 def test_client_unique_key_uses_uuid_function():
     # a client-generated idempotency/request-id UUID must be fresh per request (${__UUID()}),
     # not a shared CSV value — else 100 users send the same key and the gateway dedups them.
