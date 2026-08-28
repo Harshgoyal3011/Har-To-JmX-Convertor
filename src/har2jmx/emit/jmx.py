@@ -36,6 +36,10 @@ def _b(parent, name, value):
     el = SubElement(parent, "boolProp", {"name": name}); el.text = "true" if value else "false"; return el
 
 
+def _i(parent, name, value):
+    el = SubElement(parent, "intProp", {"name": name}); el.text = str(value); return el
+
+
 def _elem(parent, name, etype):
     return SubElement(parent, "elementProp", {"name": name, "elementType": etype})
 
@@ -293,6 +297,29 @@ def _add_global_header_manager(parent_ht, common: dict[str, tuple[str, str]], su
     SubElement(parent_ht, "hashTree")
 
 
+def _add_response_assertion(parent_ht):
+    """Thread-group scope: every sampler must return a 2xx/3xx code — surfaces failures under load."""
+    a = SubElement(parent_ht, "ResponseAssertion", {
+        "guiclass": "AssertionGui", "testclass": "ResponseAssertion",
+        "testname": "Assert Response Code (2xx/3xx)", "enabled": "true"})
+    coll = _coll(a, "Asserion.test_strings")
+    _s(coll, "assert_pattern", r"^(2\d\d|3\d\d)$")
+    _s(a, "Assertion.test_field", "Assertion.response_code")
+    _b(a, "Assertion.assume_success", False)
+    _i(a, "Assertion.test_type", 1)   # 1 = Matches (regex)
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_think_time(parent_ht):
+    """Thread-group scope: uniform random think time so 50 users don't hammer with zero pacing."""
+    t = SubElement(parent_ht, "UniformRandomTimer", {
+        "guiclass": "UniformRandomTimerGui", "testclass": "UniformRandomTimer",
+        "testname": "Think Time", "enabled": "true"})
+    _s(t, "ConstantTimer.delay", "500")
+    _s(t, "RandomTimer.range", "1000")
+    SubElement(parent_ht, "hashTree")
+
+
 def _add_cookie_manager(parent_ht):
     mgr = SubElement(parent_ht, "CookieManager", {
         "guiclass": "CookiePanel", "testclass": "CookieManager",
@@ -347,6 +374,8 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     _add_http_defaults(tg_ht, result)
     _add_cookie_manager(tg_ht)
     _add_global_header_manager(tg_ht, common_headers, sub)   # every plan gets an HTTP Header Manager
+    _add_response_assertion(tg_ht)                            # validate responses under load
+    _add_think_time(tg_ht)                                    # realistic pacing for N users
     for d in result.parameterization.datasets:
         fname = csv_files.get(d.name, f"{d.name.lower()}.csv")
         _add_csv_dataset(tg_ht, d.name, fname, [c.name for c in d.columns])

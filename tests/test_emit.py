@@ -33,6 +33,17 @@ def test_transactions_and_extractor_present():
     assert "referenceNames" in x and "orderId" in x
 
 
+def test_plan_has_all_jmeter_constituents():
+    # a complete, runnable plan: thread group (N users), defaults, cookie + header managers,
+    # response assertion, think-time timer, transaction controllers, samplers.
+    x = _xml(FIX / "sample_flow.har")
+    for element in ("ThreadGroup", "HTTP Request Defaults", "HTTP Cookie Manager", "HTTP Header Manager",
+                    "ResponseAssertion", "Assertion.response_code", "UniformRandomTimer",
+                    "TransactionController", "HTTPSamplerProxy"):
+        assert element in x, f"missing {element}"
+    assert 'num_threads">${THREADS}' in x        # scales to N users
+
+
 def test_global_header_manager_in_every_plan():
     # a plan always has an HTTP Header Manager at the thread group (like the Cookie Manager),
     # holding the headers common to all requests — not repeated on every sampler.
