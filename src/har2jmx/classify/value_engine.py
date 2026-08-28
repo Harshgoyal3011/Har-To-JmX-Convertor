@@ -140,9 +140,9 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
             if _is_secret(flow):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = "server-issued session/token/secret, reused in a later request"
-            elif source.startswith("response.location:") or str(status).startswith("3"):
+            elif source.startswith(("response.location:", "response.header:")) or str(status).startswith("3"):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
-                reason = "issued in a redirect (per-session, e.g. OAuth auth code), reused downstream"
+                reason = "issued in a response header / redirect (per-session: ETag/version, auth code, token), reused downstream"
             elif method == "GET" or search:
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
                 reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"
