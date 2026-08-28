@@ -169,8 +169,13 @@ def _request_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             if o:
                 yield o
     if req.request.body.json is not None:
+        body_json = req.request.body.json
+        # For GraphQL, the business inputs are the operation variables; operationName/query are
+        # protocol envelope, not test data.
+        if req.request.body.kind == BodyKind.GRAPHQL and isinstance(body_json, dict):
+            body_json = body_json.get("variables") or {}
         pairs: list[tuple[str, Any]] = []
-        _walk_json(req.request.body.json, "", pairs)
+        _walk_json(body_json, "", pairs)
         for kp, v in pairs:
             o = _emit(v, "request", f"request.body:{kp}", kp.split(".")[-1], idx)
             if o:

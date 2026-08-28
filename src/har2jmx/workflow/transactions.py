@@ -89,6 +89,14 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     noun = _entity_noun(req.request.path_segments) or "Request"
     method = req.method
 
+    # GraphQL: name from the operation (all requests share one endpoint).
+    if req.request.body.kind == BodyKind.GRAPHQL and req.request.body.graphql_operation:
+        op = req.request.body.graphql_operation
+        low = op.lower()
+        action = any(low.startswith(v) for v in ("create", "add", "update", "edit", "delete",
+                                                 "remove", "submit", "set", "save"))
+        return _titleize(op), ("Business Action" if action else "Business View")
+
     def has(*words: str) -> bool:
         return any(s in words for s in segs)
 
