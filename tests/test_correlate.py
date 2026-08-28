@@ -56,6 +56,16 @@ def test_bearer_token_in_authorization_header_is_correlated():
     assert "refreshToken" not in by_var
 
 
+def test_html_csrf_token_correlated():
+    # __RequestVerificationToken lives in a hidden HTML input on the login page and is posted back
+    # in the form — a server-rendered app (ASP.NET/JSF/Django/Rails). Must be correlated via HTML.
+    by_var, _ = _corr("sample_csrf.har")
+    assert "RequestVerificationToken" in by_var
+    d = by_var["RequestVerificationToken"]
+    assert d.extractor == ExtractorType.REGEX
+    assert 1 in d.consumers                       # posted back in the login form
+
+
 def test_short_values_not_correlated():
     # a bare "7" (user id) is too ambiguous to correlate
     by_var, _ = _corr("sample_bearer.har")

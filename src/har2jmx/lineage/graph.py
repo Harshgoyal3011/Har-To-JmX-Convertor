@@ -21,7 +21,7 @@ from typing import Any, Iterator
 from urllib.parse import unquote
 
 from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest
-from har2jmx.patterns import GUID_RE
+from har2jmx.patterns import GUID_RE, HIDDEN_INPUT_RE
 
 # Headers whose value carries a credential after a scheme word (Bearer <token>, Token <t>, …).
 _AUTH_HEADERS = {"authorization", "proxy-authorization", "x-auth-token", "x-access-token",
@@ -201,6 +201,16 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             o = _emit(v, "response", f"response.body:{kp}", kp.split(".")[-1], idx)
             if o:
                 yield o
+    # HTML hidden inputs (CSRF / __RequestVerificationToken / ViewState / EventValidation) — the
+    # producers for server-rendered apps (ASP.NET, JSF, Django, Rails, Spring Security).
+    raw = req.response.body.raw
+    if raw and ("html" in (req.response.mime or "").lower() or raw.lstrip()[:1] == "<"):
+        for m in HIDDEN_INPUT_RE.finditer(raw):
+            name, value = m.group("name"), m.group("value")
+            if value:
+                o = _emit(value, "response", f"response.html:{name}", name, idx)
+                if o:
+                    yield o
 
 
 # ---------------------------------------------------------------- graph construction
