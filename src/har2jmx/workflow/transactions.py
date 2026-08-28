@@ -25,6 +25,41 @@ _VERB_WORDS = {
     "update", "edit", "modify", "delete", "remove", "submit", "file", "open", "view", "get",
     "pay", "payment", "checkout", "confirm", "login", "signin", "logon", "authenticate",
     "logout", "signout", "upload", "import", "download", "export", "report", "print",
+    # action verbs common to enterprise flows
+    "initiate", "verify", "approve", "reject", "cancel", "activate", "deactivate", "process",
+    "apply", "register", "enroll", "book", "reserve", "acknowledge", "complete", "validate",
+}
+
+
+def _av(template: str, category: str):
+    return lambda noun: (template.format(n=noun).strip(), category)
+
+
+# Action verb (as the TERMINAL path segment) → transaction name. Matching the terminal segment (not
+# any mid-path segment) avoids naming GET /payment/{id}/receipt as "Payment".
+_ACTION_TERMINALS = {
+    "checkout": _av("Checkout", "Business Action"),
+    "pay": _av("Payment", "Business Action"), "payment": _av("Payment", "Business Action"),
+    "search": _av("{n} Search", "Business View"), "find": _av("{n} Search", "Business View"),
+    "lookup": _av("{n} Search", "Business View"), "query": _av("{n} Search", "Business View"),
+    "browse": _av("{n} Search", "Business View"),
+    "initiate": _av("Initiate {n}", "Business Action"), "confirm": _av("Confirm {n}", "Business Action"),
+    "verify": _av("Verify {n}", "Business Action"), "validate": _av("Validate {n}", "Business Action"),
+    "approve": _av("Approve {n}", "Business Action"), "reject": _av("Reject {n}", "Business Action"),
+    "cancel": _av("Cancel {n}", "Business Action"), "submit": _av("Submit {n}", "Business Action"),
+    "activate": _av("Activate {n}", "Business Action"), "deactivate": _av("Deactivate {n}", "Business Action"),
+    "process": _av("Process {n}", "Business Action"), "apply": _av("Apply {n}", "Business Action"),
+    "register": _av("Register {n}", "Business Action"), "enroll": _av("Enroll {n}", "Business Action"),
+    "book": _av("Book {n}", "Business Action"), "reserve": _av("Reserve {n}", "Business Action"),
+    "acknowledge": _av("Acknowledge {n}", "Business Action"), "complete": _av("Complete {n}", "Business Action"),
+    "upload": _av("Upload {n}", "Business Action"), "import": _av("Import {n}", "Business Action"),
+    "export": _av("Export {n}", "Business View"), "download": _av("Export {n}", "Business View"),
+    "report": _av("Export {n}", "Business View"), "print": _av("Export {n}", "Business View"),
+    "create": _av("Create {n}", "Business Action"), "add": _av("Create {n}", "Business Action"),
+    "new": _av("Create {n}", "Business Action"),
+    "update": _av("Update {n}", "Business Action"), "edit": _av("Update {n}", "Business Action"),
+    "modify": _av("Update {n}", "Business Action"),
+    "delete": _av("Delete {n}", "Business Action"), "remove": _av("Delete {n}", "Business Action"),
 }
 _SEARCH_QUERY_KEYS = {"q", "query", "search", "keyword", "term", "filter", "name", "text"}
 _ID_SEG_RE = re.compile(r"^(?:\d+|[0-9a-fA-F]{8,}|[0-9a-fA-F-]{16,})$")
@@ -152,25 +187,12 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
             return "Session", "Authentication"
         return f"{noun} Session", "Authentication"
 
-    # Explicit action verbs in the path
-    if has("search", "find", "lookup", "query", "browse"):
-        return f"{noun} Search", "Business View"
-    if has("checkout"):
-        return "Checkout", "Business Action"
-    if has("pay", "payment"):
-        return "Payment", "Business Action"
-    if has("upload", "import"):
-        return f"Upload {noun}", "Business Action"
-    if has("export", "download", "report", "print"):
-        return f"Export {noun}", "Business View"
-    if has("create", "new", "add"):
-        return f"Create {noun}", "Business Action"
-    if has("update", "edit", "modify", "save"):
-        return f"Update {noun}", "Business Action"
-    if has("delete", "remove"):
-        return f"Delete {noun}", "Business Action"
-    if has("submit", "file", "confirm"):
-        return f"Submit {noun}", "Business Action"
+    # Action from the TERMINAL path segment (the last non-id/non-version/non-api segment, INCLUDING
+    # verbs): /transfers/initiate -> Initiate Transfer   |   /payment/{id}/receipt -> View Receipt
+    terminal = next((s for s in reversed(segs)
+                     if s and not _is_id_seg(s) and not _VERSION_RE.match(s) and s not in _API_WORDS), "")
+    if terminal in _ACTION_TERMINALS:
+        return _ACTION_TERMINALS[terminal](noun)
 
     # Method-driven fallback
     if method in {"POST"}:

@@ -81,6 +81,17 @@ def test_no_pageref_capture_does_not_crash():
     assert all(r.context.transaction for r in cap.requests)
 
 
+def test_terminal_action_verb_naming():
+    # action endpoints must name from the TERMINAL segment, not a mid-path segment
+    cap, txns = _txns("sample_complex_names.har")
+    names = [t.name for t in txns]
+    assert "Checkout" in names           # POST /api/checkout
+    assert "Payment" in names            # POST /api/payment
+    assert "View Receipt" in names       # GET /api/payment/{id}/receipt  (NOT 'Payment (2)')
+    assert "Initiate Transfer" in names  # POST /api/transfers/initiate   (NOT 'Create Initiate')
+    assert "Confirm Transfer" in names   # POST /api/transfers/confirm
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0
