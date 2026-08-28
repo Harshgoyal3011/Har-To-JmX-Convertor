@@ -46,7 +46,8 @@ class Body:
     kind: BodyKind = BodyKind.NONE
     mime: str = ""
     raw: str = ""
-    form: list[tuple[str, str]] = field(default_factory=list)  # form / multipart fields
+    form: list[tuple[str, str]] = field(default_factory=list)  # form / multipart (non-file) fields
+    files: list[tuple[str, str, str]] = field(default_factory=list)  # (param, filename, content_type)
     json: Any = None                                           # parsed JSON (json/graphql bodies)
     graphql_operation: str = ""                                # operationName when kind == GRAPHQL
 

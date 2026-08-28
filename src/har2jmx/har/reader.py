@@ -36,11 +36,24 @@ def header_value(headers: list[tuple[str, str]], name: str) -> str:
 def post_pairs(entry: dict[str, Any]) -> tuple[list[tuple[str, str]], str, str]:
     post = entry.get("request", {}).get("postData") or {}
     mime_type = post.get("mimeType", "")
-    params = [(p.get("name", ""), p.get("value", "")) for p in post.get("params", []) if p.get("name")]
+    # exclude file parts (those with a fileName) — they are returned by post_files()
+    params = [(p.get("name", ""), p.get("value", "")) for p in post.get("params", [])
+              if p.get("name") and not p.get("fileName")]
     text = post.get("text") or ""
     if not params and text and "application/x-www-form-urlencoded" in mime_type:
         params = parse_qsl(text, keep_blank_values=True)
     return params, text, mime_type
+
+
+def post_files(entry: dict[str, Any]) -> list[tuple[str, str, str]]:
+    """Multipart file parts as (param_name, filename, content_type)."""
+    post = entry.get("request", {}).get("postData") or {}
+    out: list[tuple[str, str, str]] = []
+    for p in post.get("params", []):
+        filename = p.get("fileName")
+        if filename:
+            out.append((p.get("name", "file"), filename, p.get("contentType", "application/octet-stream")))
+    return out
 
 
 def decode_response_text(content: dict[str, Any]) -> str:

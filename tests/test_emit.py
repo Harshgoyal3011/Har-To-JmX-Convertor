@@ -88,6 +88,16 @@ def test_real_har_end_to_end_correlated_and_parameterized():
     assert "Sally" not in x                         # firstname lives in the CSV, not the plan
 
 
+def test_multipart_file_upload():
+    har = EXAMPLES / "complex_upload.har"
+    if not har.exists():
+        return
+    x = _xml(har)
+    assert 'HTTPSampler.DO_MULTIPART_POST">true' in x   # real multipart upload
+    assert "HTTPFileArg" in x and "File.paramname" in x
+    assert "damage_front.jpg" in x                        # the uploaded file
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0

@@ -28,6 +28,8 @@ _VERB_WORDS = {
     # action verbs common to enterprise flows
     "initiate", "verify", "approve", "reject", "cancel", "activate", "deactivate", "process",
     "apply", "register", "enroll", "book", "reserve", "acknowledge", "complete", "validate",
+    "generate", "calculate", "compute", "run", "execute", "send", "dispatch", "notify",
+    "sync", "reset", "refresh", "assign", "transfer",
 }
 
 
@@ -60,6 +62,12 @@ _ACTION_TERMINALS = {
     "update": _av("Update {n}", "Business Action"), "edit": _av("Update {n}", "Business Action"),
     "modify": _av("Update {n}", "Business Action"),
     "delete": _av("Delete {n}", "Business Action"), "remove": _av("Delete {n}", "Business Action"),
+    "generate": _av("Generate {n}", "Business Action"), "calculate": _av("Calculate {n}", "Business Action"),
+    "compute": _av("Calculate {n}", "Business Action"), "run": _av("Run {n}", "Business Action"),
+    "execute": _av("Run {n}", "Business Action"), "send": _av("Send {n}", "Business Action"),
+    "dispatch": _av("Dispatch {n}", "Business Action"), "notify": _av("Notify {n}", "Business Action"),
+    "sync": _av("Sync {n}", "Business Action"), "reset": _av("Reset {n}", "Business Action"),
+    "assign": _av("Assign {n}", "Business Action"), "transfer": _av("Transfer {n}", "Business Action"),
 }
 _SEARCH_QUERY_KEYS = {"q", "query", "search", "keyword", "term", "filter", "name", "text"}
 _ID_SEG_RE = re.compile(r"^(?:\d+|[0-9a-fA-F]{8,}|[0-9a-fA-F-]{16,})$")
@@ -173,6 +181,10 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
 
     def has(*words: str) -> bool:
         return any(s in words for s in segs)
+
+    # a multipart request with file parts is a file upload
+    if req.request.body.files:
+        return f"Upload {noun}", "Business Action"
 
     # Authentication
     if has("logout", "signout", "logoff"):

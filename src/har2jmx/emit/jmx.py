@@ -167,6 +167,18 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)
 
+    # multipart file upload — real file-upload elements, not empty form fields
+    is_multipart = req.request.body.kind == BodyKind.MULTIPART
+    _b(http, "HTTPSampler.DO_MULTIPART_POST", is_multipart)
+    if req.request.body.files:
+        files_el = _elem(http, "HTTPsampler.Files", "HTTPFileArgs")
+        fcoll = _coll(files_el, "HTTPFileArgs.files")
+        for param, filename, mimetype in req.request.body.files:
+            fa = _elem(fcoll, filename, "HTTPFileArg")
+            _s(fa, "File.path", filename)        # supply the local file at run time
+            _s(fa, "File.paramname", param)
+            _s(fa, "File.mimetype", mimetype)
+
     sampler_ht = SubElement(parent_ht, "hashTree")
     _add_header_manager(sampler_ht, req, sub, global_headers, cookie_mgr_values)
 
