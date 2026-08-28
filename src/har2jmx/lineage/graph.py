@@ -28,6 +28,21 @@ _AUTH_HEADERS = {"authorization", "proxy-authorization", "x-auth-token", "x-acce
                  "x-api-key", "x-csrf-token", "x-xsrf-token"}
 _SCHEME_RE = re.compile(r"^\s*(\S+)\s+(\S.*)$")
 
+# XML/SOAP leaf-element text and attributes (namespace-prefix tolerant).
+_XML_TEXT_RE = re.compile(r"<(?:[\w.-]+:)?([A-Za-z_][\w.-]*)(?:\s[^>]*)?>([^<>]+)</(?:[\w.-]+:)?\1\s*>")
+_XML_ATTR_RE = re.compile(r'([A-Za-z_][\w.:-]*)\s*=\s*"([^"]*)"')
+
+
+def _iter_xml_values(raw: str) -> Iterator[tuple[str, str]]:
+    for m in _XML_TEXT_RE.finditer(raw):
+        yield m.group(1), m.group(2).strip()
+    for m in _XML_ATTR_RE.finditer(raw):
+        name, val = m.group(1), m.group(2)
+        low = name.lower()
+        if low == "xmlns" or low.startswith("xmlns:") or "schemas.xmlsoap" in val or "w3.org" in val:
+            continue
+        yield name, val.strip()
+
 _TRIVIAL = {"", "true", "false", "null", "none", "undefined", "0", "1", "-1"}
 _MAX_LIST = 25
 _MAX_DEPTH = 6
@@ -180,6 +195,11 @@ def _request_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             o = _emit(v, "request", f"request.body:{kp}", kp.split(".")[-1], idx)
             if o:
                 yield o
+    if req.request.body.kind in {BodyKind.XML, BodyKind.SOAP} and req.request.body.raw:
+        for tag, val in _iter_xml_values(req.request.body.raw):
+            o = _emit(val, "request", f"request.xml:{tag}", tag, idx)
+            if o:
+                yield o
 
 
 def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
@@ -201,16 +221,23 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             o = _emit(v, "response", f"response.body:{kp}", kp.split(".")[-1], idx)
             if o:
                 yield o
+    raw = req.response.body.raw
+    mime = (req.response.mime or "").lower()
     # HTML hidden inputs (CSRF / __RequestVerificationToken / ViewState / EventValidation) — the
     # producers for server-rendered apps (ASP.NET, JSF, Django, Rails, Spring Security).
-    raw = req.response.body.raw
-    if raw and ("html" in (req.response.mime or "").lower() or raw.lstrip()[:1] == "<"):
+    if raw and "html" in mime:
         for m in HIDDEN_INPUT_RE.finditer(raw):
             name, value = m.group("name"), m.group("value")
             if value:
                 o = _emit(value, "response", f"response.html:{name}", name, idx)
                 if o:
                     yield o
+    # XML / SOAP response values (session ids, object ids, tokens returned in the envelope).
+    if raw and "html" not in mime and (req.response.body.kind in {BodyKind.XML, BodyKind.SOAP} or "xml" in mime):
+        for tag, val in _iter_xml_values(raw):
+            o = _emit(val, "response", f"response.xml:{tag}", tag, idx)
+            if o:
+                yield o
 
 
 # ---------------------------------------------------------------- graph construction

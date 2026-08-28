@@ -104,6 +104,17 @@ def _sub_path(path: str, sub: dict[str, str]) -> str:
     return "/".join(_apply(p, sub) if p else p for p in parts)
 
 
+def _sub_raw(text: str, sub: dict[str, str]) -> str:
+    """Substitute known correlated/parameter values inside a raw body (XML/SOAP/text).
+
+    Values are significant (>=3 chars, guarded by _sub_ok); longest-first avoids partial overlaps.
+    """
+    for value in sorted(sub, key=len, reverse=True):
+        if value in text:
+            text = text.replace(value, sub[value])
+    return text
+
+
 # ---------------------------------------------------------------- samplers & extractors
 
 def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str]) -> None:
@@ -119,7 +130,7 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str]) ->
     if req.request.body.kind in {BodyKind.JSON, BodyKind.GRAPHQL} and req.request.body.json is not None:
         raw_body = _json.dumps(_sub_json(req.request.body.json, sub))
     elif req.request.body.kind in {BodyKind.XML, BodyKind.SOAP, BodyKind.TEXT} and req.request.body.raw:
-        raw_body = _apply(req.request.body.raw, sub)
+        raw_body = _sub_raw(req.request.body.raw, sub)
 
     _b(http, "HTTPSampler.postBodyRaw", bool(raw_body))
     if raw_body:

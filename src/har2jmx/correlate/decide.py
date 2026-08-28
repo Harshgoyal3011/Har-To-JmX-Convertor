@@ -68,6 +68,9 @@ def _choose_extractor(location: str, cookie_name: str, consumers: list[Occurrenc
     if location.startswith("response.html:"):
         field = location.split("response.html:", 1)[1]
         return ExtractorType.REGEX, rf'name=["\']{re.escape(field)}["\'][^>]*value=["\']([^"\']*)["\']'
+    if location.startswith("response.xml:"):
+        tag = location.split("response.xml:", 1)[1]
+        return ExtractorType.REGEX, rf"<(?:[\w.-]+:)?{re.escape(tag)}(?:\s[^>]*)?>([^<]+)</"
     return ExtractorType.REGEX, ""
 
 

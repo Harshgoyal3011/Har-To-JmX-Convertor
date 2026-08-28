@@ -78,6 +78,19 @@ def _entity_noun(segments: list[str]) -> str:
     return ""
 
 
+_SOAP_BODY_OP_RE = re.compile(r"<(?:[\w.-]+:)?Body[^>]*>\s*<(?:[\w.-]+:)?([A-Za-z_][\w.-]*)", re.IGNORECASE)
+
+
+def _soap_operation(req: NormalizedRequest) -> str | None:
+    for name, value in req.request.headers:
+        if name.lower() == "soapaction" and value:
+            action = value.strip().strip('"').rsplit("/", 1)[-1].rsplit("#", 1)[-1]
+            if action:
+                return action
+    m = _SOAP_BODY_OP_RE.search(req.request.body.raw or "")
+    return m.group(1) if m else None
+
+
 def _has_search_signal(req: NormalizedRequest) -> bool:
     keys = {k.lower() for k, _ in req.request.query}
     return bool(keys & _SEARCH_QUERY_KEYS)
@@ -88,6 +101,19 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     segs = [s.lower() for s in req.request.path_segments]
     noun = _entity_noun(req.request.path_segments) or "Request"
     method = req.method
+
+    # SOAP: name from the operation (SOAPAction header, else the first body element).
+    if req.request.body.kind == BodyKind.SOAP:
+        op = _soap_operation(req)
+        if op:
+            low = op.lower()
+            if low.startswith(("login", "logon", "authenticate")):
+                return "Login", "Authentication"
+            if low.startswith(("logout", "signout")):
+                return "Logout", "Authentication"
+            action = any(low.startswith(v) for v in ("create", "add", "update", "edit", "delete",
+                                                     "remove", "submit", "set", "save", "insert", "post"))
+            return _titleize(op), ("Business Action" if action else "Business View")
 
     # GraphQL: name from the operation (all requests share one endpoint).
     if req.request.body.kind == BodyKind.GRAPHQL and req.request.body.graphql_operation:
