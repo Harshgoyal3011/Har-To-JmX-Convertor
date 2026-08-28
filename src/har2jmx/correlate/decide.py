@@ -40,6 +40,7 @@ class CorrelationDecision:
     confidence: str = "Medium"
     reason: str = ""
     entity: str | None = None
+    from_redirect: bool = False
 
 
 _LIST_IDX_RE = re.compile(r"\[\d+\]")
@@ -62,6 +63,9 @@ def _choose_extractor(location: str, cookie_name: str, consumers: list[Occurrenc
         return ExtractorType.REGEX, rf"Set-Cookie:\s*{re.escape(cookie_name)}=([^;]+)"
     if location.startswith("response.body:"):
         return ExtractorType.JSON, _json_path(location)
+    if location.startswith("response.location:"):
+        param = location.split("response.location:", 1)[1]
+        return ExtractorType.REGEX, rf"[?&]{re.escape(param)}=([^&\s\"']+)"
     if location.startswith("response.header:"):
         header = location.split("response.header:", 1)[1]
         return ExtractorType.REGEX, rf"{re.escape(header)}:\s*(.+)"
@@ -99,6 +103,9 @@ def build_correlations(cap: NormalizedCapture,
         seen.add(key)
 
         extractor, expr = _choose_extractor(producer.location, producer.field, flow.consumers)
+        # a value read from a redirect Location can only be extracted if the producer does NOT follow
+        # the redirect — flag it so the emitter disables auto-redirect on that sampler.
+        from_redirect = producer.location.startswith(("response.location:", "response.header:Location"))
         decisions.append(CorrelationDecision(
             variable=var,
             value=v.value,
@@ -110,6 +117,7 @@ def build_correlations(cap: NormalizedCapture,
             confidence=v.confidence,
             reason=v.reason,
             entity=v.entity,
+            from_redirect=from_redirect,
         ))
 
     decisions.sort(key=lambda d: (d.producer_index, d.variable))

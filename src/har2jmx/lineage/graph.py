@@ -18,7 +18,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from typing import Any, Iterator
-from urllib.parse import unquote
+from urllib.parse import parse_qsl, unquote, urlparse
 
 from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest
 from har2jmx.patterns import GUID_RE, HIDDEN_INPUT_RE
@@ -209,11 +209,19 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
         if o:
             yield o
     for name, value in req.response.headers:
-        if name.lower() in _NOISE_HEADERS or name.lower() == "set-cookie":
+        nl = name.lower()
+        if nl in _NOISE_HEADERS or nl == "set-cookie":
             continue
         o = _emit(value, "response", f"response.header:{name}", name, idx)
         if o:
             yield o
+        # Redirect Location often carries per-session values (OAuth auth code, SAML relay state) in
+        # its query string — expose them so the redirect chain can be correlated.
+        if nl in {"location", "content-location"} and value and "?" in value:
+            for k, v in parse_qsl(urlparse(value).query, keep_blank_values=True):
+                oc = _emit(v, "response", f"response.location:{k}", k, idx)
+                if oc:
+                    yield oc
     if req.response.body.json is not None:
         pairs: list[tuple[str, Any]] = []
         _walk_json(req.response.body.json, "", pairs)

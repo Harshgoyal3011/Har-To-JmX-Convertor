@@ -117,7 +117,7 @@ def _sub_raw(text: str, sub: dict[str, str]) -> str:
 
 # ---------------------------------------------------------------- samplers & extractors
 
-def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str]) -> None:
+def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True) -> None:
     http = SubElement(parent_ht, "HTTPSamplerProxy", {
         "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
         "testname": f"{req.method} {_sub_path(req.request.path, sub)}",
@@ -152,7 +152,7 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str]) ->
     _s(http, "HTTPSampler.protocol", req.request.scheme)
     _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub))
     _s(http, "HTTPSampler.method", req.method)
-    _b(http, "HTTPSampler.follow_redirects", True)
+    _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)
 
     sampler_ht = SubElement(parent_ht, "hashTree")
@@ -316,14 +316,17 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
         tc_ht = SubElement(tg_ht, "hashTree")
         for idx in biz:
             req = cap.requests[idx]
-            _add_http_sampler(tc_ht, req, sub)
+            produced = producer_map.get(idx, [])
+            # if this request produces a value read from its redirect, it must not follow the redirect
+            follow = not any(c.from_redirect for c in produced)
+            _add_http_sampler(tc_ht, req, sub, follow_redirects=follow)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
-            for c in producer_map.get(idx, []):
+            for c in produced:
                 if c.extractor == ExtractorType.JSON:
                     _add_json_extractor(sampler_ht, c.variable, c.expression)
                 else:
-                    use_headers = c.producer_location.startswith(("set-cookie:", "response.header:"))
+                    use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:"))
                     _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)
 
     rough = tostring(root, encoding="utf-8")
