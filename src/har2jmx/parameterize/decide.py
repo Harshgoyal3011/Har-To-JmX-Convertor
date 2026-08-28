@@ -84,11 +84,12 @@ def build_parameterization(cap: NormalizedCapture,
         if idf:
             cols.setdefault(variable_name(idf), idf)          # keep identity for referential meaning
         rows_src = model.instances.get(ent, [])
-        # drop any column whose observed values are entirely runtime-generated (belongs in correlation)
+        # drop any column that carries a runtime-generated value (a created/server id belongs in
+        # correlation, never in a CSV — even if some of the column's other values are existing data)
         dropped = set()
         for col, fld in cols.items():
             vals = [str(r.get(fld)) for r in rows_src if r.get(fld) not in (None, "")]
-            if vals and all(v in runtime_values for v in vals):
+            if any(v in runtime_values for v in vals):
                 dropped.add(col)
         cols = {c: f for c, f in cols.items() if c not in dropped}
         rows = []

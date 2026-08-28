@@ -48,6 +48,19 @@ def test_business_inputs_consolidate_into_one_dataset():
     assert len(plan.datasets) == 1
 
 
+def test_created_id_never_leaks_into_csv_even_with_existing_ids():
+    # an entity id column that mixes an existing id (1) and a created runtime id (101) must NOT put
+    # the created value into a dataset; the user inputs (title/body) still parameterize.
+    plan = _plan("sample_mixed_id.har")
+    post = next((d for d in plan.datasets if d.name == "Post"), None)
+    assert post is not None
+    cols = {c.name for c in post.columns}
+    assert "title" in cols and "body" in cols
+    assert "id" not in cols
+    all_values = {v for d in plan.datasets for row in d.rows for v in row.values()}
+    assert "101" not in all_values          # created post id is runtime, never test data
+
+
 def test_no_csv_per_field_explosion():
     plan = _plan("sample_flow.har")
     # a handful of meaningful datasets, never dozens of fragments
