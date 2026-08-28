@@ -60,22 +60,35 @@ def _titleize(token: str) -> str:
 
 
 def _is_id_seg(seg: str) -> bool:
-    return bool(_ID_SEG_RE.match(seg))
+    s = seg.lower()
+    if _ID_SEG_RE.match(s):
+        return True
+    # instance identifiers mix letters and digits (PAT-9001, ORD-5501-2026, APPT-7788, 2862)
+    return any(ch.isdigit() for ch in s)
+
+
+def _meaningful(low: str) -> bool:
+    return bool(low) and not _is_id_seg(low) and not _VERSION_RE.match(low) \
+        and low not in _API_WORDS and low not in _VERB_WORDS
 
 
 def _entity_noun(segments: list[str]) -> str:
+    """Singular business noun for the resource (Patient, Order) — for create/update/open."""
     for seg in reversed(segments):
-        low = seg.lower()
-        if not low or _is_id_seg(low) or _VERSION_RE.match(low):
-            continue
-        if low in _API_WORDS or low in _VERB_WORDS:
-            continue
-        return _titleize(_singularize(low))
-    # fall back to any non-id segment even if it's an API word
+        if _meaningful(seg.lower()):
+            return _titleize(_singularize(seg.lower()))
     for seg in reversed(segments):
         if seg and not _is_id_seg(seg.lower()) and not _VERSION_RE.match(seg.lower()):
             return _titleize(_singularize(seg.lower()))
     return ""
+
+
+def _collection_noun(segments: list[str]) -> str:
+    """The resource segment as captured (usually plural: Patients, Orders) — for list/view."""
+    for seg in reversed(segments):
+        if _meaningful(seg.lower()):
+            return _titleize(seg)
+    return _entity_noun(segments) or "Items"
 
 
 _SOAP_BODY_OP_RE = re.compile(r"<(?:[\w.-]+:)?Body[^>]*>\s*<(?:[\w.-]+:)?([A-Za-z_][\w.-]*)", re.IGNORECASE)
@@ -130,7 +143,7 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     if has("logout", "signout", "logoff"):
         return "Logout", "Authentication"
     is_login_submit = has("login", "signin", "logon", "authenticate", "sso") or \
-        (method in {"POST", "PUT"} and has("token", "authorize", "oauth"))
+        (method in {"POST", "PUT"} and has("token", "authorize", "oauth", "auth", "session", "connect"))
     if is_login_submit:
         return "Login", "Authentication"
     if req.classification.role == RequestRole.AUTH:
@@ -174,10 +187,10 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     if _has_search_signal(req):
         return f"{noun} Search", "Business View"
     if req.request.path_segments and _is_id_seg(req.request.path_segments[-1].lower()):
-        return f"Open {noun}", "Business View"
+        return f"Open {noun}", "Business View"          # detail: single record
     if "html" in (req.response.mime or "").lower():
-        return f"Open {noun}" if noun != "Request" else "Open Page", "Navigation"
-    return f"View {noun}", "Business View"
+        return f"Open {_collection_noun(req.request.path_segments)}" if noun != "Request" else "Open Page", "Navigation"
+    return f"View {_collection_noun(req.request.path_segments)}", "Business View"   # list: collection
 
 
 # ---------------------------------------------------------------- grouping
@@ -280,4 +293,29 @@ def discover_transactions(cap: NormalizedCapture) -> list[Transaction]:
             business_indices=[r.index for r in g if not r.classification.excluded],
         ))
 
+    _label_launch(cap, transactions)
     return transactions
+
+
+_HOME_SEGMENTS = {"home", "index", "landing", "welcome", "app", "portal", "dashboard", "main", "default"}
+
+
+def _label_launch(cap: NormalizedCapture, transactions: list[Transaction]) -> None:
+    """The first user action, when it's the app landing/home page load, reads as 'Launch Application'
+    to a stakeholder — much clearer than 'Open Home' or a raw path."""
+    if not transactions:
+        return
+    first = transactions[0]
+    # scan the first user action for a landing/home page navigation (may be a supporting request,
+    # not the anchor — the anchor can be a data call fired by the page).
+    for i in first.request_indices:
+        rq = cap.requests[i]
+        if rq.method != "GET" or "html" not in (rq.response.mime or "").lower():
+            continue
+        segs = {s.lower() for s in rq.request.path_segments}
+        if not segs or rq.request.path in ("/", "") or bool(segs & _HOME_SEGMENTS):
+            first.name = "Launch Application"
+            first.category = "Navigation"
+            for j in first.request_indices:
+                cap.requests[j].context.transaction = "Launch Application"
+            return

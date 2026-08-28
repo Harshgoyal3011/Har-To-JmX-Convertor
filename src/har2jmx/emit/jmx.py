@@ -36,6 +36,10 @@ def _b(parent, name, value):
     el = SubElement(parent, "boolProp", {"name": name}); el.text = "true" if value else "false"; return el
 
 
+def _i(parent, name, value):
+    el = SubElement(parent, "intProp", {"name": name}); el.text = str(value); return el
+
+
 def _elem(parent, name, etype):
     return SubElement(parent, "elementProp", {"name": name, "elementType": etype})
 
@@ -117,7 +121,8 @@ def _sub_raw(text: str, sub: dict[str, str]) -> str:
 
 # ---------------------------------------------------------------- samplers & extractors
 
-def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True) -> None:
+def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True,
+                      global_headers: frozenset = frozenset()) -> None:
     http = SubElement(parent_ht, "HTTPSamplerProxy", {
         "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
         "testname": f"{req.method} {_sub_path(req.request.path, sub)}",
@@ -156,12 +161,15 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _b(http, "HTTPSampler.use_keepalive", True)
 
     sampler_ht = SubElement(parent_ht, "hashTree")
-    _add_header_manager(sampler_ht, req, sub)
+    _add_header_manager(sampler_ht, req, sub, global_headers)
 
 
-def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str]) -> None:
+def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str],
+                        global_headers: frozenset = frozenset()) -> None:
+    # request-specific headers only — headers already carried by the global manager are skipped
     headers = [(n, v) for n, v in req.request.headers
-               if n.lower() not in {"host", "content-length", "cookie"} and v]
+               if n.lower() not in {"host", "content-length", "cookie"}
+               and n.lower() not in global_headers and v]
     if req.request.cookies:
         cookie_val = "; ".join(f"{n}={_apply(v, sub)}" for n, v in req.request.cookies)
         headers.append(("Cookie", cookie_val))
@@ -251,6 +259,67 @@ def _add_http_defaults(parent_ht, result: EngineResult):
     SubElement(parent_ht, "hashTree")
 
 
+def _collect_common_headers(business: list[NormalizedRequest]) -> dict[str, tuple[str, str]]:
+    """Headers shared (same name+value) across most business requests → hoisted to a global manager.
+
+    Body-specific (Content-Type) and per-request/correlated (Authorization) headers stay per-sampler.
+    """
+    from collections import defaultdict
+    values: dict[str, set] = defaultdict(set)
+    present: dict[str, int] = defaultdict(int)
+    orig: dict[str, str] = {}
+    skip = {"host", "content-length", "cookie", "content-type", "authorization"}
+    for req in business:
+        seen: set[str] = set()
+        for hn, hv in req.request.headers:
+            low = hn.lower()
+            if low in skip or not hv or low in seen:
+                continue
+            seen.add(low)
+            values[low].add(hv)
+            present[low] += 1
+            orig[low] = hn
+    n = len(business)
+    threshold = max(2, round(n * 0.6))
+    return {low: (orig[low], next(iter(vals)))
+            for low, vals in values.items() if len(vals) == 1 and present[low] >= threshold}
+
+
+def _add_global_header_manager(parent_ht, common: dict[str, tuple[str, str]], sub: dict[str, str]):
+    mgr = SubElement(parent_ht, "HeaderManager", {
+        "guiclass": "HeaderPanel", "testclass": "HeaderManager",
+        "testname": "HTTP Header Manager", "enabled": "true"})
+    coll = _coll(mgr, "HeaderManager.headers")
+    for _low, (name, value) in sorted(common.items()):
+        h = _elem(coll, "", "Header")
+        _s(h, "Header.name", name)
+        _s(h, "Header.value", _apply_header(value, sub))
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_response_assertion(parent_ht):
+    """Thread-group scope: every sampler must return a 2xx/3xx code — surfaces failures under load."""
+    a = SubElement(parent_ht, "ResponseAssertion", {
+        "guiclass": "AssertionGui", "testclass": "ResponseAssertion",
+        "testname": "Assert Response Code (2xx/3xx)", "enabled": "true"})
+    coll = _coll(a, "Asserion.test_strings")
+    _s(coll, "assert_pattern", r"^(2\d\d|3\d\d)$")
+    _s(a, "Assertion.test_field", "Assertion.response_code")
+    _b(a, "Assertion.assume_success", False)
+    _i(a, "Assertion.test_type", 1)   # 1 = Matches (regex)
+    SubElement(parent_ht, "hashTree")
+
+
+def _add_think_time(parent_ht):
+    """Thread-group scope: uniform random think time so 50 users don't hammer with zero pacing."""
+    t = SubElement(parent_ht, "UniformRandomTimer", {
+        "guiclass": "UniformRandomTimerGui", "testclass": "UniformRandomTimer",
+        "testname": "Think Time", "enabled": "true"})
+    _s(t, "ConstantTimer.delay", "500")
+    _s(t, "RandomTimer.range", "1000")
+    SubElement(parent_ht, "hashTree")
+
+
 def _add_cookie_manager(parent_ht):
     mgr = SubElement(parent_ht, "CookieManager", {
         "guiclass": "CookiePanel", "testclass": "CookieManager",
@@ -297,13 +366,20 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     _add_thread_group(plan_ht)
     tg_ht = SubElement(plan_ht, "hashTree")
 
+    cap = result.capture
+    business = [r for r in cap.requests if not r.classification.excluded]
+    common_headers = _collect_common_headers(business)
+    global_header_names = frozenset(common_headers)
+
     _add_http_defaults(tg_ht, result)
     _add_cookie_manager(tg_ht)
+    _add_global_header_manager(tg_ht, common_headers, sub)   # every plan gets an HTTP Header Manager
+    _add_response_assertion(tg_ht)                            # validate responses under load
+    _add_think_time(tg_ht)                                    # realistic pacing for N users
     for d in result.parameterization.datasets:
         fname = csv_files.get(d.name, f"{d.name.lower()}.csv")
         _add_csv_dataset(tg_ht, d.name, fname, [c.name for c in d.columns])
 
-    cap = result.capture
     for txn in result.transactions:
         biz = [i for i in txn.request_indices if not cap.requests[i].classification.excluded]
         if not biz:
@@ -319,7 +395,7 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
             produced = producer_map.get(idx, [])
             # if this request produces a value read from its redirect, it must not follow the redirect
             follow = not any(c.from_redirect for c in produced)
-            _add_http_sampler(tc_ht, req, sub, follow_redirects=follow)
+            _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             for c in produced:

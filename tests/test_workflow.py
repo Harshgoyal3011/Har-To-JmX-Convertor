@@ -65,6 +65,16 @@ def test_excluded_requests_nest_not_own_transaction():
     assert not any("Svg" in t.name or "Eum" in t.name or "Beacon" in t.name for t in txns)
 
 
+def test_names_are_business_readable_no_ids():
+    # alphanumeric ids in the path (SKU-88231-ALPHA, ORD-5501-2026) must never leak into names;
+    # list vs detail is distinguished; every name reads as a clear business action.
+    _, txns = _txns("sample_naming.har")
+    names = [t.name for t in txns]
+    assert names == ["View Catalog", "Open Product", "Create Cart", "Create Order", "Open Order", "Update Order"]
+    for n in names:
+        assert "9001" not in n and "5501" not in n and "SKU" not in n
+
+
 def test_no_pageref_capture_does_not_crash():
     cap, txns = _txns("sample_noise.har")
     assert len(txns) >= 1
