@@ -72,6 +72,16 @@ def test_short_values_not_correlated():
     assert all(len(d.value) >= 3 for d in by_var.values())
 
 
+def test_no_variable_name_collision_across_different_values():
+    # two created objects both returning {"id": ...} must NOT share one JMeter variable, or the
+    # second extractor clobbers the first and the wrong id is replayed (404 at 100 users).
+    by_var, decisions = _corr("sample_dup_id.har")
+    names = [d.variable for d in decisions]
+    assert len(names) == len(set(names))               # unique names
+    assert "orderId" in by_var and by_var["orderId"].value == "ORD-111"
+    assert "shipmentId" in by_var and by_var["shipmentId"].value == "SHP-999"
+
+
 def test_no_extractor_without_consumer_and_no_duplicates():
     _, decisions = _corr("sample_flow.har")
     assert all(d.consumers for d in decisions)                # every extractor has a consumer

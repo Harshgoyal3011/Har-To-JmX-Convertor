@@ -19,6 +19,7 @@ from har2jmx.har.reader import (
     decode_response_text,
     header_pairs,
     header_value,
+    post_files,
     post_pairs,
     read_har,
 )
@@ -50,10 +51,11 @@ def _graphql_operation(parsed: Any) -> str | None:
     return None
 
 
-def _build_request_body(params: list[tuple[str, str]], text: str, mime: str) -> Body:
+def _build_request_body(params: list[tuple[str, str]], text: str, mime: str,
+                        files: list[tuple[str, str, str]] | None = None) -> Body:
     m = (mime or "").lower()
     if "multipart/form-data" in m:
-        return Body(kind=BodyKind.MULTIPART, mime=mime, raw=text, form=params)
+        return Body(kind=BodyKind.MULTIPART, mime=mime, raw=text, form=params, files=files or [])
     if params or "x-www-form-urlencoded" in m:
         return Body(kind=BodyKind.FORM, mime=mime, raw=text, form=params)
     return _build_text_body(text, mime)
@@ -129,6 +131,7 @@ def build_capture(har: dict[str, Any] | bytes) -> NormalizedCapture:
 
         req_headers = header_pairs(entry, "request")
         params, body_text, req_mime = post_pairs(entry)
+        files = post_files(entry)
 
         http_request = HttpRequest(
             method=method,
@@ -141,7 +144,7 @@ def build_capture(har: dict[str, Any] | bytes) -> NormalizedCapture:
             query=[(k, v) for k, v in _query_pairs(parsed.query)],
             headers=req_headers,
             cookies=cookie_pairs(entry),
-            body=_build_request_body(params, body_text, req_mime),
+            body=_build_request_body(params, body_text, req_mime, files),
         )
 
         resp_headers = header_pairs(entry, "response")

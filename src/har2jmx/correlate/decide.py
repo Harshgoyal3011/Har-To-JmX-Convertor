@@ -44,6 +44,14 @@ class CorrelationDecision:
 
 
 _LIST_IDX_RE = re.compile(r"\[\d+\]")
+_GENERIC_ID_NAMES = {"id", "code", "key", "number", "uuid", "guid", "ref", "reference", "identifier", "no"}
+
+
+def _camel(entity: str, field: str) -> str:
+    e = re.sub(r"[^A-Za-z0-9]", "", entity)
+    if not e:
+        return field
+    return e[0].lower() + e[1:] + field[0].upper() + field[1:]
 
 
 def _json_path(producer_location: str) -> str:
@@ -85,7 +93,7 @@ def build_correlations(cap: NormalizedCapture,
     classification = classification if classification is not None else classify_values(cap, lineage)
 
     decisions: list[CorrelationDecision] = []
-    seen: set[tuple[str, str]] = set()
+    assigned: dict[str, str] = {}   # variable name -> value, to guarantee unique names
 
     verdicts: list[ValueVerdict] = [
         v for v in classification.verdicts
@@ -96,11 +104,18 @@ def build_correlations(cap: NormalizedCapture,
         if flow is None or flow.first_producer is None:
             continue
         producer = flow.first_producer
-        var = variable_name(v.entity_field or producer.field or "value")
-        key = (var, v.value)
-        if key in seen:
+        base = variable_name(v.entity_field or producer.field or "value")
+        # a generic id ("id"/"code"/"key"...) with a known entity is qualified (orderId, shipmentId)
+        # so two different entities' ids never share one JMeter variable and clobber each other.
+        if v.entity and base.lower() in _GENERIC_ID_NAMES:
+            base = variable_name(_camel(v.entity, base))
+        var = base
+        n = 2
+        while var in assigned and assigned[var] != v.value:   # different value → new unique name
+            var, n = f"{base}{n}", n + 1
+        if assigned.get(var) == v.value:                       # exact correlation already recorded
             continue
-        seen.add(key)
+        assigned[var] = v.value
 
         extractor, expr = _choose_extractor(producer.location, producer.field, flow.consumers)
         # a value read from a redirect Location can only be extracted if the producer does NOT follow

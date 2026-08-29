@@ -15,7 +15,7 @@ import csv as _csv
 import json as _json
 import re as _re
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 from xml.dom import minidom
@@ -24,6 +24,14 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from har2jmx.correlate import ExtractorType
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
+from har2jmx.patterns import GUID_RE
+
+# client-generated per-request keys — must be fresh each request, not a shared CSV value
+_UNIQUE_KEY_RE = _re.compile(
+    r"idempotenc|request.?id|correlation.?id|trace.?id|message.?id|nonce|"
+    r"x-request|x-correlation|transaction.?id|requestid|correlationid",
+    _re.IGNORECASE,
+)
 
 
 # ---------------------------------------------------------------- xml prop helpers
@@ -61,6 +69,36 @@ def _cookie_manager_values(result: EngineResult) -> frozenset:
     return frozenset(c.value for c in result.correlations if c.extractor == ExtractorType.COOKIE_MANAGER)
 
 
+def _generated_uuid_values(result: EngineResult) -> set[str]:
+    """Client-generated GUIDs in idempotency/request/correlation keys — one per request at run time."""
+    vals: set[str] = set()
+
+    def scan(name: str, value: Any) -> None:
+        if value and _UNIQUE_KEY_RE.search(name) and GUID_RE.match(str(value).strip()):
+            vals.add(str(value).strip())
+
+    def walk(obj: Any) -> None:
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                scan(k, v) if not isinstance(v, (dict, list)) else walk(v)
+        elif isinstance(obj, list):
+            for it in obj:
+                walk(it)
+
+    for req in result.capture.requests:
+        if req.classification.excluded:
+            continue
+        for n, v in req.request.headers:
+            scan(n, v)
+        for n, v in req.request.query:
+            scan(n, v)
+        for n, v in req.request.body.form:
+            scan(n, v)
+        if req.request.body.json is not None:
+            walk(req.request.body.json)
+    return vals
+
+
 def _build_sub_map(result: EngineResult) -> dict[str, str]:
     sub: dict[str, str] = {}
     for c in result.correlations:                       # correlations win over parameters
@@ -68,6 +106,8 @@ def _build_sub_map(result: EngineResult) -> dict[str, str]:
             continue                                    # Cookie Manager replays it; no ${var}
         if _sub_ok(c.value):
             sub[str(c.value)] = f"${{{c.variable}}}"
+    for uuid_val in _generated_uuid_values(result):     # fresh UUID per request (beats a CSV value)
+        sub.setdefault(uuid_val, "${__UUID()}")
     for d in result.parameterization.datasets:
         for col in d.columns:
             for row in d.rows:
@@ -166,6 +206,18 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _s(http, "HTTPSampler.method", req.method)
     _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)
+
+    # multipart file upload — real file-upload elements, not empty form fields
+    is_multipart = req.request.body.kind == BodyKind.MULTIPART
+    _b(http, "HTTPSampler.DO_MULTIPART_POST", is_multipart)
+    if req.request.body.files:
+        files_el = _elem(http, "HTTPsampler.Files", "HTTPFileArgs")
+        fcoll = _coll(files_el, "HTTPFileArgs.files")
+        for param, filename, mimetype in req.request.body.files:
+            fa = _elem(fcoll, filename, "HTTPFileArg")
+            _s(fa, "File.path", filename)        # supply the local file at run time
+            _s(fa, "File.paramname", param)
+            _s(fa, "File.mimetype", mimetype)
 
     sampler_ht = SubElement(parent_ht, "hashTree")
     _add_header_manager(sampler_ht, req, sub, global_headers, cookie_mgr_values)
@@ -423,28 +475,108 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")
 
 
+# ---------------------------------------------------------------- CSV row synthesis
+
+_MAX_CSV_ROWS = 200
+_CRED_RE = _re.compile(r"user|pass|pwd|pin\b|otp|secret|token|login|credential|cvv|card", _re.IGNORECASE)
+_CODED_ID_RE = _re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
+_EMAIL_RE = _re.compile(r"^([^@]+)@(.+)$")
+_TRAIL_RE = _re.compile(r"^(.*?)(\d+)$")
+_DATE_FORMATS = ("%Y-%m-%d", "%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d", "%d/%m/%Y",
+                 "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M:%S.000Z", "%d-%b-%Y")
+
+
+def _is_fixed_value_column(values: list[str]) -> bool:
+    """Coded real ids / GUIDs must not be fabricated (fake ids don't exist in the system)."""
+    non_empty = [v for v in values if v]
+    return bool(non_empty) and all(GUID_RE.search(v) or _CODED_ID_RE.match(v) for v in non_empty)
+
+
+def _vary(value: str, i: int) -> str:
+    """Produce the i-th synthetic variant of a safe business value (date/number/email/text)."""
+    if i == 0 or not value:
+        return value
+    v = str(value)
+    for fmt in _DATE_FORMATS:
+        try:
+            return (datetime.strptime(v, fmt) + timedelta(days=i)).strftime(fmt)
+        except ValueError:
+            continue
+    if v.lstrip("-").isdigit():
+        return str(int(v) + i)
+    try:
+        if "." in v:
+            return f"{float(v) + i:.2f}"
+    except ValueError:
+        pass
+    m = _EMAIL_RE.match(v)
+    if m:
+        local, domain = m.group(1), m.group(2)
+        tm = _TRAIL_RE.match(local)
+        local = f"{tm.group(1)}{int(tm.group(2)) + i}" if tm else f"{local}{i}"
+        return f"{local}@{domain}"
+    tm = _TRAIL_RE.match(v)
+    if tm:
+        return f"{tm.group(1)}{int(tm.group(2)) + i}"
+    return f"{v}{i + 1}"
+
+
+def _synthesize_rows(cols: list[str], observed: list[tuple], target: int) -> list[tuple]:
+    """Grow a dataset toward `target` rows by varying safe columns; credential datasets and coded-id
+    columns are never fabricated (cycled from observed instead)."""
+    if not observed or len(observed) >= target:
+        return observed
+    if any(_CRED_RE.search(c) for c in cols):        # credentials need real, matched data — never synth
+        return observed
+    col_values = {i: [o[i] for o in observed] for i in range(len(cols))}
+    varyable = [i for i in range(len(cols)) if not _is_fixed_value_column(col_values[i])]
+    if not varyable:                                  # nothing safe to vary (all coded ids) — keep as-is
+        return observed
+    out = list(observed)
+    seen = set(observed)
+    base = observed[0]
+    idx = len(observed)
+    guard = 0
+    while len(out) < target and guard < target * 4:
+        guard += 1
+        row = tuple(_vary(base[i], idx) if i in varyable else observed[idx % len(observed)][i]
+                    for i in range(len(cols)))
+        if row not in seen:
+            seen.add(row)
+            out.append(row)
+        idx += 1
+    return out
+
+
 def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] | None = None,
              name: str = "test_plan") -> tuple[Path, list[Path]]:
     """Write the .jmx and its CSV files to out_dir. Returns (jmx_path, [csv_paths])."""
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    config = config or {}
+    try:
+        target = min(max(int(str(config.get("threads", "10")).strip()), 1), _MAX_CSV_ROWS)
+    except (TypeError, ValueError):
+        target = 10
     csv_files: dict[str, str] = {}
     csv_paths: list[Path] = []
     for d in result.parameterization.datasets:
         fname = f"{name}_{d.name.lower()}.csv"
         csv_files[d.name] = fname
         path = out / fname
+        cols = [c.name for c in d.columns]
+        observed: list[tuple] = []
+        seen: set[tuple] = set()
+        for row in d.rows:                               # unique observed rows
+            cells = tuple(str(row.get(c, "")) for c in cols)
+            if cells not in seen:
+                seen.add(cells)
+                observed.append(cells)
+        rows = _synthesize_rows(cols, observed, target)  # grow safe data toward N users
         with path.open("w", newline="", encoding="utf-8") as fh:
             w = _csv.writer(fh)
-            cols = [c.name for c in d.columns]
             w.writerow(cols)
-            seen: set[tuple] = set()
-            for row in d.rows:
-                cells = tuple(row.get(c, "") for c in cols)
-                if cells in seen:                       # drop duplicate rows (echoed occurrences)
-                    continue
-                seen.add(cells)
-                w.writerow(cells)
+            w.writerows(rows)
         csv_paths.append(path)
 
     xml = build_jmx_xml(result, config, csv_files)
