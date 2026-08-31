@@ -55,6 +55,18 @@ row-aligned. Lifecycle rules:
 - Created during the run (POST/201, then reused) → correlation, never a CSV value.
 - Ambiguous / no evidence → flagged for review, never silently wired.
 
+Two refinements keep this accurate on messy real captures, where "returned by a GET" alone misleads:
+
+- **Opaque server handles returned by a GET are correlated, not parameterized.** A random,
+  unstructured, mixed letters+digits handle that the server issues as a *singleton* (a quote ref, a
+  draft id, an upload ticket — often with an `expiresIn`) is per-run state that goes stale, so it's
+  correlated. A *structured* coded id (`PROD-4400`) or one of several values from a list stays a CSV
+  parameter, so load still spreads across the catalog.
+- **UI/config enums are left hardcoded, not parameterized.** A value that is a fixed enum on a
+  config-named field (`layout=grid`, `sort=asc`, `view=list`) is the same for every user and every
+  run — varying it exercises nothing — so it is neither correlated nor parameterized. This is what
+  keeps a small flow from sprouting noise columns for display toggles.
+
 **One file per varying dataset, not per field.** A CSV earns its own file only when it has more than
 one row — the only case where threads read different values. Every single-row dataset (which would
 feed all users the same value) is merged into one row-per-user `TestData` set, so a small flow emits

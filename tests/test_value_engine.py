@@ -73,6 +73,24 @@ def test_user_scoped_id_is_correlated_shared_catalog_id_is_parameterized():
     assert prod in r.parameters()
 
 
+def test_opaque_handle_correlates_coded_id_parameterizes_config_stays_static():
+    # the three real-world calls this exercises:
+    r = _result("sample_realworld.har")
+    #  - an opaque, expiring server handle (singleton, not a catalog item) must be CORRELATED
+    quote = r.by_value("Qz7Kf39aPd2")
+    assert quote.classification == ValueClass.RUNTIME_GENERATED and quote in r.correlations()
+    #  - a structured coded catalog id (one of several products) stays business master data
+    prod = r.by_value("PROD-4400")
+    assert prod.classification == ValueClass.BUSINESS_MASTER_DATA and prod in r.parameters()
+    #  - a UI/config enum is left hardcoded — never a parameter and never a correlation
+    layout = r.by_value("grid")
+    assert layout.classification == ValueClass.STATIC
+    assert layout not in r.parameters() and layout not in r.correlations()
+    #  - genuine free-text user input still parameterizes
+    note = r.by_value("gift wrap please")
+    assert note.classification == ValueClass.BUSINESS_MASTER_DATA
+
+
 def test_every_verdict_has_reason():
     for name in ("sample_lineage.har", "sample_flow.har", "sample_entities.har"):
         for v in _result(name).verdicts:
