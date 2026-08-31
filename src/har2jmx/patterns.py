@@ -13,6 +13,14 @@ USER_DATA_RE = re.compile(
     re.IGNORECASE,
 )
 TOKEN_VALUE_RE = re.compile(r"^[A-Za-z0-9_\-+/=.]{16,}$")
+# Pagination / continuation handles: opaque server state that points at the *next* page. A recorded
+# cursor is valid only for that dataset snapshot, so it can never be parameterized — it must be
+# re-extracted from each page's response and fed to the next request. Matched on the producing field.
+PAGINATION_TOKEN_RE = re.compile(
+    r"(?:^|[_.\-])?(?:next(?:_?(?:cursor|page(?:_?token)?|link|url|offset|marker|key))?|"
+    r"cursor|continuation(?:_?token)?|page_?token|scroll_?id|marker|bookmark|start_?key)$",
+    re.IGNORECASE,
+)
 GUID_RE = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
 HIDDEN_INPUT_RE = re.compile(
     r'<input[^>]+type=["\']hidden["\'][^>]+name=["\'](?P<name>[^"\']+)["\'][^>]+value=["\'](?P<value>[^"\']*)["\']',

@@ -26,6 +26,8 @@ later request. Detected across:
 | XML / SOAP envelope | `SessionId`, object ids returned in a SOAP response | Regex over the response |
 | 302 `Location` redirect | OAuth authorization `code`, SAML `SAMLRequest`/`RelayState` | Header regex; producer set to **not follow redirects** |
 | Response headers | `ETag` / version-lock tokens (replayed as `If-Match`) | Header regex |
+| **Pagination / continuation cursors** | `nextCursor`, `next_page_token`, `continuationToken`, `scroll_id` | JSON/Regex — re-extracted per page, fed to the next request's cursor param |
+| **Rotating CSRF tokens** | a double-submit token that changes on every response | re-extracted each step (`csrf`, `csrf2`, …) |
 | **Per-user resource ids** returned by a session-scoped list | `accountId` from `/customers/${cif}/accounts`, `orderId` from `/users/${uid}/orders` | JSON extractor — see below |
 
 **User-owned vs shared data.** An id returned by a GET and reused is normally existing master data
