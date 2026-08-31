@@ -55,6 +55,12 @@ row-aligned. Lifecycle rules:
 - Created during the run (POST/201, then reused) → correlation, never a CSV value.
 - Ambiguous / no evidence → flagged for review, never silently wired.
 
+**One file per varying dataset, not per field.** A CSV earns its own file only when it has more than
+one row — the only case where threads read different values. Every single-row dataset (which would
+feed all users the same value) is merged into one row-per-user `TestData` set, so a small flow emits
+one test-data file instead of six. One row is one virtual user's complete data; add rows to add
+users. Datasets that genuinely vary per thread keep their own file.
+
 **CSV row synthesis** grows datasets toward the thread count so N users exercise distinct data:
 
 - Safe business data (names, amounts, prices, dates, quantities, free text, emails) is **varied**.

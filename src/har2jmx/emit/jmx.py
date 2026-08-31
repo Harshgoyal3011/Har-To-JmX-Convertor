@@ -24,7 +24,7 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from har2jmx.correlate import ExtractorType
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
-from har2jmx.patterns import GUID_RE
+from har2jmx.patterns import GUID_RE, ID_FIELD_RE
 
 # client-generated per-request keys — must be fresh each request, not a shared CSV value
 _UNIQUE_KEY_RE = _re.compile(
@@ -551,11 +551,19 @@ def _synthesize_rows(cols: list[str], observed: list[tuple], target: int) -> lis
     columns are never fabricated (cycled from observed instead)."""
     if not observed or len(observed) >= target:
         return observed
-    if any(_CRED_RE.search(c) for c in cols):        # credentials need real, matched data — never synth
-        return observed
     col_values = {i: [o[i] for o in observed] for i in range(len(cols))}
-    varyable = [i for i in range(len(cols)) if not _is_fixed_value_column(col_values[i])]
-    if not varyable:                                  # nothing safe to vary (all coded ids) — keep as-is
+    # a column is fixed (cycled from observed, never fabricated) if it is a credential or a coded id;
+    # only genuinely safe columns are varied. This lets a mixed dataset (credentials + coded ids +
+    # safe fields, as produced by single-row consolidation) still vary its safe fields per user while
+    # keeping every credential/id real — instead of freezing the whole file at one row.
+    def _fixed(i: int) -> bool:
+        # credentials, coded ids, and any id-named column are real values that must not be fabricated
+        # (a synthesized customerId/accountId would be an identity that doesn't exist) — cycle them.
+        return (bool(_CRED_RE.search(cols[i])) or bool(ID_FIELD_RE.search(cols[i]))
+                or _is_fixed_value_column(col_values[i]))
+
+    varyable = [i for i in range(len(cols)) if not _fixed(i)]
+    if not varyable:                                  # nothing safe to vary (all creds/coded ids) — keep
         return observed
     out = list(observed)
     seen = set(observed)

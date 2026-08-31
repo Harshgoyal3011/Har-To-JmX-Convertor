@@ -122,5 +122,41 @@ def build_parameterization(cap: NormalizedCapture,
             reason="client-supplied business inputs (credentials, search terms, form fields)",
         ))
 
+    _consolidate_single_row(plan)
     plan.datasets.sort(key=lambda d: (d.source != "entity", d.name))
     return plan
+
+
+def _consolidate_single_row(plan: ParameterizationPlan) -> None:
+    """Collapse every single-row dataset into one row-per-user ``TestData`` set.
+
+    A CSV earns a separate file only when it has more than one row — that is the only case where
+    threads read *different* values. A single-row dataset feeds every virtual user the same value, so
+    N of them are N files of noise (a small flow can otherwise emit six one-line CSVs). Merging them
+    into one row is lossless — there is no cross-row alignment to preserve — and yields the structure
+    a load test actually wants: one row = one virtual user's complete data, extend it with more rows
+    to add users. Multi-row datasets stay separate; they carry real per-thread variation.
+    """
+    single = [d for d in plan.datasets if d.row_count == 1]
+    if len(single) < 2:
+        return                                    # nothing to gain from merging one (or none)
+    multi = [d for d in plan.datasets if d.row_count != 1]
+
+    columns: list[ParameterColumn] = []
+    row: dict[str, str] = {}
+    for d in single:
+        for col in d.columns:
+            value = str(d.rows[0].get(col.name, col.sample))
+            name = col.name
+            if name in row and row[name] != value:          # same column name, different value
+                name = variable_name(f"{d.name}_{col.name}")  # qualify to keep both distinct
+            if name in row:
+                continue
+            row[name] = value
+            columns.append(ParameterColumn(name=name, sample=value, entity_field=col.entity_field))
+
+    plan.datasets = multi + [ParameterDataset(
+        name="TestData", columns=columns, rows=[row], source="inputs",
+        reason=("single-value test data merged into one row-per-user dataset — one row is one user's "
+                "data; add rows to add users (separate files only where values vary per thread)"),
+    )]
