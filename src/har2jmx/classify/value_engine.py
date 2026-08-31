@@ -21,7 +21,7 @@ from enum import Enum
 from har2jmx.entities import discover_relationships
 from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import LineageGraph, ValueFlow, build_lineage
-from har2jmx.patterns import CREATION_VERB_RE, GUID_RE, TOKEN_NAME_RE, USER_DATA_RE
+from har2jmx.patterns import CREATION_VERB_RE, GUID_RE, PAGINATION_TOKEN_RE, TOKEN_NAME_RE, USER_DATA_RE
 
 _JWT_RE = re.compile(r"^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$")
 
@@ -101,6 +101,13 @@ def _business_named(flow: ValueFlow) -> bool:
     return any(USER_DATA_RE.search(o.field) and not TOKEN_NAME_RE.search(o.field) for o in flow.occurrences)
 
 
+def _is_pagination_token(flow: ValueFlow) -> bool:
+    """The producing field is a next-page/continuation handle (opaque server state)."""
+    if flow.first_producer is not None and PAGINATION_TOKEN_RE.search(flow.first_producer.field or ""):
+        return True
+    return any(PAGINATION_TOKEN_RE.search(o.field or "") for o in flow.producers)
+
+
 def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None) -> ClassificationResult:
     lineage = lineage if lineage is not None else build_lineage(cap)
     value_entity = _build_value_entity_map(cap)
@@ -147,6 +154,11 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
             elif source.startswith(("response.location:", "response.header:")) or str(status).startswith("3"):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = "issued in a response header / redirect (per-session: ETag/version, auth code, token), reused downstream"
+            elif _is_pagination_token(flow):
+                cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
+                reason = ("server-issued pagination/continuation cursor consumed by the next page — "
+                          "opaque state that only fits this dataset snapshot, so correlate per page, "
+                          "never a static CSV value")
             elif method == "GET" or search:
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
                 reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"

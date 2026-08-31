@@ -99,6 +99,17 @@ def build_correlations(cap: NormalizedCapture,
         v for v in classification.verdicts
         if v.classification == ValueClass.RUNTIME_GENERATED and v.consumers
     ]
+
+    # Assign variable names in document order (earliest producer first) so that when one field is
+    # issued more than once — e.g. an access_token re-issued by a token refresh — the FIRST value
+    # keeps the clean base name (access_token) and later re-issues are suffixed (access_token2),
+    # which reads the way an engineer would name them rather than by whichever had more consumers.
+    def _producer_index(v: ValueVerdict) -> int:
+        f = lineage.by_value(v.value)
+        return f.first_producer.request_index if f and f.first_producer else 1_000_000
+
+    verdicts.sort(key=lambda v: (_producer_index(v), str(v.value)))
+
     for v in verdicts:
         flow = lineage.by_value(v.value)
         if flow is None or flow.first_producer is None:
