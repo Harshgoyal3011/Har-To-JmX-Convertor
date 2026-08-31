@@ -53,6 +53,7 @@ class ValueVerdict:
     entity_field: str | None = None
     is_identifier: bool = False
     producer_scope: frozenset = frozenset()   # producer path segments + query values (session-scope test)
+    needs_correlation: bool = False           # dynamic value we could not auto-correlate → flag for a human
 
 
 @dataclass
@@ -70,6 +71,11 @@ class ClassificationResult:
 
     def unknowns(self) -> list[ValueVerdict]:
         return [v for v in self.verdicts if v.classification == ValueClass.UNKNOWN]
+
+    def needs_correlation(self) -> list[ValueVerdict]:
+        """Dynamic values that could not be auto-correlated and are actually sent in a request —
+        the list a performance engineer must wire up by hand before running at load."""
+        return [v for v in self.verdicts if v.needs_correlation and v.consumers]
 
 
 def _is_secret(flow: ValueFlow) -> bool:
@@ -219,6 +225,7 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
         client_originated = earliest_req is not None and (earliest_resp is None or earliest_req <= earliest_resp)
 
         producer_scope: frozenset = frozenset()
+        needs_corr = False
         if flow.first_producer is not None and not client_originated:
             # server-originated: the server introduced this value this run
             producer = req_by_index.get(flow.first_producer.request_index)
@@ -261,6 +268,7 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
             else:
                 cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
                 reason = "produced then reused but lifecycle is ambiguous"
+                needs_corr = True          # server-issued & reused but unclassified — a human should wire it
         else:
             # client-originated (first seen in a request; may be echoed back by the server later)
             source = (min(req_occs, key=lambda o: o.request_index).location
@@ -276,6 +284,7 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
                 reason = ("token/session/secret sent in a request but its issuing response was not "
                           "captured — needs correlation (capture the response that returns it), "
                           "never safe as a static CSV value")
+                needs_corr = True
             elif entity_name or _business_named(flow) or _is_search_input(flow):
                 strong = _business_named(flow) or _is_search_input(flow)
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "High" if strong else "Medium"
@@ -284,10 +293,15 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
                 cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
                 reason = f"client-supplied value with no business/entity signal{echoed}"
 
+        # A flagged value with no captured producer has no "consumers" (those require a producer), yet
+        # it IS sent in requests — record those request indices so it can be reported and located.
+        if needs_corr and not consumers:
+            consumers = sorted({o.request_index for o in req_occs})
+
         verdicts.append(ValueVerdict(
             value=flow.value, classification=cls, lifecycle=life, confidence=conf, reason=reason,
             source=source, consumers=consumers, entity=entity_name, entity_field=entity_field,
-            is_identifier=is_id, producer_scope=producer_scope,
+            is_identifier=is_id, producer_scope=producer_scope, needs_correlation=needs_corr,
         ))
 
     _reclassify_user_scoped(verdicts)

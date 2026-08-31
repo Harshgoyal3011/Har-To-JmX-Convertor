@@ -17,6 +17,40 @@ def _mask(value: str) -> str:
     return v
 
 
+def _suggestion(reason: str) -> str:
+    if "not " in reason and "captured" in reason:
+        return ("Capture the response that issues this value (re-record with response bodies enabled), "
+                "then add a Boundary/Regex Extractor on it and reference the value as ${…}.")
+    return ("Confirm whether the server issues this value; if so, add an extractor on its producing "
+            "response and reference it as ${…} instead of the recorded literal.")
+
+
+def build_manual_correlations(result: EngineResult) -> list[dict[str, Any]]:
+    """Dynamic values the engine could not auto-correlate — the list a performance engineer must wire
+    up by hand before running at load (e.g. a token whose issuing response was not captured)."""
+    cap = result.capture
+    items: list[dict[str, Any]] = []
+    for v in result.classification.needs_correlation():
+        used_in: list[str] = []
+        seen: set[str] = set()
+        for i in v.consumers:
+            if 0 <= i < len(cap.requests):
+                rq = cap.requests[i]
+                label = f"{rq.context.transaction or 'flow'} — {rq.label()}"
+                if label not in seen:
+                    seen.add(label)
+                    used_in.append(label)
+        field = v.entity_field or (v.source.split(":")[-1] if ":" in v.source else v.source) or "value"
+        items.append({
+            "field": field,
+            "value": _mask(v.value),
+            "reason": v.reason,
+            "usedIn": used_in[:8],
+            "suggestion": _suggestion(v.reason),
+        })
+    return items
+
+
 def _derived_auth_list(result: EngineResult) -> list[str]:
     # If no standard mechanism matched but a token-like value is correlated, report it (evidence-backed).
     if any(_TOKENISH.search(c.variable) for c in result.correlations):
@@ -112,5 +146,6 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             }
             for r in cap.requests if r.classification.excluded
         ][:14],
+        "manualCorrelations": build_manual_correlations(result),
         "downloads": downloads,
     }

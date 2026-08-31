@@ -161,7 +161,8 @@ def _request_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             yield o
     for name, value in req.request.headers:
         nl = name.lower()
-        if nl in _NOISE_HEADERS or nl.startswith(("sec-", "x-forwarded")):
+        # skip HTTP/2 pseudo-headers (:authority/:method/:path/:scheme) — protocol, never test data
+        if nl in _NOISE_HEADERS or nl.startswith((":", "sec-", "x-forwarded")):
             continue
         o = _emit(value, "request", f"request.header:{name}", name, idx)
         if o:
@@ -210,7 +211,7 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             yield o
     for name, value in req.response.headers:
         nl = name.lower()
-        if nl in _NOISE_HEADERS or nl == "set-cookie":
+        if nl in _NOISE_HEADERS or nl == "set-cookie" or nl.startswith(":"):
             continue
         o = _emit(value, "response", f"response.header:{name}", name, idx)
         if o:

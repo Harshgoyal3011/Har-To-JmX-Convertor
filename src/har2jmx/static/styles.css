@@ -158,6 +158,8 @@ body {
 .download-actions { display: flex; gap: 10px; }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.card.warn { border-color: #d9822b; border-left: 4px solid #d9822b; background: color-mix(in srgb, #d9822b 6%, var(--surface)); }
+.card.warn .card-head h3::before { content: "⚠ "; }
 .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .card-head h3 { font-family: var(--display); font-weight: 600; font-size: 1.02rem; margin: 0; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }

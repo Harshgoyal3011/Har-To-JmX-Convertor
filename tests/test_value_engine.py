@@ -91,6 +91,18 @@ def test_opaque_handle_correlates_coded_id_parameterizes_config_stays_static():
     assert note.classification == ValueClass.BUSINESS_MASTER_DATA
 
 
+def test_uncaptured_token_is_flagged_for_manual_correlation():
+    # the flagged token must appear in needs_correlation() so the tool can surface it; a plain
+    # ambiguous client value (?q=acme) must NOT (it is genuinely ignorable, not a correlation gap).
+    r = _result("sample_uncaptured_token.har")
+    flagged = {v.value for v in r.needs_correlation()}
+    assert "YWRtaW4xNzgzMzUy" in flagged
+    tok = r.by_value("YWRtaW4xNzgzMzUy")
+    assert tok.needs_correlation is True
+    amb = _result("sample_flow.har").by_value("acme")
+    assert amb is not None and amb.needs_correlation is False
+
+
 def test_uncaptured_token_is_flagged_not_parameterized():
     # a token used in requests whose issuing response was not captured must NOT land in a CSV — a
     # fixed token there makes every virtual user share one stale session. It is flagged for

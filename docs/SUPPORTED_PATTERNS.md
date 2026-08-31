@@ -102,6 +102,16 @@ correlation) · **Uniform Random Timer** (think time) · CSV Data Sets · Transa
 HTTP Samplers · JSON/Regex extractors (each with a `NOT_FOUND_<var>` default) · **multipart
 file-upload** elements where applicable.
 
+## Manual-correlation reporting (nothing fails silently)
+
+When a dynamic value can't be auto-correlated — most often because the response that issues it wasn't
+captured (an empty login body, or a flow recorded mid-session) — it is **never** parameterized (a fixed
+token in a CSV makes every user share one stale session). Instead it is **flagged for manual
+correlation** and surfaced three ways: the web UI shows a "Needs manual correlation" panel; the bundle
+includes a `*_manual_review.md` naming each value, where it's used, why, and how to fix it; and the
+`.jmx` carries a ⚠ warning in its Test Plan comment, visible the moment it opens in JMeter. HTTP/2
+pseudo-headers (`:authority`, `:method`, …) are protocol and never flagged.
+
 ## Token refresh (OAuth2 `refresh_token` grant)
 
 A capture that renews an expired access token mid-flow is handled end to end:
