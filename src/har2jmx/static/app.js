@@ -65,6 +65,7 @@ form.addEventListener("submit", async (e) => {
   fd.append("threads", $("#threads").value || "50");
   fd.append("loops", $("#loops").value || "5");
   fd.append("ramp", $("#ramp").value || "20");
+  fd.append("thinktime", $("#thinktime").value || "500");
 
   try {
     const res = await fetch("/api/convert", { method: "POST", body: fd });

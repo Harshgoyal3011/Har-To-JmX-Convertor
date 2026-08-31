@@ -43,6 +43,7 @@ class AppHandler(SimpleHTTPRequestHandler):
                 "threads": _clamp(fields.get("threads", "10"), 1, 10),
                 "loops": _clamp(fields.get("loops", "1"), 1, 1),
                 "ramp": _clamp(fields.get("ramp", "5"), 0, 5),
+                "thinktime": _clamp(fields.get("thinktime", "500"), 0, 500),
             }
             # New reasoning engine → runnable JMX + parameter CSVs + downloadable bundle.
             result = analyze(upload)
