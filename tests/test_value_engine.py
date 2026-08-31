@@ -91,6 +91,18 @@ def test_opaque_handle_correlates_coded_id_parameterizes_config_stays_static():
     assert note.classification == ValueClass.BUSINESS_MASTER_DATA
 
 
+def test_uncaptured_token_is_flagged_not_parameterized():
+    # a token used in requests whose issuing response was not captured must NOT land in a CSV — a
+    # fixed token there makes every virtual user share one stale session. It is flagged for
+    # correlation instead. Real credentials (username/password) still parameterize.
+    r = _result("sample_uncaptured_token.har")
+    tok = r.by_value("YWRtaW4xNzgzMzUy")
+    assert tok.classification == ValueClass.UNKNOWN          # flagged, never wired as data
+    assert tok not in r.parameters() and tok not in r.correlations()
+    # the genuine login inputs are still business data
+    assert r.by_value("admin").classification == ValueClass.BUSINESS_MASTER_DATA
+
+
 def test_every_verdict_has_reason():
     for name in ("sample_lineage.har", "sample_flow.har", "sample_entities.har"):
         for v in _result(name).verdicts:
