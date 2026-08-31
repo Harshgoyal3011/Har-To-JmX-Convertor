@@ -79,6 +79,21 @@ correlation) · **Uniform Random Timer** (think time) · CSV Data Sets · Transa
 HTTP Samplers · JSON/Regex extractors (each with a `NOT_FOUND_<var>` default) · **multipart
 file-upload** elements where applicable.
 
+## Token refresh (OAuth2 `refresh_token` grant)
+
+A capture that renews an expired access token mid-flow is handled end to end:
+
+- The **login-issued** access token keeps the clean base name (`access_token`); the **refreshed**
+  token is suffixed (`access_token2`). Calls before the refresh carry `${access_token}`, calls after
+  it carry `${access_token2}` — each extracted from the response that actually issued it.
+- The `refresh_token` is correlated from the login response and replayed in the refresh request body.
+- A token refresh is recognized **structurally** (`grant_type=refresh_token`, not by endpoint name),
+  so it is treated as background machinery: it never hijacks the surrounding user action's name (the
+  action stays `View Orders`, not `Login`).
+- The recorded **expiry failure** (the `401`/`403` on the stale token, immediately followed by a
+  refresh and a successful retry of the same endpoint) is dropped, so the load script carries no
+  built-in failure — its successful retry represents the real call.
+
 ## Verified across domains
 
 Correlation/parameterization correctness and a clean dry-run were verified on real or representative
@@ -96,6 +111,9 @@ plus large day-to-day flows (login → explore → select → checkout → payme
 - **One-time secrets** — real OTPs and live logins can't be synthesized; the tool generates the CSV
   structure and flags that you supply real data for N users.
 - **WebSocket / gRPC** — detected and reported, but scripting needs JMeter plugins.
+- **Unscheduled token re-auth** — the *recorded* refresh is scripted (above). But a token expiring at
+  an unpredictable moment during a long soak needs a conditional "on 401 → refresh → retry" loop
+  (`If Controller` + JSR223), which is dynamic control flow no linear HAR expresses.
 
 ## Running & validating
 

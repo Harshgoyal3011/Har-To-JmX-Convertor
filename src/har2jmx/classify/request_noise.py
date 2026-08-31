@@ -126,6 +126,29 @@ def _is_auth(req: NormalizedRequest) -> bool:
     return any(AUTH_SEGMENT_RE.match(seg) for seg in req.request.path_segments)
 
 
+_REFRESH_GRANT_RE = re.compile(r"grant_type[\"'\s:=]+refresh_token", re.IGNORECASE)
+
+
+def is_token_refresh(req: NormalizedRequest) -> bool:
+    """A token-refresh request exchanges a refresh token for a fresh access token.
+
+    Detected structurally (never by endpoint name): an OAuth2 ``grant_type=refresh_token`` write, or
+    a write that carries a ``refresh_token`` field. This is machinery triggered by expiry, not a user
+    action, so it must not name/anchor a transaction the way an interactive login does.
+    """
+    if req.method not in {"POST", "PUT"}:
+        return False
+    b = req.request.body
+    kv = {str(k).lower(): str(v).lower() for k, v in (b.form or [])}
+    if kv.get("grant_type") == "refresh_token" or "refresh_token" in kv:
+        return True
+    if isinstance(b.json, dict):
+        jl = {str(k).lower(): str(v).lower() for k, v in b.json.items()}
+        if jl.get("grant_type") == "refresh_token" or "refresh_token" in jl:
+            return True
+    return bool(b.raw and _REFRESH_GRANT_RE.search(b.raw))
+
+
 def _looks_business(req: NormalizedRequest) -> bool:
     if req.method not in {"GET", "HEAD"}:
         return True
@@ -234,11 +257,42 @@ def _mark_polling(capture: NormalizedCapture) -> None:
                     c.role = RequestRole.POLLING
 
 
+def _mark_superseded_auth_failures(capture: NormalizedCapture) -> None:
+    """Drop a recorded auth-expiry failure that a token refresh + retry already recovered.
+
+    A capture of a refresh cycle contains the doomed call (HTTP 401/403 on an expired access token)
+    right before the refresh and the successful retry of the *same* endpoint. Replayed as-is that
+    sampler fails every iteration and pollutes the results, yet it carries no unique business intent —
+    its successful retry represents the real call. When (and only when) a 401/403 is followed by a
+    token-refresh request and then a 2xx/3xx retry of the same method+path, exclude the failed
+    attempt so the load script has no built-in failure. Precise by construction: without both the
+    refresh and the matching successful retry, nothing is dropped.
+    """
+    reqs = capture.requests
+    for i, req in enumerate(reqs):
+        if req.classification.excluded or (req.status or 0) not in (401, 403):
+            continue
+        refresh_at = next((j for j in range(i + 1, len(reqs)) if is_token_refresh(reqs[j])), None)
+        if refresh_at is None:
+            continue
+        retry = next((k for k in range(refresh_at + 1, len(reqs))
+                      if reqs[k].method == req.method
+                      and reqs[k].request.path == req.request.path
+                      and 200 <= (reqs[k].status or 0) < 400), None)
+        if retry is None:
+            continue
+        c = req.classification
+        c.excluded = True
+        c.exclusion_reason = "pre-refresh auth failure (401/403) superseded by token refresh + retry"
+        c.reasons.append(c.exclusion_reason)
+
+
 def classify_capture(capture: NormalizedCapture) -> ClassificationSummary:
     """Classify every request in the capture. Mutates classifications in place; returns a summary."""
     for req in capture.requests:
         classify_request(req)
     _mark_polling(capture)
+    _mark_superseded_auth_failures(capture)
 
     summary = ClassificationSummary(total=capture.count)
     for req in capture.requests:

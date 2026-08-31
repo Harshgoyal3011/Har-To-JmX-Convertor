@@ -15,6 +15,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime
 
+from har2jmx.classify.request_noise import is_token_refresh
 from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest, RequestRole
 
 _THINK_GAP_MS = 2500  # a pause longer than this between requests suggests a new user action
@@ -189,6 +190,9 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     # Authentication
     if has("logout", "signout", "logoff"):
         return "Logout", "Authentication"
+    # a token refresh is background machinery (expiry-triggered), not an interactive login
+    if is_token_refresh(req):
+        return "Refresh Token", "Authentication"
     is_login_submit = has("login", "signin", "logon", "authenticate", "sso") or \
         (method in {"POST", "PUT"} and has("token", "authorize", "oauth", "auth", "session", "connect"))
     if is_login_submit:
@@ -262,6 +266,10 @@ def _anchor_priority(req: NormalizedRequest) -> int:
     role = req.classification.role
     if req.classification.excluded:
         return -1
+    # a token refresh nests under the user action that triggered it — it should never win anchoring
+    # over a real business request in the same group (else "View Orders" would read as "Refresh Token")
+    if is_token_refresh(req):
+        return 30
     if role == RequestRole.AUTH:
         # the auth *submit* (a write) is a better anchor than the auth page load (a GET)
         return 110 if req.method in {"POST", "PUT", "PATCH"} else 100
