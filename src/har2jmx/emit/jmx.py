@@ -361,6 +361,29 @@ def _add_global_header_manager(parent_ht, common: dict[str, tuple[str, str]], su
     SubElement(parent_ht, "hashTree")
 
 
+def _add_correlation_health_assertion(parent_ht, variable: str) -> None:
+    """Fail the sample when a correlation didn't resolve, instead of sending garbage downstream.
+
+    Every extractor falls back to the sentinel ``NOT_FOUND_<var>`` when it matches nothing — which
+    happens when the app returned HTTP 200 with an error body (a failed login still 200s), so the
+    response-code assertion passes while the flow is actually broken. This variable-scoped assertion
+    marks the sample failed whenever the variable still holds its sentinel, turning that false-green
+    into a real, visible failure. The sentinel never occurs in a healthy response, so it is
+    false-positive-free.
+    """
+    a = SubElement(parent_ht, "ResponseAssertion", {
+        "guiclass": "AssertionGui", "testclass": "ResponseAssertion",
+        "testname": f"Assert {variable} correlated", "enabled": "true"})
+    coll = _coll(a, "Asserion.test_strings")
+    _s(coll, "assert_notfound", f"NOT_FOUND_{variable}")
+    _s(a, "Assertion.scope", "variable")
+    _s(a, "Scope.variable", variable)
+    _s(a, "Assertion.test_field", "Assertion.response_data")
+    _b(a, "Assertion.assume_success", False)
+    _i(a, "Assertion.test_type", 20)   # 16 Substring | 4 Not  → fails if the sentinel is present
+    SubElement(parent_ht, "hashTree")
+
+
 def _add_response_assertion(parent_ht):
     """Thread-group scope: every sampler must return a 2xx/3xx code — surfaces failures under load."""
     a = SubElement(parent_ht, "ResponseAssertion", {
@@ -470,6 +493,8 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
                 else:
                     use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:"))
                     _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)
+                # fail loudly if this correlation didn't resolve (false-green guard)
+                _add_correlation_health_assertion(sampler_ht, c.variable)
 
     rough = tostring(root, encoding="utf-8")
     return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")

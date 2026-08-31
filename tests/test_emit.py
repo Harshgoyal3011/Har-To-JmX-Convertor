@@ -63,6 +63,17 @@ def test_launch_transaction_named():
     assert result.transactions[0].name == "Launch Application"
 
 
+def test_correlation_health_assertion_guards_false_greens():
+    # every correlation extractor is paired with a variable-scoped assertion that fails the sample
+    # when the extractor fell back to its NOT_FOUND sentinel — so a broken correlation (e.g. a login
+    # that 200s with an error body) surfaces as a real failure, not a silent false-green.
+    x = _xml(FIX / "sample_flow.har")
+    assert 'testname="Assert orderId correlated"' in x
+    assert "NOT_FOUND_orderId" in x
+    assert 'name="Assertion.scope">variable' in x and 'name="Scope.variable">orderId' in x
+    assert 'name="Assertion.test_type">20' in x           # Substring | Not → fails if sentinel present
+
+
 def test_bearer_header_substituted_in_plan():
     x = _xml(FIX / "sample_bearer.har")
     assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted

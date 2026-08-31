@@ -60,6 +60,19 @@ def test_echoed_user_input_is_master_data_not_runtime():
     assert oid.classification == ValueClass.RUNTIME_GENERATED
 
 
+def test_user_scoped_id_is_correlated_shared_catalog_id_is_parameterized():
+    # A server-returned id read from a PER-USER list (its producer path carries the session uid) must
+    # be CORRELATED — a static CSV id belongs to one login and 404s for every other user. A shared
+    # catalog id (producer path has no session value) stays master data so the CSV can spread load.
+    r = _result("sample_user_scoped.har")
+    acc = r.by_value("ACC-778812")     # from GET /users/UID-55021/accounts (session-scoped path)
+    assert acc.classification == ValueClass.RUNTIME_GENERATED
+    assert acc in r.correlations()
+    prod = r.by_value("PROD-4400")     # from GET /products (shared catalog, no session in path)
+    assert prod.classification == ValueClass.BUSINESS_MASTER_DATA
+    assert prod in r.parameters()
+
+
 def test_every_verdict_has_reason():
     for name in ("sample_lineage.har", "sample_flow.har", "sample_entities.har"):
         for v in _result(name).verdicts:
