@@ -8,6 +8,7 @@ from har2jmx.ir.build import build_capture
 from har2jmx.parameterize import build_parameterization
 
 FIX = Path(__file__).parent / "fixtures"
+EXAMPLES = Path(__file__).parent.parent / "examples"
 
 
 def _plan(name: str):
@@ -65,6 +66,34 @@ def test_no_csv_per_field_explosion():
     plan = _plan("sample_flow.har")
     # a handful of meaningful datasets, never dozens of fragments
     assert len(plan.datasets) <= 3
+
+
+def test_single_row_datasets_consolidate_into_one_file():
+    # a small flow must not emit one CSV per entity when each holds a single value: those carry no
+    # per-thread variation, so they merge into one row-per-user TestData set.
+    har = EXAMPLES / "complex_healthcare.har"
+    if not har.exists():
+        return
+    cap = build_capture(har.read_bytes())
+    classify_capture(cap)
+    plan = build_parameterization(cap)
+    single = [d for d in plan.datasets if d.row_count == 1]
+    assert len(single) == 1 and single[0].name == "TestData"     # six one-line CSVs -> one
+    cols = {c.name for c in single[0].columns}
+    assert {"doctorId", "slotId", "patientId", "username", "password"} <= cols   # nothing lost
+
+
+def test_multi_row_datasets_stay_separate():
+    # datasets that genuinely vary per thread keep their own file (merging would lose the variation).
+    har = EXAMPLES / "complex_ecommerce.har"
+    if not har.exists():
+        return
+    cap = build_capture(har.read_bytes())
+    classify_capture(cap)
+    plan = build_parameterization(cap)
+    names = {d.name for d in plan.datasets}
+    assert "Product" in names                                    # 2 productIds -> its own CSV
+    assert next(d for d in plan.datasets if d.name == "Product").row_count > 1
 
 
 if __name__ == "__main__":

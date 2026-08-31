@@ -102,16 +102,75 @@ def _business_named(flow: ValueFlow) -> bool:
 
 
 def _is_pagination_token(flow: ValueFlow) -> bool:
-    """The producing field is a next-page/continuation handle (opaque server state)."""
+    """The producing field is a next-page/continuation handle (opaque state)."""
     if flow.first_producer is not None and PAGINATION_TOKEN_RE.search(flow.first_producer.field or ""):
         return True
     return any(PAGINATION_TOKEN_RE.search(o.field or "") for o in flow.producers)
+
+
+# UI / display / config toggles: their value is a fixed enum the same for every user and every run, so
+# varying it exercises nothing — parameterizing it just adds a noise CSV column. Matched as whole
+# camel/snake words (so "modelId" is not mistaken for "mode", "border" not for "order").
+_CONFIG_WORDS = {
+    "layout", "sort", "sortby", "order", "orderby", "direction", "dir", "view", "mode", "theme",
+    "display", "align", "alignment", "orientation", "format", "density", "variant", "sortorder",
+    "sortdir", "sortfield", "viewmode", "tab", "panel", "skin", "style", "position",
+}
+_ENUM_VALUE_RE = re.compile(r"^[a-z][a-z0-9_]{0,19}$")
+_KNOWN_ENUM_VALUES = {
+    "asc", "desc", "true", "false", "grid", "list", "table", "card", "dark", "light", "auto",
+    "none", "all", "default", "compact", "expanded", "horizontal", "vertical", "left", "right",
+    "center", "top", "bottom", "enabled", "disabled", "on", "off", "yes", "no",
+}
+_WORD_SPLIT_RE = re.compile(r"[^A-Za-z0-9]+|(?<=[a-z0-9])(?=[A-Z])")
+
+
+def _field_words(field: str) -> set[str]:
+    return {w.lower() for w in _WORD_SPLIT_RE.split(field or "") if w}
+
+
+def _is_config_constant(flow: ValueFlow) -> bool:
+    """A UI/config enum on a config-named field — left hardcoded, never parameterized/correlated."""
+    val = str(flow.value).strip()
+    if val.lower() not in _KNOWN_ENUM_VALUES and not _ENUM_VALUE_RE.match(val):
+        return False
+    return any(_field_words(o.field) & _CONFIG_WORDS for o in flow.occurrences)
+
+
+_CODED_ID_RE = re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
+
+
+def _is_opaque_handle(value: str) -> bool:
+    """A random-looking, generated handle (mixed letters+digits, ≥8 chars) — not a plain id, count,
+    slug, word, or structured business code. These are per-run server state (a quote ref, draft id,
+    upload ticket) that expire, so a recorded value is stale. A structured coded id (PROD-4400,
+    DOC-4451: a prefix + separator + code) is a stable identifier and is deliberately excluded — it
+    belongs in a CSV so load spreads across the catalog, not correlated to a single instance."""
+    val = str(value).strip()
+    if _CODED_ID_RE.match(val):
+        return False
+    core = re.sub(r"[^A-Za-z0-9]", "", val)
+    if len(core) < 8 or core.isdigit() or (core.isalpha() and core.islower()):
+        return False
+    has_upper = any(c.isupper() for c in core)
+    has_lower = any(c.islower() for c in core)
+    has_digit = any(c.isdigit() for c in core)
+    return has_digit and (has_upper or has_lower) and (has_upper + has_lower + has_digit) >= 2
 
 
 def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None) -> ClassificationResult:
     lineage = lineage if lineage is not None else build_lineage(cap)
     value_entity = _build_value_entity_map(cap)
     req_by_index = {r.index: r for r in cap.requests}
+
+    # How many distinct values each producer field emitted. A field that produced several values
+    # (products[].productId → {5, 6, ...}) is a selectable catalog collection; a field that produced
+    # exactly one (quoteRef → {Qz7...}) is a singleton handle. Array siblings share one location, so
+    # a count > 1 marks the value as one-of-many (parameterize), a count of 1 as a singleton.
+    producer_field_values: dict[str, set] = {}
+    for f in lineage.flows:
+        if f.first_producer is not None:
+            producer_field_values.setdefault(f.first_producer.location, set()).add(f.value)
 
     verdicts: list[ValueVerdict] = []
     for flow in lineage.flows:
@@ -127,6 +186,18 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
         entity_field = ent[1] if ent else None
         is_id = ent[2] if ent else False
         consumers = flow.consumer_indices
+
+        # A UI/config enum (layout=grid, sort=asc, view=list) is constant for every user and run —
+        # leave it hardcoded rather than mint a noise CSV column. Decided before entity association,
+        # which would otherwise pull it in as "master data".
+        if _is_config_constant(flow):
+            verdicts.append(ValueVerdict(
+                value=flow.value, classification=ValueClass.STATIC, lifecycle=Lifecycle.UNKNOWN,
+                confidence="Medium", reason="UI/config enum (same for every user) — left hardcoded, not parameterized",
+                source=(flow.occurrences[0].location if flow.occurrences else ""),
+                consumers=consumers, entity=None, entity_field=None,
+            ))
+            continue
 
         # Lifecycle turns on the EARLIEST occurrence overall, not merely "has a producer".
         # If the client sent the value before (or at) the response that returned it, the value is
@@ -159,6 +230,13 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
                 reason = ("server-issued pagination/continuation cursor consumed by the next page — "
                           "opaque state that only fits this dataset snapshot, so correlate per page, "
                           "never a static CSV value")
+            elif (_is_opaque_handle(flow.value)
+                  and len(producer_field_values.get(flow.first_producer.location, ())) <= 1):
+                # a singleton opaque handle (quote ref, draft id, upload ticket) — server-issued this
+                # run and expiring, NOT one of a selectable catalog set — so correlate the fresh value
+                cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
+                reason = ("opaque server-issued handle (singleton, not one of a catalog list) reused "
+                          "downstream — per-run/expiring state, correlate it; a recorded value goes stale")
             elif method == "GET" or search:
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
                 reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"
@@ -173,7 +251,17 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
             source = (min(req_occs, key=lambda o: o.request_index).location
                       if req_occs else (flow.occurrences[0].location if flow.occurrences else ""))
             echoed = " (echoed back by the server, not generated by it)" if flow.producers else ""
-            if entity_name or _business_named(flow):
+            if _is_secret(flow):
+                # A token / session id / GUID first seen in a REQUEST usually means the response that
+                # issued it was not captured (an empty login body, or the flow starts mid-session).
+                # It must NEVER be parameterized — a fixed token in a CSV makes every virtual user share
+                # one stale session. Flag it for correlation instead (capture the issuing response, or
+                # add a boundary extractor); never wire it as static test data.
+                cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Medium"
+                reason = ("token/session/secret sent in a request but its issuing response was not "
+                          "captured — needs correlation (capture the response that returns it), "
+                          "never safe as a static CSV value")
+            elif entity_name or _business_named(flow):
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "High" if _business_named(flow) else "Medium"
                 reason = f"client-supplied business/master data (varies per user){echoed}"
             else:

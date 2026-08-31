@@ -120,6 +120,14 @@ def test_csv_row_synthesis_varies_safe_data_only():
     assert all(r[0] == "PAYEE-55" for r in rows)      # real payee preserved on every row
     assert len({r[1] for r in rows}) == 5             # amounts vary
 
+    # a consolidated mixed row (credentials + a numeric id + safe fields): the id and credential are
+    # cycled (never fabricated), only the safe field varies — so single-row merge doesn't freeze data.
+    rows = _synthesize_rows(["customerId", "password", "amount"], [("7788123", "PIN9", "100")], target=4)
+    assert len(rows) == 4
+    assert all(r[0] == "7788123" for r in rows)       # numeric identity is real — cycled, not invented
+    assert all(r[1] == "PIN9" for r in rows)          # credential never fabricated
+    assert len({r[2] for r in rows}) == 4             # the safe amount still varies per user
+
 
 def test_client_unique_key_uses_uuid_function():
     # a client-generated idempotency/request-id UUID must be fresh per request (${__UUID()}),
