@@ -26,10 +26,22 @@ later request. Detected across:
 | XML / SOAP envelope | `SessionId`, object ids returned in a SOAP response | Regex over the response |
 | 302 `Location` redirect | OAuth authorization `code`, SAML `SAMLRequest`/`RelayState` | Header regex; producer set to **not follow redirects** |
 | Response headers | `ETag` / version-lock tokens (replayed as `If-Match`) | Header regex |
+| **Per-user resource ids** returned by a session-scoped list | `accountId` from `/customers/${cif}/accounts`, `orderId` from `/users/${uid}/orders` | JSON extractor — see below |
+
+**User-owned vs shared data.** An id returned by a GET and reused is normally existing master data
+(parameterized from a CSV of known records, which spreads load across the catalog). But when the
+producing request is itself **scoped by a per-session value** — its path/query carries a correlated
+id such as `${cif}` — the records it returns belong to whoever logged in. A static CSV id then fits
+only one login and 404s for every other user, so those ids are **correlated per user** instead. A
+shared catalog (`/products`, `/doctors`) has no session id in its producer scope and is left as a
+CSV parameter, preserving load-spread. The distinction is structural, not name-based.
 
 Guarantees: variable names are **globally unique** (a generic `id` from two entities becomes
 `orderId` / `shipmentId`, never a shared `${id}` that clobbers itself); correlations never ship the
-literal value; extractors are structured-first (JSON > XPath/regex).
+literal value; extractors are structured-first (JSON > XPath/regex); and every extractor is paired
+with a **correlation-health assertion** — a variable-scoped assertion that fails the sample if the
+extractor fell back to its `NOT_FOUND_<var>` sentinel, so a broken correlation surfaces as a real
+failure instead of a false-green (an app that returns HTTP 200 with an error body still 200s).
 
 ## Parameterization — entity-centric test data
 
@@ -61,9 +73,11 @@ page reads as `Launch Application`; supporting XHRs nest inside their user actio
 
 Every plan contains: Test Plan + `THREADS`/`LOOPS`/`RAMP` variables · Thread Group (`${THREADS}`) ·
 HTTP Request Defaults · **HTTP Cookie Manager** · **global HTTP Header Manager** (shared headers
-hoisted once) · per-sampler Header Managers (request-specific only) · **Response Assertion** (2xx/3xx)
-· **Uniform Random Timer** (think time) · CSV Data Sets · Transaction Controllers · HTTP Samplers ·
-JSON/Regex extractors · **multipart file-upload** elements where applicable.
+hoisted once) · per-sampler Header Managers (request-specific only) · **Response Assertion** (2xx/3xx,
+thread-group scope) · **correlation-health assertions** (one per extractor, fail on unresolved
+correlation) · **Uniform Random Timer** (think time) · CSV Data Sets · Transaction Controllers ·
+HTTP Samplers · JSON/Regex extractors (each with a `NOT_FOUND_<var>` default) · **multipart
+file-upload** elements where applicable.
 
 ## Verified across domains
 

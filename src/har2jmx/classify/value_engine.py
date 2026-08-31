@@ -52,6 +52,7 @@ class ValueVerdict:
     entity: str | None = None
     entity_field: str | None = None
     is_identifier: bool = False
+    producer_scope: frozenset = frozenset()   # producer path segments + query values (session-scope test)
 
 
 @dataclass
@@ -128,6 +129,7 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
         earliest_resp = min((o.request_index for o in flow.producers), default=None)
         client_originated = earliest_req is not None and (earliest_resp is None or earliest_req <= earliest_resp)
 
+        producer_scope: frozenset = frozenset()
         if flow.first_producer is not None and not client_originated:
             # server-originated: the server introduced this value this run
             producer = req_by_index.get(flow.first_producer.request_index)
@@ -136,6 +138,8 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
             status = str(producer.status) if producer else ""
             path = producer.request.path if producer else ""
             search = _producer_is_search(producer) if producer else False
+            if producer:
+                producer_scope = _scope_tokens(producer)
 
             if _is_secret(flow):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
@@ -167,13 +171,53 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
         verdicts.append(ValueVerdict(
             value=flow.value, classification=cls, lifecycle=life, confidence=conf, reason=reason,
             source=source, consumers=consumers, entity=entity_name, entity_field=entity_field,
-            is_identifier=is_id,
+            is_identifier=is_id, producer_scope=producer_scope,
         ))
+
+    _reclassify_user_scoped(verdicts)
 
     order = {ValueClass.RUNTIME_GENERATED: 0, ValueClass.BUSINESS_MASTER_DATA: 1,
              ValueClass.STATIC: 2, ValueClass.UNKNOWN: 3}
     verdicts.sort(key=lambda v: (order[v.classification], -len(v.consumers), v.value))
     return ClassificationResult(verdicts=verdicts)
+
+
+def _scope_tokens(req) -> frozenset:
+    """Whole-value tokens that scope a request: its path segments + its query values.
+
+    A per-session value appearing here (e.g. /customers/CIF-778/accounts) proves the request is
+    scoped to one authenticated user, so the records it returns are user-owned — not a shared catalog.
+    """
+    toks = {seg for seg in req.request.path.split("/") if seg}
+    toks |= {str(val).strip() for _, val in req.request.query if str(val).strip()}
+    return frozenset(toks)
+
+
+def _reclassify_user_scoped(verdicts: list[ValueVerdict]) -> None:
+    """Server-returned ids read from a per-user list must be correlated, not parameterized.
+
+    A GET-returned, reused id is normally existing master data (parameterize from a CSV of known
+    records). But when the producing request is itself scoped by a per-session correlated value
+    (its path/query carries a runtime id such as ${cif}), the records it returns belong to whoever
+    logged in — a static CSV id is valid for one user and 404s for every other. Correlating extracts
+    the right id per user, so the script stays correct no matter how many logins the tester supplies.
+    A shared catalog (`/products`) has no session value in its producer scope and is left untouched,
+    preserving CSV load-spread across the catalog.
+    """
+    runtime_vals = {v.value for v in verdicts if v.classification == ValueClass.RUNTIME_GENERATED}
+    if not runtime_vals:
+        return
+    for v in verdicts:
+        if (v.classification == ValueClass.BUSINESS_MASTER_DATA
+                and v.lifecycle == Lifecycle.EXISTING_BEFORE_RUN
+                and v.consumers
+                and v.producer_scope & runtime_vals):
+            v.classification = ValueClass.RUNTIME_GENERATED
+            v.lifecycle = Lifecycle.CREATED_THIS_RUN
+            v.confidence = "High"
+            v.reason = ("returned by a per-session request (its producer path/query carries a "
+                        "correlated session id), so this id is user-owned — correlate per user, "
+                        "not a shared CSV value that only fits one login")
 
 
 def _producer_is_search(req) -> bool:
