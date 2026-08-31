@@ -20,6 +20,7 @@ later request. Detected across:
 | Location | Example values | Extractor emitted |
 |---|---|---|
 | Set-Cookie / request cookie | session ids (`JSESSIONID`, `SPSESSION`) | Cookie Manager (auto-replay) |
+| **Value embedded in a response blob** | a token wrapped in a string (`"Auth_token: <t>"`), a value inside HTML/text | Boundary/regex extractor — anchored on the field label, only for dynamic-looking values |
 | Response JSON body | tokens, created object ids (`orderId`, `bookingid`, `appointmentId`), continuation tokens | JSON extractor (`$..field`) |
 | `Authorization: Bearer <token>` | JWT / OAuth access tokens | JSON + header substitution (`Bearer ${token}`) |
 | HTML hidden inputs | CSRF, `__RequestVerificationToken`, `__VIEWSTATE`, `EventValidation`, `SAMLResponse` | Regex over the page |
@@ -75,6 +76,8 @@ users. Datasets that genuinely vary per thread keep their own file.
 
 **CSV row synthesis** grows datasets toward the thread count so N users exercise distinct data:
 
+- Search / filter / category selections (`cat`, `category`, `keyword`, `tag`, `brand`, …) are
+  recognized as per-user inputs and **parameterized**, so users don't all browse the same term.
 - Safe business data (names, amounts, prices, dates, quantities, free text, emails) is **varied**.
 - Credentials (username/password/otp/pin/cvv/card) are **never fabricated** — kept as observed.
 - Coded real ids (GUIDs, `PROD-…`, `ACC-…`) are **never fabricated** — cycled, kept valid.

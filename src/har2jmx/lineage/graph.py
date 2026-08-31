@@ -283,5 +283,89 @@ def build_lineage(cap: NormalizedCapture) -> LineageGraph:
             significant=_is_significant(value),
         ))
 
+    _augment_embedded(cap, flows)
     flows.sort(key=lambda f: (not f.is_produced_then_consumed, -len(f.consumers), f.value))
     return LineageGraph(flows=flows)
+
+
+# ---------------------------------------------------------------- embedded / boundary correlation
+
+# A stable left anchor: a "key": / key= / "key" : prefix immediately before the value. Anchoring on a
+# field label (not arbitrary preceding text, which may itself vary per run) keeps the extractor robust.
+_LEFT_ANCHOR_RE = re.compile(r'(["\']?[\w .\-]{1,32}["\']?\s*[:=]\s*["\']?)\s*$')
+_RIGHT_DELIMS = "\"'<>,;&}\n\r\t "
+_STATIC_NAME_RE = re.compile(r"\.(?:html?|js|mjs|css|png|jpe?g|gif|svg|ico|woff2?|ttf|json|xml|pdf|txt|map)$",
+                             re.IGNORECASE)
+
+
+def _looks_dynamic(value: str) -> bool:
+    """Only correlate an embedded value that looks server-generated (a token/handle/id): it has a
+    digit or mixed case. Excludes static resource names (index.html) and plain dictionary words,
+    which are constants that would just add a noise extractor."""
+    if _STATIC_NAME_RE.search(value):
+        return False
+    has_digit = any(c.isdigit() for c in value)
+    has_upper = any(c.isupper() for c in value)
+    has_lower = any(c.islower() for c in value)
+    return has_digit or (has_upper and has_lower)
+
+
+def _searchable_response_text(req: NormalizedRequest) -> str:
+    parts = [req.response.body.raw or ""]
+    for name, value in req.response.headers:
+        if value:
+            parts.append(f"{name}: {value}")
+    for name, value in req.response.set_cookies:
+        if value:
+            parts.append(f"{name}={value}")
+    return "\n".join(p for p in parts if p)
+
+
+def _boundary_regex(left: str, value: str, right: str) -> str | None:
+    """Left-anchor + non-greedy capture + right delimiter, for a value embedded in a response blob
+    (e.g. a token inside the string "Auth_token: <t>"). Returns None if no stable anchor is found."""
+    m = _LEFT_ANCHOR_RE.search(left)
+    if not m:
+        return None
+    lb = m.group(1)
+    rb = next((ch for ch in right if ch in _RIGHT_DELIMS), "")
+    esc_l = re.escape(lb)
+    if rb:
+        return rf"{esc_l}([^{re.escape(rb)}]+?){re.escape(rb)}"
+    return rf"{esc_l}(\S+)"
+
+
+def _augment_embedded(cap: NormalizedCapture, flows: list[ValueFlow]) -> None:
+    """Correlate a value that appears EMBEDDED inside an earlier response (not as a whole JSON/XML
+    slot). Whole-slot matching misses a token returned wrapped in a larger string; here we find it as
+    a substring in a prior response and synthesize a boundary/regex producer so it correlates instead
+    of being mistaken for client input. Conservative: only token-length values (>=8), only when a
+    stable field-label anchor precedes them, and only from a response BEFORE their first request use."""
+    resp_text = {req.index: _searchable_response_text(req)
+                 for req in cap.requests if not req.classification.excluded}
+
+    for f in flows:
+        if f.producers or len(f.value) < 8 or not _looks_dynamic(f.value):
+            continue
+        req_occs = [o for o in f.occurrences if o.side == "request"]
+        if not req_occs:
+            continue
+        earliest_req = min(o.request_index for o in req_occs)
+        consumer_field = min(req_occs, key=lambda o: o.request_index).field
+        for idx in sorted(i for i in resp_text if i < earliest_req):
+            text = resp_text[idx]
+            pos = text.find(f.value)
+            if pos == -1:
+                continue
+            regex = _boundary_regex(text[max(0, pos - 40):pos], f.value,
+                                    text[pos + len(f.value): pos + len(f.value) + 40])
+            if not regex:
+                continue
+            producer = Occurrence(request_index=idx, side="response",
+                                  location="response.regex:" + regex, field=consumer_field, raw=f.value)
+            f.producers = [producer]
+            f.first_producer = producer
+            f.consumers = [o for o in f.occurrences
+                           if o.side == "request" and o.request_index > idx]
+            f.significant = True
+            break

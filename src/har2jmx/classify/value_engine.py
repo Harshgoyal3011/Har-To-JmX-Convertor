@@ -101,6 +101,17 @@ def _business_named(flow: ValueFlow) -> bool:
     return any(USER_DATA_RE.search(o.field) and not TOKEN_NAME_RE.search(o.field) for o in flow.occurrences)
 
 
+# Search / filter / category selections a user makes — classic parameterization targets (vary the
+# term per virtual user). A clearly-named field only; a bare generic "q" stays conservative.
+_SEARCH_INPUT_RE = re.compile(
+    r"^(?:query|search|searchterm|keyword|keywords|kw|term|cat|category|categories|tag|tags|brand|"
+    r"genre|department|dept|section|collection)$", re.IGNORECASE)
+
+
+def _is_search_input(flow: ValueFlow) -> bool:
+    return any(o.side == "request" and _SEARCH_INPUT_RE.match(o.field or "") for o in flow.occurrences)
+
+
 def _is_pagination_token(flow: ValueFlow) -> bool:
     """The producing field is a next-page/continuation handle (opaque state)."""
     if flow.first_producer is not None and PAGINATION_TOKEN_RE.search(flow.first_producer.field or ""):
@@ -219,7 +230,11 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
             if producer:
                 producer_scope = _scope_tokens(producer)
 
-            if _is_secret(flow):
+            if source.startswith("response.regex:"):
+                cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
+                reason = ("found embedded inside an earlier response (server-issued, e.g. a token "
+                          "wrapped in a string) and reused — correlated via a boundary extractor")
+            elif _is_secret(flow):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = "server-issued session/token/secret, reused in a later request"
             elif source.startswith(("response.location:", "response.header:")) or str(status).startswith("3"):
@@ -261,8 +276,9 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None)
                 reason = ("token/session/secret sent in a request but its issuing response was not "
                           "captured — needs correlation (capture the response that returns it), "
                           "never safe as a static CSV value")
-            elif entity_name or _business_named(flow):
-                cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "High" if _business_named(flow) else "Medium"
+            elif entity_name or _business_named(flow) or _is_search_input(flow):
+                strong = _business_named(flow) or _is_search_input(flow)
+                cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "High" if strong else "Medium"
                 reason = f"client-supplied business/master data (varies per user){echoed}"
             else:
                 cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
