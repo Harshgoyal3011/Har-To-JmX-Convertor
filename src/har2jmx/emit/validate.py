@@ -16,7 +16,7 @@ _CONSTITUENTS = [
     "ThreadGroup", "HTTP Request Defaults", "HTTP Cookie Manager", "HTTP Header Manager",
     "ResponseAssertion", "UniformRandomTimer", "TransactionController", "HTTPSamplerProxy",
 ]
-_UDV = {"THREADS", "LOOPS", "RAMP"}
+_UDV = {"THREADS", "LOOPS", "RAMP", "THINKTIME"}
 _VAR_RE = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
 
 
@@ -45,9 +45,14 @@ def validate_plan(result: EngineResult, xml: str | bytes) -> list[str]:
     if unresolved:
         issues.append("unresolved variables (no extractor/CSV/UDV source): " + ", ".join(sorted(unresolved)))
 
-    # only the request-carrying props matter for a "hardcoded secret" — not timer/assertion config
+    # only the request-carrying props matter for a "hardcoded secret" — not timer/assertion config.
+    # Strip the top-level config UDVs (THREADS/LOOPS/RAMP/THINKTIME) first, so a correlation value
+    # that happens to equal e.g. the think-time (userId "500" vs THINKTIME 500) isn't a false leak.
+    x_scan = re.sub(
+        r'<stringProp name="Argument\.name">(?:' + "|".join(_UDV) + r')</stringProp>\s*'
+        r'<stringProp name="Argument\.value">[^<]*</stringProp>', "", x)
     request_content = "\n".join(
-        re.findall(r'(?:Argument\.value|HTTPSampler\.path|Header\.value)">([^<]*)<', x)
+        re.findall(r'(?:Argument\.value|HTTPSampler\.path|Header\.value)">([^<]*)<', x_scan)
     )
     leaked = sorted({c.variable for c in result.correlations if c.value and c.value in request_content})
     if leaked:

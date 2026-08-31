@@ -63,6 +63,19 @@ def test_launch_transaction_named():
     assert result.transactions[0].name == "Launch Application"
 
 
+def test_think_time_is_configurable_from_upload():
+    # the uploaded "think time" value drives a THINKTIME variable the timer uses (like THREADS/RAMP),
+    # so pacing is set at upload and stays editable in JMeter — not hardcoded.
+    x = build_jmx_xml(analyze((FIX / "sample_flow.har").read_bytes()),
+                      {"threads": "50", "loops": "1", "ramp": "10", "thinktime": "1500"}).decode()
+    assert 'name="THINKTIME"' in x and ">1500<" in x
+    assert 'ConstantTimer.delay">${THINKTIME}' in x
+    assert 'RandomTimer.range">${THINKTIME}' in x
+    # a default is supplied when the field is omitted
+    d = build_jmx_xml(analyze((FIX / "sample_flow.har").read_bytes())).decode()
+    assert 'name="THINKTIME"' in d and 'ConstantTimer.delay">${THINKTIME}' in d
+
+
 def test_correlation_health_assertion_guards_false_greens():
     # every correlation extractor is paired with a variable-scoped assertion that fails the sample
     # when the extractor fell back to its NOT_FOUND sentinel — so a broken correlation (e.g. a login
