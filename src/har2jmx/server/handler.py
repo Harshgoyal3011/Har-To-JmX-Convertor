@@ -47,18 +47,21 @@ class AppHandler(SimpleHTTPRequestHandler):
             # New reasoning engine → runnable JMX + parameter CSVs + downloadable bundle.
             result = analyze(upload)
             result_id = uuid.uuid4().hex[:10]
-            jmx_path, csv_paths = emit_jmx(result, OUTPUT_DIR, config, name=f"har2jmx_{result_id}")
+            jmx_path, csv_paths, report_paths = emit_jmx(result, OUTPUT_DIR, config, name=f"har2jmx_{result_id}")
 
             bundle_path = OUTPUT_DIR / f"har2jmx_{result_id}.zip"
             with zipfile.ZipFile(bundle_path, "w", zipfile.ZIP_DEFLATED) as zf:
                 zf.write(jmx_path, arcname=jmx_path.name)
                 for c in csv_paths:
                     zf.write(c, arcname=c.name)
+                for rp in report_paths:
+                    zf.write(rp, arcname=rp.name)
 
             downloads = {
                 "jmx": jmx_path.name,
                 "zip": bundle_path.name,
                 "csvs": [c.name for c in csv_paths],
+                "reports": [rp.name for rp in report_paths],
             }
             payload = build_web_summary(result, result_id, downloads)
             payload["config"] = config

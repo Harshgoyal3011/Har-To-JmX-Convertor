@@ -190,6 +190,26 @@ function render(d) {
   $("#excludedCount").textContent = rq.excluded + " requests · " + rq.excludedPct + "%";
   if (!(d.excluded || []).length) ex.innerHTML = `<div class="muted">No noise in this capture — every request was business-relevant.</div>`;
 
+  // needs manual correlation
+  const mc = d.manualCorrelations || [];
+  const mcWrap = $("#manualCorr"); mcWrap.innerHTML = "";
+  const mcCard = $("#manualCard");
+  $("#manualCount").textContent = mc.length ? mc.length + " to wire up" : "none";
+  if (!mc.length) {
+    mcCard.classList.remove("warn");
+    mcWrap.innerHTML = `<div class="muted">✓ All dynamic values were correlated automatically — nothing to wire by hand.</div>`;
+  } else {
+    mcCard.classList.add("warn");
+    mc.forEach((m) => {
+      const q = el("div", "exq");
+      q.innerHTML = `<div><span class="var">${esc(m.field)}</span> <span class="val">${esc(m.value)}</span></div>
+        <div class="muted" style="margin-top:4px">${esc(m.reason)}</div>
+        <div class="muted" style="margin-top:2px"><b>Used in:</b> ${esc((m.usedIn || []).join("; ") || "a later request")}</div>
+        <div class="muted" style="margin-top:2px"><b>Fix:</b> ${esc(m.suggestion)}</div>`;
+      mcWrap.appendChild(q);
+    });
+  }
+
   $("#results").classList.remove("hidden");
   $("#results").scrollIntoView({ behavior: "smooth", block: "start" });
 }

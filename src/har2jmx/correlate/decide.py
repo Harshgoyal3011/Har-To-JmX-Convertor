@@ -69,6 +69,8 @@ def _choose_extractor(location: str, cookie_name: str, consumers: list[Occurrenc
         if _all_consumers_are_cookies(consumers):
             return ExtractorType.COOKIE_MANAGER, ""
         return ExtractorType.REGEX, rf"Set-Cookie:\s*{re.escape(cookie_name)}=([^;]+)"
+    if location.startswith("response.regex:"):        # embedded / boundary match (prebuilt regex)
+        return ExtractorType.REGEX, location.split("response.regex:", 1)[1]
     if location.startswith("response.body:"):
         return ExtractorType.JSON, _json_path(location)
     if location.startswith("response.location:"):
