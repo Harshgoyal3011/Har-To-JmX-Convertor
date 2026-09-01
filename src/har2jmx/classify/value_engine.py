@@ -128,30 +128,42 @@ def _is_pagination_token(flow: ValueFlow) -> bool:
 # UI / display / config toggles: their value is a fixed enum the same for every user and every run, so
 # varying it exercises nothing — parameterizing it just adds a noise CSV column. Matched as whole
 # camel/snake words (so "modelId" is not mistaken for "mode", "border" not for "order").
-_CONFIG_WORDS = {
-    "layout", "sort", "sortby", "order", "orderby", "direction", "dir", "view", "mode", "theme",
-    "display", "align", "alignment", "orientation", "format", "density", "variant", "sortorder",
-    "sortdir", "sortfield", "viewmode", "tab", "panel", "skin", "style", "position",
+# Config / display / navigation field names, matched on the WHOLE normalized field name (separators
+# stripped) — NOT on component words, so "orderId" ("orderid") is not mistaken for the sort word
+# "order", nor "accountType" for a config "type". Add whole names here, including compounds.
+_CONFIG_FIELD_NAMES = {
+    "sort", "sortby", "sortorder", "sortdir", "sortdirection", "sortfield", "orderby",
+    "direction", "dir", "mode", "viewmode", "viewtype", "displaymode", "layout", "theme",
+    "display", "orientation", "density", "align", "alignment", "panel", "format",
+    "tab", "tabname", "activetab", "selectedtab", "currenttab",
+    "screen", "screentab", "screentype", "screenname", "screenmode",
+    "wizard", "wizardstep", "step", "perpage", "pagesize", "columns", "toggle",
 }
-_ENUM_VALUE_RE = re.compile(r"^[a-z][a-z0-9_]{0,19}$")
 _KNOWN_ENUM_VALUES = {
     "asc", "desc", "true", "false", "grid", "list", "table", "card", "dark", "light", "auto",
     "none", "all", "default", "compact", "expanded", "horizontal", "vertical", "left", "right",
     "center", "top", "bottom", "enabled", "disabled", "on", "off", "yes", "no",
 }
-_WORD_SPLIT_RE = re.compile(r"[^A-Za-z0-9]+|(?<=[a-z0-9])(?=[A-Z])")
+# A config value is a short code / enum / compound (sort=createdAt,asc; screenType=DETAIL_VIEW) — any
+# case, common separators — but NOT free text (kept short), a GUID, or an id-like value.
+_CONFIG_VALUE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_,:.\-+ ]{0,39}$")
+_CONFIG_ID_LIKE_RE = re.compile(r"^\d{4,}$|^[A-Za-z]{2,}[-_]\d")   # a long number or PREFIX-1234 code
+_NON_ALNUM_RE = re.compile(r"[^a-z0-9]")
 
 
-def _field_words(field: str) -> set[str]:
-    return {w.lower() for w in _WORD_SPLIT_RE.split(field or "") if w}
+def _norm_field(field: str) -> str:
+    return _NON_ALNUM_RE.sub("", (field or "").lower())
 
 
 def _is_config_constant(flow: ValueFlow) -> bool:
-    """A UI/config enum on a config-named field — left hardcoded, never parameterized/correlated."""
+    """A UI/display/config value on a config-named field (sort, view, screenTab, screenType, …) — the
+    same for every user and run, so left hardcoded, never parameterized/correlated."""
     val = str(flow.value).strip()
-    if val.lower() not in _KNOWN_ENUM_VALUES and not _ENUM_VALUE_RE.match(val):
-        return False
-    return any(_field_words(o.field) & _CONFIG_WORDS for o in flow.occurrences)
+    if val.lower() not in _KNOWN_ENUM_VALUES:
+        if not _CONFIG_VALUE_RE.match(val) or GUID_RE.search(val) or _CONFIG_ID_LIKE_RE.match(val):
+            return False   # a GUID / id / free text is not a config toggle even on a config-named field
+    return any(o.side == "request" and _norm_field(o.field) in _CONFIG_FIELD_NAMES
+               for o in flow.occurrences)
 
 
 _CODED_ID_RE = re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")

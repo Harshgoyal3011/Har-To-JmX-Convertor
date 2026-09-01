@@ -115,6 +115,21 @@ def test_uncaptured_token_is_flagged_not_parameterized():
     assert r.by_value("admin").classification == ValueClass.BUSINESS_MASTER_DATA
 
 
+def test_ui_config_fields_stay_static_business_inputs_still_parameterize():
+    # sort / screenTab / screenType are UI/display config — same for every user — and must be left
+    # hardcoded, even with uppercase or compound values (createdAt,DESC / DETAIL_VIEW). Search/business
+    # inputs and a created order id are unaffected.
+    r = _result("sample_config_fields.har")
+    for cfg in ("createdAt,DESC", "Summary", "DETAIL_VIEW"):
+        v = r.by_value(cfg)
+        assert v is not None and v.classification == ValueClass.STATIC, cfg
+        assert v not in r.parameters()
+    assert r.by_value("monitor").classification == ValueClass.BUSINESS_MASTER_DATA     # category search
+    assert r.by_value("Anaya").classification == ValueClass.BUSINESS_MASTER_DATA        # user input
+    # whole-name matching: a created order id ("ORD1", field orderId) is NOT mistaken for sort "order"
+    assert _result("sample_flow.har").by_value("ORD1").classification == ValueClass.RUNTIME_GENERATED
+
+
 def test_every_verdict_has_reason():
     for name in ("sample_lineage.har", "sample_flow.har", "sample_entities.har"):
         for v in _result(name).verdicts:
