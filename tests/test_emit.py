@@ -63,6 +63,46 @@ def test_launch_transaction_named():
     assert result.transactions[0].name == "Launch Application"
 
 
+def test_env_portable_base_url_and_inherited_samplers():
+    # the plan repoints via ${BASE_URL}: HTTP Request Defaults + primary-host samplers reference it,
+    # so the same script runs against dev/stage/prod by editing one variable.
+    x = _xml(FIX / "sample_flow.har")
+    assert 'name="BASE_URL"' in x and 'name="PROTOCOL"' in x
+    import re
+    defaults = re.search(r'HTTP Request Defaults.*?HTTPSampler\.domain">([^<]*)', x, re.S).group(1)
+    assert defaults == "${BASE_URL}"
+    # primary-host samplers have empty domain (inherit the default) — no hardcoded host
+    assert re.search(r'HTTPSampler\.domain"\s*/>', x) or 'HTTPSampler.domain"></stringProp>' in x
+
+
+def test_steady_state_hold_enables_scheduler_zero_keeps_loop_count():
+    r = analyze((FIX / "sample_flow.har").read_bytes())
+    held = build_jmx_xml(r, {"threads": "100", "ramp": "30", "hold": "60"}).decode()
+    assert 'ThreadGroup.scheduler">true' in held
+    assert 'ThreadGroup.duration">${__intSum(${RAMP},${HOLD})}' in held
+    assert 'LoopController.loops">-1' in held
+    # default (no hold) stays loop-count driven — no behavior change
+    plain = build_jmx_xml(r, {"threads": "100", "ramp": "30"}).decode()
+    assert 'ThreadGroup.scheduler">false' in plain and 'LoopController.loops">${LOOPS}' in plain
+
+
+def test_cache_and_dns_managers_present():
+    x = _xml(FIX / "sample_flow.har")
+    assert 'testclass="CacheManager"' in x and 'clearEachIteration">true' in x
+    assert 'testclass="DNSCacheManager"' in x
+
+
+def test_observed_think_time_default_from_capture():
+    from har2jmx.emit.jmx import _observed_think_time
+    r = analyze((FIX / "sample_flow.har").read_bytes())
+    obs = _observed_think_time(r.capture)
+    assert 100 <= obs <= 8000                          # clamped to a sane pacing range
+    # with no think time supplied, the plan uses the observed value (not a flat 500 guess)
+    x = build_jmx_xml(r, {"threads": "10"}).decode()
+    import re
+    assert re.search(r'name="THINKTIME".*?Argument\.value">' + str(obs) + '<', x, re.S)
+
+
 def test_think_time_is_configurable_from_upload():
     # the uploaded "think time" value drives a THINKTIME variable the timer uses (like THREADS/RAMP),
     # so pacing is set at upload and stays editable in JMeter — not hardcoded.

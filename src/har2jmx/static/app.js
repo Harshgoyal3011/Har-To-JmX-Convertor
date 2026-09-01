@@ -65,7 +65,8 @@ form.addEventListener("submit", async (e) => {
   fd.append("threads", $("#threads").value || "50");
   fd.append("loops", $("#loops").value || "5");
   fd.append("ramp", $("#ramp").value || "20");
-  fd.append("thinktime", $("#thinktime").value || "500");
+  fd.append("hold", $("#hold").value || "0");
+  if ($("#thinktime").value) fd.append("thinktime", $("#thinktime").value);   // blank → observed pacing
 
   try {
     const res = await fetch("/api/convert", { method: "POST", body: fd });
