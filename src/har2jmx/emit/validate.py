@@ -13,10 +13,10 @@ from xml.dom import minidom
 from har2jmx.engine import EngineResult
 
 _CONSTITUENTS = [
-    "ThreadGroup", "HTTP Request Defaults", "HTTP Cookie Manager", "HTTP Header Manager",
+    "ThreadGroup", "HTTP Request Defaults", "HTTP Cookie Manager", "CacheManager", "HTTP Header Manager",
     "ResponseAssertion", "UniformRandomTimer", "TransactionController", "HTTPSamplerProxy",
 ]
-_UDV = {"THREADS", "LOOPS", "RAMP", "THINKTIME"}
+_UDV = {"THREADS", "LOOPS", "RAMP", "THINKTIME", "BASE_URL", "PROTOCOL", "HOLD", "DURATION"}
 _VAR_RE = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
 
 
