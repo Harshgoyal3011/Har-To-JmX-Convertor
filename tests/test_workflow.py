@@ -92,6 +92,18 @@ def test_terminal_action_verb_naming():
     assert "Confirm Transfer" in names   # POST /api/transfers/confirm
 
 
+def test_keepalive_call_never_names_a_transaction():
+    # a background /check (session keepalive) fired on every page must NOT anchor the transaction —
+    # otherwise every page reads "Create Check", "Create Check (2)", ... The real user action names it.
+    cap, txns = _txns("sample_keepalive.har")
+    names = [t.name for t in txns]
+    assert not any("Check" in n for n in names), names       # no keepalive-named transactions
+    assert "Browse Products" in names                        # POST /bycat
+    assert "View Cart" in names                              # POST /viewcart
+    # and a read verb (POST /view, /viewcart) reads as View, never "Create"
+    assert not any(n.startswith("Create View") for n in names)
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0

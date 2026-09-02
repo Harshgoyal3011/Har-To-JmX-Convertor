@@ -45,7 +45,21 @@ _ACTION_TERMINALS = {
     "pay": _av("Payment", "Business Action"), "payment": _av("Payment", "Business Action"),
     "search": _av("{n} Search", "Business View"), "find": _av("{n} Search", "Business View"),
     "lookup": _av("{n} Search", "Business View"), "query": _av("{n} Search", "Business View"),
-    "browse": _av("{n} Search", "Business View"),
+    "browse": _av("Browse {n}", "Business View"),
+    # read / view actions — these are NOT creates (a POST /view is still a read)
+    "view": _av("View {n}", "Business View"), "list": _av("View {n}", "Business View"),
+    "get": _av("View {n}", "Business View"), "fetch": _av("View {n}", "Business View"),
+    "load": _av("View {n}", "Business View"), "show": _av("View {n}", "Business View"),
+    "detail": _av("View {n}", "Business View"), "details": _av("View {n}", "Business View"),
+    "read": _av("View {n}", "Business View"), "open": _av("Open {n}", "Business View"),
+    "cart": _av("View Cart", "Business View"), "basket": _av("View Cart", "Business View"),
+    "viewcart": _av("View Cart", "Business View"), "viewbasket": _av("View Cart", "Business View"),
+    "addtocart": _av("Add to Cart", "Business Action"), "addtobasket": _av("Add to Cart", "Business Action"),
+    "addcart": _av("Add to Cart", "Business Action"),
+    "deleteitem": _av("Delete Item", "Business Action"), "removeitem": _av("Delete Item", "Business Action"),
+    "deletecart": _av("Remove from Cart", "Business Action"),
+    "removefromcart": _av("Remove from Cart", "Business Action"),
+    "bycat": _av("Browse Products", "Business View"), "bycategory": _av("Browse Products", "Business View"),
     "initiate": _av("Initiate {n}", "Business Action"), "confirm": _av("Confirm {n}", "Business Action"),
     "verify": _av("Verify {n}", "Business Action"), "validate": _av("Validate {n}", "Business Action"),
     "approve": _av("Approve {n}", "Business Action"), "reject": _av("Reject {n}", "Business Action"),
@@ -208,7 +222,11 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     terminal = next((s for s in reversed(segs)
                      if s and not _is_id_seg(s) and not _VERSION_RE.match(s) and s not in _API_WORDS), "")
     if terminal in _ACTION_TERMINALS:
-        return _ACTION_TERMINALS[terminal](noun)
+        # don't let the verb double as the noun on a single-segment endpoint (/view → "View", not
+        # "View View"): blank the noun only when it IS the terminal verb itself (not merely verb-like,
+        # so "/transfers/initiate" still reads "Initiate Transfer").
+        clean_noun = "" if noun.lower() == terminal else noun
+        return _ACTION_TERMINALS[terminal](clean_noun)
 
     # Method-driven fallback
     if method in {"POST"}:
@@ -261,11 +279,36 @@ def _is_boundary(prev: NormalizedRequest, curr: NormalizedRequest) -> bool:
     return False
 
 
+# Background / keepalive / config calls that a page fires on its own — they must never NAME a user
+# action (else three different pages all read "Create Check"). Matched on the terminal path segment.
+_SUPPORTING_SEGMENTS = {
+    "check", "keepalive", "keep-alive", "heartbeat", "ping", "poll", "session", "config",
+    "configuration", "settings", "manifest", "health", "healthcheck", "healthz", "readyz", "livez",
+    "ready", "live", "status", "status", "beacon", "telemetry", "metrics", "collect", "track",
+    "log", "logs", "event", "events", "notify", "notifications", "presence", "sync", "refresh",
+    "validate", "verify", "token", "csrf", "nonce", "time", "clock", "version",
+}
+
+
+def _is_supporting(req: NormalizedRequest) -> bool:
+    segs = [s.lower() for s in req.request.path_segments]
+    terminal = next((s for s in reversed(segs)
+                     if s and not _is_id_seg(s) and not _VERSION_RE.match(s) and s not in _API_WORDS), "")
+    if terminal in _SUPPORTING_SEGMENTS:
+        return True
+    # a config/manifest file (config.json, app.manifest) fired by the page shell
+    last = segs[-1] if segs else ""
+    return last in {"config.json", "manifest.json", "settings.json", "env.json", "version.json"}
+
+
 def _anchor_priority(req: NormalizedRequest) -> int:
     """Higher = more likely to be the request that names the user action."""
     role = req.classification.role
     if req.classification.excluded:
         return -1
+    # background/keepalive/config calls (a page fires them itself) must not name the transaction
+    if _is_supporting(req):
+        return 15
     # a token refresh nests under the user action that triggered it — it should never win anchoring
     # over a real business request in the same group (else "View Orders" would read as "Refresh Token")
     if is_token_refresh(req):
