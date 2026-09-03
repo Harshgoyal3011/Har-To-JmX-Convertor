@@ -55,9 +55,15 @@ def _camel(entity: str, field: str) -> str:
 
 
 def _json_path(producer_location: str) -> str:
+    """Recursive-descent to the leaf field name (``$..addressId``). This is robust for BOTH object and
+    array nesting — a dotted path like ``$.addresses.addressId`` breaks when ``addresses`` is an array
+    (Jayway can't index an array without ``[*]``), which silently makes the extractor fall back to its
+    NOT_FOUND default. The leaf name is specific (addressId, accountId, cartId), so ``$..<leaf>`` matches
+    the intended value and works whether the container is an object or a list."""
     keypath = producer_location.split("response.body:", 1)[1]
     keypath = _LIST_IDX_RE.sub("", keypath)
-    return f"$.{keypath}" if "." in keypath else f"$..{keypath}"
+    leaf = keypath.split(".")[-1] or keypath
+    return f"$..{leaf}"
 
 
 def _all_consumers_are_cookies(consumers: list[Occurrence]) -> bool:

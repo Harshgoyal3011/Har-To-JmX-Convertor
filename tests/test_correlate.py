@@ -26,6 +26,17 @@ def test_created_id_gets_json_extractor():
     assert d.consumers and d.value == "ORD1"
 
 
+def test_array_nested_jsonpath_is_recursive_not_dotted():
+    # a value inside an array (accounts[].accountId) must extract with recursive-descent $..leaf — a
+    # dotted $.accounts.accountId breaks at runtime (Jayway can't index an array without [*]), silently
+    # falling back to NOT_FOUND. Top-level and object-nested both resolve to the same robust form.
+    from har2jmx.correlate.decide import _json_path
+    assert _json_path("response.body:accounts.accountId") == "$..accountId"   # array-nested (was broken)
+    assert _json_path("response.body:addresses.addressId") == "$..addressId"
+    assert _json_path("response.body:token") == "$..token"                    # top-level unchanged
+    assert _json_path("response.body:Item.token") == "$..token"               # object-nested → still works
+
+
 def test_master_data_id_is_not_correlated():
     by_var, _ = _corr("sample_flow.har")
     # customer 1001 is existing master data → must NOT be a correlation
