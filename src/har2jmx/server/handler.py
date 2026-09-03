@@ -95,10 +95,37 @@ class AppHandler(SimpleHTTPRequestHandler):
         self.wfile.write(data)
 
 
+def _lan_ip() -> str:
+    """Best-effort local network IP so others on the LAN know the address to open."""
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))          # no packet is sent; just picks the outbound interface
+        return s.getsockname()[0]
+    except OSError:
+        return "127.0.0.1"
+    finally:
+        s.close()
+
+
 def main() -> None:
+    import os
+    host = os.environ.get("HAR2JMX_HOST", "127.0.0.1")
+    try:
+        port = int(os.environ.get("HAR2JMX_PORT", "8000"))
+    except ValueError:
+        port = 8000
+
     handler = functools.partial(AppHandler, directory=str(ROOT))
-    server = ThreadingHTTPServer(("127.0.0.1", 8000), handler)
-    print("Self Healing HAR to JMeter prototype running at http://127.0.0.1:8000")
+    server = ThreadingHTTPServer((host, port), handler)
+
+    print(f"har2jmx running — local:   http://127.0.0.1:{port}")
+    if host not in ("127.0.0.1", "localhost"):
+        # exposed on the network: show the address teammates on the same LAN can open
+        print(f"                shared:  http://{_lan_ip()}:{port}   (anyone on your network)")
+        print("                (bound to all interfaces — allow the port through your firewall if prompted)")
+    else:
+        print("                (localhost only — set HAR2JMX_HOST=0.0.0.0 to let others on your network use it)")
     server.serve_forever()
 
 
