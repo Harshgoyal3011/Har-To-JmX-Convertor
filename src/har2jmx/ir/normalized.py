@@ -5,9 +5,8 @@ discovery, value lineage, classification, correlation, parameterization, emit) c
 IR and *annotates* it. No stage re-parses the HAR.
 
 This IR is framework-independent: it describes HTTP exchanges and their capture context, plus
-placeholders the later stages fill in (classification, lineage). It is intentionally separate
-from the legacy ``ir.models.RequestIR`` used by the current live pipeline, which stays in place
-until the staged pipeline reaches parity (strangler migration).
+placeholders the later stages fill in (classification, lineage). It is the single model the whole
+pipeline uses.
 """
 
 from __future__ import annotations

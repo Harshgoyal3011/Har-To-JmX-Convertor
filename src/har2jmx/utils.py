@@ -3,8 +3,6 @@ from __future__ import annotations
 import re
 from urllib.parse import unquote
 
-from har2jmx.models import CorrelationRule, Parameter
-
 
 def clean_name(value: str, fallback: str = "Transaction") -> str:
     value = unquote(value or "").strip()
@@ -22,19 +20,6 @@ def variable_name(name: str) -> str:
     if name[0].isdigit():
         name = f"v_{name}"
     return name[:48]
-
-
-def apply_variable(value: str, parameters: list[Parameter], correlations: list[CorrelationRule]) -> str:
-    if value is None:
-        return ""
-    replaced = str(value)
-    all_vars = [(p.name, p.value) for p in parameters if p.value] + [(c.variable, c.value) for c in correlations if c.value]
-    for name, raw in all_vars:
-        if raw == replaced:
-            return f"${{{name}}}"
-        if len(raw) >= 8 and raw in replaced:
-            replaced = replaced.replace(raw, f"${{{name}}}")
-    return replaced
 
 
 def xml_safe_comment_text(text: str) -> str:
