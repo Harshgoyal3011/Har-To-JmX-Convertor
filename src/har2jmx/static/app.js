@@ -93,6 +93,17 @@ $("#restartBtn").addEventListener("click", () => {
 function render(d) {
   const m = d.metrics, rq = d.requests;
 
+  // capture-quality preflight — correlation is only as good as the capture
+  const cq = d.captureQuality;
+  const cqBox = $("#captureQuality");
+  if (cq && cq.degraded) {
+    cqBox.innerHTML = `<strong>Capture quality note:</strong> ${cq.emptyBodies} of ${cq.businessResponses} responses were recorded without a body (${cq.bodyCoveragePct}% have bodies). Values issued by those responses can't be correlated automatically — re-record with response bodies enabled for full correlation.`;
+    cqBox.classList.remove("hidden");
+  } else {
+    cqBox.classList.add("hidden");
+    cqBox.innerHTML = "";
+  }
+
   // downloads
   $("#dlZip").href = "/download/" + encodeURIComponent(d.downloads.zip);
   $("#dlJmx").href = "/download/" + encodeURIComponent(d.downloads.jmx);

@@ -19,7 +19,7 @@ from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import build_lineage
 from har2jmx.parameterize import ParameterizationPlan, build_parameterization
 from har2jmx.understand import ApplicationProfile, AuthProfile, detect_application, detect_auth
-from har2jmx.validate import ReplayReport, validate_replay
+from har2jmx.validate import ExtractorCheck, ReplayReport, validate_replay, verify_extractors
 from har2jmx.workflow import Transaction, discover_transactions
 
 
@@ -34,6 +34,7 @@ class EngineResult:
     correlations: list[CorrelationDecision]
     parameterization: ParameterizationPlan
     replay: ReplayReport
+    extractor_checks: list[ExtractorCheck] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
 
 
@@ -44,6 +45,9 @@ def _metrics(res: EngineResult) -> dict[str, Any]:
     excluded = total - len(business)
     corr = res.correlations
     datasets = res.parameterization.datasets
+    from har2jmx.validate import ExtractorStatus
+    checks = res.extractor_checks
+    unresolved = sum(1 for c in checks if c.status == ExtractorStatus.UNRESOLVED)
     return {
         "requests": {
             "total": total,
@@ -63,6 +67,9 @@ def _metrics(res: EngineResult) -> dict[str, Any]:
             "count": len(corr),
             "high_confidence": sum(1 for c in corr if c.confidence == "High"),
             "coverage_per_business_request": round(len(corr) / max(len(business), 1), 2),
+            "verified_unique": sum(1 for c in checks if c.status == ExtractorStatus.UNIQUE),
+            "refined": sum(1 for c in checks if c.status == ExtractorStatus.AMBIGUOUS_REFINED),
+            "unresolved": unresolved,
         },
         "parameterization": {
             "datasets": len(datasets),
@@ -70,7 +77,7 @@ def _metrics(res: EngineResult) -> dict[str, Any]:
             "rows": sum(d.row_count for d in datasets),
         },
         "replay_readiness": res.replay.score,
-        "manual_review_items": len(res.replay.issues()) + len(res.classification.unknowns()),
+        "manual_review_items": len(res.replay.issues()) + len(res.classification.unknowns()) + unresolved,
         "_estimated": [
             "correlation.high_confidence is a precision proxy (no external ground truth)",
             "manual_review_items counts flagged findings + ambiguous values",
@@ -92,11 +99,12 @@ def analyze(har: bytes | dict) -> EngineResult:
     correlations = build_correlations(cap, classification, lineage)   # M9
     parameterization = build_parameterization(cap, classification, model, lineage)  # M10
     replay = validate_replay(cap, correlations, parameterization, classification, lineage)  # M11
+    extractor_checks = verify_extractors(cap, correlations)   # resolve each extractor against its response
 
     result = EngineResult(
         capture=cap, application=application, auth=auth, transactions=transactions,
         entities_model=model, classification=classification, correlations=correlations,
-        parameterization=parameterization, replay=replay,
+        parameterization=parameterization, replay=replay, extractor_checks=extractor_checks,
     )
     result.metrics = _metrics(result)           # M12
     return result
