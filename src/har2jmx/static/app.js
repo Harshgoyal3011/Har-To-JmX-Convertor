@@ -97,7 +97,13 @@ function render(d) {
   const cq = d.captureQuality;
   const cqBox = $("#captureQuality");
   if (cq && cq.degraded) {
-    cqBox.innerHTML = `<strong>Capture quality note:</strong> ${cq.emptyBodies} of ${cq.businessResponses} responses were recorded without a body (${cq.bodyCoveragePct}% have bodies). Values issued by those responses can't be correlated automatically — re-record with response bodies enabled for full correlation.`;
+    let msg;
+    if (cq.errorDominated) {
+      msg = `<strong>Capture quality note:</strong> ${cq.errorResponses} of ${cq.businessResponses} responses were errors (${cq.errorPct}% were 4xx/5xx). This capture recorded a broken session — created records never existed, so little correlates and samplers will fail the response assertion. Re-capture a clean, successful run.`;
+    } else {
+      msg = `<strong>Capture quality note:</strong> ${cq.emptyBodies} of ${cq.businessResponses} responses were recorded without a body (${cq.bodyCoveragePct}% have bodies). Values issued by those responses can't be correlated automatically — re-record with response bodies enabled for full correlation.`;
+    }
+    cqBox.innerHTML = msg;
     cqBox.classList.remove("hidden");
   } else {
     cqBox.classList.add("hidden");

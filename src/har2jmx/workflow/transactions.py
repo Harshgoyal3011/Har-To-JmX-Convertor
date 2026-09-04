@@ -134,6 +134,16 @@ def _meaningful(low: str) -> bool:
         and low not in _API_WORDS and low not in _VERB_WORDS
 
 
+# a trailing data-format / handler extension (search.json, users.xml, list.aspx) is transport, not a
+# business noun — strip it before naming so /search.json reads "Search", not "Search.json Search".
+_EXT_RE = re.compile(r"^(.+)\.(?:json|xml|html?|csv|txt|rss|atom|aspx?|php|jsp|do|action|cgi)$", re.IGNORECASE)
+
+
+def _strip_ext(seg: str) -> str:
+    m = _EXT_RE.match(seg)
+    return m.group(1) if m else seg
+
+
 def _entity_noun(segments: list[str]) -> str:
     """Singular business noun for the resource (Patient, Order) — for create/update/open."""
     for seg in reversed(segments):
@@ -173,8 +183,9 @@ def _has_search_signal(req: NormalizedRequest) -> bool:
 
 def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     """Return (name, category) for an anchor request, from generic endpoint semantics."""
-    segs = [s.lower() for s in req.request.path_segments]
-    noun = _entity_noun(req.request.path_segments) or "Request"
+    clean_segments = [_strip_ext(s) for s in req.request.path_segments]
+    segs = [s.lower() for s in clean_segments]
+    noun = _entity_noun(clean_segments) or "Request"
     method = req.method
 
     # SOAP: name from the operation (SOAPAction header, else the first body element).
