@@ -9,7 +9,10 @@ TOKEN_NAME_RE = re.compile(
 USER_DATA_RE = re.compile(
     r"(?:username|user|email|password|pass|phone|mobile|customer|client|account|order|reference|transaction|invoice|ticket|id|name|city|country|zip|postal|address|date|dob|ssn"
     r"|aadhaar|passport|branch|policy|claim|pincode|pan[_-]?(?:number|no|card)"
-    r"|query|search|keyword|term|criteria|filter)",
+    r"|query|search|keyword|term|criteria|filter"
+    # free-text user input — the actual thing a user types: a prompt, a message, a review. For a GenAI
+    # or content app this is THE variable to vary per user (same prompt x250 tests nothing real).
+    r"|content|prompt|message|comment|description|note|question|review|caption|feedback|subject)",
     re.IGNORECASE,
 )
 TOKEN_VALUE_RE = re.compile(r"^[A-Za-z0-9_\-+/=.]{16,}$")

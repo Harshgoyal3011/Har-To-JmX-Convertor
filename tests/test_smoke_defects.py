@@ -84,6 +84,24 @@ def test_genuine_uncaptured_token_still_flags():
     assert any("sess" in m["value"] or "session" in m["field"].lower() for m in manual)
 
 
+def test_freetext_user_input_is_parameterized():
+    # a GenAI/content app's free-text input (the prompt/message the user types) is THE variable to vary
+    # per user — it must be parameterized, not shipped hardcoded (same prompt x N users tests nothing).
+    r = analyze(_har([
+        _entry("POST", "https://api.x.com/login", resp_body='{"access_token":"AT-abc123def456"}',
+               req_body='{"email":"a@x.com","password":"p"}'),
+        _entry("POST", "https://api.x.com/conversations", status=201,
+               req_headers={"Authorization": "Bearer AT-abc123def456"},
+               req_body='{"title":"Chat"}', resp_body='{"conversationId":"conv_7h3k9m2p"}'),
+        _entry("POST", "https://api.x.com/conversations/conv_7h3k9m2p/messages", status=201,
+               req_headers={"Authorization": "Bearer AT-abc123def456"},
+               req_body='{"role":"user","content":"Explain how to size a load test"}',
+               resp_body='{"messageId":"msg_a1b2c3"}'),
+    ]))
+    cols = {c.name for d in r.parameterization.datasets for c in d.columns}
+    assert "content" in cols, f"free-text prompt not parameterized; params={cols}"
+
+
 def test_error_dominated_capture_is_flagged():
     cap = build_capture(_har([
         _entry("POST", "https://petstore.x.io/store/order", status=500, resp_body='{"code":500}',
