@@ -84,6 +84,10 @@ _ACTION_TERMINALS = {
     "sync": _av("Sync {n}", "Business Action"), "reset": _av("Reset {n}", "Business Action"),
     "assign": _av("Assign {n}", "Business Action"), "transfer": _av("Transfer {n}", "Business Action"),
 }
+# bare noun terminals (not verbs) whose verb comes from the HTTP method: GET /cart is "View Cart" but
+# POST /cart is "Create Cart" and DELETE /cart is "Delete Cart". Explicit verb terminals (viewcart,
+# addtocart, …) are unaffected — they carry their own action.
+_READ_ONLY_NOUN_TERMINALS = {"cart", "basket"}
 _SEARCH_QUERY_KEYS = {"q", "query", "search", "keyword", "term", "filter", "name", "text"}
 _ID_SEG_RE = re.compile(r"^(?:\d+|[0-9a-fA-F]{8,}|[0-9a-fA-F-]{16,})$")
 _VERSION_RE = re.compile(r"^v\d+$", re.IGNORECASE)
@@ -221,7 +225,10 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     # verbs): /transfers/initiate -> Initiate Transfer   |   /payment/{id}/receipt -> View Receipt
     terminal = next((s for s in reversed(segs)
                      if s and not _is_id_seg(s) and not _VERSION_RE.match(s) and s not in _API_WORDS), "")
-    if terminal in _ACTION_TERMINALS:
+    # a bare noun terminal (cart/basket) is method-ambiguous — only read it as "View X" on a read verb;
+    # a POST/PUT/DELETE to it is a create/update/delete, handled by the method fallback below.
+    noun_terminal_write = terminal in _READ_ONLY_NOUN_TERMINALS and method not in {"GET", "HEAD"}
+    if terminal in _ACTION_TERMINALS and not noun_terminal_write:
         # don't let the verb double as the noun on a single-segment endpoint (/view → "View", not
         # "View View"): blank the noun only when it IS the terminal verb itself (not merely verb-like,
         # so "/transfers/initiate" still reads "Initiate Transfer").
