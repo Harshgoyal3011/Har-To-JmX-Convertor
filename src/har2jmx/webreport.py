@@ -81,14 +81,29 @@ def assess_capture_quality(cap) -> dict[str, Any]:
                     if r.response.body.json is not None or (r.response.body.raw or "").strip())
     with_timing = sum(1 for r in business if (r.context.started or "").strip())
     coverage = round(100 * with_body / total) if total else 100
+
+    def _is_error(r) -> bool:
+        try:
+            return int(str(r.status)) >= 400
+        except (TypeError, ValueError):
+            return False
+    errors = sum(1 for r in business if _is_error(r))
+    error_pct = round(100 * errors / total) if total else 0
+    # A capture where most responses were 4xx/5xx recorded a broken session: the created ids never
+    # existed, so nothing correlates and every sampler will fail the response assertion at run time.
+    error_dominated = bool(total) and error_pct >= 50
+
     return {
         "businessResponses": total,
         "withBody": with_body,
         "emptyBodies": total - with_body,
         "withTiming": with_timing,
         "bodyCoveragePct": coverage,
-        # degraded when a meaningful share of responses carry no body — correlation is limited
-        "degraded": bool(total) and coverage < 75,
+        "errorResponses": errors,
+        "errorPct": error_pct,
+        "errorDominated": error_dominated,
+        # degraded when responses carry no body (correlation is blind) OR most were errors (broken session)
+        "degraded": (bool(total) and coverage < 75) or error_dominated,
     }
 
 
