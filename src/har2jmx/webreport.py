@@ -25,30 +25,71 @@ def _suggestion(reason: str) -> str:
             "response and reference it as ${…} instead of the recorded literal.")
 
 
+def _used_in(cap, consumers) -> list[str]:
+    used_in: list[str] = []
+    seen: set[str] = set()
+    for i in consumers:
+        if 0 <= i < len(cap.requests):
+            rq = cap.requests[i]
+            label = f"{rq.context.transaction or 'flow'} — {rq.label()}"
+            if label not in seen:
+                seen.add(label)
+                used_in.append(label)
+    return used_in[:8]
+
+
 def build_manual_correlations(result: EngineResult) -> list[dict[str, Any]]:
     """Dynamic values the engine could not auto-correlate — the list a performance engineer must wire
-    up by hand before running at load (e.g. a token whose issuing response was not captured)."""
+    up by hand before running at load. Two sources: values with no captured producer at all
+    (``needs_correlation``), and correlations whose extractor could not be verified against the
+    capture (``extractor_checks`` UNRESOLVED) — the latter would otherwise ship as a false green."""
     cap = result.capture
     items: list[dict[str, Any]] = []
+    listed: set[str] = set()
     for v in result.classification.needs_correlation():
-        used_in: list[str] = []
-        seen: set[str] = set()
-        for i in v.consumers:
-            if 0 <= i < len(cap.requests):
-                rq = cap.requests[i]
-                label = f"{rq.context.transaction or 'flow'} — {rq.label()}"
-                if label not in seen:
-                    seen.add(label)
-                    used_in.append(label)
         field = v.entity_field or (v.source.split(":")[-1] if ":" in v.source else v.source) or "value"
         items.append({
             "field": field,
             "value": _mask(v.value),
             "reason": v.reason,
-            "usedIn": used_in[:8],
+            "usedIn": _used_in(cap, v.consumers),
             "suggestion": _suggestion(v.reason),
         })
+        listed.add(v.value)
+    # extractors that were decided but did not resolve against the producing response
+    for chk in result.extractor_checks:
+        if chk.ok or chk.value in listed:
+            continue
+        listed.add(chk.value)
+        items.append({
+            "field": chk.variable,
+            "value": _mask(chk.value),
+            "reason": chk.reason,
+            "usedIn": _used_in(cap, chk.consumers),
+            "suggestion": chk.suggestion or _suggestion(chk.reason),
+        })
     return items
+
+
+def assess_capture_quality(cap) -> dict[str, Any]:
+    """Up-front signal on capture completeness: correlation can only be as good as the capture. A HAR
+    recorded without response bodies (a common devtools setting) hides the values that must be
+    correlated — so we surface that before the user trusts the output."""
+    business = [r for r in cap.requests if not r.classification.excluded]
+    total = len(business)
+    with_body = sum(1 for r in business
+                    if r.response.body.json is not None or (r.response.body.raw or "").strip())
+    with_timing = sum(1 for r in business if (r.context.started or "").strip())
+    coverage = round(100 * with_body / total) if total else 100
+    return {
+        "businessResponses": total,
+        "withBody": with_body,
+        "emptyBodies": total - with_body,
+        "withTiming": with_timing,
+        "bodyCoveragePct": coverage,
+        # degraded when a meaningful share of responses carry no body — correlation is limited
+        "degraded": bool(total) and coverage < 75,
+    }
 
 
 def _derived_auth_list(result: EngineResult) -> list[str]:
@@ -147,5 +188,6 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             for r in cap.requests if r.classification.excluded
         ][:14],
         "manualCorrelations": build_manual_correlations(result),
+        "captureQuality": assess_capture_quality(cap),
         "downloads": downloads,
     }

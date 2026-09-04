@@ -101,9 +101,15 @@ def _generated_uuid_values(result: EngineResult) -> set[str]:
 
 def _build_sub_map(result: EngineResult) -> dict[str, str]:
     sub: dict[str, str] = {}
+    # values whose extractor could not be verified against the capture must NOT be substituted: a
+    # ${var} with no working extractor resolves to NOT_FOUND at run time (a false green). Ship the
+    # literal and escalate it to the manual-review report instead.
+    unresolved = {chk.value for chk in result.extractor_checks if not chk.ok}
     for c in result.correlations:                       # correlations win over parameters
         if c.extractor == ExtractorType.COOKIE_MANAGER:
             continue                                    # Cookie Manager replays it; no ${var}
+        if c.value in unresolved:
+            continue                                    # no verified extractor → keep the literal
         if _sub_ok(c.value):
             sub[str(c.value)] = f"${{{c.variable}}}"
     for uuid_val in _generated_uuid_values(result):     # fresh UUID per request (beats a CSV value)
@@ -527,6 +533,9 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     if not str(config.get("thinktime", "")).strip():
         config["thinktime"] = str(_observed_think_time(result.capture))
     sub = _build_sub_map(result)
+    # extractor self-check: only ship an extractor proven to resolve; refine ambiguous JSONPaths; drop
+    # (and let the manual-review path flag) any that could not be verified against the capture.
+    check_by_var = {chk.variable: chk for chk in result.extractor_checks}
     producer_map: dict[int, list] = {}
     for c in result.correlations:
         if c.extractor != ExtractorType.COOKIE_MANAGER:
@@ -582,8 +591,14 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             for c in produced:
+                chk = check_by_var.get(c.variable)
+                if chk is not None and not chk.ok:
+                    # unverifiable extractor — omit it (and its ${var}) rather than ship a false green;
+                    # the value stays a literal and is listed in the manual-review report.
+                    continue
                 if c.extractor == ExtractorType.JSON:
-                    _add_json_extractor(sampler_ht, c.variable, c.expression)
+                    expr = chk.refined_expression if (chk and chk.refined_expression) else c.expression
+                    _add_json_extractor(sampler_ht, c.variable, expr)
                 else:
                     use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:"))
                     _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)

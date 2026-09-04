@@ -54,7 +54,11 @@ def validate_plan(result: EngineResult, xml: str | bytes) -> list[str]:
     request_content = "\n".join(
         re.findall(r'(?:Argument\.value|HTTPSampler\.path|Header\.value)">([^<]*)<', x_scan)
     )
-    leaked = sorted({c.variable for c in result.correlations if c.value and c.value in request_content})
+    # A value whose extractor could not be verified against the capture is *intentionally* shipped as a
+    # literal and escalated to the manual-review report — that is not a silent leak, so exempt it here.
+    escalated = {c.value for c in result.extractor_checks if not c.ok}
+    leaked = sorted({c.variable for c in result.correlations
+                     if c.value and c.value not in escalated and c.value in request_content})
     if leaked:
         issues.append("correlation value shipped literally in a request (should be a variable): " + ", ".join(leaked))
 
