@@ -64,7 +64,6 @@ ENTERPRISE_APP_RULES: list[tuple[re.Pattern, str]] = [
     (re.compile(r"auth0\.com", re.IGNORECASE), "Auth0 (Auth)"),
     (re.compile(r"login\.microsoftonline\.com|graph\.microsoft\.com", re.IGNORECASE), "Microsoft Entra / Azure AD"),
 ]
-STATIC_RESOURCE_TYPES = {"stylesheet", "script", "image", "font", "media", "manifest", "other"}
 STATIC_EXTENSIONS = {
     ".css", ".js", ".mjs", ".map", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
     ".woff", ".woff2", ".ttf", ".otf", ".eot", ".mp4", ".webm", ".mp3", ".wav", ".avi",
@@ -72,12 +71,6 @@ STATIC_EXTENSIONS = {
 }
 STATIC_PATH_RE = re.compile(r"/(?:static|assets|asset|content|css|js|scripts|fonts|images|img|media|vendor|dist|build)/", re.IGNORECASE)
 API_PATH_RE = re.compile(r"/(?:api|rest|graphql|oauth|auth|login|logout|session|token|saml|openid)(?:/|$)", re.IGNORECASE)
-NOISE_HOST_RE = re.compile(
-    r"(google-analytics|googletagmanager|doubleclick|hotjar|segment|mixpanel|newrelic|datadog|"
-    r"clarity|facebook|linkedin|fonts\.googleapis|fonts\.gstatic)",
-    re.IGNORECASE,
-)
-NOISE_PATH_RE = re.compile(r"/(?:collect|analytics|telemetry|metrics|beacon|favicon|css2)(?:/|$|\?)", re.IGNORECASE)
 
 BUSINESS_TRANSACTION_RULES: list[tuple[re.Pattern, str]] = [
     (re.compile(r"/(auth|login|signin|sign-in|logon|authenticate|sso|saml|oauth|openid|authorize)(/|$|\?)", re.IGNORECASE), "Login"),
