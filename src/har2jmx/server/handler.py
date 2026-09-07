@@ -23,6 +23,17 @@ def _clamp(raw: str, minimum: int, default: int) -> str:
         return str(default)
 
 
+def _max_upload_bytes() -> int:
+    """Upload ceiling (bytes). A HAR is JSON text; 25 MB covers very large captures while stopping a
+    hostile/accidental multi-GB body from being read into memory. Raise via HAR2JMX_MAX_UPLOAD_MB."""
+    import os
+    try:
+        mb = int(os.environ.get("HAR2JMX_MAX_UPLOAD_MB", "25"))
+    except (TypeError, ValueError):
+        mb = 25
+    return max(1, mb) * 1024 * 1024
+
+
 class AppHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:
         if self.path == "/":
@@ -38,6 +49,18 @@ class AppHandler(SimpleHTTPRequestHandler):
             return
         try:
             length = int(self.headers.get("Content-Length", "0"))
+        except (TypeError, ValueError):
+            length = 0
+        # reject oversized uploads BEFORE reading the body into memory (avoids a memory-exhaustion DoS)
+        limit = _max_upload_bytes()
+        if length > limit:
+            self.respond_json(
+                {"error": f"Upload too large ({length // (1024 * 1024)} MB). The limit is "
+                          f"{limit // (1024 * 1024)} MB — export a smaller HAR, or raise "
+                          "HAR2JMX_MAX_UPLOAD_MB."},
+                status=HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
+            return
+        try:
             upload, fields = parse_multipart(self.headers, self.rfile.read(length))
             config = {
                 "threads": _clamp(fields.get("threads", "10"), 1, 10),
