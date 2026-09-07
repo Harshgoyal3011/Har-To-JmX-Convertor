@@ -75,6 +75,18 @@ def test_names_are_business_readable_no_ids():
         assert "9001" not in n and "5501" not in n and "SKU" not in n
 
 
+def test_redirect_split_auth_handshake_merges():
+    # a redirect-heavy OAuth/OpenID handshake fragments across pagerefs into Login, Login (2)... and
+    # Authorize Session, Authorize Session (2)...; adjacent fragments split by fast redirects (no user
+    # pause) collapse into one transaction each — no numeric duplication.
+    _, txns = _txns("auth_fragmented.har")
+    names = [t.name for t in txns]
+    assert names == ["Authorize Session", "Login"], names
+    login = next(t for t in txns if t.name == "Login")
+    assert len(login.request_indices) == 4                       # all four login fragments merged
+    assert not any("(2)" in n or "(3)" in n for n in names)      # duplication gone
+
+
 def test_no_pageref_capture_does_not_crash():
     cap, txns = _txns("sample_noise.har")
     assert len(txns) >= 1

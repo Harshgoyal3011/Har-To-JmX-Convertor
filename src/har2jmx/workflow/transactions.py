@@ -383,9 +383,32 @@ def discover_transactions(cap: NormalizedCapture) -> list[Transaction]:
             business_indices=[r.index for r in g if not r.classification.excluded],
         ))
 
+    transactions = _merge_fragmented(cap, transactions)   # collapse redirect-split same-name fragments
     _label_launch(cap, transactions)     # rename the landing action BEFORE de-duplicating names
     _dedupe_names(cap, transactions)
     return transactions
+
+
+def _merge_fragmented(cap: NormalizedCapture, transactions: list[Transaction]) -> list[Transaction]:
+    """Collapse consecutive transactions that share a name/category and were split by an *automatic*
+    boundary — a redirect / pageref change with no user pause between them. A redirect-heavy auth
+    handshake (OAuth/OpenID, SAML, ASP.NET) fragments across many pagerefs into Login, Login (2),
+    Login (3)… and Authorize Session, Authorize Session (2)…; those are one user action and should be
+    one transaction. A genuinely repeated action separated by think time — paging through results, a
+    second login after a logout — has a real gap between fragments (or isn't adjacent) and is kept."""
+    if len(transactions) < 2:
+        return transactions
+    out: list[Transaction] = [transactions[0]]
+    for t in transactions[1:]:
+        prev = out[-1]
+        gap = _gap_ms(cap.requests[prev.request_indices[-1]], cap.requests[t.request_indices[0]])
+        auto_boundary = gap is not None and gap <= _THINK_GAP_MS   # split by redirect/nav, not a pause
+        if t.name == prev.name and t.category == prev.category and auto_boundary:
+            prev.request_indices.extend(t.request_indices)
+            prev.business_indices.extend(t.business_indices)
+        else:
+            out.append(t)
+    return out
 
 
 def _dedupe_names(cap: NormalizedCapture, transactions: list[Transaction]) -> None:
