@@ -17,9 +17,17 @@ from har2jmx.server.multipart import parse_multipart
 from har2jmx.webreport import build_web_summary
 
 
-def _clamp(raw: str, minimum: int, default: int) -> str:
+# Sane upper bounds so an absurd value can't be baked into the plan (e.g. threads=999999 would make
+# JMeter try to spawn a million threads and fall over). Generous, not restrictive.
+_MAX_THREADS = 2000
+_MAX_LOOPS = 100_000
+_MAX_SECONDS = 86_400        # 24h — ramp / hold ceiling
+_MAX_THINKTIME_MS = 300_000  # 5 min per step
+
+
+def _clamp(raw: str, minimum: int, maximum: int, default: int) -> str:
     try:
-        return str(max(minimum, int(str(raw).strip())))
+        return str(min(maximum, max(minimum, int(str(raw).strip()))))
     except (TypeError, ValueError):
         return str(default)
 
@@ -99,14 +107,14 @@ class AppHandler(SimpleHTTPRequestHandler):
         try:
             upload, fields = parse_multipart(self.headers, self.rfile.read(length))
             config = {
-                "threads": _clamp(fields.get("threads", "10"), 1, 10),
-                "loops": _clamp(fields.get("loops", "1"), 1, 1),
-                "ramp": _clamp(fields.get("ramp", "5"), 0, 5),
-                "hold": _clamp(fields.get("hold", "0"), 0, 0),
+                "threads": _clamp(fields.get("threads", "10"), 1, _MAX_THREADS, 10),
+                "loops": _clamp(fields.get("loops", "1"), 1, _MAX_LOOPS, 1),
+                "ramp": _clamp(fields.get("ramp", "5"), 0, _MAX_SECONDS, 5),
+                "hold": _clamp(fields.get("hold", "0"), 0, _MAX_SECONDS, 0),
             }
             # think time: only set when supplied; blank lets the engine use the capture's observed pacing
             if str(fields.get("thinktime", "")).strip():
-                config["thinktime"] = _clamp(fields.get("thinktime"), 0, 500)
+                config["thinktime"] = _clamp(fields.get("thinktime"), 0, _MAX_THINKTIME_MS, 500)
             # New reasoning engine → runnable JMX + parameter CSVs + downloadable bundle.
             result = analyze(upload)
             result_id = uuid.uuid4().hex[:10]

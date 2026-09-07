@@ -14,7 +14,13 @@ import time
 from pathlib import Path
 
 from har2jmx.paths import ROOT
-from har2jmx.server.handler import AppHandler, _keep_results, _max_upload_bytes, _prune_output
+from har2jmx.server.handler import (
+    AppHandler,
+    _clamp,
+    _keep_results,
+    _max_upload_bytes,
+    _prune_output,
+)
 
 
 def _start():
@@ -39,6 +45,14 @@ def test_max_upload_bytes_default_and_env():
             os.environ.pop("HAR2JMX_MAX_UPLOAD_MB", None)
         else:
             os.environ["HAR2JMX_MAX_UPLOAD_MB"] = old
+
+
+def test_clamp_enforces_floor_ceiling_and_default():
+    assert _clamp("50", 1, 2000, 10) == "50"      # in range → unchanged
+    assert _clamp("0", 1, 2000, 10) == "1"        # below floor → floor
+    assert _clamp("999999", 1, 2000, 10) == "2000"  # above ceiling → ceiling (no million threads)
+    assert _clamp("junk", 1, 2000, 10) == "10"    # unparseable → default
+    assert _clamp("", 0, 100, 5) == "5"           # empty → default
 
 
 def test_prune_output_keeps_newest_bundles_only():
