@@ -3,6 +3,7 @@ from __future__ import annotations
 import functools
 import json
 import re
+import traceback
 import uuid
 import zipfile
 from html import escape
@@ -139,8 +140,17 @@ class AppHandler(SimpleHTTPRequestHandler):
             payload = build_web_summary(result, result_id, downloads)
             payload["config"] = config
             self.respond_json(payload)
-        except Exception as exc:
+        except ValueError as exc:
+            # intentional input-validation errors (no file, malformed/invalid HAR) — the message is
+            # user-actionable and safe to show.
             self.respond_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
+        except Exception:
+            # unexpected failure: never echo internal exception detail (paths, stack info) to the
+            # client — log the real cause server-side and return a generic message.
+            traceback.print_exc()
+            self.respond_json(
+                {"error": "Could not process this HAR. Please verify it is a valid capture and try again."},
+                status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
     def serve_download(self, filename: str) -> None:
         safe = Path(filename).name

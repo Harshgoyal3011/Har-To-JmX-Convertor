@@ -117,6 +117,48 @@ def test_oversized_upload_rejected_before_read():
         srv.shutdown()
 
 
+def _post_har(port, harfile_bytes):
+    boundary = "----harbnd"
+    body = (
+        f'--{boundary}\r\n'
+        'Content-Disposition: form-data; name="harfile"; filename="c.har"\r\n\r\n'
+    ).encode() + harfile_bytes + f"\r\n--{boundary}--\r\n".encode()
+    c = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+    c.request("POST", "/api/convert", body=body,
+              headers={"Content-Type": f"multipart/form-data; boundary={boundary}"})
+    r = c.getresponse()
+    return r.status, r.read().decode("utf-8", "replace")
+
+
+def test_invalid_har_returns_400_with_message():
+    srv, port = _start()
+    try:
+        status, body = _post_har(port, b"this is not json")   # invalid HAR -> ValueError
+        assert status == 400, status
+        assert "error" in body
+    finally:
+        srv.shutdown()
+
+
+def test_unexpected_error_is_generic_500_without_leaking():
+    # an internal (non-ValueError) failure must NOT echo its message to the client.
+    import har2jmx.server.handler as H
+
+    def boom(*_a, **_k):
+        raise RuntimeError("INTERNAL-LEAK-XYZ /secret/path")
+
+    orig, H.analyze = H.analyze, boom
+    srv, port = _start()
+    try:
+        status, body = _post_har(port, b'{"log":{"entries":[]}}')
+        assert status == 500, status
+        assert "INTERNAL-LEAK-XYZ" not in body and "/secret/path" not in body, "internal detail leaked!"
+        assert "error" in body                                 # generic message still returned
+    finally:
+        H.analyze = orig
+        srv.shutdown()
+
+
 def test_index_and_unknown_post():
     srv, port = _start()
     try:
