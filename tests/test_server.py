@@ -35,7 +35,7 @@ def test_max_upload_bytes_default_and_env():
     old = os.environ.get("HAR2JMX_MAX_UPLOAD_MB")
     try:
         os.environ.pop("HAR2JMX_MAX_UPLOAD_MB", None)
-        assert _max_upload_bytes() == 250 * 1024 * 1024          # default 25 MB
+        assert _max_upload_bytes() == 250 * 1024 * 1024          # default 250 MB
         os.environ["HAR2JMX_MAX_UPLOAD_MB"] = "5"
         assert _max_upload_bytes() == 5 * 1024 * 1024           # env override
         os.environ["HAR2JMX_MAX_UPLOAD_MB"] = "not-a-number"
