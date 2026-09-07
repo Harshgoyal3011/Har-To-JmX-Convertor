@@ -34,13 +34,14 @@ def _clamp(raw: str, minimum: int, maximum: int, default: int) -> str:
 
 
 def _max_upload_bytes() -> int:
-    """Upload ceiling (bytes). A HAR is JSON text; 25 MB covers very large captures while stopping a
-    hostile/accidental multi-GB body from being read into memory. Raise via HAR2JMX_MAX_UPLOAD_MB."""
+    """Upload ceiling (bytes). Real HARs — captures that include response bodies — routinely run to
+    tens or low-hundreds of MB, so the default is generous (250 MB); it exists to stop an accidental
+    or hostile multi-GB body, not to reject real captures. Raise/lower via HAR2JMX_MAX_UPLOAD_MB."""
     import os
     try:
-        mb = int(os.environ.get("HAR2JMX_MAX_UPLOAD_MB", "25"))
+        mb = int(os.environ.get("HAR2JMX_MAX_UPLOAD_MB", "250"))
     except (TypeError, ValueError):
-        mb = 25
+        mb = 250
     return max(1, mb) * 1024 * 1024
 
 
@@ -96,13 +97,15 @@ class AppHandler(SimpleHTTPRequestHandler):
             length = int(self.headers.get("Content-Length", "0"))
         except (TypeError, ValueError):
             length = 0
-        # reject oversized uploads BEFORE reading the body into memory (avoids a memory-exhaustion DoS)
+        # reject oversized uploads without reading the whole body into memory (memory-exhaustion guard).
+        # The client also size-checks before sending (app.js), so a browser shows a clean message rather
+        # than hitting this after streaming a huge body; this stays as the server-side backstop.
         limit = _max_upload_bytes()
         if length > limit:
             self.respond_json(
                 {"error": f"Upload too large ({length // (1024 * 1024)} MB). The limit is "
-                          f"{limit // (1024 * 1024)} MB — export a smaller HAR, or raise "
-                          "HAR2JMX_MAX_UPLOAD_MB."},
+                          f"{limit // (1024 * 1024)} MB — raise it with HAR2JMX_MAX_UPLOAD_MB, or "
+                          "trim the capture."},
                 status=HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
             return
         try:
