@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import json
+import re
 import uuid
 import zipfile
 from html import escape
@@ -32,6 +33,41 @@ def _max_upload_bytes() -> int:
     except (TypeError, ValueError):
         mb = 25
     return max(1, mb) * 1024 * 1024
+
+
+_RESULT_ID_RE = re.compile(r"^har2jmx_([0-9a-f]{10})")
+
+
+def _keep_results() -> int:
+    """How many past result bundles to retain in the output dir (HAR2JMX_KEEP_RESULTS, default 50)."""
+    import os
+    try:
+        return max(1, int(os.environ.get("HAR2JMX_KEEP_RESULTS", "50")))
+    except (TypeError, ValueError):
+        return 50
+
+
+def _prune_output(out_dir: Path, keep: int) -> None:
+    """Retain only the newest ``keep`` result bundles; delete older ones so the output dir doesn't grow
+    without bound. A single conversion writes several files sharing a ``har2jmx_<id>`` prefix, so files
+    are grouped by that id and whole bundles are aged out together. ``.gitkeep`` and any file that isn't
+    a har2jmx result are left untouched."""
+    groups: dict[str, list[Path]] = {}
+    for p in out_dir.iterdir():
+        if not p.is_file():
+            continue
+        m = _RESULT_ID_RE.match(p.name)
+        if m:
+            groups.setdefault(m.group(1), []).append(p)
+    if len(groups) <= keep:
+        return
+    ordered = sorted(groups.values(), key=lambda fs: max(f.stat().st_mtime for f in fs), reverse=True)
+    for files in ordered[keep:]:                        # everything past the newest `keep` bundles
+        for f in files:
+            try:
+                f.unlink()
+            except OSError:
+                pass
 
 
 class AppHandler(SimpleHTTPRequestHandler):
@@ -83,6 +119,8 @@ class AppHandler(SimpleHTTPRequestHandler):
                     zf.write(c, arcname=c.name)
                 for rp in report_paths:
                     zf.write(rp, arcname=rp.name)
+
+            _prune_output(OUTPUT_DIR, _keep_results())   # bound the output dir (newest bundles kept)
 
             downloads = {
                 "jmx": jmx_path.name,
