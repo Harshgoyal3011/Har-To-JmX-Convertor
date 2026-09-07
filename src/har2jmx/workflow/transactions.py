@@ -383,29 +383,65 @@ def discover_transactions(cap: NormalizedCapture) -> list[Transaction]:
             business_indices=[r.index for r in g if not r.classification.excluded],
         ))
 
-    transactions = _merge_fragmented(cap, transactions)   # collapse redirect-split same-name fragments
-    _label_launch(cap, transactions)     # rename the landing action BEFORE de-duplicating names
+    # Peel off the app-launch BEFORE merging auth steps: a landing page that the grouper bundled with
+    # the SSO redirect must stay "Launch Application", not get swallowed into the login-handshake merge.
+    _label_launch(cap, transactions)
+    transactions = _merge_fragmented(cap, transactions)   # collapse a fragmented login handshake / redirect-split fragments
     _dedupe_names(cap, transactions)
     return transactions
 
 
+def _reanchor(cap: NormalizedCapture, t: Transaction) -> None:
+    """Recompute a merged transaction's name/category from the strongest request across everything it
+    now contains, so a merged login handshake reads as the one action the user performed ("Login")."""
+    pool = [cap.requests[i] for i in t.request_indices if not cap.requests[i].classification.excluded] \
+        or [cap.requests[i] for i in t.request_indices]
+    anchor = max(pool, key=_anchor_priority)
+    t.anchor_index = anchor.index
+    t.name, t.category = _name_transaction(anchor)
+
+
 def _merge_fragmented(cap: NormalizedCapture, transactions: list[Transaction]) -> list[Transaction]:
-    """Collapse consecutive transactions that share a name/category and were split by an *automatic*
-    boundary — a redirect / pageref change with no user pause between them. A redirect-heavy auth
-    handshake (OAuth/OpenID, SAML, ASP.NET) fragments across many pagerefs into Login, Login (2),
-    Login (3)… and Authorize Session, Authorize Session (2)…; those are one user action and should be
-    one transaction. A genuinely repeated action separated by think time — paging through results, a
-    second login after a logout — has a real gap between fragments (or isn't adjacent) and is kept."""
+    """Collapse fragments of a single user action back into one transaction, so the transaction timer
+    measures the real end-to-end time for that action (a performance engineer's transaction = one
+    click, with everything it triggers nested inside).
+
+    Two cases are merged:
+
+    (a) The login handshake. A redirect-heavy OAuth2/OpenID/SAML/ASP.NET login fires many requests
+        across many pagerefs — authorize endpoints, the login submit, the token exchange, redirects —
+        and a *manual* capture records human pauses (typing a password) between them. That is ONE
+        action: clicking "Login". So a contiguous run of authentication steps is merged into a single
+        transaction *regardless of the gap between them*, and re-anchored so the whole run reads as the
+        strongest step in it (the login submit → "Login"). A logout is a barrier: it is not part of a
+        login, so Login → Logout → Login stays three transactions (two real, separate logins).
+
+    (b) Any redirect-split identical fragments. Consecutive transactions with the same name+category
+        separated by an *automatic* boundary (a redirect / pageref change, gap ≤ the think-time
+        threshold) are one action split by navigation and are merged.
+
+    Genuinely repeated actions separated by real think time — paging through results, a second login
+    after a logout — are NOT adjacent same-purpose fragments and are kept as distinct transactions."""
     if len(transactions) < 2:
         return transactions
+
+    def is_handshake_step(t: Transaction) -> bool:
+        # a login-side auth step (authorize / login submit / token exchange / session) — NOT a logout,
+        # which is a deliberate separate action and must not glue two logins together
+        return t.category == "Authentication" and t.name != "Logout"
+
     out: list[Transaction] = [transactions[0]]
     for t in transactions[1:]:
         prev = out[-1]
         gap = _gap_ms(cap.requests[prev.request_indices[-1]], cap.requests[t.request_indices[0]])
         auto_boundary = gap is not None and gap <= _THINK_GAP_MS   # split by redirect/nav, not a pause
-        if t.name == prev.name and t.category == prev.category and auto_boundary:
+        merge_handshake = is_handshake_step(prev) and is_handshake_step(t)       # case (a)
+        merge_redirect = t.name == prev.name and t.category == prev.category and auto_boundary  # (b)
+        if merge_handshake or merge_redirect:
             prev.request_indices.extend(t.request_indices)
             prev.business_indices.extend(t.business_indices)
+            if merge_handshake:
+                _reanchor(cap, prev)     # the whole handshake is one action → name it from its peak
         else:
             out.append(t)
     return out

@@ -75,16 +75,35 @@ def test_names_are_business_readable_no_ids():
         assert "9001" not in n and "5501" not in n and "SKU" not in n
 
 
-def test_redirect_split_auth_handshake_merges():
-    # a redirect-heavy OAuth/OpenID handshake fragments across pagerefs into Login, Login (2)... and
-    # Authorize Session, Authorize Session (2)...; adjacent fragments split by fast redirects (no user
-    # pause) collapse into one transaction each — no numeric duplication.
+def test_login_handshake_collapses_to_one_transaction():
+    # a redirect-heavy OAuth2/OpenID handshake — authorize endpoints + login submit + token exchange —
+    # is ONE user action (clicking "Login"). The whole contiguous auth run collapses into a single
+    # "Login" transaction so its timer measures real end-to-end login time. No Authorize Session /
+    # Login (2)(3) fragments.
     _, txns = _txns("auth_fragmented.har")
     names = [t.name for t in txns]
-    assert names == ["Authorize Session", "Login"], names
-    login = next(t for t in txns if t.name == "Login")
-    assert len(login.request_indices) == 4                       # all four login fragments merged
+    assert names == ["Login"], names
+    login = txns[0]
+    assert len(login.request_indices) == 6                       # every handshake request nested in
     assert not any("(2)" in n or "(3)" in n for n in names)      # duplication gone
+
+
+def test_manual_paced_login_still_collapses_despite_gaps():
+    # a MANUAL capture records human pauses (typing a password) inside a single login, so the auth
+    # fragments are >2.5s apart — a gap-based merge would miss them. The handshake must still collapse
+    # to one Login, because gaps inside one click are not action boundaries.
+    _, txns = _txns("auth_manual_paused.har")
+    names = [t.name for t in txns]
+    assert names == ["Login"], names
+    assert len(txns[0].request_indices) == 4
+
+
+def test_logout_is_a_barrier_between_two_logins():
+    # login -> logout -> login are three deliberate actions; the logout must NOT glue the two logins
+    # into one. Two separate logins stay separate (numbered), never merged across a logout.
+    _, txns = _txns("auth_relogin.har")
+    names = [t.name for t in txns]
+    assert names == ["Login", "Logout", "Login (2)"], names
 
 
 def test_no_pageref_capture_does_not_crash():
