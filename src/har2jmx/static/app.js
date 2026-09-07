@@ -48,11 +48,21 @@ function finishPipelineAnim() {
   document.querySelectorAll("#pipelineSteps li").forEach((s) => { s.classList.remove("active"); s.classList.add("done"); });
 }
 
+// Keep in sync with the server default (HAR2JMX_MAX_UPLOAD_MB). Checking size here means an oversized
+// file is refused with a clear message instead of streaming a huge body and hitting a connection reset.
+const MAX_UPLOAD_MB = 250;
+
 // ---- Submit ----
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const file = fileInput.files[0];
   if (!file) { $("#fileMeta").textContent = "Choose a .har file first."; return; }
+  if (file.size > MAX_UPLOAD_MB * 1024 * 1024) {
+    $("#fileMeta").textContent =
+      `That file is ${(file.size / 1024 / 1024).toFixed(0)} MB — over the ${MAX_UPLOAD_MB} MB limit. ` +
+      `Trim the capture, or raise HAR2JMX_MAX_UPLOAD_MB on the server.`;
+    return;
+  }
 
   submitBtn.classList.add("loading"); submitBtn.disabled = true; $("#submitLabel").textContent = "Analyzing…";
   $("#errorBox").classList.add("hidden");
