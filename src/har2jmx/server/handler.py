@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import functools
 import json
+import re
+import traceback
 import uuid
 import zipfile
 from html import escape
@@ -16,11 +18,65 @@ from har2jmx.server.multipart import parse_multipart
 from har2jmx.webreport import build_web_summary
 
 
-def _clamp(raw: str, minimum: int, default: int) -> str:
+# Sane upper bounds so an absurd value can't be baked into the plan (e.g. threads=999999 would make
+# JMeter try to spawn a million threads and fall over). Generous, not restrictive.
+_MAX_THREADS = 2000
+_MAX_LOOPS = 100_000
+_MAX_SECONDS = 86_400        # 24h — ramp / hold ceiling
+_MAX_THINKTIME_MS = 300_000  # 5 min per step
+
+
+def _clamp(raw: str, minimum: int, maximum: int, default: int) -> str:
     try:
-        return str(max(minimum, int(str(raw).strip())))
+        return str(min(maximum, max(minimum, int(str(raw).strip()))))
     except (TypeError, ValueError):
         return str(default)
+
+
+def _max_upload_bytes() -> int:
+    """Upload ceiling (bytes). A HAR is JSON text; 25 MB covers very large captures while stopping a
+    hostile/accidental multi-GB body from being read into memory. Raise via HAR2JMX_MAX_UPLOAD_MB."""
+    import os
+    try:
+        mb = int(os.environ.get("HAR2JMX_MAX_UPLOAD_MB", "25"))
+    except (TypeError, ValueError):
+        mb = 25
+    return max(1, mb) * 1024 * 1024
+
+
+_RESULT_ID_RE = re.compile(r"^har2jmx_([0-9a-f]{10})")
+
+
+def _keep_results() -> int:
+    """How many past result bundles to retain in the output dir (HAR2JMX_KEEP_RESULTS, default 50)."""
+    import os
+    try:
+        return max(1, int(os.environ.get("HAR2JMX_KEEP_RESULTS", "50")))
+    except (TypeError, ValueError):
+        return 50
+
+
+def _prune_output(out_dir: Path, keep: int) -> None:
+    """Retain only the newest ``keep`` result bundles; delete older ones so the output dir doesn't grow
+    without bound. A single conversion writes several files sharing a ``har2jmx_<id>`` prefix, so files
+    are grouped by that id and whole bundles are aged out together. ``.gitkeep`` and any file that isn't
+    a har2jmx result are left untouched."""
+    groups: dict[str, list[Path]] = {}
+    for p in out_dir.iterdir():
+        if not p.is_file():
+            continue
+        m = _RESULT_ID_RE.match(p.name)
+        if m:
+            groups.setdefault(m.group(1), []).append(p)
+    if len(groups) <= keep:
+        return
+    ordered = sorted(groups.values(), key=lambda fs: max(f.stat().st_mtime for f in fs), reverse=True)
+    for files in ordered[keep:]:                        # everything past the newest `keep` bundles
+        for f in files:
+            try:
+                f.unlink()
+            except OSError:
+                pass
 
 
 class AppHandler(SimpleHTTPRequestHandler):
@@ -38,16 +94,28 @@ class AppHandler(SimpleHTTPRequestHandler):
             return
         try:
             length = int(self.headers.get("Content-Length", "0"))
+        except (TypeError, ValueError):
+            length = 0
+        # reject oversized uploads BEFORE reading the body into memory (avoids a memory-exhaustion DoS)
+        limit = _max_upload_bytes()
+        if length > limit:
+            self.respond_json(
+                {"error": f"Upload too large ({length // (1024 * 1024)} MB). The limit is "
+                          f"{limit // (1024 * 1024)} MB — export a smaller HAR, or raise "
+                          "HAR2JMX_MAX_UPLOAD_MB."},
+                status=HTTPStatus.REQUEST_ENTITY_TOO_LARGE)
+            return
+        try:
             upload, fields = parse_multipart(self.headers, self.rfile.read(length))
             config = {
-                "threads": _clamp(fields.get("threads", "10"), 1, 10),
-                "loops": _clamp(fields.get("loops", "1"), 1, 1),
-                "ramp": _clamp(fields.get("ramp", "5"), 0, 5),
-                "hold": _clamp(fields.get("hold", "0"), 0, 0),
+                "threads": _clamp(fields.get("threads", "10"), 1, _MAX_THREADS, 10),
+                "loops": _clamp(fields.get("loops", "1"), 1, _MAX_LOOPS, 1),
+                "ramp": _clamp(fields.get("ramp", "5"), 0, _MAX_SECONDS, 5),
+                "hold": _clamp(fields.get("hold", "0"), 0, _MAX_SECONDS, 0),
             }
             # think time: only set when supplied; blank lets the engine use the capture's observed pacing
             if str(fields.get("thinktime", "")).strip():
-                config["thinktime"] = _clamp(fields.get("thinktime"), 0, 500)
+                config["thinktime"] = _clamp(fields.get("thinktime"), 0, _MAX_THINKTIME_MS, 500)
             # New reasoning engine → runnable JMX + parameter CSVs + downloadable bundle.
             result = analyze(upload)
             result_id = uuid.uuid4().hex[:10]
@@ -61,6 +129,8 @@ class AppHandler(SimpleHTTPRequestHandler):
                 for rp in report_paths:
                     zf.write(rp, arcname=rp.name)
 
+            _prune_output(OUTPUT_DIR, _keep_results())   # bound the output dir (newest bundles kept)
+
             downloads = {
                 "jmx": jmx_path.name,
                 "zip": bundle_path.name,
@@ -70,8 +140,17 @@ class AppHandler(SimpleHTTPRequestHandler):
             payload = build_web_summary(result, result_id, downloads)
             payload["config"] = config
             self.respond_json(payload)
-        except Exception as exc:
+        except ValueError as exc:
+            # intentional input-validation errors (no file, malformed/invalid HAR) — the message is
+            # user-actionable and safe to show.
             self.respond_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
+        except Exception:
+            # unexpected failure: never echo internal exception detail (paths, stack info) to the
+            # client — log the real cause server-side and return a generic message.
+            traceback.print_exc()
+            self.respond_json(
+                {"error": "Could not process this HAR. Please verify it is a valid capture and try again."},
+                status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
     def serve_download(self, filename: str) -> None:
         safe = Path(filename).name
