@@ -95,7 +95,7 @@ def analyze(har: bytes | dict) -> EngineResult:
     transactions = discover_transactions(cap)   # M4
     model = discover_relationships(cap)         # M5 + M6 (entities + relationships + aligned rows)
     lineage = build_lineage(cap)                # M7
-    classification = classify_values(cap, lineage)          # M8
+    classification = classify_values(cap, lineage, model)   # M8 (reuse the model — no recompute)
     correlations = build_correlations(cap, classification, lineage)   # M9
     parameterization = build_parameterization(cap, classification, model, lineage)  # M10
     replay = validate_replay(cap, correlations, parameterization, classification, lineage)  # M11

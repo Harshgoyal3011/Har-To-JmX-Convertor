@@ -68,6 +68,17 @@ def test_excluded_requests_ignored():
         assert all(o.request_index not in (2, 3) for o in f.occurrences)
 
 
+def test_by_value_index_is_correct_and_complete():
+    # by_value() is backed by an O(1) value->flow index (not a linear scan); it must resolve every
+    # flow's value to that exact flow, tolerate normalization (whitespace/URL-encoding), and miss cleanly.
+    g = _graph("sample_flow.har")
+    assert g.flows, "fixture should produce flows"
+    for f in g.flows:
+        assert g.by_value(f.value) is f                      # every flow reachable by its value
+        assert g.by_value(f"  {f.value}  ") is f             # normalization (trim) still resolves
+    assert g.by_value("value-that-does-not-exist-anywhere") is None
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0
