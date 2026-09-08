@@ -35,11 +35,11 @@ def test_max_upload_bytes_default_and_env():
     old = os.environ.get("HAR2JMX_MAX_UPLOAD_MB")
     try:
         os.environ.pop("HAR2JMX_MAX_UPLOAD_MB", None)
-        assert _max_upload_bytes() == 25 * 1024 * 1024          # default 25 MB
+        assert _max_upload_bytes() == 250 * 1024 * 1024          # default 250 MB
         os.environ["HAR2JMX_MAX_UPLOAD_MB"] = "5"
         assert _max_upload_bytes() == 5 * 1024 * 1024           # env override
         os.environ["HAR2JMX_MAX_UPLOAD_MB"] = "not-a-number"
-        assert _max_upload_bytes() == 25 * 1024 * 1024          # bad value → default
+        assert _max_upload_bytes() == 250 * 1024 * 1024          # bad value → default
     finally:
         if old is None:
             os.environ.pop("HAR2JMX_MAX_UPLOAD_MB", None)
@@ -106,7 +106,7 @@ def test_oversized_upload_rejected_before_read():
             "POST /api/convert HTTP/1.1\r\n"
             "Host: 127.0.0.1\r\n"
             "Content-Type: multipart/form-data; boundary=xx\r\n"
-            "Content-Length: 999999999\r\n"       # ~953 MB, far over the 25 MB limit
+            "Content-Length: 999999999\r\n"       # ~953 MB, far over the 250 MB limit
             "\r\n"
         )
         s.sendall(req.encode())
