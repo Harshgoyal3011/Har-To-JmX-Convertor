@@ -106,6 +106,20 @@ def test_logout_is_a_barrier_between_two_logins():
     assert names == ["Login", "Logout", "Login (2)"], names
 
 
+def test_burst_click_collapses_all_requests_into_one_transaction():
+    # the real-world defect: one click fires a burst — a screen loads its lookup data, then the action,
+    # then a follow-up read — and the capture stamps each with a different pageref, so the grouper used
+    # to split one click into several transactions (Open X (2)(3)... + Create Y). A sub-think-gap boundary
+    # can only be a pageref change (a real pause would exceed it), so the whole burst is ONE user action.
+    cap, txns = _txns("spa_burst_click.har")
+    names = [t.name for t in txns]
+    assert len(txns) == 2, names                                  # two clicks, split only by the real pause
+    assert txns[0].request_indices == [0, 1, 2, 3, 4]             # every request of the first click nested
+    assert txns[1].request_indices == [5, 6]                      # the second click's burst
+    assert txns[0].category == "Business Action"                  # named from the action, not a lookup GET
+    assert not any("(2)" in n or "(3)" in n for n in names)       # no fragmentation
+
+
 def test_no_pageref_capture_does_not_crash():
     cap, txns = _txns("sample_noise.har")
     assert len(txns) >= 1

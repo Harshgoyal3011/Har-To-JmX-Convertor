@@ -408,20 +408,24 @@ def _merge_fragmented(cap: NormalizedCapture, transactions: list[Transaction]) -
 
     Two cases are merged:
 
-    (a) The login handshake. A redirect-heavy OAuth2/OpenID/SAML/ASP.NET login fires many requests
-        across many pagerefs — authorize endpoints, the login submit, the token exchange, redirects —
-        and a *manual* capture records human pauses (typing a password) between them. That is ONE
-        action: clicking "Login". So a contiguous run of authentication steps is merged into a single
-        transaction *regardless of the gap between them*, and re-anchored so the whole run reads as the
-        strongest step in it (the login submit → "Login"). A logout is a barrier: it is not part of a
-        login, so Login → Logout → Login stays three transactions (two real, separate logins).
+    (a) The rapid burst (the general case). One click fires many requests — a screen loads its lookup
+        data, then the action the user performed, then follow-up reads — and a capture tool often
+        stamps each with a different page-reference, so the grouper splits them into several
+        transactions. But an *automatic* boundary (gap ≤ the think-time threshold) can ONLY be a
+        pageref change: a real user pause would have exceeded the threshold. So any two consecutive
+        groups whose gap is within the threshold were split by navigation, not by a pause — they are
+        one user action. Merge them and re-anchor so the whole burst reads as its strongest request
+        (the write/action the user actually clicked), with every one of its requests nested inside.
+        This is what makes "clicked an item → 10 requests" ONE transaction, not five.
 
-    (b) Any redirect-split identical fragments. Consecutive transactions with the same name+category
-        separated by an *automatic* boundary (a redirect / pageref change, gap ≤ the think-time
-        threshold) are one action split by navigation and are merged.
+    (b) The login handshake. A redirect-heavy OAuth2/OpenID/SAML/ASP.NET login records human pauses
+        (typing a password) between its steps, so its fragments are >think-gap apart and case (a)
+        would miss them. A contiguous run of authentication steps is therefore merged *regardless of
+        the gap*. A logout is a barrier: Login → Logout → Login stays three transactions.
 
-    Genuinely repeated actions separated by real think time — paging through results, a second login
-    after a logout — are NOT adjacent same-purpose fragments and are kept as distinct transactions."""
+    Genuinely repeated actions separated by real think time — paging through results (a pause between
+    pages), a second login after a logout — have a gap ABOVE the threshold, so they are NOT merged and
+    stay distinct, correctly numbered transactions."""
     if len(transactions) < 2:
         return transactions
 
@@ -434,14 +438,13 @@ def _merge_fragmented(cap: NormalizedCapture, transactions: list[Transaction]) -
     for t in transactions[1:]:
         prev = out[-1]
         gap = _gap_ms(cap.requests[prev.request_indices[-1]], cap.requests[t.request_indices[0]])
-        auto_boundary = gap is not None and gap <= _THINK_GAP_MS   # split by redirect/nav, not a pause
-        merge_handshake = is_handshake_step(prev) and is_handshake_step(t)       # case (a)
-        merge_redirect = t.name == prev.name and t.category == prev.category and auto_boundary  # (b)
-        if merge_handshake or merge_redirect:
+        auto_boundary = gap is not None and gap <= _THINK_GAP_MS   # split by pageref/nav, not a pause
+        merge_burst = auto_boundary                                              # case (a)
+        merge_handshake = is_handshake_step(prev) and is_handshake_step(t)       # case (b)
+        if merge_burst or merge_handshake:
             prev.request_indices.extend(t.request_indices)
             prev.business_indices.extend(t.business_indices)
-            if merge_handshake:
-                _reanchor(cap, prev)     # the whole handshake is one action → name it from its peak
+            _reanchor(cap, prev)     # the whole action is one click → name it from its strongest request
         else:
             out.append(t)
     return out
