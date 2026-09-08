@@ -15,6 +15,7 @@ of bogus consumers):
 
 from __future__ import annotations
 
+import bisect
 import re
 from dataclasses import dataclass, field
 from typing import Any, Iterator
@@ -343,6 +344,9 @@ def _boundary_regex(left: str, value: str, right: str) -> str | None:
     return rf"{esc_l}(\S+)"
 
 
+_EMBEDDED_SCAN_WINDOW = 300   # nearest prior responses scanned for an embedded producer (see below)
+
+
 def _augment_embedded(cap: NormalizedCapture, flows: list[ValueFlow]) -> None:
     """Correlate a value that appears EMBEDDED inside an earlier response (not as a whole JSON/XML
     slot). Whole-slot matching misses a token returned wrapped in a larger string; here we find it as
@@ -351,6 +355,10 @@ def _augment_embedded(cap: NormalizedCapture, flows: list[ValueFlow]) -> None:
     stable field-label anchor precedes them, and only from a response BEFORE their first request use."""
     resp_text = {req.index: _searchable_response_text(req)
                  for req in cap.requests if not req.classification.excluded}
+    # Precompute the ascending response-index list ONCE. Previously this was rebuilt and re-sorted for
+    # every candidate flow (`sorted(i for i in resp_text if i < earliest_req)`), which on a large capture
+    # is O(F·R log R) of pure overhead; here it is O(R log R) once, then an O(log R) bisect per flow.
+    sorted_resp = sorted(resp_text)
 
     for f in flows:
         if f.producers or len(f.value) < 8 or not _looks_dynamic(f.value):
@@ -360,7 +368,14 @@ def _augment_embedded(cap: NormalizedCapture, flows: list[ValueFlow]) -> None:
             continue
         earliest_req = min(o.request_index for o in req_occs)
         consumer_field = min(req_occs, key=lambda o: o.request_index).field
-        for idx in sorted(i for i in resp_text if i < earliest_req):
+        cut = bisect.bisect_left(sorted_resp, earliest_req)   # only responses strictly before first use
+        # Bound the scan to the nearest prior responses. A server-issued token embedded in a response is
+        # used shortly after it is issued (the very next auth/page step), never hundreds of requests
+        # later, so scanning every prior response is wasted work that makes a large capture O(F·R). The
+        # window keeps the whole corpus behavior-identical (all captures are far smaller) while capping a
+        # huge capture to O(F·window). Earliest-within-window is still chosen (ascending + break).
+        lo = max(0, cut - _EMBEDDED_SCAN_WINDOW)
+        for idx in sorted_resp[lo:cut]:
             text = resp_text[idx]
             pos = text.find(f.value)
             if pos == -1:

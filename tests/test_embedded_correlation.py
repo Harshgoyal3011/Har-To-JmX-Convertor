@@ -44,6 +44,33 @@ def test_category_and_search_selection_is_parameterized():
     assert "monitor" not in build_jmx_xml(r).decode() or "${cat}" in build_jmx_xml(r).decode()
 
 
+def test_embedded_producer_found_within_scan_window():
+    # guards the bounded-scan optimization: an embedded token issued shortly before its use must still
+    # be correlated. A token is embedded in an earlier response string and reused a few requests later;
+    # the windowed scan (nearest prior responses) must still find the producer via a boundary extractor.
+    import json
+    from har2jmx.lineage import build_lineage
+
+    tok = "Zx91KkQ7mPa2Ld"
+    entries = []
+    for i in range(6):
+        body = f"prelude noise Auth_token: {tok}; more" if i == 2 else "nothing here"
+        entries.append({"startedDateTime": f"2026-01-01T00:00:0{i}Z", "time": 5,
+            "request": {"method": "GET", "url": f"https://a.com/step/{i}", "headers": [], "cookies": []},
+            "response": {"status": 200, "headers": [{"name": "Content-Type", "value": "text/plain"}],
+                         "content": {"mimeType": "text/plain", "text": body}}})
+    entries.append({"startedDateTime": "2026-01-01T00:00:06Z", "time": 5,
+        "request": {"method": "GET", "url": "https://a.com/use",
+                    "headers": [{"name": "X-Auth-Token", "value": tok}], "cookies": []},
+        "response": {"status": 200, "headers": [], "content": {"mimeType": "text/plain", "text": "ok"}}})
+    cap = build_capture(json.dumps({"log": {"version": "1.2", "entries": entries}}).encode())
+    classify_capture(cap)
+    flow = build_lineage(cap).by_value(tok)
+    assert flow is not None and flow.first_producer is not None            # producer found in window
+    assert flow.first_producer.location.startswith("response.regex:")      # via boundary extractor
+    assert flow.first_producer.request_index == 2                          # the response that embedded it
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0
