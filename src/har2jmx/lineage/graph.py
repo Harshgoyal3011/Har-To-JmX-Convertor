@@ -87,10 +87,17 @@ class ValueFlow:
 @dataclass
 class LineageGraph:
     flows: list[ValueFlow]
+    # value -> flow index, so by_value() is O(1). Flows are unique per normalized value (build_lineage
+    # keys them that way), so the mapping is 1:1. Rebuilt from `flows` at construction; excluded from
+    # equality/repr so the dataclass still compares by its flows alone.
+    _index: dict[str, ValueFlow] = field(default_factory=dict, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        if not self._index:
+            self._index = {f.value: f for f in self.flows}
 
     def by_value(self, value: str) -> ValueFlow | None:
-        v = _norm(value)
-        return next((f for f in self.flows if f.value == v), None)
+        return self._index.get(_norm(value))
 
     def produced_then_consumed(self) -> list[ValueFlow]:
         return [f for f in self.flows if f.is_produced_then_consumed]

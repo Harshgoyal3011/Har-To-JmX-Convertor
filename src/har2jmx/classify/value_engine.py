@@ -18,7 +18,7 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 
-from har2jmx.entities import discover_relationships
+from har2jmx.entities import RelationshipModel, discover_relationships
 from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import LineageGraph, ValueFlow, build_lineage
 from har2jmx.patterns import CREATION_VERB_RE, GUID_RE, PAGINATION_TOKEN_RE, TOKEN_NAME_RE, USER_DATA_RE
@@ -97,8 +97,9 @@ def _is_secret(flow: ValueFlow) -> bool:
     return False
 
 
-def _build_value_entity_map(cap: NormalizedCapture) -> dict[str, tuple[str, str, bool]]:
-    model = discover_relationships(cap)
+def _build_value_entity_map(cap: NormalizedCapture,
+                            model: "RelationshipModel | None" = None) -> dict[str, tuple[str, str, bool]]:
+    model = model if model is not None else discover_relationships(cap)
     ident = {e.name: e.identifier for e in model.entities}
     out: dict[str, tuple[str, str, bool]] = {}
     for ent, rows in model.instances.items():
@@ -199,9 +200,10 @@ def _is_opaque_handle(value: str) -> bool:
     return has_digit and (has_upper or has_lower) and (has_upper + has_lower + has_digit) >= 2
 
 
-def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None) -> ClassificationResult:
+def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
+                    model: "RelationshipModel | None" = None) -> ClassificationResult:
     lineage = lineage if lineage is not None else build_lineage(cap)
-    value_entity = _build_value_entity_map(cap)
+    value_entity = _build_value_entity_map(cap, model)
     req_by_index = {r.index: r for r in cap.requests}
 
     # How many distinct values each producer field emitted. A field that produced several values
