@@ -144,6 +144,45 @@ def _strip_ext(seg: str) -> str:
     return m.group(1) if m else seg
 
 
+# A descriptive resource name can carry a trailing numeric suffix (a version or a bound parameter):
+# GetDoctorList_67, GeoLocState_1, GetAddressByPinCode_246761. The digits make `_is_id_seg` treat the
+# WHOLE segment as an id, so the name falls back to the parent folder ("Open Hisjson") and every such
+# request collides on that generic name. Strip the suffix for naming — but ONLY when the remainder is a
+# real descriptive name (has a lowercase letter and is reasonably long), so a genuine short code id
+# (PAT-9001, ORD-5501) is left intact and still treated as an identifier.
+_NUM_SUFFIX_RE = re.compile(r"^(.*[A-Za-z].*?)[-_]\d+$")
+
+
+def _strip_num_suffix(seg: str) -> str:
+    m = _NUM_SUFFIX_RE.match(seg)
+    if m:
+        base = m.group(1)
+        if len(base) >= 5 and any(c.islower() for c in base):
+            return base
+    return seg
+
+
+# RPC-over-POST / RPC-over-GET reads: enterprise apps expose a query as an operation in the terminal
+# path segment (getWardBedDetails, findAdmissionAdvice, listPatients). Such an endpoint is a READ, so it
+# must read as "View X" / "X Search", never "Create Getwardbeddetail". Matched as a verb PREFIX of the
+# terminal segment (an exact verb terminal is already covered by _ACTION_TERMINALS).
+_RPC_READ_PREFIXES = ("get", "fetch", "retrieve", "load", "list", "view", "read", "show")
+_RPC_SEARCH_PREFIXES = ("find", "search", "query", "lookup")
+
+
+def _read_verb_name(terminal_clean: str) -> tuple[str, str] | None:
+    low = terminal_clean.lower()
+    for pre in _RPC_SEARCH_PREFIXES:
+        if low.startswith(pre) and len(low) > len(pre) + 2:
+            rest = _titleize(terminal_clean[len(pre):])
+            return (f"{rest} Search", "Business View") if rest else None
+    for pre in _RPC_READ_PREFIXES:
+        if low.startswith(pre) and len(low) > len(pre) + 2:
+            rest = _titleize(terminal_clean[len(pre):])
+            return (f"View {rest}", "Business View") if rest else None
+    return None
+
+
 def _entity_noun(segments: list[str]) -> str:
     """Singular business noun for the resource (Patient, Order) — for create/update/open."""
     for seg in reversed(segments):
@@ -183,7 +222,7 @@ def _has_search_signal(req: NormalizedRequest) -> bool:
 
 def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     """Return (name, category) for an anchor request, from generic endpoint semantics."""
-    clean_segments = [_strip_ext(s) for s in req.request.path_segments]
+    clean_segments = [_strip_num_suffix(_strip_ext(s)) for s in req.request.path_segments]
     segs = [s.lower() for s in clean_segments]
     noun = _entity_noun(clean_segments) or "Request"
     method = req.method
@@ -234,8 +273,10 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
 
     # Action from the TERMINAL path segment (the last non-id/non-version/non-api segment, INCLUDING
     # verbs): /transfers/initiate -> Initiate Transfer   |   /payment/{id}/receipt -> View Receipt
-    terminal = next((s for s in reversed(segs)
-                     if s and not _is_id_seg(s) and not _VERSION_RE.match(s) and s not in _API_WORDS), "")
+    terminal_clean = next((s for s in reversed(clean_segments)
+                           if s and not _is_id_seg(s.lower()) and not _VERSION_RE.match(s.lower())
+                           and s.lower() not in _API_WORDS), "")
+    terminal = terminal_clean.lower()
     # a bare noun terminal (cart/basket) is method-ambiguous — only read it as "View X" on a read verb;
     # a POST/PUT/DELETE to it is a create/update/delete, handled by the method fallback below.
     noun_terminal_write = terminal in _READ_ONLY_NOUN_TERMINALS and method not in {"GET", "HEAD"}
@@ -245,6 +286,14 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
         # so "/transfers/initiate" still reads "Initiate Transfer").
         clean_noun = "" if noun.lower() == terminal else noun
         return _ACTION_TERMINALS[terminal](clean_noun)
+
+    # RPC read: a terminal that is a read verb + object (getWardBedDetails, findAdmissionAdvice) is a
+    # query even when sent as a POST — enterprise apps expose reads as POSTs. Name it from the verb so
+    # it reads "View Ward Bed Details", never "Create Getwardbeddetail". Query-string searches fall
+    # through to the search branch below.
+    read_rpc = _read_verb_name(terminal_clean)
+    if read_rpc and not _has_search_signal(req):
+        return read_rpc
 
     # Method-driven fallback
     if method in {"POST"}:
@@ -260,11 +309,11 @@ def _name_transaction(req: NormalizedRequest) -> tuple[str, str]:
     # GET
     if _has_search_signal(req):
         return f"{noun} Search", "Business View"
-    if req.request.path_segments and _is_id_seg(req.request.path_segments[-1].lower()):
+    if segs and _is_id_seg(segs[-1]):
         return f"Open {noun}", "Business View"          # detail: single record
     if "html" in (req.response.mime or "").lower():
-        return f"Open {_collection_noun(req.request.path_segments)}" if noun != "Request" else "Open Page", "Navigation"
-    return f"View {_collection_noun(req.request.path_segments)}", "Business View"   # list: collection
+        return f"Open {_collection_noun(clean_segments)}" if noun != "Request" else "Open Page", "Navigation"
+    return f"View {_collection_noun(clean_segments)}", "Business View"   # list: collection
 
 
 # ---------------------------------------------------------------- grouping
