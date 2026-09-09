@@ -106,6 +106,39 @@ def test_logout_is_a_barrier_between_two_logins():
     assert names == ["Login", "Logout", "Login (2)"], names
 
 
+def test_rpc_and_suffixed_resource_naming():
+    # two real-world naming defects that caused same-name duplicate transactions:
+    #  - a reference file with a trailing number (GetDoctorList_67.json, GeoLocState_1.json) was treated
+    #    as an id, so the name fell back to the parent folder ("Open Hisjson") and every one collided;
+    #  - an RPC read exposed as a POST (getWardBedDetails) read as "Create Getwardbeddetail" (wrong verb).
+    from har2jmx.workflow.transactions import _name_transaction
+
+    def nm(method, url):
+        body = {"postData": {"mimeType": "application/json", "text": "{}"}} if method == "POST" else {}
+        har = {"log": {"version": "1.2", "entries": [{
+            "startedDateTime": "2026-01-01T00:00:00Z", "time": 10,
+            "request": {"method": method, "url": url,
+                        "headers": [{"name": "Content-Type", "value": "application/json"}], "cookies": [], **body},
+            "response": {"status": 200, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                         "content": {"mimeType": "application/json", "text": "{}"}}}]}}
+        cap = build_capture(json.dumps(har).encode())
+        classify_capture(cap)
+        return _name_transaction(cap.requests[0])
+
+    import json
+    # suffixed reference files name from the resource, not the folder → distinct, not "Open Hisjson"
+    assert nm("GET", "https://x/HISJson/GetDoctorList_67.json") == ("View Doctor List", "Business View")
+    assert nm("GET", "https://x/HISJson/GeoLocState_1.json") == ("View Geo Loc State", "Business View")
+    assert nm("GET", "https://x/HISJson/BedType.json") == ("View Bed Type", "Business View")
+    # a genuine short-code id (PAT-9001) is still an id and must NOT become part of the name
+    assert "9001" not in nm("GET", "https://x/patients/PAT-9001")[0]
+    # RPC read over POST is a View, never a Create
+    assert nm("POST", "https://x/api/bedmanagement/getWardBedDetails")[1] == "Business View"
+    assert nm("POST", "https://x/api/bedmanagement/getWardBedDetails")[0].startswith("View")
+    # a genuine write is still a create
+    assert nm("POST", "https://x/api/orders/create") == ("Create Order", "Business Action")
+
+
 def test_burst_click_collapses_all_requests_into_one_transaction():
     # the real-world defect: one click fires a burst — a screen loads its lookup data, then the action,
     # then a follow-up read — and the capture stamps each with a different pageref, so the grouper used
