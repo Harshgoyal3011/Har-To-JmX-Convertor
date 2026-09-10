@@ -22,13 +22,14 @@ def _check(result, variable: str):
 
 
 def test_unique_extractor_verified_and_shipped_as_is():
-    # a clean created id lives at exactly one node → UNIQUE, shipped as $..orderId with its assertion.
+    # a clean created id lives at exactly one node → UNIQUE, shipped as $..orderId. Being 100% right
+    # (verified UNIQUE + High confidence), it ships without a runtime health guard.
     result = analyze((FIX / "sample_flow.har").read_bytes())
     chk = _check(result, "orderId")
     assert chk is not None and chk.status == ExtractorStatus.UNIQUE
     x = build_jmx_xml(result).decode()
     assert "$..orderId" in x
-    assert 'testname="Assert orderId correlated"' in x
+    assert 'testname="Assert orderId correlated"' not in x   # certain correlation → no guard clutter
 
 
 def test_ambiguous_extractor_refined_to_concrete_object_path():

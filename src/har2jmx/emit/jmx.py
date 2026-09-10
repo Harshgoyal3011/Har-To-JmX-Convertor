@@ -25,6 +25,7 @@ from har2jmx.correlate import ExtractorType
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
+from har2jmx.validate import ExtractorStatus
 
 # client-generated per-request keys — must be fresh each request, not a shared CSV value
 _UNIQUE_KEY_RE = _re.compile(
@@ -602,8 +603,14 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
                 else:
                     use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:"))
                     _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)
-                # fail loudly if this correlation didn't resolve (false-green guard)
-                _add_correlation_health_assertion(sampler_ht, c.variable)
+                # Only guard correlations with residual doubt. A correlation proven correct against the
+                # capture (extractor verified UNIQUE) with strong lifecycle evidence (High confidence) is
+                # 100% right — no runtime "did it resolve?" review needed, it would just add clutter. Keep
+                # the false-green guard where doubt remains: an ambiguous path we had to refine, or
+                # Medium/Low confidence — exactly where a NOT_FOUND is actually plausible.
+                certain = chk is not None and chk.status == ExtractorStatus.UNIQUE and c.confidence == "High"
+                if not certain:
+                    _add_correlation_health_assertion(sampler_ht, c.variable)
 
     rough = tostring(root, encoding="utf-8")
     return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")

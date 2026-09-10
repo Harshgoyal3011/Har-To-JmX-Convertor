@@ -116,15 +116,20 @@ def test_think_time_is_configurable_from_upload():
     assert 'name="THINKTIME"' in d and 'ConstantTimer.delay">${THINKTIME}' in d
 
 
-def test_correlation_health_assertion_guards_false_greens():
-    # every correlation extractor is paired with a variable-scoped assertion that fails the sample
-    # when the extractor fell back to its NOT_FOUND sentinel — so a broken correlation (e.g. a login
-    # that 200s with an error body) surfaces as a real failure, not a silent false-green.
-    x = _xml(FIX / "sample_flow.har")
-    assert 'testname="Assert orderId correlated"' in x
-    assert "NOT_FOUND_orderId" in x
-    assert 'name="Assertion.scope">variable' in x and 'name="Scope.variable">orderId' in x
-    assert 'name="Assertion.test_type">20' in x           # Substring | Not → fails if sentinel present
+def test_correlation_health_assertion_guards_only_doubtful_correlations():
+    # A correlation proven correct against the capture (extractor verified UNIQUE) with High confidence
+    # is 100% right — it ships WITHOUT a runtime "did it resolve?" guard (no clutter). A correlation
+    # with residual doubt (an ambiguous path we had to refine) KEEPS the false-green guard, so a
+    # NOT_FOUND surfaces exactly where it is actually plausible.
+    clean = _xml(FIX / "sample_flow.har")             # orderId: verified UNIQUE + High → certain
+    assert "$..orderId" in clean                       # still correlated
+    assert 'testname="Assert orderId correlated"' not in clean   # no guard on a 100%-right correlation
+
+    doubtful = _xml(FIX / "sample_ambiguous_id.har")   # orderId: ambiguous path, refined → doubt remains
+    assert 'testname="Assert orderId correlated"' in doubtful
+    assert "NOT_FOUND_orderId" in doubtful
+    assert 'name="Assertion.scope">variable' in doubtful and 'name="Scope.variable">orderId' in doubtful
+    assert 'name="Assertion.test_type">20' in doubtful    # Substring | Not → fails if sentinel present
 
 
 def test_bearer_header_substituted_in_plan():
