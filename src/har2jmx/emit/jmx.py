@@ -486,16 +486,28 @@ def _observed_think_time(cap) -> int:
     return int(min(8000, max(100, median)))
 
 
-def _add_think_time(parent_ht):
-    """Thread-group scope: uniform random think time driven by the ${THINKTIME} variable (set on
-    upload, editable in JMeter), so pacing is configurable instead of hardcoded. Each pause is
-    uniformly ${THINKTIME}..2×${THINKTIME} ms — natural spread, no robotic fixed delay."""
-    t = SubElement(parent_ht, "UniformRandomTimer", {
-        "guiclass": "UniformRandomTimerGui", "testclass": "UniformRandomTimer",
+def _add_think_time_pause(parent_ht):
+    """A think-time pause BETWEEN user actions — emitted once before each Transaction Controller.
+
+    A bare timer at thread-group scope applies to *every* sampler (JMeter scopes timers by subtree, not
+    by tree position), so it would pause before every sub-request inside a transaction — inflating pacing
+    and skewing throughput. Instead a Flow Control Action ("pause 0") carries the Uniform Random Timer as
+    its OWN child, so the delay applies only to this standalone no-op step: the user pausing before the
+    next action. The Test Action emits no sample, so it doesn't pollute the transaction timings or the
+    response assertion. Each pause is uniformly ${THINKTIME}..2×${THINKTIME} ms."""
+    ta = SubElement(parent_ht, "TestAction", {
+        "guiclass": "TestActionGui", "testclass": "TestAction",
         "testname": "Think Time", "enabled": "true"})
+    _i(ta, "ActionProcessor.action", 1)     # 1 = Pause
+    _i(ta, "ActionProcessor.target", 0)     # 0 = current thread
+    _s(ta, "ActionProcessor.duration", "0")  # the timer below supplies the delay
+    ta_ht = SubElement(parent_ht, "hashTree")
+    t = SubElement(ta_ht, "UniformRandomTimer", {
+        "guiclass": "UniformRandomTimerGui", "testclass": "UniformRandomTimer",
+        "testname": "Pause", "enabled": "true"})
     _s(t, "ConstantTimer.delay", "${THINKTIME}")
     _s(t, "RandomTimer.range", "${THINKTIME}")
-    SubElement(parent_ht, "hashTree")
+    SubElement(ta_ht, "hashTree")
 
 
 def _add_cookie_manager(parent_ht):
@@ -572,7 +584,6 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     _add_cache_manager(tg_ht)                                 # realistic caching — no re-fetch per iteration
     _add_global_header_manager(tg_ht, common_headers, sub)   # every plan gets an HTTP Header Manager
     _add_response_assertion(tg_ht)                            # validate responses under load
-    _add_think_time(tg_ht)                                    # realistic pacing for N users
     for d in result.parameterization.datasets:
         fname = csv_files.get(d.name, f"{d.name.lower()}.csv")
         _add_csv_dataset(tg_ht, d.name, fname, [c.name for c in d.columns])
@@ -581,6 +592,9 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
         biz = [i for i in txn.request_indices if not cap.requests[i].classification.excluded]
         if not biz:
             continue
+        # Think time between user actions: one pause before each transaction (so also between loop
+        # iterations), never before the sub-requests inside a transaction.
+        _add_think_time_pause(tg_ht)
         tc = SubElement(tg_ht, "TransactionController", {
             "guiclass": "TransactionControllerGui", "testclass": "TransactionController",
             "testname": txn.name, "enabled": "true"})
