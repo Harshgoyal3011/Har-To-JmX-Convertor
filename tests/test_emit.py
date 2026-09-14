@@ -187,6 +187,28 @@ def test_csv_row_synthesis_varies_safe_data_only():
     assert len({r[2] for r in rows}) == 4             # the safe amount still varies per user
 
 
+def test_csv_dataset_ignores_the_header_row():
+    # the emitted CSV has a header row AND the plan sets variableNames, so JMeter must be told to skip
+    # the first line — otherwise (its default) it reads the header as data and the first virtual user
+    # submits the column names as values.
+    import tempfile
+    from har2jmx.emit import emit_jmx
+    result = analyze((EXAMPLES / "restful_booker.har").read_bytes()
+                     if (EXAMPLES / "restful_booker.har").exists()
+                     else (FIX / "sample_flow.har").read_bytes())
+    with tempfile.TemporaryDirectory() as d:
+        jmx_path, csv_paths, _ = emit_jmx(result, d, {"threads": "10"}, name="plan")
+        assert csv_paths, "expected at least one CSV dataset"
+        x = jmx_path.read_text(encoding="utf-8")
+        assert 'name="ignoreFirstLine">true' in x          # header is skipped, not read as data
+        assert 'name="variableNames"' in x                 # names are explicit (so ignoreFirstLine applies)
+        # the CSV really does carry a header line matching the declared variable names
+        import csv as _c
+        rows = list(_c.reader(csv_paths[0].read_text(encoding="utf-8").splitlines()))
+        header = rows[0]
+        assert all(h and not h.isdigit() for h in header)  # first line is column names, not data
+
+
 def test_client_unique_key_uses_uuid_function():
     # a client-generated idempotency/request-id UUID must be fresh per request (${__UUID()}),
     # not a shared CSV value — else 100 users send the same key and the gateway dedups them.
