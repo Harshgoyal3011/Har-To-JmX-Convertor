@@ -169,6 +169,28 @@ def test_request_charset_and_timeouts_are_set():
     assert 'name="TIMEOUT"' in x and ">30000<" in x           # editable default
 
 
+def test_http2_pseudo_headers_and_client_hints_are_not_emitted():
+    # a modern Chrome HTTP/2 capture carries :authority/:method/:path/:scheme pseudo-headers plus
+    # sec-* client hints and x-forwarded-* — none are replayable (pseudo-headers are illegal HTTP/1
+    # names that duplicate what the sampler sets; the rest are recorder noise). Real headers stay.
+    import re
+    har = {"log": {"version": "1.2", "entries": [
+        {"startedDateTime": "2026-01-01T10:00:00.000Z", "time": 30,
+         "request": {"method": "GET", "url": "https://api.example.com/orders", "cookies": [], "headers": [
+             {"name": ":authority", "value": "api.example.com"}, {"name": ":method", "value": "GET"},
+             {"name": ":path", "value": "/orders"}, {"name": ":scheme", "value": "https"},
+             {"name": "sec-ch-ua", "value": "x"}, {"name": "sec-fetch-mode", "value": "cors"},
+             {"name": "x-forwarded-for", "value": "1.2.3.4"},
+             {"name": "Accept", "value": "application/json"}]},
+         "response": {"status": 200, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                      "content": {"mimeType": "application/json", "text": "{}"}}},
+    ]}}
+    names = set(re.findall(r'Header.name">([^<]+)<', build_jmx_xml(analyze(har)).decode()))
+    assert not any(h.startswith(":") for h in names), f"pseudo-headers leaked: {names}"
+    assert not any(h.lower().startswith(("sec-", "x-forwarded")) for h in names)
+    assert "Accept" in names                              # a real header is still emitted
+
+
 def test_raw_body_substitution_is_whole_token_not_substring():
     # a correlated value that is a prefix of another value in the same XML/SOAP body must NOT corrupt
     # that other value (ORD-100 must not turn ORD-1000 into ${orderId}0).

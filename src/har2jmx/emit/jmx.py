@@ -27,6 +27,17 @@ from har2jmx.ir.normalized import BodyKind, NormalizedRequest
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
 from har2jmx.validate import ExtractorStatus
 
+# Headers JMeter must not replay. HTTP/2 pseudo-headers (:authority/:method/:path/:scheme) are illegal
+# HTTP/1 header names and duplicate what the sampler already sets — emitting them breaks the request.
+# Browser client-hints (sec-ch-*, sec-fetch-*) and forwarding headers (x-forwarded-*) are recorder
+# noise, not part of the API contract. Mirrors the pseudo-header filter the lineage layer already uses.
+_NON_REPLAYABLE_HEADER_PREFIXES = (":", "sec-", "x-forwarded")
+
+
+def _replayable_header(name: str) -> bool:
+    return not name.lower().startswith(_NON_REPLAYABLE_HEADER_PREFIXES)
+
+
 # client-generated per-request keys — must be fresh each request, not a shared CSV value
 _UNIQUE_KEY_RE = _re.compile(
     r"idempotenc|request.?id|correlation.?id|trace.?id|message.?id|nonce|"
@@ -251,10 +262,11 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
 def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str],
                         global_headers: frozenset = frozenset(),
                         cookie_mgr_values: frozenset = frozenset()) -> None:
-    # request-specific headers only — headers already carried by the global manager are skipped
+    # request-specific headers only — headers already carried by the global manager are skipped, and
+    # non-replayable ones (HTTP/2 pseudo-headers, client-hints, forwarding) are dropped entirely.
     headers = [(n, v) for n, v in req.request.headers
                if n.lower() not in {"host", "content-length", "cookie"}
-               and n.lower() not in global_headers and v]
+               and n.lower() not in global_headers and v and _replayable_header(n)]
     # cookies not replayed by the Cookie Manager are sent manually (substituted); session cookies
     # the Cookie Manager handles are omitted so we neither hardcode a stale value nor reference a
     # phantom variable.
@@ -419,7 +431,7 @@ def _collect_common_headers(business: list[NormalizedRequest]) -> dict[str, tupl
         seen: set[str] = set()
         for hn, hv in req.request.headers:
             low = hn.lower()
-            if low in skip or not hv or low in seen:
+            if low in skip or not hv or low in seen or not _replayable_header(hn):
                 continue
             seen.add(low)
             values[low].add(hv)
