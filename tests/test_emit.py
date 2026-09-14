@@ -132,6 +132,24 @@ def test_correlation_health_assertion_guards_only_doubtful_correlations():
     assert 'name="Assertion.test_type">20' in doubtful    # Substring | Not → fails if sentinel present
 
 
+def test_think_time_is_between_transactions_not_before_every_request():
+    # think time must model a user pausing between actions — one pause before each transaction, via a
+    # Flow Control Action (Test Action) that scopes the timer to just that no-op step. A bare timer at
+    # thread-group scope would (wrongly) pause before every sub-request inside every transaction.
+    import re
+    r = analyze((FIX / "sample_flow.har").read_bytes())
+    x = build_jmx_xml(r, {"threads": "50", "thinktime": "500"}).decode()
+    n_txns = sum(1 for t in r.transactions
+                 if any(not r.capture.requests[i].classification.excluded for i in t.request_indices))
+    # exactly one Think Time pause per transaction (not one global timer, not one per sampler)
+    assert x.count('testclass="TestAction"') == n_txns
+    assert x.count('testname="Think Time"') == n_txns
+    # the timer is wired to the pause and driven by the ${THINKTIME} variable
+    assert 'ConstantTimer.delay">${THINKTIME}' in x and 'RandomTimer.range">${THINKTIME}' in x
+    # each Test Action pause is immediately followed by its own timer (scoped to the pause)
+    assert re.search(r'testclass="TestAction".*?<hashTree>\s*<UniformRandomTimer', x, re.S)
+
+
 def test_bearer_header_substituted_in_plan():
     x = _xml(FIX / "sample_bearer.har")
     assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted
@@ -213,6 +231,28 @@ def test_query_and_form_values_are_url_encoded():
     assert "true" in encodes, "query/form args must be URL-encoded"
     assert "false" in encodes, "the raw JSON body must NOT be URL-encoded"
     assert "red running shoes" in x                    # stored decoded (JMeter encodes at runtime)
+
+
+def test_csv_dataset_ignores_the_header_row():
+    # the emitted CSV has a header row AND the plan sets variableNames, so JMeter must be told to skip
+    # the first line — otherwise (its default) it reads the header as data and the first virtual user
+    # submits the column names as values.
+    import tempfile
+    from har2jmx.emit import emit_jmx
+    result = analyze((EXAMPLES / "restful_booker.har").read_bytes()
+                     if (EXAMPLES / "restful_booker.har").exists()
+                     else (FIX / "sample_flow.har").read_bytes())
+    with tempfile.TemporaryDirectory() as d:
+        jmx_path, csv_paths, _ = emit_jmx(result, d, {"threads": "10"}, name="plan")
+        assert csv_paths, "expected at least one CSV dataset"
+        x = jmx_path.read_text(encoding="utf-8")
+        assert 'name="ignoreFirstLine">true' in x          # header is skipped, not read as data
+        assert 'name="variableNames"' in x                 # names are explicit (so ignoreFirstLine applies)
+        # the CSV really does carry a header line matching the declared variable names
+        import csv as _c
+        rows = list(_c.reader(csv_paths[0].read_text(encoding="utf-8").splitlines()))
+        header = rows[0]
+        assert all(h and not h.isdigit() for h in header)  # first line is column names, not data
 
 
 def test_client_unique_key_uses_uuid_function():
