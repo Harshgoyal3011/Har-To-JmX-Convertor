@@ -201,7 +201,11 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     else:
         for name, value in list(req.request.query) + list(req.request.body.form):
             arg = _elem(coll, name, "HTTPArgument")
-            _b(arg, "HTTPArgument.always_encode", False)
+            # Query/form values are stored DECODED (parse_qsl), so JMeter must URL-encode them or a value
+            # with a space/&/+/= (e.g. q="red running shoes") ships as a malformed request line. Encoding
+            # a ${var} encodes its RESOLVED value, so correlations/parameters stay correct. (The raw
+            # JSON/XML body above keeps always_encode=false — a body blob must not be URL-encoded.)
+            _b(arg, "HTTPArgument.always_encode", True)
             _s(arg, "Argument.name", name)
             _s(arg, "Argument.value", _apply(value, sub))
             _s(arg, "Argument.metadata", "=")
