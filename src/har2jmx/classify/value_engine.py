@@ -180,6 +180,30 @@ def _is_config_constant(flow: ValueFlow) -> bool:
 
 
 _CODED_ID_RE = re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
+_GENERATED_REF_RE = re.compile(r"^[A-Za-z]{2,}[-_](?P<code>.+)$")
+# A field named like a per-run REFERENCE/handle (checkoutRef, bookingReference, uploadTicket, drawHandle)
+# — as opposed to an entity id (patientId, orderId). A "…Ref/Reference/Handle/Ticket" name is what
+# separates ephemeral process state (correlate) from a stable coded entity id (parameterize) when the
+# value shape alone can't (PAT-MRN-88213 looks generated but is a patient identifier = master data).
+_REF_FIELD_RE = re.compile(r"(?:ref|reference|handle|ticket)$", re.IGNORECASE)
+
+
+def _is_ref_named(flow: ValueFlow) -> bool:
+    return any(_REF_FIELD_RE.search(o.field or "") for o in flow.occurrences)
+
+
+def _looks_generated_ref(value: str) -> bool:
+    """A coded id whose CODE part (after PREFIX-) looks server-GENERATED, not a catalog sequence:
+    ≥6 chars with BOTH letters and digits (checkoutRef CHK-9f8e7d6c, booking BK-A1B2C3D4) — as opposed
+    to a short catalog code (PROD-4400, DOC-4451) whose numeric tail is a stable, selectable id. Lets a
+    per-run reference issued by a prepare/init call be correlated without pulling catalog ids in with it."""
+    m = _GENERATED_REF_RE.match(str(value).strip())
+    if not m:
+        return False
+    core = re.sub(r"[^A-Za-z0-9]", "", m.group("code"))
+    if len(core) < 6:
+        return False
+    return any(c.isdigit() for c in core) and any(c.isalpha() for c in core)
 
 
 def _is_opaque_handle(value: str) -> bool:
@@ -278,13 +302,21 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                 reason = ("server-issued pagination/continuation cursor consumed by the next page — "
                           "opaque state that only fits this dataset snapshot, so correlate per page, "
                           "never a static CSV value")
-            elif (_is_opaque_handle(flow.value)
-                  and len(producer_field_values.get(flow.first_producer.location, ())) <= 1):
-                # a singleton opaque handle (quote ref, draft id, upload ticket) — server-issued this
-                # run and expiring, NOT one of a selectable catalog set — so correlate the fresh value
+            elif (len(producer_field_values.get(flow.first_producer.location, ())) <= 1
+                  and (_is_opaque_handle(flow.value)
+                       or (_looks_generated_ref(flow.value) and _is_ref_named(flow)))):
+                # a SINGLETON server-issued reference — an opaque handle (quote ref, draft id, upload
+                # ticket) OR a REFERENCE-named coded value with a generated-looking code (checkoutRef
+                # CHK-9f8e7d6c, bookingReference BK-A1B2C3D4). Minted once this run and reused: the classic
+                # "prepare/init GET returns a ref you post back", which a recorded value can't replay. Two
+                # guards keep catalog/master data out: a value arriving as one-of-many is a selectable id
+                # (parameterize), and a generated-looking value in an *id*-named field (patientId
+                # PAT-MRN-88213) is an existing entity identifier (parameterize) — only ref/handle-named
+                # process state is correlated. This was the biggest missed-correlation class.
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
-                reason = ("opaque server-issued handle (singleton, not one of a catalog list) reused "
-                          "downstream — per-run/expiring state, correlate it; a recorded value goes stale")
+                reason = ("server-issued singleton reference (opaque or coded — e.g. checkoutRef/quoteId/"
+                          "bookingRef) reused downstream: per-run state, not one of a catalog list; "
+                          "correlate it, a recorded value goes stale")
             elif method == "GET" or search:
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
                 reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"
