@@ -42,9 +42,10 @@ def test_ephemeral_code_is_correlated_config_code_is_not():
                           _e("POST", "https://a.b/verify", 200, "{}", body='{"verificationCode":"VC-9982AB"}')])
     assert r.by_value("VC-9982AB").classification == ValueClass.RUNTIME_GENERATED
 
-    r2 = _classify_inline([_e("POST", "https://a.b/login", 200, '{"countryCode":"USD"}', body='{"u":"a"}'),
-                           _e("GET", "https://a.b/USD/x", 200, "{}")])
-    assert r2.by_value("USD").classification != ValueClass.RUNTIME_GENERATED   # config, not correlated
+    # a config code (currencyCode) echoed by the server and reused must never be correlated
+    r2 = _classify_inline([_e("POST", "https://a.b/login", 200, '{"currencyCode":"USD-EUR-GBP"}', body='{"u":"a"}'),
+                           _e("GET", "https://a.b/USD-EUR-GBP/x", 200, "{}")])
+    assert all(v.value != "USD-EUR-GBP" for v in r2.correlations())   # config, not a correlation
 
 
 def test_infra_constant_from_post_is_not_correlated_into_path():
