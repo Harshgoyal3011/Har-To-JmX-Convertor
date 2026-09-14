@@ -16,6 +16,45 @@ def _result(name: str):
     return classify_values(cap)
 
 
+def _classify_inline(entries):
+    import json
+    cap = build_capture(json.dumps({"log": {"version": "1.2", "entries": entries}}).encode())
+    classify_capture(cap)
+    return classify_values(cap)
+
+
+def _e(m, u, st, resp, body=None):
+    e = {"startedDateTime": "2026-01-01T10:00:00Z", "time": 10,
+         "request": {"method": m, "url": u, "cookies": [], "headers": [{"name": "Accept", "value": "application/json"}]},
+         "response": {"status": st, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                      "content": {"mimeType": "application/json", "text": resp}}}
+    if body is not None:
+        e["request"]["postData"] = {"mimeType": "application/json", "text": body}
+        e["request"]["headers"].append({"name": "Content-Type", "value": "application/json"})
+    return e
+
+
+def test_ephemeral_code_is_correlated_config_code_is_not():
+    # a server-issued ephemeral code (verification/pairing/confirmation/OTP) reused later is per-run
+    # state -> correlate. A config code that merely ends in "code" (countryCode, currencyCode) is the
+    # same for every user -> never correlated.
+    r = _classify_inline([_e("GET", "https://a.b/vc", 200, '{"verificationCode":"VC-9982AB"}'),
+                          _e("POST", "https://a.b/verify", 200, "{}", body='{"verificationCode":"VC-9982AB"}')])
+    assert r.by_value("VC-9982AB").classification == ValueClass.RUNTIME_GENERATED
+
+    r2 = _classify_inline([_e("POST", "https://a.b/login", 200, '{"countryCode":"USD"}', body='{"u":"a"}'),
+                           _e("GET", "https://a.b/USD/x", 200, "{}")])
+    assert r2.by_value("USD").classification != ValueClass.RUNTIME_GENERATED   # config, not correlated
+
+
+def test_infra_constant_from_post_is_not_correlated_into_path():
+    # a login response echoes an infrastructure constant (region us-east-1) that the client then puts in
+    # a path. It is the same for every user, so it must stay hardcoded — not "correlated" as runtime.
+    r = _classify_inline([_e("POST", "https://a.b/login", 200, '{"region":"us-east-1"}', body='{"u":"a"}'),
+                          _e("GET", "https://a.b/us-east-1/dashboard", 200, "{}")])
+    assert r.by_value("us-east-1").classification != ValueClass.RUNTIME_GENERATED
+
+
 def test_runtime_token_is_correlation():
     r = _result("sample_lineage.har")
     v = r.by_value("SID-abc123def")

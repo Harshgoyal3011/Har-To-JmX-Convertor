@@ -151,6 +151,12 @@ _CONFIG_FIELD_NAMES = {
     # public OAuth/OIDC configuration identifiers — the same for every user & run, so hardcoded, never
     # a "secret needing correlation" (client_secret, which IS a secret, is deliberately not here).
     "clientid", "tenantid", "applicationid", "responsetype", "granttype", "scope", "audience",
+    # infrastructure / deployment constants — a login response often echoes these (region us-east-1,
+    # environment prod, zone). They are the same for every user, so a value that flows into a later
+    # path/param must stay hardcoded, never be "correlated" as if it were per-run runtime state.
+    "region", "environment", "env", "zone", "availabilityzone", "datacenter", "datacentre", "dc",
+    "cluster", "realm", "stage", "partition", "shard",
+    "countrycode", "currencycode", "country", "currency", "locale", "language", "languagecode",
 }
 _KNOWN_ENUM_VALUES = {
     "asc", "desc", "true", "false", "grid", "list", "table", "card", "dark", "light", "auto",
@@ -175,8 +181,10 @@ def _is_config_constant(flow: ValueFlow) -> bool:
     if val.lower() not in _KNOWN_ENUM_VALUES:
         if not _CONFIG_VALUE_RE.match(val) or GUID_RE.search(val) or _CONFIG_ID_LIKE_RE.match(val):
             return False   # a GUID / id / free text is not a config toggle even on a config-named field
-    return any(o.side == "request" and _norm_field(o.field) in _CONFIG_FIELD_NAMES
-               for o in flow.occurrences)
+    # A config-named field on EITHER side marks the value config: an infra constant (region, currency)
+    # that the server returns and the client sends back in a path/param must stay hardcoded, never be
+    # correlated as if it were per-run runtime state — a common "correlated a path that wasn't needed".
+    return any(_norm_field(o.field) in _CONFIG_FIELD_NAMES for o in flow.occurrences)
 
 
 _CODED_ID_RE = re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
@@ -190,6 +198,22 @@ _REF_FIELD_RE = re.compile(r"(?:ref|reference|handle|ticket)$", re.IGNORECASE)
 
 def _is_ref_named(flow: ValueFlow) -> bool:
     return any(_REF_FIELD_RE.search(o.field or "") for o in flow.occurrences)
+
+
+# Ephemeral CODE field names — a per-run code the server issues and the client submits back
+# (verification/confirmation/pairing/activation/OTP/auth code). Deliberately excludes config codes that
+# merely end in "code" (countryCode, statusCode, errorCode, zipCode, areaCode, currencyCode) by requiring
+# either a whole-name match (code/otp/pin/passcode) or one of the ephemeral prefixes before "code".
+_EPHEMERAL_CODE_RE = re.compile(
+    r"^(?:(?:verification|confirmation|pairing|activation|redemption|challenge|security|auth|"
+    r"authorization|device|session|login|access|sms|email|onetime|one[-_]?time)code"
+    r"|otp|otc|pin|passcode|code)$",
+    re.IGNORECASE,
+)
+
+
+def _is_ephemeral_code_named(flow: ValueFlow) -> bool:
+    return any(_EPHEMERAL_CODE_RE.match(_norm_field(o.field)) for o in flow.occurrences)
 
 
 def _looks_generated_ref(value: str) -> bool:
@@ -304,7 +328,8 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                           "never a static CSV value")
             elif (len(producer_field_values.get(flow.first_producer.location, ())) <= 1
                   and (_is_opaque_handle(flow.value)
-                       or (_looks_generated_ref(flow.value) and _is_ref_named(flow)))):
+                       or (_looks_generated_ref(flow.value) and _is_ref_named(flow))
+                       or _is_ephemeral_code_named(flow))):
                 # a SINGLETON server-issued reference — an opaque handle (quote ref, draft id, upload
                 # ticket) OR a REFERENCE-named coded value with a generated-looking code (checkoutRef
                 # CHK-9f8e7d6c, bookingReference BK-A1B2C3D4). Minted once this run and reused: the classic
