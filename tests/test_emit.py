@@ -150,6 +150,61 @@ def test_think_time_is_between_transactions_not_before_every_request():
     assert re.search(r'testclass="TestAction".*?<hashTree>\s*<UniformRandomTimer', x, re.S)
 
 
+def test_request_charset_and_timeouts_are_set():
+    # non-ASCII payloads (fed from a UTF-8 CSV) must ship as UTF-8, not the JVM default charset, or the
+    # body is mojibake; and a stalled server must not hang threads forever — cap connect/response time.
+    har = {"log": {"version": "1.2", "entries": [
+        {"startedDateTime": "2026-01-01T10:00:00.000Z", "time": 30,
+         "request": {"method": "POST", "url": "https://x.example.com/users",
+                     "headers": [{"name": "Content-Type", "value": "application/json"}], "cookies": [],
+                     "postData": {"mimeType": "application/json",
+                                  "text": "{\"name\":\"José Müller\",\"city\":\"Zürich\"}"}},
+         "response": {"status": 201, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                      "content": {"mimeType": "application/json", "text": "{\"userId\":\"U-500\"}"}}},
+    ]}}
+    x = build_jmx_xml(analyze(har)).decode()
+    assert 'HTTPSampler.contentEncoding">UTF-8' in x          # request charset pinned per sampler
+    assert 'HTTPSampler.connect_timeout">${TIMEOUT}' in x     # no infinite hang under load
+    assert 'HTTPSampler.response_timeout">${TIMEOUT}' in x
+    assert 'name="TIMEOUT"' in x and ">30000<" in x           # editable default
+
+
+def test_http2_pseudo_headers_and_client_hints_are_not_emitted():
+    # a modern Chrome HTTP/2 capture carries :authority/:method/:path/:scheme pseudo-headers plus
+    # sec-* client hints and x-forwarded-* — none are replayable (pseudo-headers are illegal HTTP/1
+    # names that duplicate what the sampler sets; the rest are recorder noise). Real headers stay.
+    import re
+    har = {"log": {"version": "1.2", "entries": [
+        {"startedDateTime": "2026-01-01T10:00:00.000Z", "time": 30,
+         "request": {"method": "GET", "url": "https://api.example.com/orders", "cookies": [], "headers": [
+             {"name": ":authority", "value": "api.example.com"}, {"name": ":method", "value": "GET"},
+             {"name": ":path", "value": "/orders"}, {"name": ":scheme", "value": "https"},
+             {"name": "sec-ch-ua", "value": "x"}, {"name": "sec-fetch-mode", "value": "cors"},
+             {"name": "x-forwarded-for", "value": "1.2.3.4"},
+             {"name": "Accept", "value": "application/json"}]},
+         "response": {"status": 200, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                      "content": {"mimeType": "application/json", "text": "{}"}}},
+    ]}}
+    names = set(re.findall(r'Header.name">([^<]+)<', build_jmx_xml(analyze(har)).decode()))
+    assert not any(h.startswith(":") for h in names), f"pseudo-headers leaked: {names}"
+    assert not any(h.lower().startswith(("sec-", "x-forwarded")) for h in names)
+    assert "Accept" in names                              # a real header is still emitted
+
+
+def test_raw_body_substitution_is_whole_token_not_substring():
+    # a correlated value that is a prefix of another value in the same XML/SOAP body must NOT corrupt
+    # that other value (ORD-100 must not turn ORD-1000 into ${orderId}0).
+    from har2jmx.emit.jmx import _sub_raw
+    out = _sub_raw("<order>ORD-100</order><rel>ORD-1000</rel><note>ORD-100 ok</note>",
+                   {"ORD-100": "${orderId}"})
+    assert out == "<order>${orderId}</order><rel>ORD-1000</rel><note>${orderId} ok</note>"
+    # whole tokens are still replaced anywhere they stand alone (element text, attribute, bare ref)
+    out2 = _sub_raw('<a id="TOK-9">x</a> ref=TOK-9;', {"TOK-9": "${tok}"})
+    assert out2 == '<a id="${tok}">x</a> ref=${tok};'
+    # a shorter id embedded in a longer one is left intact
+    assert _sub_raw("<s>SES1</s><o>SES1234</o>", {"SES1": "${sid}"}) == "<s>${sid}</s><o>SES1234</o>"
+
+
 def test_bearer_header_substituted_in_plan():
     x = _xml(FIX / "sample_bearer.har")
     assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted
