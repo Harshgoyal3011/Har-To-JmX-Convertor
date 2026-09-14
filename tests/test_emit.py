@@ -150,6 +150,25 @@ def test_think_time_is_between_transactions_not_before_every_request():
     assert re.search(r'testclass="TestAction".*?<hashTree>\s*<UniformRandomTimer', x, re.S)
 
 
+def test_request_charset_and_timeouts_are_set():
+    # non-ASCII payloads (fed from a UTF-8 CSV) must ship as UTF-8, not the JVM default charset, or the
+    # body is mojibake; and a stalled server must not hang threads forever — cap connect/response time.
+    har = {"log": {"version": "1.2", "entries": [
+        {"startedDateTime": "2026-01-01T10:00:00.000Z", "time": 30,
+         "request": {"method": "POST", "url": "https://x.example.com/users",
+                     "headers": [{"name": "Content-Type", "value": "application/json"}], "cookies": [],
+                     "postData": {"mimeType": "application/json",
+                                  "text": "{\"name\":\"José Müller\",\"city\":\"Zürich\"}"}},
+         "response": {"status": 201, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                      "content": {"mimeType": "application/json", "text": "{\"userId\":\"U-500\"}"}}},
+    ]}}
+    x = build_jmx_xml(analyze(har)).decode()
+    assert 'HTTPSampler.contentEncoding">UTF-8' in x          # request charset pinned per sampler
+    assert 'HTTPSampler.connect_timeout">${TIMEOUT}' in x     # no infinite hang under load
+    assert 'HTTPSampler.response_timeout">${TIMEOUT}' in x
+    assert 'name="TIMEOUT"' in x and ">30000<" in x           # editable default
+
+
 def test_bearer_header_substituted_in_plan():
     x = _xml(FIX / "sample_bearer.har")
     assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted
