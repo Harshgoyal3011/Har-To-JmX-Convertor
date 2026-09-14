@@ -40,6 +40,28 @@ TELEMETRY_HOST_RE = re.compile(
     r")",
     re.IGNORECASE,
 )
+# Embedded third-party SERVICES (maps, fonts, captcha, social embeds, widget/JS CDNs). These are not
+# the system under test — you don't load-test Google Maps — yet they return data (map tiles, geocode
+# JSON) that isn't caught by the static-MIME filter, so they leak into the plan as business samplers.
+# Matched against host+path and kept deliberately specific: Firebase/GCP *backends*
+# (identitytoolkit/firestore/storage.googleapis.com) are an app's own API and must NOT be excluded, so
+# only the well-known widget subdomains of googleapis/gstatic are listed, never googleapis.com wholesale.
+THIRD_PARTY_HOST_RE = re.compile(
+    r"(?:"
+    r"maps\.googleapis\.com|maps\.google\.com|maps\.gstatic\.com|khms\d?\.googleapis\.com|"   # Google Maps
+    r"fonts\.googleapis\.com|fonts\.gstatic\.com|"                                             # Google Fonts
+    r"www\.gstatic\.com|ssl\.gstatic\.com|apis\.google\.com|"                                  # Google static/platform JS
+    r"www\.google\.com/recaptcha|recaptcha\.net|www\.recaptcha\.net|"                          # reCAPTCHA
+    r"translate\.googleapis\.com|translate\.google\.com|"                                      # Google Translate
+    r"api\.mapbox\.com|[a-d]\.tiles?\.mapbox\.com|tile\.openstreetmap\.org|"                   # map tiles
+    r"platform\.twitter\.com|syndication\.twitter\.com|www\.facebook\.com/plugins|"           # social embeds
+    r"platform\.linkedin\.com|www\.youtube\.com/embed|youtube\.com/iframe_api|player\.vimeo\.com|"
+    r"cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|unpkg\.com|ajax\.googleapis\.com|code\.jquery\.com|"  # widget/JS CDNs
+    r"stackpath\.bootstrapcdn\.com|maxcdn\.bootstrapcdn\.com|use\.fontawesome\.com|kit\.fontawesome\.com|"
+    r"cdn\.cookielaw\.org|widget\.intercom\.io|js\.intercomcdn\.com"                          # consent / support widgets
+    r")",
+    re.IGNORECASE,
+)
 # Beacon/telemetry endpoints by path shape (kept specific to avoid catching business endpoints).
 TELEMETRY_PATH_RE = re.compile(
     r"(?:/eum/|/rum(?:/|\b)|/beacon(?:s)?(?:/|\b)|/telemetry/|/csp-report|/__rum|"
@@ -117,6 +139,8 @@ def _is_telemetry(req: NormalizedRequest) -> tuple[bool, str]:
     host = req.request.host or ""
     if TELEMETRY_HOST_RE.search(host):
         return True, f"known telemetry/RUM vendor host '{host}'"
+    if THIRD_PARTY_HOST_RE.search(host + (req.request.path or "")):
+        return True, f"third-party embedded service '{host}' (maps/fonts/widget/CDN) — not the system under test"
     if TELEMETRY_PATH_RE.search(req.request.path):
         return True, "beacon/telemetry endpoint path"
     return False, ""

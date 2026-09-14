@@ -39,6 +39,35 @@ def test_static_and_telemetry_are_excluded_but_kept():
     assert cap.count == 6
 
 
+def test_third_party_services_excluded_but_app_backends_kept():
+    # embedded third-party services (Google Maps, Fonts, reCAPTCHA) are not the system under test and
+    # must be excluded even when they return data — but Firebase/GCP *backends* on googleapis.com are
+    # an app's own API/login and must NOT be excluded.
+    import json
+    from har2jmx.ir.build import build_capture
+    from har2jmx.classify import classify_capture as _cc
+
+    def one(host, path, method="GET"):
+        return {"startedDateTime": "2026-01-01T10:00:00Z", "time": 5,
+                "request": {"method": method, "url": f"https://{host}{path}", "cookies": [],
+                            "headers": [{"name": "Accept", "value": "application/json"}]},
+                "response": {"status": 200, "headers": [{"name": "Content-Type", "value": "application/json"}],
+                             "content": {"mimeType": "application/json", "text": "{}"}}}
+    har = {"log": {"version": "1.2", "entries": [
+        one("shop.acme.com", "/api/products"),
+        one("maps.googleapis.com", "/maps/api/staticmap?center=NY"),
+        one("fonts.googleapis.com", "/css2?family=Roboto"),
+        one("identitytoolkit.googleapis.com", "/v1/accounts:signInWithPassword", "POST"),  # Firebase auth backend
+    ]}}
+    cap = build_capture(json.dumps(har).encode())
+    _cc(cap)
+    by_host = {r.request.host: r.classification.excluded for r in cap.requests}
+    assert by_host["maps.googleapis.com"] is True
+    assert by_host["fonts.googleapis.com"] is True
+    assert by_host["shop.acme.com"] is False
+    assert by_host["identitytoolkit.googleapis.com"] is False   # app backend — never excluded
+
+
 def test_business_and_auth_not_excluded():
     r = _cap("sample_mini.har").requests
     assert not r[0].classification.excluded  # auth is business-relevant
