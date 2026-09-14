@@ -515,6 +515,11 @@ def _add_csv_dataset(parent_ht, dataset_name, filename, columns):
     _s(cfg, "filename", filename)
     _s(cfg, "fileEncoding", "UTF-8")
     _s(cfg, "variableNames", ",".join(columns))
+    # We write an explicit header row AND set variableNames, so JMeter must skip that first line —
+    # otherwise (its default of false) it reads the header as data and the first virtual user submits
+    # the column names as values ("firstname", "email", …). ignoreFirstLine only applies when
+    # variableNames is non-empty, which it always is here.
+    _b(cfg, "ignoreFirstLine", True)
     _s(cfg, "delimiter", ",")
     _b(cfg, "quotedData", True)
     _b(cfg, "recycle", True)
