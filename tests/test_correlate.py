@@ -100,6 +100,18 @@ def test_no_extractor_without_consumer_and_no_duplicates():
     assert len(keys) == len(set(keys))                        # no duplicates
 
 
+def test_csrf_token_in_meta_tag_is_correlated_robustly():
+    # a SPA exposes its CSRF token as <meta name="csrf-token" content="..."> and sends it back as a
+    # header. The extractor must anchor on the meta NAME, so a competing <meta name="viewport"
+    # content="..."> (present on every real page) can't pre-empt it.
+    by_var, _ = _corr("sample_csrf_meta.har")
+    d = next((v for v in by_var.values() if v.value == "CSRF-abc123xyz789"), None)
+    assert d is not None, "CSRF meta token was not correlated"
+    assert d.extractor == ExtractorType.REGEX
+    assert "csrf" in d.expression and "token" in d.expression and "content=" in d.expression  # anchored on meta name
+    assert d.consumers                                                   # sent back in a later request
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0

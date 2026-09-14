@@ -22,7 +22,7 @@ from typing import Any, Iterator
 from urllib.parse import parse_qsl, unquote, urlparse
 
 from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest
-from har2jmx.patterns import GUID_RE, HIDDEN_INPUT_RE
+from har2jmx.patterns import GUID_RE, HIDDEN_INPUT_RE, META_TAG_RE
 
 # Headers whose value carries a credential after a scheme word (Bearer <token>, Token <t>, …).
 _AUTH_HEADERS = {"authorization", "proxy-authorization", "x-auth-token", "x-access-token",
@@ -247,6 +247,15 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
             name, value = m.group("name"), m.group("value")
             if value:
                 o = _emit(value, "response", f"response.html:{name}", name, idx)
+                if o:
+                    yield o
+        # <meta name="csrf-token" content="..."> — the SPA CSRF pattern. A dedicated producer anchored
+        # on the meta name, so the token is correlated robustly rather than via a generic content="
+        # boundary that a viewport/description meta would pre-empt.
+        for m in META_TAG_RE.finditer(raw):
+            name, value = m.group("name"), m.group("value")
+            if value:
+                o = _emit(value, "response", f"response.meta:{name}", name, idx)
                 if o:
                     yield o
     # XML / SOAP response values (session ids, object ids, tokens returned in the envelope).
