@@ -100,6 +100,18 @@ def test_no_extractor_without_consumer_and_no_duplicates():
     assert len(keys) == len(set(keys))                        # no duplicates
 
 
+def test_created_id_in_location_header_path_is_correlated():
+    # REST 201 Created returns the new id only in Location: .../orders/ORD-88231 (empty body). That id
+    # is created this run and reused, so it must be CORRELATED (regex on the Location header), not left
+    # for parameterization as if it were existing master data.
+    by_var, _ = _corr("sample_location_id.har")
+    assert "orderId" in by_var
+    d = by_var["orderId"]
+    assert d.value == "ORD-88231"
+    assert d.extractor == ExtractorType.REGEX
+    assert d.producer_index == 0 and d.consumers            # produced by the POST, consumed by the GET
+
+
 if __name__ == "__main__":
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = 0
