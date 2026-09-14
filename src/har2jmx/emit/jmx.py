@@ -165,11 +165,17 @@ def _sub_path(path: str, sub: dict[str, str]) -> str:
 def _sub_raw(text: str, sub: dict[str, str]) -> str:
     """Substitute known correlated/parameter values inside a raw body (XML/SOAP/text).
 
-    Values are significant (>=3 chars, guarded by _sub_ok); longest-first avoids partial overlaps.
+    Whole-token only: a plain str.replace() would corrupt a *different* value that merely shares a
+    prefix (ORD-100 turning ORD-1000 into ${orderId}0, SES1 turning SES1234 into ${sid}234). Match the
+    value only when it is not embedded in a longer identifier — bounded by a non-[word/-] character on
+    each side — mirroring the whole-slot discipline used everywhere else in the pipeline. Longest-first
+    still prevents a shorter value from pre-empting a longer overlapping one.
     """
     for value in sorted(sub, key=len, reverse=True):
-        if value in text:
-            text = text.replace(value, sub[value])
+        if value not in text:
+            continue
+        pat = _re.compile(r"(?<![\w-])" + _re.escape(value) + r"(?![\w-])")
+        text = pat.sub(lambda _m, v=value: sub[v], text)
     return text
 
 

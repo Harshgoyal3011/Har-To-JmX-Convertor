@@ -169,6 +169,20 @@ def test_request_charset_and_timeouts_are_set():
     assert 'name="TIMEOUT"' in x and ">30000<" in x           # editable default
 
 
+def test_raw_body_substitution_is_whole_token_not_substring():
+    # a correlated value that is a prefix of another value in the same XML/SOAP body must NOT corrupt
+    # that other value (ORD-100 must not turn ORD-1000 into ${orderId}0).
+    from har2jmx.emit.jmx import _sub_raw
+    out = _sub_raw("<order>ORD-100</order><rel>ORD-1000</rel><note>ORD-100 ok</note>",
+                   {"ORD-100": "${orderId}"})
+    assert out == "<order>${orderId}</order><rel>ORD-1000</rel><note>${orderId} ok</note>"
+    # whole tokens are still replaced anywhere they stand alone (element text, attribute, bare ref)
+    out2 = _sub_raw('<a id="TOK-9">x</a> ref=TOK-9;', {"TOK-9": "${tok}"})
+    assert out2 == '<a id="${tok}">x</a> ref=${tok};'
+    # a shorter id embedded in a longer one is left intact
+    assert _sub_raw("<s>SES1</s><o>SES1234</o>", {"SES1": "${sid}"}) == "<s>${sid}</s><o>SES1234</o>"
+
+
 def test_bearer_header_substituted_in_plan():
     x = _xml(FIX / "sample_bearer.har")
     assert "Bearer ${accessToken}" in x           # scheme-prefixed credential substituted
