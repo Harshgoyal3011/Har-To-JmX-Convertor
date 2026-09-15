@@ -93,6 +93,18 @@ def test_no_variable_name_collision_across_different_values():
     assert "shipmentId" in by_var and by_var["shipmentId"].value == "SHP-999"
 
 
+def test_prepare_init_reference_from_get_is_correlated_not_parameterized():
+    # the classic "prepare/init GET returns a ref you post back": GET /checkout/init issues a
+    # checkoutRef (server-generated, singleton, ref-named) that is submitted to /checkout/confirm. It is
+    # per-run state — a recorded value is stale next run — so it MUST be correlated, not dropped into a
+    # CSV as if it were existing master data. This was the biggest missed-correlation class on real apps.
+    by_var, _ = _corr("sample_prepare_ref.har")
+    assert "checkoutRef" in by_var
+    d = by_var["checkoutRef"]
+    assert d.value == "CHK-9f8e7d6c"
+    assert d.producer_index == 0 and d.consumers            # issued by the GET, posted back to confirm
+
+
 def test_no_extractor_without_consumer_and_no_duplicates():
     _, decisions = _corr("sample_flow.har")
     assert all(d.consumers for d in decisions)                # every extractor has a consumer
