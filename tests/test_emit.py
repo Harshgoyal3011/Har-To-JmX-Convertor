@@ -191,6 +191,24 @@ def test_http2_pseudo_headers_and_client_hints_are_not_emitted():
     assert "Accept" in names                              # a real header is still emitted
 
 
+def test_raw_body_gets_content_type_when_capture_omits_it():
+    import re
+    # a JSON body recorded WITHOUT a Content-Type header must still ship one, or the server 415s / can't
+    # parse the payload. Derived from the body's media type; never duplicated when the header IS present.
+    def ct(headers):
+        har = {"log": {"version": "1.2", "entries": [
+            {"startedDateTime": "2026-01-01T10:00:00.000Z", "time": 10,
+             "request": {"method": "POST", "url": "https://a.b/orders", "cookies": [], "headers": headers,
+                         "postData": {"mimeType": "application/json", "text": "{\"x\":1}"}},
+             "response": {"status": 201, "headers": [],
+                          "content": {"mimeType": "application/json", "text": "{\"id\":\"O-1\"}"}}},
+        ]}}
+        x = build_jmx_xml(analyze(har)).decode()
+        return re.findall(r'Header.name">Content-Type</stringProp>\s*<stringProp name="Header.value">([^<]*)<', x)
+    assert ct([{"name": "Accept", "value": "application/json"}]) == ["application/json"]   # injected
+    assert ct([{"name": "Content-Type", "value": "application/json"}]) == ["application/json"]  # not doubled
+
+
 def test_raw_body_substitution_is_whole_token_not_substring():
     # a correlated value that is a prefix of another value in the same XML/SOAP body must NOT corrupt
     # that other value (ORD-100 must not turn ORD-1000 into ${orderId}0).

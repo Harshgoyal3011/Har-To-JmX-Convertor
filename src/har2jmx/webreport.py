@@ -127,6 +127,23 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
     def txn_of(idx: int) -> str:
         return cap.requests[idx].context.transaction
 
+    # Show ONLY the correlations the emitter actually put in the script. An extractor that could not be
+    # verified against the capture is dropped from the plan (the value ships as a literal and is listed
+    # under "needs manual correlation") — so it must NOT also appear in the Correlations table, or the UI
+    # claims a correlation the script does not contain. Cookie-manager correlations have no extractor to
+    # verify and are always emitted; UNIQUE/AMBIGUOUS_REFINED are emitted; UNRESOLVED are not.
+    _check_by_var = {chk.variable: chk for chk in result.extractor_checks}
+
+    def _emitted(c) -> bool:
+        chk = _check_by_var.get(c.variable)
+        return chk is None or chk.ok
+
+    def _shown_expr(c) -> str:
+        chk = _check_by_var.get(c.variable)
+        return chk.refined_expression if (chk and chk.refined_expression) else c.expression
+
+    shown_correlations = [c for c in result.correlations if _emitted(c)]
+
     reqs = m["requests"]
     return {
         "id": result_id,
@@ -136,7 +153,7 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
         },
         "metrics": {
             "transactions": m["transactions"]["count"],
-            "correlations": m["correlation"]["count"],
+            "correlations": len(shown_correlations),   # count what's actually in the script, not dropped ones
             "parameters": m["parameterization"]["columns"],
             "datasets": m["parameterization"]["datasets"],
             "entities": m["entities"]["count"],
@@ -167,14 +184,14 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
                 "variable": c.variable,
                 "value": _mask(c.value),
                 "extractor": c.extractor.value,
-                "expression": c.expression,
+                "expression": _shown_expr(c),
                 "confidence": c.confidence,
                 "reason": c.reason,
                 "consumers": len(c.consumers),
                 "producedIn": txn_of(c.producer_index),
                 "entity": c.entity,
             }
-            for c in result.correlations
+            for c in shown_correlations
         ],
         "parameters": [
             {

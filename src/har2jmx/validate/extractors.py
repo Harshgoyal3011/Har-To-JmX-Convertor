@@ -184,7 +184,7 @@ def _check_json(dec: CorrelationDecision, producer: NormalizedRequest) -> Extrac
 
 
 def _check_regex(dec: CorrelationDecision, producer: NormalizedRequest) -> ExtractorCheck:
-    use_headers = dec.producer_location.startswith(("set-cookie:", "response.header:", "response.location:"))
+    use_headers = dec.producer_location.startswith(("set-cookie:", "response.header:", "response.location:", "response.locpath:"))
     text = _headers_text(producer) if use_headers else (producer.response.body.raw or "")
     target = _norm(dec.value)
 

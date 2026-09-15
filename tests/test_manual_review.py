@@ -27,6 +27,24 @@ def test_web_summary_lists_uncorrelated_token_with_context():
     assert summary["manualCorrelations"] == items
 
 
+def test_web_summary_correlations_match_the_script():
+    # the UI Correlations table must list ONLY correlations the emitter actually kept. A value whose
+    # extractor could not be verified is dropped from the script (shipped as a literal + escalated to
+    # manual review) — it must NOT also appear as "correlated" in the UI, or the UI contradicts the .jmx.
+    r = _r("sample_list_id.har")                     # orderId's extractor is UNRESOLVED -> dropped
+    summary = build_web_summary(r, "rid", {})
+    x = build_jmx_xml(r).decode()
+    ui_vars = {c["variable"] for c in summary["correlations"]}
+    assert "orderId" not in ui_vars                          # not claimed as correlated in the UI
+    assert 'referenceNames">orderId' not in x               # and indeed not in the script
+    assert "orderId" in {m["field"] for m in summary["manualCorrelations"]}   # shown as manual instead
+    assert summary["metrics"]["correlations"] == len(summary["correlations"])  # count matches the table
+
+    # a clean flow still surfaces its real correlation in the UI
+    ok = build_web_summary(_r("sample_flow.har"), "rid2", {})
+    assert "orderId" in {c["variable"] for c in ok["correlations"]}
+
+
 def test_clean_flow_has_no_manual_items():
     r = _r("sample_flow.har")
     assert build_manual_correlations(r) == []
