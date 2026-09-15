@@ -224,11 +224,20 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
         o = _emit(value, "response", f"response.header:{name}", name, idx)
         if o:
             yield o
-        # Redirect Location often carries per-session values (OAuth auth code, SAML relay state) in
-        # its query string — expose them so the redirect chain can be correlated.
-        if nl in {"location", "content-location"} and value and "?" in value:
-            for k, v in parse_qsl(urlparse(value).query, keep_blank_values=True):
+        # A Location header carries per-session values worth correlating in two places: its query
+        # string (OAuth auth code, SAML relay state) AND its path — a REST 201 Created returns the new
+        # resource id only as Location: .../orders/ORD-88231 (RFC 7231), so the created id lives in the
+        # path, not the body. Expose both so the created id is correlated, not mistaken for master data.
+        if nl in {"location", "content-location"} and value:
+            parsed = urlparse(value)
+            for k, v in parse_qsl(parsed.query, keep_blank_values=True):
                 oc = _emit(v, "response", f"response.location:{k}", k, idx)
+                if oc:
+                    yield oc
+            segs = [s for s in parsed.path.split("/") if s]
+            if segs and _looks_dynamic(segs[-1]):        # only an id-like last segment, not a collection noun
+                parent = segs[-2] if len(segs) >= 2 else ""
+                oc = _emit(segs[-1], "response", f"response.locpath:{parent}", parent or "id", idx)
                 if oc:
                     yield oc
     if req.response.body.json is not None:

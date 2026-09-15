@@ -660,7 +660,7 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
                     expr = chk.refined_expression if (chk and chk.refined_expression) else c.expression
                     _add_json_extractor(sampler_ht, c.variable, expr)
                 else:
-                    use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:"))
+                    use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:", "response.locpath:"))
                     _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)
                 # Only guard correlations with residual doubt. A correlation proven correct against the
                 # capture (extractor verified UNIQUE) with strong lifecycle evidence (High confidence) is

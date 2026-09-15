@@ -79,6 +79,13 @@ def _choose_extractor(location: str, cookie_name: str, consumers: list[Occurrenc
         return ExtractorType.REGEX, location.split("response.regex:", 1)[1]
     if location.startswith("response.body:"):
         return ExtractorType.JSON, _json_path(location)
+    if location.startswith("response.locpath:"):
+        # created id in the Location header PATH (REST 201 Created). Anchor on the parent collection
+        # segment so the right segment is captured: Location: .../orders/ORD-88231 -> orders/(ORD-88231).
+        parent = location.split("response.locpath:", 1)[1]
+        if parent:
+            return ExtractorType.REGEX, rf"{re.escape(parent)}/([^/?\s\"']+)"
+        return ExtractorType.REGEX, r"[Ll]ocation:[^\r\n]*?/([^/?\s\"']+)\s*[\r\n]"
     if location.startswith("response.location:"):
         param = location.split("response.location:", 1)[1]
         return ExtractorType.REGEX, rf"[?&]{re.escape(param)}=([^&\s\"']+)"
@@ -139,7 +146,7 @@ def build_correlations(cap: NormalizedCapture,
         extractor, expr = _choose_extractor(producer.location, producer.field, flow.consumers)
         # a value read from a redirect Location can only be extracted if the producer does NOT follow
         # the redirect — flag it so the emitter disables auto-redirect on that sampler.
-        from_redirect = producer.location.startswith(("response.location:", "response.header:Location"))
+        from_redirect = producer.location.startswith(("response.location:", "response.locpath:", "response.header:Location"))
         decisions.append(CorrelationDecision(
             variable=var,
             value=v.value,
