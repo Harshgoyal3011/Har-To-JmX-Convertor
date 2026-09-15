@@ -29,6 +29,13 @@ HIDDEN_INPUT_RE = re.compile(
     r'<input[^>]+type=["\']hidden["\'][^>]+name=["\'](?P<name>[^"\']+)["\'][^>]+value=["\'](?P<value>[^"\']*)["\']',
     re.IGNORECASE,
 )
+# <meta name="csrf-token" content="..."> — how SPAs (Rails, Laravel, Django, ASP.NET Core) expose the
+# CSRF token for the JS layer to read and send back as a header. name-before-content is the near-
+# universal order these frameworks emit.
+META_TAG_RE = re.compile(
+    r'<meta[^>]+name=["\'](?P<name>[^"\']+)["\'][^>]+content=["\'](?P<value>[^"\']*)["\']',
+    re.IGNORECASE,
+)
 AUTHORIZATION_BEARER_RE = re.compile(r"Bearer\s+(?P<token>[A-Za-z0-9\-_.=]+)", re.IGNORECASE)
 JSON_PAIR_RE = re.compile(
     r'"(?P<name>[A-Za-z0-9_.:-]*(?:csrf|xsrf|token|auth|session|sid|nonce|state|requestId|traceId|access_token|refresh_token|jwt|saml|viewState|eventValidation|relayState|requestVerificationToken|clientId|tenantId|applicationId)[A-Za-z0-9_.:-]*)"\s*:\s*"(?P<value>[^"]{8,})"',
