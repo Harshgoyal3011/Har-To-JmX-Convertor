@@ -267,6 +267,13 @@ def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str],
     headers = [(n, v) for n, v in req.request.headers
                if n.lower() not in {"host", "content-length", "cookie"}
                and n.lower() not in global_headers and v and _replayable_header(n)]
+    # A raw body must carry a Content-Type. Some captures record the JSON/XML body but not the header
+    # (fetch() defaults, tool quirks); JMeter would then POST the raw payload with no Content-Type and
+    # the server 415s / can't parse it. Supply it from the body's known media type when it's missing.
+    _RAW_KINDS = {BodyKind.JSON, BodyKind.GRAPHQL, BodyKind.XML, BodyKind.SOAP, BodyKind.TEXT}
+    if (req.request.body.kind in _RAW_KINDS and req.request.body.mime
+            and not any(n.lower() == "content-type" for n, _ in req.request.headers)):
+        headers.append(("Content-Type", req.request.body.mime))
     # cookies not replayed by the Cookie Manager are sent manually (substituted); session cookies
     # the Cookie Manager handles are omitted so we neither hardcode a stale value nor reference a
     # phantom variable.
