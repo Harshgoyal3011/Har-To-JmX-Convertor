@@ -7,11 +7,18 @@ from urllib.parse import parse_qsl
 
 
 def read_har(upload: bytes) -> dict[str, Any]:
+    # Fail safely on any malformed input with ONE user-actionable message — never leak the raw JSON
+    # parser error (e.g. "Expecting value: line 1 column 1") to the caller/UI, and never let a
+    # non-list `entries` propagate as an AttributeError deeper in the pipeline.
     try:
-        data = json.loads(upload.decode("utf-8-sig"))
-    except UnicodeDecodeError:
-        data = json.loads(upload.decode("latin-1"))
-    if "log" not in data or "entries" not in data["log"]:
+        try:
+            data = json.loads(upload.decode("utf-8-sig"))
+        except UnicodeDecodeError:
+            data = json.loads(upload.decode("latin-1"))
+    except (json.JSONDecodeError, ValueError):
+        raise ValueError("The uploaded file is not a valid HAR export.")
+    if (not isinstance(data, dict) or not isinstance(data.get("log"), dict)
+            or not isinstance(data["log"].get("entries"), list)):
         raise ValueError("The uploaded file is not a valid HAR export.")
     return data
 
