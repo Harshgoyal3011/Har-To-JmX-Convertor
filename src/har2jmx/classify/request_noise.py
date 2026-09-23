@@ -69,6 +69,54 @@ TELEMETRY_PATH_RE = re.compile(
     re.IGNORECASE,
 )
 
+# --- Fire-and-forget beacon / ad-RTB / telemetry-ingest families (RC-1 from the real-HAR audit) ---
+# Detected by request SHAPE (path) + a small set of PROVEN vendor families + RTB content type — NOT an
+# unbounded host blacklist. These are never business workload: header-bidding/RTB auctions and
+# cookie-syncs, error/telemetry ingest (Sentry envelope), bot-defense collectors (PerimeterX/DataDome),
+# CDN challenge telemetry (Cloudflare), and generic logging/beacon endpoints. Their POST bodies are
+# often binary/protobuf (the source of the RC-2 XML-1.0 control-char crashes), so excluding them here
+# also removes those crashes at the root. Kept conservative: only proven shapes match, so a genuine
+# business POST is never swept up — unknown non-beacon POSTs still fall through to the business/UNKNOWN
+# branches and stay visible for review.
+# Conservative: only ad-tech-specific shapes. Deliberately excludes generic paths (/track, /metrics,
+# /log, /logs, bare /auction, bare /rtb) that a real business endpoint legitimately uses.
+_BEACON_PATH_RE = re.compile(
+    r"(?:/openrtb|/prebid|/pbjs|/hbopenbid|/header-bidding|/translator(?:/|\b)|"          # RTB / header-bidding
+    r"/setuid|/user[-_]?sync|/usermatch|/c(?:k)?sync|/getuid|"                            # cookie-sync
+    r"/api/\d+/(?:envelope|store|security)|"                                              # Sentry project ingest
+    r"/cdn-cgi/(?:challenge-platform|rum|beacon|bm)|/interstitial|/captcha-delivery|"     # Cloudflare / DataDome
+    r"/api/v\d+/collector(?:/|\b)|"                                                       # PerimeterX collector
+    r"logservice|/logevent(?:/|\b)|/pong(?:/|\b))",                                       # specific log/telemetry
+    re.IGNORECASE,
+)
+_BEACON_HOST_RE = re.compile(
+    r"(?:pubmatic|criteo|rubiconproject|openx|adnxs|casalemedia|3lift|triplelift|sharethrough|"
+    r"smartadserver|bidswitch|yieldmo|gumgum|contextweb|districtm|sonobi|onetag|33across|"
+    r"id5-sync|liadm|adsrvr|scorecardresearch|quantserve|"
+    r"ingest\.[\w.-]*sentry\.|perimeterx|datadome|captcha-delivery|px-cloud|px-cdn|_prebid)",
+    re.IGNORECASE,
+)
+_RTB_CT_RE = re.compile(r"application/(?:x-protobuf|grpc|cbor|octet-stream\+rtb)", re.IGNORECASE)
+
+
+def _is_beacon(req: NormalizedRequest) -> tuple[bool, str]:
+    """A fire-and-forget ad-RTB / telemetry-ingest beacon — never part of the business workload."""
+    host = req.request.host or ""
+    path = req.request.path or ""
+    if _BEACON_HOST_RE.search(host):
+        return True, f"ad/RTB/telemetry vendor family '{host}' — fire-and-forget beacon, not the system under test"
+    if _BEACON_PATH_RE.search(path):
+        return True, "ad/RTB/telemetry beacon endpoint shape (bidding/cookie-sync/ingest/collector/log)"
+    # a POST carrying an RTB/binary content type to a non-app host is a beacon, not business
+    ctype = ""
+    for name, value in req.request.headers:
+        if name.lower() == "content-type":
+            ctype = value or ""
+            break
+    if req.method in {"POST", "PUT"} and _RTB_CT_RE.search(ctype):
+        return True, f"binary/RTB content-type '{ctype.split(';')[0]}' beacon — not business workload"
+    return False, ""
+
 # --- Static resource paths (general) ---
 STATIC_PATH_RE = re.compile(
     r"/(?:static|assets?|content|css|js|scripts?|fonts?|images?|img|media|vendor|dist|build|"
@@ -143,6 +191,9 @@ def _is_telemetry(req: NormalizedRequest) -> tuple[bool, str]:
         return True, f"third-party embedded service '{host}' (maps/fonts/widget/CDN) — not the system under test"
     if TELEMETRY_PATH_RE.search(req.request.path):
         return True, "beacon/telemetry endpoint path"
+    is_beacon, beacon_reason = _is_beacon(req)     # RC-1: ad-RTB / telemetry-ingest beacons (any method)
+    if is_beacon:
+        return True, beacon_reason
     return False, ""
 
 

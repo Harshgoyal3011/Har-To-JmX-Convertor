@@ -218,6 +218,22 @@ def determinism_gate(har: bytes, config: dict | None = None) -> GateResult:
                       "identical" if a == b else "differs")
 
 
+def conversion_safety_gate(har: bytes, config: dict | None = None) -> GateResult:
+    """RC-2: conversion must SUCCEED with well-formed XML, or fail with a controlled ValueError — it must
+    never raise an uncaught parser exception (e.g. ExpatError on XML-1.0-illegal control chars)."""
+    try:
+        res = analyze(har)
+        xml = build_jmx_xml(res, config or {"threads": "10"})
+        minidom.parseString(xml)                       # must be well-formed
+        return GateResult("conversion safety (valid JMX or clean error, never a crash)", True, "valid JMX")
+    except ValueError as exc:                           # controlled, user-safe failure is acceptable
+        return GateResult("conversion safety (valid JMX or clean error, never a crash)", True,
+                          f"clean error: {str(exc)[:60]}")
+    except Exception as exc:                            # noqa: BLE001 — any uncaught non-ValueError is a defect
+        return GateResult("conversion safety (valid JMX or clean error, never a crash)", False,
+                          f"UNCAUGHT {type(exc).__name__}: {str(exc)[:80]}")
+
+
 def repo_architecture_gates(src_root: Path | None = None) -> list[GateResult]:
     """Part 1-3: prove a single canonical pipeline with no duplicate active engines on this baseline."""
     src = src_root or (_ROOT / "src" / "har2jmx")

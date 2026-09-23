@@ -19,6 +19,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 from xml.dom import minidom
+from xml.parsers.expat import ExpatError
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 from har2jmx.correlate import ExtractorType
@@ -48,8 +49,22 @@ _UNIQUE_KEY_RE = _re.compile(
 
 # ---------------------------------------------------------------- xml prop helpers
 
+# XML 1.0 forbids most C0 control characters (everything except tab/newline/CR). Real captured payloads
+# (binary/protobuf ad-RTB bodies, gzip fragments) can contain them; ElementTree emits them raw and the
+# minidom re-parse then throws ExpatError, crashing the whole conversion. Strip exactly this illegal
+# class from every string value so XML-safe text is preserved byte-for-byte and only genuinely
+# unserializable control bytes are removed.
+_XML_ILLEGAL = _re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
+_XML_ILLEGAL_BYTES = _re.compile(rb"[\x00-\x08\x0b\x0c\x0e-\x1f]")
+
+
+def _xml_clean(value) -> str:
+    v = str(value)
+    return _XML_ILLEGAL.sub("", v) if _XML_ILLEGAL.search(v) else v
+
+
 def _s(parent, name, value=""):
-    el = SubElement(parent, "stringProp", {"name": name}); el.text = value; return el
+    el = SubElement(parent, "stringProp", {"name": name}); el.text = _xml_clean(value); return el
 
 
 def _b(parent, name, value):
@@ -682,7 +697,21 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
         emitted_txns += 1
 
     rough = tostring(root, encoding="utf-8")
-    return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")
+    # Conversion-safety guard immediately before serialization: the tree must be well-formed XML. Values
+    # were already control-char-sanitized (_xml_clean), so this is belt-and-suspenders — if a stray
+    # illegal byte remains, strip and retry rather than let an uncaught ExpatError abort the conversion;
+    # only if it is still unserializable do we raise a clear, structured error (never a bare ExpatError).
+    try:
+        return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")
+    except ExpatError:
+        salvaged = _XML_ILLEGAL_BYTES.sub(b"", rough)
+        try:
+            return minidom.parseString(salvaged).toprettyxml(indent="  ", encoding="utf-8")
+        except ExpatError as exc:
+            raise ValueError(
+                "The generated JMeter plan contained content that is not valid XML and could not be "
+                f"sanitized ({exc}). This usually indicates a binary/non-text payload in the capture; "
+                "exclude that request or re-capture it as text.") from exc
 
 
 _JMX_VAR_RE = _re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
