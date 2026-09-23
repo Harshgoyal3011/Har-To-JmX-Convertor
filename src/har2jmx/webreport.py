@@ -154,8 +154,10 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
         "metrics": {
             "transactions": m["transactions"]["count"],
             "correlations": len(shown_correlations),   # count what's actually in the script, not dropped ones
-            "parameters": m["parameterization"]["columns"],
-            "datasets": m["parameterization"]["datasets"],
+            # count the parameters/datasets actually in the plan (usage-aware pruning may have dropped
+            # unreferenced columns during emission) — keep this in step with the CSV and the list below
+            "parameters": sum(len(d.columns) for d in result.parameterization.datasets),
+            "datasets": len(result.parameterization.datasets),
             "entities": m["entities"]["count"],
             "replayReadiness": m["replay_readiness"],
             "manualReview": m["manual_review_items"],
