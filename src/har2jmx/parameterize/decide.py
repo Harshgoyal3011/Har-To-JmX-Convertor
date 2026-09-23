@@ -123,8 +123,39 @@ def build_parameterization(cap: NormalizedCapture,
         ))
 
     _consolidate_single_row(plan)
+    _dedupe_column_names(plan)                # keep every ${variable} name unique across datasets
     plan.datasets.sort(key=lambda d: (d.source != "entity", d.name))
     return plan
+
+
+def _dedupe_column_names(plan: ParameterizationPlan) -> None:
+    """Keep every ``${variable}`` name unique ACROSS datasets.
+
+    Two different entities can each expose a field of the same name — e.g. a Product identifier ``id``
+    and an authenticated-user identifier ``id`` land in separate datasets, yet both would emit a CSV
+    Data Set declaring ``${id}``. In JMeter every CSV Data Set that names ``id`` writes the same
+    variable, so ``/products/${id}`` could be fed the *user* id instead of the product id — a silent
+    data-mixup. When a column name is defined by more than one dataset, qualify each occurrence with its
+    dataset name (``Product_id``, ``Auth_id``) so each request reads the value it actually recorded; the
+    per-value substitution in the emitter then maps each recorded value to the right qualified variable.
+    A name used by only one dataset is left untouched.
+    """
+    usage: dict[str, int] = {}
+    for d in plan.datasets:
+        for c in d.columns:
+            usage[c.name] = usage.get(c.name, 0) + 1
+    collisions = {name for name, n in usage.items() if n > 1}
+    if not collisions:
+        return
+    for d in plan.datasets:
+        for c in d.columns:
+            if c.name not in collisions:
+                continue
+            new = variable_name(f"{d.name}_{c.name}")
+            for row in d.rows:
+                if c.name in row:
+                    row[new] = row.pop(c.name)
+            c.name = new
 
 
 def _consolidate_single_row(plan: ParameterizationPlan) -> None:
