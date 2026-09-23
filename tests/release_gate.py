@@ -179,6 +179,24 @@ def evaluate(res, xml: str, config: dict | None = None) -> list[GateResult]:
     g("every emitted correlation has producer+consumer+verified extractor", not bad_corr,
       f"bad={bad_corr}")
 
+    # Correlation-application gate (Phase E): a correlation whose extractor is VERIFIED UNIQUE and whose
+    # value is substitutable and has consumers MUST have its ${var} applied to a consumer. This is the
+    # positive invariant for a *genuine* emission bug (verified but never applied) — distinct from the
+    # gate above (emitted-but-no-consumer / unverified) and from validate_plan's "literal shipped" check
+    # (which is a broader substring test). Unverifiable extractors are intentional safe-drops, not defects.
+    from har2jmx.validate import ExtractorStatus
+    from har2jmx.emit.jmx import _sub_ok
+    unapplied = []
+    for c in res.correlations:
+        if c.extractor == ExtractorType.COOKIE_MANAGER:
+            continue
+        chk = chk_by_var.get(c.variable)
+        if (chk is not None and chk.ok and chk.status == ExtractorStatus.UNIQUE
+                and c.consumers and _sub_ok(str(c.value)) and f"${{{c.variable}}}" not in xml):
+            unapplied.append(c.variable)
+    g("verified-unique correlation is applied to a consumer (${var} present)", not unapplied,
+      f"unapplied={unapplied}")
+
     # Part 9 — think time between transactions, correctly scoped
     g("think time strictly between transactions (N-1)",
       p.thinktime_count == max(p.txn_count - 1, 0), f"tt={p.thinktime_count},txn={p.txn_count}")
