@@ -144,6 +144,56 @@ def _is_login_field(flow: ValueFlow) -> bool:
                for o in flow.occurrences)
 
 
+# W3C Navigation-Timing / Resource-Timing / PerformanceNavigationTiming attribute schema — a BROWSER
+# STANDARD, identical in every application and domain, emitted by RUM/analytics instrumentation, never
+# typed by a user or chosen by a test scenario. This is deliberately NOT an app/vendor/field blacklist:
+# it is one fixed, cross-domain browser API vocabulary (like set-cookie or the OAuth PKCE fields the
+# engine already recognises). A value carried under one of these names is browser performance telemetry,
+# so it must never become a CSV parameter. Matched together with a NUMERIC value (multi-signal: standard
+# name + timing-metric type), so a business field that merely collides in name but carries real data is
+# not suppressed.
+_TIMING_METRIC_NAMES = {
+    "fetchstart", "domainlookupstart", "domainlookupend", "connectstart", "connectend",
+    "secureconnectionstart", "requeststart", "responsestart", "responseend", "domloading",
+    "dominteractive", "domcontentloadedeventstart", "domcontentloadedeventend", "domcomplete",
+    "loadeventstart", "loadeventend", "unloadeventstart", "unloadeventend", "redirectstart",
+    "redirectend", "redirectcount", "workerstart", "transfersize", "encodedbodysize",
+    "decodedbodysize", "navigationstart", "navigationid", "navigationtype", "nexthopprotocol",
+    "initiatortype", "firstpaint", "firstcontentfulpaint", "largestcontentfulpaint",
+    "timetofirstbyte", "cumulativelayoutshift", "firstinputdelay", "interactiontonextpaint",
+}
+# Descriptor fields in that schema whose value is a label, not a number (navigationType="navigate",
+# nextHopProtocol="h2") — matched on the standard name alone.
+_TIMING_NONNUMERIC = {"navigationid", "navigationtype", "nexthopprotocol", "initiatortype"}
+# Plain words that ARE timing fields in the schema but could also be a genuine business input — treated
+# as telemetry only when they co-occur with the RUM cluster (≥3 unambiguous timing fields in the same
+# request), never on their own, so a real business "duration" is preserved.
+_TIMING_AMBIGUOUS = {"duration", "starttime"}
+
+
+def _is_numeric(value) -> bool:
+    try:
+        float(str(value).strip())
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
+def _is_browser_timing_metric(flow: ValueFlow, rum_request_indices: frozenset) -> bool:
+    """A W3C Navigation/Resource-Timing metric (browser RUM instrumentation) — telemetry, never business
+    test data. Domain-agnostic: recognises the browser-standard timing schema, not application fields."""
+    numeric = _is_numeric(flow.value)
+    for o in flow.occurrences:
+        if o.side != "request":
+            continue
+        name = _norm_field(o.field or "")
+        if name in _TIMING_METRIC_NAMES and (numeric or name in _TIMING_NONNUMERIC):
+            return True
+        if name in _TIMING_AMBIGUOUS and numeric and o.request_index in rum_request_indices:
+            return True
+    return False
+
+
 def _is_pagination_token(flow: ValueFlow) -> bool:
     """The producing field is a next-page/continuation handle (opaque state)."""
     if flow.first_producer is not None and PAGINATION_TOKEN_RE.search(flow.first_producer.field or ""):
@@ -279,6 +329,17 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
         if f.first_producer is not None:
             producer_field_values.setdefault(f.first_producer.location, set()).add(f.value)
 
+    # Requests that look like a RUM/telemetry payload: ≥3 distinct unambiguous W3C timing fields in the
+    # same request. Used to disambiguate plain timing words (duration/startTime) from real business
+    # inputs — they count as telemetry only inside such a cluster.
+    _timing_per_req: dict[int, set] = {}
+    for f in lineage.flows:
+        for o in f.occurrences:
+            name = _norm_field(o.field or "")
+            if o.side == "request" and name in (_TIMING_METRIC_NAMES | _TIMING_AMBIGUOUS):
+                _timing_per_req.setdefault(o.request_index, set()).add(name)
+    rum_request_indices = frozenset(i for i, names in _timing_per_req.items() if len(names) >= 3)
+
     verdicts: list[ValueVerdict] = []
     for flow in lineage.flows:
         # Short values (e.g. "1", "10") are too ambiguous to correlate or parameterize — they
@@ -295,6 +356,20 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
         entity_field = ent[1] if ent else None
         is_id = ent[2] if ent else False
         consumers = flow.consumer_indices
+
+        # Browser RUM / Navigation-Timing telemetry (fetchStart, domComplete, transferSize, …) — a
+        # numeric browser-instrumentation metric, never business test data. Decided before entity
+        # association / the business branch so a reused timing value can't be pulled into the CSV as
+        # "master data". Left as recorded (STATIC), never parameterized and never correlated.
+        if _is_browser_timing_metric(flow, rum_request_indices):
+            verdicts.append(ValueVerdict(
+                value=flow.value, classification=ValueClass.STATIC, lifecycle=Lifecycle.UNKNOWN,
+                confidence="High",
+                reason="browser performance-timing metric (RUM/Navigation-Timing telemetry) — excluded from test data",
+                source=(flow.occurrences[0].location if flow.occurrences else ""),
+                consumers=flow.consumer_indices, entity=None, entity_field=None,
+            ))
+            continue
 
         # A UI/config enum (layout=grid, sort=asc, view=list) is constant for every user and run —
         # leave it hardcoded rather than mint a noise CSV column. Decided before entity association,
