@@ -81,6 +81,12 @@ def _direct_response_code_assertions(container):
     return out
 
 
+def _deep_response_code_assertions(container):
+    # the response assertion now nests under the transaction's anchor sampler, so count the whole subtree
+    return [n for n in container.getElementsByTagName("ResponseAssertion")
+            if "Assertion.response_code" in n.toxml()]
+
+
 def _walk_structure(doc):
     """Return (tg_level_assertion_count, [per-transaction assertion counts], thinktime_count, txn_count)."""
     tg = None
@@ -112,7 +118,7 @@ def _walk_structure(doc):
         ht = kids[i + 1] if i + 1 < len(kids) and kids[i + 1].tagName == "hashTree" else None
         if e.tagName == "TransactionController" and ht is not None:
             txns += 1
-            txn_counts.append(len(_direct_response_code_assertions(ht)))
+            txn_counts.append(len(_deep_response_code_assertions(ht)))
         elif e.tagName == "TestAction" and "Think Time" in e.getAttribute("testname"):
             thinktime += 1
         i += 2 if ht is not None else 1

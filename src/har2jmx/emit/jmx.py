@@ -501,8 +501,9 @@ def _add_correlation_health_assertion(parent_ht, variable: str) -> None:
 
 
 def _add_response_assertion(parent_ht):
-    """Transaction scope: added inside a Transaction Controller's subtree, so every sampler in that one
-    business transaction must return a 2xx/3xx code — surfaces failures under load. One per transaction."""
+    """Sampler scope: nested under the transaction's anchor (important) HTTP request, so that request
+    must return a 2xx/3xx code — surfaces failures under load. One per transaction, on the request that
+    defines it (not at Thread Group or Transaction Controller level, not one per sampler)."""
     a = SubElement(parent_ht, "ResponseAssertion", {
         "guiclass": "AssertionGui", "testclass": "ResponseAssertion",
         "testname": "Assert Response Code (2xx/3xx)", "enabled": "true"})
@@ -661,6 +662,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
         _b(tc, "TransactionController.parent", True)
         _b(tc, "TransactionController.includeTimers", False)
         tc_ht = SubElement(tg_ht, "hashTree")
+        sampler_ht_by_idx: dict[int, Any] = {}
         for idx in biz:
             req = cap.requests[idx]
             produced = producer_map.get(idx, [])
@@ -670,6 +672,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
                               cookie_mgr_values=cookie_mgr_values, primary_host=base_url)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
+            sampler_ht_by_idx[idx] = sampler_ht
             for c in produced:
                 chk = check_by_var.get(c.variable)
                 if chk is not None and not chk.ok:
@@ -690,10 +693,12 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
                 certain = chk is not None and chk.status == ExtractorStatus.UNIQUE and c.confidence == "High"
                 if not certain:
                     _add_correlation_health_assertion(sampler_ht, c.variable)
-        # ONE response assertion per business transaction: it belongs to the Transaction Controller's
-        # subtree, so it validates every HTTP request in THIS transaction returns 2xx/3xx — never one
-        # global assertion at Thread Group level, never one duplicated per sampler.
-        _add_response_assertion(tc_ht)
+        # ONE response assertion per business transaction, nested under the transaction's ANCHOR sampler
+        # (its defining/important business request) — a sampler-scoped assertion on the request that
+        # matters, never at Thread Group level, never at Transaction Controller level, and never one per
+        # sampler. The anchor is the request that names the transaction; fall back to the first sampler.
+        anchor_idx = txn.anchor_index if txn.anchor_index in sampler_ht_by_idx else biz[0]
+        _add_response_assertion(sampler_ht_by_idx[anchor_idx])
         emitted_txns += 1
 
     rough = tostring(root, encoding="utf-8")

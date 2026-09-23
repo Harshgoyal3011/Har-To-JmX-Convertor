@@ -169,7 +169,7 @@ def test_exclusion_reasons_are_explainable():
 
 # ============================================================ Defect 2 — assertion placement
 
-def test_one_response_assertion_per_transaction_inside_the_controller():
+def test_one_response_assertion_per_transaction_on_anchor_sampler():
     _res, doc, _xml = _plan()
     tg = _thread_group_container(doc)
 
@@ -177,13 +177,16 @@ def test_one_response_assertion_per_transaction_inside_the_controller():
     tg_direct = [a for a, _ in _response_code_assertions_direct(tg)]
     assert tg_direct == [], "a response-code assertion must not sit directly under the Thread Group"
 
-    # exactly one response-code assertion inside EACH Transaction Controller (D), none elsewhere
+    # exactly one response-code assertion per transaction (D), nested under a sampler — never a direct
+    # child of the Transaction Controller, never one per sampler
     tcs = []
     _collect(tg, "TransactionController", tcs)
     assert len(tcs) >= 2
     for tc, tc_ht in tcs:
-        inside = _response_code_assertions_direct(tc_ht)
-        assert len(inside) == 1, f"{tc.getAttribute('testname')} must have exactly one response assertion"
+        deep = _response_code_assertions(tc_ht)               # anywhere in the transaction subtree
+        assert len(deep) == 1, f"{tc.getAttribute('testname')} must have exactly one response assertion"
+        assert _response_code_assertions_direct(tc_ht) == [], \
+            f"{tc.getAttribute('testname')} assertion must be under a sampler, not a direct TC child"
 
     # and the plan-wide count equals the number of transactions (not one-per-sampler)
     total = _response_code_assertions(tg)

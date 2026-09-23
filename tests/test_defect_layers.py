@@ -89,6 +89,11 @@ def _rc_assertions(container):
     return out
 
 
+def _rc_assertions_deep(container):
+    return [n for n in container.getElementsByTagName("ResponseAssertion")
+            if "Assertion.response_code" in n.toxml()]
+
+
 def _thread_group(doc):
     box = [None]
 
@@ -144,7 +149,7 @@ def test_every_excluded_request_has_a_reason():
 
 # ============================ JMX LAYER ============================
 
-def test_one_assertion_per_transaction_zero_at_thread_group():
+def test_one_assertion_per_transaction_on_anchor_sampler_zero_at_thread_group():
     res = _multi_txn()
     doc = minidom.parseString(build_jmx_xml(res).decode())
     tg = _thread_group(doc)
@@ -156,7 +161,8 @@ def test_one_assertion_per_transaction_zero_at_thread_group():
         ht = k[i + 1] if i + 1 < len(k) and k[i + 1].tagName == "hashTree" else None
         if el.tagName == "TransactionController" and ht is not None:
             tcs += 1
-            assert len(_rc_assertions(ht)) == 1               # exactly one per TC
+            assert len(_rc_assertions_deep(ht)) == 1          # exactly one per transaction (in its subtree)
+            assert len(_rc_assertions(ht)) == 0               # NOT a direct child of the TC — nested under a sampler
         i += 2 if ht is not None else 1
     assert tcs >= 2
     # no per-sampler duplication: total assertions == transaction count

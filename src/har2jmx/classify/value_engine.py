@@ -128,6 +128,22 @@ def _is_search_input(flow: ValueFlow) -> bool:
     return any(o.side == "request" and _SEARCH_INPUT_RE.match(o.field or "") for o in flow.occurrences)
 
 
+# Authentication / login inputs — a user/business credential that must vary per virtual user. A SHORT
+# credential value (e.g. a username "bob") is still a legitimate parameter even when the generic
+# significance heuristic (which favours longer/reused values) would drop it. Matched on the WHOLE
+# normalized field name (separators stripped), so signInName / userName / user_name / loginName all
+# match; combined below with client-originated origin, so this is field semantics + supplied-by-user,
+# not field name alone.
+_LOGIN_FIELD_RE = re.compile(
+    r"^(?:user(?:name)?|login(?:name|id)?|signinname|email(?:address)?|pass(?:word|wd)?|pwd)$",
+    re.IGNORECASE)
+
+
+def _is_login_field(flow: ValueFlow) -> bool:
+    return any(o.side == "request" and _LOGIN_FIELD_RE.match(_norm_field(o.field or ""))
+               for o in flow.occurrences)
+
+
 def _is_pagination_token(flow: ValueFlow) -> bool:
     """The producing field is a next-page/continuation handle (opaque state)."""
     if flow.first_producer is not None and PAGINATION_TOKEN_RE.search(flow.first_producer.field or ""):
@@ -269,7 +285,9 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
         # collide across unrelated fields (a page number vs a stock count). Leave them literal.
         if len(str(flow.value)) < 3:
             continue
-        if not flow.significant and flow.value not in value_entity:
+        # Named login/credential fields (username, signInName, email, password, …) are exempt from the
+        # significance drop so a short but genuine credential value is still parameterized.
+        if not flow.significant and flow.value not in value_entity and not _is_login_field(flow):
             continue
 
         ent = value_entity.get(flow.value)
@@ -375,10 +393,12 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                           "captured — needs correlation (capture the response that returns it), "
                           "never safe as a static CSV value")
                 needs_corr = True
-            elif entity_name or _business_named(flow) or _is_search_input(flow):
-                strong = _business_named(flow) or _is_search_input(flow)
+            elif entity_name or _business_named(flow) or _is_search_input(flow) or _is_login_field(flow):
+                login = _is_login_field(flow)
+                strong = _business_named(flow) or _is_search_input(flow) or login
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "High" if strong else "Medium"
-                reason = f"client-supplied business/master data (varies per user){echoed}"
+                reason = (f"authentication/login input (credential — parameterize){echoed}" if login
+                          else f"client-supplied business/master data (varies per user){echoed}")
             else:
                 cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
                 reason = f"client-supplied value with no business/entity signal{echoed}"

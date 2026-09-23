@@ -41,6 +41,16 @@ def _rc_assertions(container):
     return out
 
 
+def _rc_assertions_deep(container):
+    """Response-CODE assertions (2xx/3xx) anywhere in `container`'s subtree (the assertion now nests
+    under the transaction's anchor sampler, not as a direct child of the Transaction Controller)."""
+    out = []
+    for n in container.getElementsByTagName("ResponseAssertion"):
+        if "Assertion.response_code" in n.toxml():
+            out.append(n)
+    return out
+
+
 def _thread_group_ht(doc):
     box = [None]
 
@@ -91,7 +101,7 @@ def parse_plan(xml: str) -> ParsedPlan:
             ht = kids[i + 1] if i + 1 < len(kids) and kids[i + 1].tagName == "hashTree" else None
             if e.tagName == "TransactionController" and ht is not None:
                 txns += 1
-                tc_counts.append(len(_rc_assertions(ht)))
+                tc_counts.append(len(_rc_assertions_deep(ht)))   # assertion nests under the anchor sampler
             elif e.tagName == "TestAction" and "Think Time" in e.getAttribute("testname"):
                 tt += 1
             elif e.tagName in ("ConstantTimer", "UniformRandomTimer"):
