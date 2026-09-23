@@ -486,7 +486,8 @@ def _add_correlation_health_assertion(parent_ht, variable: str) -> None:
 
 
 def _add_response_assertion(parent_ht):
-    """Thread-group scope: every sampler must return a 2xx/3xx code — surfaces failures under load."""
+    """Transaction scope: added inside a Transaction Controller's subtree, so every sampler in that one
+    business transaction must return a 2xx/3xx code — surfaces failures under load. One per transaction."""
     a = SubElement(parent_ht, "ResponseAssertion", {
         "guiclass": "AssertionGui", "testclass": "ResponseAssertion",
         "testname": "Assert Response Code (2xx/3xx)", "enabled": "true"})
@@ -582,8 +583,8 @@ def _add_csv_dataset(parent_ht, dataset_name, filename, columns):
 
 # ---------------------------------------------------------------- top level
 
-def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
-                  csv_files: dict[str, str] | None = None) -> bytes:
+def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
+                    csv_files: dict[str, str] | None = None) -> bytes:
     config = dict(config or {})
     csv_files = csv_files or {}
     base_url, protocol = _primary_host(result)
@@ -623,18 +624,20 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
     _add_cookie_manager(tg_ht)
     _add_cache_manager(tg_ht)                                 # realistic caching — no re-fetch per iteration
     _add_global_header_manager(tg_ht, common_headers, sub)   # every plan gets an HTTP Header Manager
-    _add_response_assertion(tg_ht)                            # validate responses under load
     for d in result.parameterization.datasets:
         fname = csv_files.get(d.name, f"{d.name.lower()}.csv")
         _add_csv_dataset(tg_ht, d.name, fname, [c.name for c in d.columns])
 
+    emitted_txns = 0
     for txn in result.transactions:
         biz = [i for i in txn.request_indices if not cap.requests[i].classification.excluded]
         if not biz:
             continue
-        # Think time between user actions: one pause before each transaction (so also between loop
-        # iterations), never before the sub-requests inside a transaction.
-        _add_think_time_pause(tg_ht)
+        # Think time models the user's pause BETWEEN business transactions: emitted between consecutive
+        # Transaction Controllers only — never before the first one, and never between the sub-requests
+        # inside a transaction. The pause is scoped to a no-op Test Action so it can't pace the samplers.
+        if emitted_txns:
+            _add_think_time_pause(tg_ht)
         tc = SubElement(tg_ht, "TransactionController", {
             "guiclass": "TransactionControllerGui", "testclass": "TransactionController",
             "testname": txn.name, "enabled": "true"})
@@ -670,9 +673,67 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
                 certain = chk is not None and chk.status == ExtractorStatus.UNIQUE and c.confidence == "High"
                 if not certain:
                     _add_correlation_health_assertion(sampler_ht, c.variable)
+        # ONE response assertion per business transaction: it belongs to the Transaction Controller's
+        # subtree, so it validates every HTTP request in THIS transaction returns 2xx/3xx — never one
+        # global assertion at Thread Group level, never one duplicated per sampler.
+        _add_response_assertion(tc_ht)
+        emitted_txns += 1
 
     rough = tostring(root, encoding="utf-8")
     return minidom.parseString(rough).toprettyxml(indent="  ", encoding="utf-8")
+
+
+_JMX_VAR_RE = _re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
+
+
+def _prune_unused_parameters(result: EngineResult, xml: bytes) -> bool:
+    """Usage-aware CSV: drop every dataset column the generated plan never references.
+
+    A parameter candidate earns a CSV column only when a ``${column}`` actually appears in a generated
+    sampler. A column can survive discovery yet reference nothing — e.g. its values are too short to
+    substitute safely (a numeric ``id`` of "1"/"11", which `_sub_ok` refuses because it would collide),
+    the value only occurred in an excluded request, or the same value was claimed by a correlation
+    variable instead. Such a column is dead weight: it bloats the CSV and misleads the engineer. Here we
+    intersect the datasets with the variables the JMX truly uses, remove the unreferenced columns, drop
+    any dataset left empty, and collapse rows that become duplicates once a distinguishing column is
+    gone. Returns True when anything changed (so the caller rebuilds the plan without the dead columns).
+    """
+    referenced = set(_JMX_VAR_RE.findall(xml.decode("utf-8") if isinstance(xml, (bytes, bytearray)) else xml))
+    changed = False
+    kept: list = []
+    for d in result.parameterization.datasets:
+        cols = [c for c in d.columns if c.name in referenced]
+        if len(cols) != len(d.columns):
+            changed = True
+        if not cols:
+            continue                                   # no referenced column → the whole dataset is unused
+        if len(cols) != len(d.columns):
+            names = [c.name for c in cols]
+            rows, seen = [], set()
+            for r in d.rows:
+                row = {n: r.get(n, "") for n in names}
+                key = tuple(row[n] for n in names)
+                if key in seen:                        # a distinguishing column was removed → dedupe
+                    continue
+                seen.add(key)
+                rows.append(row)
+            d.columns = cols
+            d.rows = rows
+        kept.append(d)
+    if changed:
+        result.parameterization.datasets = kept
+    return changed
+
+
+def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
+                  csv_files: dict[str, str] | None = None) -> bytes:
+    """Build the JMeter plan, then prune any parameter the plan does not actually reference so the CSV
+    is the minimum data the script needs (usage-aware). Pruning mutates ``result.parameterization`` so
+    the CSV files written by :func:`emit_jmx` stay in lock-step with the plan's ``${variables}``."""
+    xml = _build_jmx_tree(result, config, csv_files)
+    if _prune_unused_parameters(result, xml):
+        xml = _build_jmx_tree(result, config, csv_files)      # rebuild without the dead CSV columns
+    return xml
 
 
 # ---------------------------------------------------------------- CSV row synthesis
@@ -794,11 +855,17 @@ def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] |
         target = min(max(int(str(config.get("threads", "10")).strip()), 1), _MAX_CSV_ROWS)
     except (TypeError, ValueError):
         target = 10
-    csv_files: dict[str, str] = {}
+    # Build the plan FIRST: build_jmx_xml prunes any parameter the plan never references, so the CSV
+    # files written below reflect only the columns the JMX actually uses (usage-aware, no dead columns).
+    csv_files: dict[str, str] = {d.name: f"{name}_{d.name.lower()}.csv"
+                                 for d in result.parameterization.datasets}
+    xml = build_jmx_xml(result, config, csv_files)
+    jmx_path = out / f"{name}.jmx"
+    jmx_path.write_bytes(xml)
+
     csv_paths: list[Path] = []
-    for d in result.parameterization.datasets:
-        fname = f"{name}_{d.name.lower()}.csv"
-        csv_files[d.name] = fname
+    for d in result.parameterization.datasets:           # datasets are now the pruned set
+        fname = csv_files[d.name]
         path = out / fname
         cols = [c.name for c in d.columns]
         observed: list[tuple] = []
@@ -814,10 +881,6 @@ def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] |
             w.writerow(cols)
             w.writerows(rows)
         csv_paths.append(path)
-
-    xml = build_jmx_xml(result, config, csv_files)
-    jmx_path = out / f"{name}.jmx"
-    jmx_path.write_bytes(xml)
 
     report_paths: list[Path] = []
     review_md = _manual_review_markdown(result, name)

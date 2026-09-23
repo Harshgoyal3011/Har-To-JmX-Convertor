@@ -133,17 +133,20 @@ def test_correlation_health_assertion_guards_only_doubtful_correlations():
 
 
 def test_think_time_is_between_transactions_not_before_every_request():
-    # think time must model a user pausing between actions — one pause before each transaction, via a
-    # Flow Control Action (Test Action) that scopes the timer to just that no-op step. A bare timer at
+    # Think time models a user pausing BETWEEN actions, so it is emitted strictly between consecutive
+    # transactions — N-1 pauses for N transactions, with NONE before the first one. Each pause is a Flow
+    # Control Action (Test Action) that scopes the timer to just that no-op step; a bare timer at
     # thread-group scope would (wrongly) pause before every sub-request inside every transaction.
     import re
     r = analyze((FIX / "sample_flow.har").read_bytes())
     x = build_jmx_xml(r, {"threads": "50", "thinktime": "500"}).decode()
     n_txns = sum(1 for t in r.transactions
                  if any(not r.capture.requests[i].classification.excluded for i in t.request_indices))
-    # exactly one Think Time pause per transaction (not one global timer, not one per sampler)
-    assert x.count('testclass="TestAction"') == n_txns
-    assert x.count('testname="Think Time"') == n_txns
+    assert n_txns >= 2                                           # fixture has several transactions
+    # one Think Time pause BETWEEN each pair of transactions (not one global timer, not one per sampler,
+    # and not one before the first transaction)
+    assert x.count('testclass="TestAction"') == n_txns - 1
+    assert x.count('testname="Think Time"') == n_txns - 1
     # the timer is wired to the pause and driven by the ${THINKTIME} variable
     assert 'ConstantTimer.delay">${THINKTIME}' in x and 'RandomTimer.range">${THINKTIME}' in x
     # each Test Action pause is immediately followed by its own timer (scoped to the pause)

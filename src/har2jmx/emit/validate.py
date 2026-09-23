@@ -31,7 +31,15 @@ def validate_plan(result: EngineResult, xml: str | bytes) -> list[str]:
         issues.append(f"malformed XML: {e}")
         return issues  # nothing else is meaningful if the XML is broken
 
-    missing = [c for c in _CONSTITUENTS if c not in x]
+    # A think-time pause is emitted only BETWEEN consecutive transactions, so a UniformRandomTimer
+    # exists only when the plan has at least two business transactions. A single-transaction plan
+    # legitimately has no between-transaction pause — do not require the timer there.
+    emitted_txns = sum(
+        1 for t in result.transactions
+        if any(not result.capture.requests[i].classification.excluded for i in t.request_indices)
+    )
+    required = [c for c in _CONSTITUENTS if not (c == "UniformRandomTimer" and emitted_txns < 2)]
+    missing = [c for c in required if c not in x]
     if missing:
         issues.append("missing constituents: " + ", ".join(missing))
 
@@ -44,6 +52,14 @@ def validate_plan(result: EngineResult, xml: str | bytes) -> list[str]:
     unresolved = refs - extractors - csv_cols - _UDV
     if unresolved:
         issues.append("unresolved variables (no extractor/CSV/UDV source): " + ", ".join(sorted(unresolved)))
+
+    # Usage-aware CSV: every declared CSV column must be referenced by a ${variable} in the plan.
+    # A column with no reference is dead test data (the parameterizer must prune it) — fail so a
+    # regression that re-introduces unused columns is caught.
+    unused_cols = sorted(c for c in csv_cols if c not in refs)
+    if unused_cols:
+        issues.append("CSV column never referenced by a ${variable} in the plan (unused test data): "
+                      + ", ".join(unused_cols))
 
     # only the request-carrying props matter for a "hardcoded secret" — not timer/assertion config.
     # Strip the top-level config UDVs (THREADS/LOOPS/RAMP/THINKTIME) first, so a correlation value
