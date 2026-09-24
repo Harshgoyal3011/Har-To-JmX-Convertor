@@ -1,0 +1,37 @@
+{
+ "meta": {
+  "app": "Deck of Cards API",
+  "domain": "Gaming / entertainment",
+  "flow": "new shuffled deck -> draw cards -> reshuffle the same deck",
+  "source": "https://deckofcardsapi.com (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "OPAQUE server-generated deck id consumed by TWO later requests (both path)."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1",
+   "st": 171349,
+   "d": 281,
+   "status": 200,
+   "b": "{\"success\": true, \"deck_id\": \"hoe4kg03jrmq\", \"remaining\": 52, \"shuffled\": true}",
+   "method": "GET"
+  },
+  {
+   "u": "https://deckofcardsapi.com/api/deck/hoe4kg03jrmq/draw/?count=2",
+   "st": 171630,
+   "d": 269,
+   "status": 200,
+   "b": "{\"success\": true, \"deck_id\": \"hoe4kg03jrmq\", \"cards\": [{\"code\": \"AH\", \"value\": \"ACE\", \"suit\": \"HEARTS\"}, {\"code\": \"9S\", \"value\": \"9\", \"suit\": \"SPADES\"}], \"remaining\": 50}",
+   "method": "GET"
+  },
+  {
+   "u": "https://deckofcardsapi.com/api/deck/hoe4kg03jrmq/shuffle/",
+   "st": 171899,
+   "d": 267,
+   "status": 200,
+   "b": "{\"success\": true, \"deck_id\": \"hoe4kg03jrmq\", \"remaining\": 52, \"shuffled\": true}",
+   "method": "GET"
+  }
+ ]
+}

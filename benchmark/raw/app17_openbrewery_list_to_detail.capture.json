@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Open Brewery DB",
+  "domain": "Retail / hospitality",
+  "flow": "list breweries -> open one",
+  "source": "https://api.openbrewerydb.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "UUID inside a root array of objects -> URL path."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.openbrewerydb.org/v1/breweries?per_page=1",
+   "st": 148935,
+   "d": 5,
+   "status": 200,
+   "b": "[{\"id\": \"ae7b3174-8be8-4d53-a3a5-9b8240970eea\", \"name\": \"'s\", \"brewery_type\": \"brewpub\", \"city\": \"Kronach\", \"state_province\": \"Bayern\", \"country\": \"Germany\"}]",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.openbrewerydb.org/v1/breweries/ae7b3174-8be8-4d53-a3a5-9b8240970eea",
+   "st": 148939,
+   "d": 4,
+   "status": 200,
+   "b": "{\"id\": \"ae7b3174-8be8-4d53-a3a5-9b8240970eea\", \"name\": \"'s\", \"city\": \"Kronach\"}",
+   "method": "GET"
+  }
+ ]
+}

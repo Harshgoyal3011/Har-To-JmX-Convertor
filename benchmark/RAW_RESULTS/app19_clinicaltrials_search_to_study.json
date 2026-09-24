@@ -1,0 +1,36 @@
+{
+ "har": "app19_clinicaltrials_search_to_study.har",
+ "path": "benchmark\\normalized\\app19_clinicaltrials_search_to_study.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "ClinicalTrials.gov",
+ "domain": "Government / clinical research",
+ "flow": "search studies -> open the study by NCT id",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "nctId"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://clinicaltrials.gov/api/v2/studies?pageSize=1&fields=NCTId,BriefTitle&format=json",
+  "GET https://clinicaltrials.gov/api/v2/studies/NCT05604235?fields=NCTId,BriefTitle&format=json"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12423
+}

@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Open Trivia DB",
+  "domain": "Gaming / media",
+  "flow": "request a session token -> fetch questions with that token",
+  "source": "https://opentdb.com (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Opaque 64-char server session token -> query parameter."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://opentdb.com/api_token.php?command=request",
+   "st": 172300,
+   "d": 905,
+   "status": 200,
+   "b": "{\"response_code\": 0, \"response_message\": \"Token Generated Successfully!\", \"token\": \"d23c01dff6f90c5e440739ca69c476173b42c9f52bcc1d02f837c61d140cc229\"}",
+   "method": "GET"
+  },
+  {
+   "u": "https://opentdb.com/api.php?amount=1&token=d23c01dff6f90c5e440739ca69c476173b42c9f52bcc1d02f837c61d140cc229",
+   "st": 173205,
+   "d": 362,
+   "status": 200,
+   "b": "{\"response_code\": 0, \"results\": [{\"type\": \"multiple\", \"difficulty\": \"hard\", \"category\": \"Celebrities\"}]}",
+   "method": "GET"
+  }
+ ]
+}

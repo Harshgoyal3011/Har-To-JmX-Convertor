@@ -1,0 +1,38 @@
+{
+ "har": "app16_postcodes_random_to_lookup.har",
+ "path": "benchmark\\normalized\\app16_postcodes_random_to_lookup.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "postcodes.io",
+ "domain": "Logistics / geo",
+ "flow": "random postcode -> look it up",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "postcode"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 1,
+ "validate_detail": [
+  "extractor with no downstream consumer: postcode"
+ ],
+ "kept_urls": [
+  "GET https://api.postcodes.io/random/postcodes",
+  "GET https://api.postcodes.io/postcodes/S13%207JT"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10015
+}

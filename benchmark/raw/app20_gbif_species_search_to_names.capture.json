@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "GBIF",
+  "domain": "Government / biodiversity science",
+  "flow": "search species -> list its vernacular names",
+  "source": "https://api.gbif.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "results[0].key -> path. The same value also appears as speciesKey in the SAME response (two candidate producer fields for one consumer)."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.gbif.org/v1/species/search?q=puma%20concolor&limit=1",
+   "st": 150281,
+   "d": 708,
+   "status": 200,
+   "b": "{\"offset\": 0, \"limit\": 1, \"count\": 554, \"results\": [{\"key\": 116892593, \"nubKey\": 2435099, \"parentKey\": 116892589, \"genus\": \"Puma\", \"species\": \"Puma concolor\", \"speciesKey\": 116892593, \"scientificName\": \"Puma concolor\", \"rank\": \"SPECIES\"}]}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.gbif.org/v1/species/116892593/vernacularNames?limit=2",
+   "st": 150989,
+   "d": 246,
+   "status": 200,
+   "b": "{\"offset\": 0, \"limit\": 2, \"endOfRecords\": true, \"results\": [{\"taxonKey\": 116892593, \"vernacularName\": \"puma\", \"language\": \"eng\"}]}",
+   "method": "GET"
+  }
+ ]
+}

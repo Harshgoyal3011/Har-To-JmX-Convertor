@@ -1,0 +1,36 @@
+{
+ "har": "app17_openbrewery_list_to_detail.har",
+ "path": "benchmark\\normalized\\app17_openbrewery_list_to_detail.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Open Brewery DB",
+ "domain": "Retail / hospitality",
+ "flow": "list breweries -> open one",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "breweryId"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 2,
+ "unknown_values": 5,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://api.openbrewerydb.org/v1/breweries?per_page=1",
+  "GET https://api.openbrewerydb.org/v1/breweries/ae7b3174-8be8-4d53-a3a5-9b8240970eea"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10628
+}

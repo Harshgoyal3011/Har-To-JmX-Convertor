@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "npm registry",
+  "domain": "Developer / API platform",
+  "flow": "search packages -> open the package's latest manifest",
+  "source": "https://registry.npmjs.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Nested objects[].package.name (a string, not an id) -> URL path."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://registry.npmjs.org/-/v1/search?text=jmeter-report&size=1",
+   "st": 168170,
+   "d": 13,
+   "status": 200,
+   "b": "{\"objects\": [{\"downloads\": {\"monthly\": 54724, \"weekly\": 11791}, \"package\": {\"name\": \"performance-results-parser\", \"version\": \"0.0.10\", \"description\": \"Parse performance test results\", \"keywords\": [\"jmeter\", \"performance\"]}, \"score\": {\"final\": 81.27738}}], \"total\": 53214}",
+   "method": "GET"
+  },
+  {
+   "u": "https://registry.npmjs.org/performance-results-parser/latest",
+   "st": 168183,
+   "d": 2,
+   "status": 200,
+   "b": "{\"name\": \"performance-results-parser\", \"version\": \"0.0.10\"}",
+   "method": "GET"
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "ClinicalTrials.gov",
+  "domain": "Government / clinical research",
+  "flow": "search studies -> open the study by NCT id",
+  "source": "https://clinicaltrials.gov (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Deeply nested studies[].protocolSection.identificationModule.nctId -> path."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://clinicaltrials.gov/api/v2/studies?pageSize=1&fields=NCTId,BriefTitle&format=json",
+   "st": 149540,
+   "d": 362,
+   "status": 200,
+   "b": "{\"studies\": [{\"protocolSection\": {\"identificationModule\": {\"nctId\": \"NCT05604235\", \"briefTitle\": \"Effectiveness of Oncological Physiotherapy\"}}}], \"nextPageToken\": \"ZVNj7o2Elu8o3lpwWM-j4bbumo6QepFqYPim2fg\"}",
+   "method": "GET"
+  },
+  {
+   "u": "https://clinicaltrials.gov/api/v2/studies/NCT05604235?fields=NCTId,BriefTitle&format=json",
+   "st": 149901,
+   "d": 380,
+   "status": 200,
+   "b": "{\"protocolSection\": {\"identificationModule\": {\"nctId\": \"NCT05604235\"}}}",
+   "method": "GET"
+  }
+ ]
+}

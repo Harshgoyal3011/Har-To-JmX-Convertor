@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "OpenAlex",
+  "domain": "Education / research",
+  "flow": "list works -> open a referenced work",
+  "source": "https://api.openalex.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Producer is an ARRAY OF SCALAR STRINGS; the consumer uses only the trailing id of the produced URL, so the produced value CONTAINS the consumed value."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.openalex.org/works?per-page=1&select=id,doi,title,referenced_works",
+   "st": 147607,
+   "d": 540,
+   "status": 200,
+   "b": "{\"meta\": {\"count\": 327891184, \"page\": 1, \"per_page\": 1}, \"results\": [{\"id\": \"https://openalex.org/W3038568908\", \"doi\": \"https://doi.org/10.1585/pfr.15.2402039\", \"title\": \"Radiation Resistant Camera System\", \"referenced_works\": [\"https://openalex.org/W2069091362\", \"https://openalex.org/W2151240562\", \"https://openalex.org/W2527753843\"]}]}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.openalex.org/works/W2069091362?select=id,title",
+   "st": 148147,
+   "d": 340,
+   "status": 200,
+   "b": "{\"id\": \"https://openalex.org/W2069091362\", \"title\": \"Effects of DD and DT neutron irradiation\"}",
+   "method": "GET"
+  }
+ ]
+}

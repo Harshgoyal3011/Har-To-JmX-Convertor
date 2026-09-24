@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "postcodes.io",
+  "domain": "Logistics / geo",
+  "flow": "random postcode -> look it up",
+  "source": "https://api.postcodes.io (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "The produced value contains a SPACE and is URL-ENCODED in the consumer path."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.postcodes.io/random/postcodes",
+   "st": 148487,
+   "d": 216,
+   "status": 200,
+   "b": "{\"status\": 200, \"result\": {\"postcode\": \"S13 7JT\", \"quality\": 1, \"country\": \"England\", \"region\": \"Yorkshire and The Humber\", \"outcode\": \"S13\", \"incode\": \"7JT\", \"admin_district\": \"Sheffield\", \"codes\": {\"admin_district\": \"E08000039\", \"lsoa\": \"E01007970\"}}}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.postcodes.io/postcodes/S13%207JT",
+   "st": 148703,
+   "d": 232,
+   "status": 200,
+   "b": "{\"status\": 200, \"result\": {\"postcode\": \"S13 7JT\", \"country\": \"England\"}}",
+   "method": "GET"
+  }
+ ]
+}

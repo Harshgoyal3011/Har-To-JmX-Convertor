@@ -1,0 +1,37 @@
+{
+ "har": "app24_deckofcards_shuffle_draw_shuffle.har",
+ "path": "benchmark\\normalized\\app24_deckofcards_shuffle_draw_shuffle.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "Deck of Cards API",
+ "domain": "Gaming / entertainment",
+ "flow": "new shuffled deck -> draw cards -> reshuffle the same deck",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 4,
+ "transactions": 1,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "deck_id"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 13,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1",
+  "GET https://deckofcardsapi.com/api/deck/hoe4kg03jrmq/draw/?count=2",
+  "GET https://deckofcardsapi.com/api/deck/hoe4kg03jrmq/shuffle/"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12054
+}

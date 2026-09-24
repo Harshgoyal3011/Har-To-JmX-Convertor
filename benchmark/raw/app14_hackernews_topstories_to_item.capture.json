@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Hacker News",
+  "domain": "Social / news",
+  "flow": "top stories -> open first story",
+  "source": "https://hacker-news.firebaseio.com (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Producer is a ROOT-LEVEL ARRAY OF SCALAR NUMBERS."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://hacker-news.firebaseio.com/v0/topstories.json?orderBy=%22$key%22&limitToFirst=5",
+   "st": 146577,
+   "d": 709,
+   "status": 200,
+   "b": "[49823582,49820134,49826059,49824686,49823664]",
+   "method": "GET"
+  },
+  {
+   "u": "https://hacker-news.firebaseio.com/v0/item/49823582.json",
+   "st": 147286,
+   "d": 321,
+   "status": 200,
+   "b": "{\"by\": \"aaronday\", \"descendants\": 124, \"id\": 49823582, \"type\": \"story\"}",
+   "method": "GET"
+  }
+ ]
+}

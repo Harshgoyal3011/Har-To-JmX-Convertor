@@ -1,0 +1,31 @@
+{
+ "meta": {
+  "app": "Platzi Fake Store",
+  "domain": "E-commerce",
+  "flow": "create a product -> retrieve the created product",
+  "source": "https://api.escuelajs.co (public sandbox) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "POST-created numeric id -> path (create -> retrieve)."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.escuelajs.co/api/v1/products/",
+   "st": 170019,
+   "d": 1092,
+   "status": 201,
+   "b": "{\"id\": 428, \"title\": \"PerfProbe3\", \"slug\": \"perfprobe3\", \"price\": 19, \"description\": \"perf\", \"category\": {\"id\": 1, \"name\": \"Updated Category Name\", \"slug\": \"updated-category-name\"}, \"images\": [\"https://placehold.co/600x400\"]}",
+   "method": "POST",
+   "reqBody": "{\"title\": \"PerfProbe3\", \"price\": 19, \"description\": \"perf\", \"categoryId\": 1, \"images\": [\"https://placehold.co/600x400\"]}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://api.escuelajs.co/api/v1/products/428",
+   "st": 171111,
+   "d": 238,
+   "status": 200,
+   "b": "{\"id\": 428, \"title\": \"PerfProbe3\", \"price\": 19}",
+   "method": "GET"
+  }
+ ]
+}

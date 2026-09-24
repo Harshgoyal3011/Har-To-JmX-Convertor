@@ -1,0 +1,36 @@
+{
+ "har": "app26_opentdb_token_to_questions.har",
+ "path": "benchmark\\normalized\\app26_opentdb_token_to_questions.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Open Trivia DB",
+ "domain": "Gaming / media",
+ "flow": "request a session token -> fetch questions with that token",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "token"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 9,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://opentdb.com/api_token.php?command=request",
+  "GET https://opentdb.com/api.php?amount=1&token=d23c01dff6f90c5e440739ca69c476173b42c9f52bcc1d02f837c61d140cc229"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 11412
+}

@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "HAPI FHIR",
+  "domain": "Healthcare",
+  "flow": "search patients -> read the patient",
+  "source": "https://hapi.fhir.org (public FHIR R4 test server) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Nested Bundle.entry[].resource.id -> path; entry[].fullUrl also holds the whole consumer URL. Public test server data."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://hapi.fhir.org/baseR4/Patient?_count=1&_elements=id,name&_format=json",
+   "st": 148944,
+   "d": 591,
+   "status": 200,
+   "b": "{\"resourceType\": \"Bundle\", \"id\": \"26729662-257f-40fc-b6f9-05e30dcc0857\", \"type\": \"searchset\", \"link\": [{\"relation\": \"self\", \"url\": \"https://hapi.fhir.org/baseR4/Patient?_count=1&_format=json\"}], \"entry\": [{\"fullUrl\": \"https://hapi.fhir.org/baseR4/Patient/4202\", \"resource\": {\"resourceType\": \"Patient\", \"id\": \"4202\", \"meta\": {\"versionId\": \"1\"}, \"name\": [{\"use\": \"official\", \"family\": \"Saikia\", \"given\": [\"Arunoday\"]}]}, \"search\": {\"mode\": \"match\"}}]}",
+   "method": "GET"
+  },
+  {
+   "u": "https://hapi.fhir.org/baseR4/Patient/4202?_elements=id,name&_format=json",
+   "st": 149534,
+   "d": 5,
+   "status": 200,
+   "b": "{\"resourceType\": \"Patient\", \"id\": \"4202\", \"meta\": {\"versionId\": \"1\"}}",
+   "method": "GET"
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Crossref",
+  "domain": "Education / scholarly publishing",
+  "flow": "list works -> open the work by its DOI",
+  "source": "https://api.crossref.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "The DOI contains a SLASH, so the produced value spans TWO path segments."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.crossref.org/works?rows=1&select=DOI,title",
+   "st": 168185,
+   "d": 1557,
+   "status": 200,
+   "b": "{\"status\": \"ok\", \"message-type\": \"work-list\", \"message\": {\"total-results\": 186898620, \"items\": [{\"DOI\": \"10.1002/9781119584414.ch4\", \"title\": [\"Complete Dental Cleaning\"]}], \"items-per-page\": 1}}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.crossref.org/works/10.1002/9781119584414.ch4",
+   "st": 169743,
+   "d": 276,
+   "status": 200,
+   "b": "{\"status\": \"ok\", \"message-type\": \"work\", \"message\": {\"publisher\": \"Wiley\", \"edition-number\": \"1\"}}",
+   "method": "GET"
+  }
+ ]
+}
