@@ -320,6 +320,13 @@ def build_lineage(cap: NormalizedCapture) -> LineageGraph:
 # A stable left anchor: a "key": / key= / "key" : prefix immediately before the value. Anchoring on a
 # field label (not arbitrary preceding text, which may itself vary per run) keeps the extractor robust.
 _LEFT_ANCHOR_RE = re.compile(r'(["\']?[\w .\-]{1,32}["\']?\s*[:=]\s*["\']?)\s*$')
+# Fallback anchor for a value embedded in free-text prose with no key label ("your verification code is
+# <token>"): a run of natural-language words — letters and single spaces only, at least two words — ending
+# right before the value. The letters-only rule is the stability guard: prose is the same every run, and
+# because it contains no digits/punctuation it can never latch onto another per-run token or id sitting
+# just before the value. Still gated downstream by extractor verification (a non-resolving regex is
+# dropped and the literal kept), so this only broadens recall for embedded tokens it can prove it captures.
+_PROSE_ANCHOR_RE = re.compile(r'(["\']?[A-Za-z]+(?: [A-Za-z]+){1,6} )$')
 _RIGHT_DELIMS = "\"'<>,;&}\n\r\t "
 _STATIC_NAME_RE = re.compile(r"\.(?:html?|js|mjs|css|png|jpe?g|gif|svg|ico|woff2?|ttf|json|xml|pdf|txt|map)$",
                              re.IGNORECASE)
@@ -350,8 +357,13 @@ def _searchable_response_text(req: NormalizedRequest) -> str:
 
 def _boundary_regex(left: str, value: str, right: str) -> str | None:
     """Left-anchor + non-greedy capture + right delimiter, for a value embedded in a response blob
-    (e.g. a token inside the string "Auth_token: <t>"). Returns None if no stable anchor is found."""
+    (e.g. a token inside the string "Auth_token: <t>", or the prose "your code is <t>"). Returns None if
+    no stable anchor is found."""
     m = _LEFT_ANCHOR_RE.search(left)
+    prose = False
+    if not m:
+        m = _PROSE_ANCHOR_RE.search(left)   # no key label → try a stable natural-language prefix
+        prose = m is not None
     if not m:
         return None
     lb = m.group(1)
@@ -359,6 +371,9 @@ def _boundary_regex(left: str, value: str, right: str) -> str | None:
     esc_l = re.escape(lb)
     if rb:
         return rf"{esc_l}([^{re.escape(rb)}]+?){re.escape(rb)}"
+    if prose:
+        # a prose anchor with no right delimiter would capture the rest of the blob — too loose to trust.
+        return None
     return rf"{esc_l}(\S+)"
 
 
