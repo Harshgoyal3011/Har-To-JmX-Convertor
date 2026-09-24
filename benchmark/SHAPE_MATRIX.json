@@ -1,0 +1,472 @@
+{
+ "summary": {
+  "workflows": 13,
+  "expected": 14,
+  "detected": 10,
+  "missed": 4,
+  "missed_below_threshold": 1,
+  "false_correlations": 0,
+  "recall": 0.714,
+  "recall_excl_below_threshold": 0.769,
+  "precision": 1.0,
+  "verified_extractor_rate": 1.0,
+  "materialization_rate": 1.0
+ },
+ "by_shape": {
+  "1 response JSON -> URL path": {
+   "exp": 5,
+   "det": 4,
+   "recall": 0.8
+  },
+  "2 response JSON -> query param": {
+   "exp": 6,
+   "det": 4,
+   "recall": 0.667
+  },
+  "4 response JSON -> request header": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "6 response JSON -> complete downstream URL": {
+   "exp": 2,
+   "det": 1,
+   "recall": 0.5
+  },
+  "7 path -> path segment + suffix": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "8 producer/consumer field names differ": {
+   "exp": 4,
+   "det": 4,
+   "recall": 1.0
+  },
+  "9 nested JSON -> downstream": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "10 array element -> downstream": {
+   "exp": 3,
+   "det": 2,
+   "recall": 0.667
+  },
+  "11 numeric generated id": {
+   "exp": 4,
+   "det": 3,
+   "recall": 0.75
+  },
+  "12 short generated id": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "13 UUID": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "14 JWT-like token": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "17 GET/search producer": {
+   "exp": 6,
+   "det": 4,
+   "recall": 0.667
+  },
+  "18 POST/create producer": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  "20 one producer -> multiple consumers": {
+   "exp": 4,
+   "det": 4,
+   "recall": 1.0
+  },
+  "23 value embedded in larger string": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "24 HATEOAS hyperlink -> request": {
+   "exp": 3,
+   "det": 2,
+   "recall": 0.667
+  },
+  "25 generated id -> detail request": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  "27 generated business entity id -> later operation": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  }
+ },
+ "by_domain": {
+  "Generic HTTP": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Generic web": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Geo/logistics": {
+   "exp": 2,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Geo/weather": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "Knowledge/media": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Library": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Media/entertainment": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Media/gaming": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Retail/food": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "SaaS": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "SaaS/commerce": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Travel/booking": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  }
+ },
+ "by_producer_method": {
+  "GET": {
+   "exp": 11,
+   "det": 7,
+   "recall": 0.636
+  },
+  "POST": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  }
+ },
+ "by_value_type": {
+  "absolute-url": {
+   "exp": 2,
+   "det": 1,
+   "recall": 0.5
+  },
+  "jwt": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "numeric": {
+   "exp": 7,
+   "det": 5,
+   "recall": 0.714
+  },
+  "path-string": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "short-numeric": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "string-id": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "uuid": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  }
+ },
+ "by_consumer_location": {
+  "header": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "path": {
+   "exp": 5,
+   "det": 4,
+   "recall": 0.8
+  },
+  "query": {
+   "exp": 5,
+   "det": 4,
+   "recall": 0.8
+  },
+  "query-embedded": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "url": {
+   "exp": 2,
+   "det": 1,
+   "recall": 0.5
+  }
+ },
+ "rows": [
+  {
+   "har": "app01_openlibrary_search_to_work",
+   "domain": "Library",
+   "value": "/works/OL1904498W",
+   "shapes": [
+    1,
+    7,
+    8,
+    17,
+    20,
+    24
+   ],
+   "producer": "GET",
+   "vtype": "path-string",
+   "consumer_location": "path",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app02_wikipedia_search_to_article",
+   "domain": "Knowledge/media",
+   "value": "6615610",
+   "shapes": [
+    2,
+    8,
+    11,
+    17,
+    20
+   ],
+   "producer": "GET",
+   "vtype": "numeric",
+   "consumer_location": "query",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app03_pokeapi_list_to_detail",
+   "domain": "Media/gaming",
+   "value": "https://pokeapi.co/api/v2/pokemon/1/",
+   "shapes": [
+    6,
+    10,
+    17,
+    24
+   ],
+   "producer": "GET",
+   "vtype": "absolute-url",
+   "consumer_location": "url",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app04_openfoodfacts_search_to_product",
+   "domain": "Retail/food",
+   "value": "3168930010265",
+   "shapes": [
+    1,
+    8,
+    10,
+    17,
+    25
+   ],
+   "producer": "GET",
+   "vtype": "string-id",
+   "consumer_location": "path",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app05_reqres_list_to_user",
+   "domain": "SaaS",
+   "value": "3",
+   "shapes": [
+    1,
+    12,
+    17
+   ],
+   "producer": "GET",
+   "vtype": "short-numeric",
+   "consumer_location": "path",
+   "detected": false,
+   "failure_stage": "DISCOVERY (value never emitted as a producer)"
+  },
+  {
+   "har": "app06_nominatim_search_to_details",
+   "domain": "Geo/logistics",
+   "value": "275905280",
+   "shapes": [
+    2,
+    11,
+    17
+   ],
+   "producer": "GET",
+   "vtype": "numeric",
+   "consumer_location": "query",
+   "detected": false,
+   "failure_stage": "CLASSIFICATION (BUSINESS_MASTER_DATA)"
+  },
+  {
+   "har": "app07_dummyjson_login_to_me",
+   "domain": "SaaS/commerce",
+   "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI",
+   "shapes": [
+    4,
+    8,
+    14,
+    18
+   ],
+   "producer": "POST",
+   "vtype": "jwt",
+   "consumer_location": "header",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app08_jsonplaceholder_create_to_comments",
+   "domain": "Generic web",
+   "value": "101",
+   "shapes": [
+    1,
+    11,
+    18,
+    25
+   ],
+   "producer": "POST",
+   "vtype": "numeric",
+   "consumer_location": "path",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app09_rickandmorty_episode_to_character",
+   "domain": "Media/entertainment",
+   "value": "https://rickandmortyapi.com/api/character/1",
+   "shapes": [
+    6,
+    10,
+    24
+   ],
+   "producer": "GET",
+   "vtype": "absolute-url",
+   "consumer_location": "url",
+   "detected": false,
+   "failure_stage": "DISCOVERY (value never emitted as a producer)"
+  },
+  {
+   "har": "app10_httpbin_uuid_to_query",
+   "domain": "Generic HTTP",
+   "value": "31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9",
+   "shapes": [
+    2,
+    13
+   ],
+   "producer": "GET",
+   "vtype": "uuid",
+   "consumer_location": "query",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app11_openmeteo_geocode_to_forecast",
+   "domain": "Geo/weather",
+   "value": "53.33306",
+   "shapes": [
+    2,
+    9,
+    20
+   ],
+   "producer": "GET",
+   "vtype": "numeric",
+   "consumer_location": "query",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app11_openmeteo_geocode_to_forecast",
+   "domain": "Geo/weather",
+   "value": "-6.24889",
+   "shapes": [
+    2,
+    9,
+    20
+   ],
+   "producer": "GET",
+   "vtype": "numeric",
+   "consumer_location": "query",
+   "detected": true,
+   "failure_stage": ""
+  },
+  {
+   "har": "app12_nominatim_osmid_embedded",
+   "domain": "Geo/logistics",
+   "value": "311466843",
+   "shapes": [
+    2,
+    23
+   ],
+   "producer": "GET",
+   "vtype": "numeric",
+   "consumer_location": "query-embedded",
+   "detected": false,
+   "failure_stage": "DISCOVERY (producer found, consumer slot never matched)"
+  },
+  {
+   "har": "app13_restfulbooker_auth_create_read",
+   "domain": "Travel/booking",
+   "value": "5454",
+   "shapes": [
+    1,
+    11,
+    18,
+    25,
+    27
+   ],
+   "producer": "POST",
+   "vtype": "numeric",
+   "consumer_location": "path",
+   "detected": true,
+   "failure_stage": ""
+  }
+ ]
+}

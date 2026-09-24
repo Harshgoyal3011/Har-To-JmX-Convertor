@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "httpbin",
+  "domain": "Generic HTTP service",
+  "flow": "obtain a server-generated UUID -> send it as a trace parameter",
+  "source": "https://httpbin.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies verbatim."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://httpbin.org/uuid",
+   "st": 36137,
+   "d": 743,
+   "status": 200,
+   "b": "{\"uuid\": \"31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9\"}",
+   "method": "GET"
+  },
+  {
+   "u": "https://httpbin.org/anything?trace=31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9",
+   "st": 36880,
+   "d": 568,
+   "status": 200,
+   "b": "{\"args\": {\"trace\": \"31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9\"}, \"method\": \"GET\", \"url\": \"https://httpbin.org/anything?trace=31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9\"}",
+   "method": "GET"
+  }
+ ]
+}

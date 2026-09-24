@@ -1,0 +1,37 @@
+{
+ "har": "app12_nominatim_osmid_embedded.har",
+ "path": "benchmark\\normalized\\app12_nominatim_osmid_embedded.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Nominatim (OpenStreetMap)",
+ "domain": "Geo / logistics",
+ "flow": "search a place -> look it up by a type-prefixed OSM id (R<osm_id>)",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "name",
+  "osm_ids"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 6,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://nominatim.openstreetmap.org/search?q=Trinity+College+Dublin&format=json&limit=1",
+  "GET https://nominatim.openstreetmap.org/lookup?osm_ids=R311466843&format=json"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12473
+}

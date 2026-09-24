@@ -1,0 +1,31 @@
+{
+ "meta": {
+  "app": "JSONPlaceholder",
+  "domain": "Generic web API",
+  "flow": "create a post -> read the comments of the created post",
+  "source": "https://jsonplaceholder.typicode.com (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies verbatim."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://jsonplaceholder.typicode.com/posts",
+   "st": 1904,
+   "d": 1008,
+   "status": 201,
+   "reqBody": "{\"title\": \"perf\", \"body\": \"x\", \"userId\": 7}",
+   "reqMime": "application/json",
+   "b": "{\"title\": \"perf\", \"body\": \"x\", \"userId\": 7, \"id\": 101}",
+   "method": "POST"
+  },
+  {
+   "u": "https://jsonplaceholder.typicode.com/posts/101/comments",
+   "st": 2912,
+   "d": 681,
+   "status": 200,
+   "b": "[]",
+   "method": "GET"
+  }
+ ]
+}

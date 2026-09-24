@@ -1,0 +1,36 @@
+{
+ "har": "app09_rickandmorty_episode_to_character.har",
+ "path": "benchmark\\normalized\\app09_rickandmorty_episode_to_character.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Rick and Morty API",
+ "domain": "Media / entertainment catalogue",
+ "flow": "open an episode -> open the first character it links to",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "url"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://rickandmortyapi.com/api/episode/1",
+  "GET https://rickandmortyapi.com/api/character/1"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10096
+}

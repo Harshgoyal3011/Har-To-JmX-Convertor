@@ -36,6 +36,7 @@ def build(record: dict, out_name: str) -> tuple[Path, int, int]:
             "status": int(a.get("status", 200)),
             "mime": a.get("mime") or "application/json", "body": a.get("b"),
             "reqBody": a.get("reqBody"), "reqMime": a.get("reqMime"),
+            "reqHeaders": a.get("reqHeaders"),
         })
 
     # optional, DISCLOSED compression of an instrumentation gap into a realistic think time

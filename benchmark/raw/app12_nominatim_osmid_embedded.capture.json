@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Nominatim (OpenStreetMap)",
+  "domain": "Geo / logistics",
+  "flow": "search a place -> look it up by a type-prefixed OSM id (R<osm_id>)",
+  "source": "https://nominatim.openstreetmap.org (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "The lookup legitimately returned an empty array; the dependency is in the REQUEST."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://nominatim.openstreetmap.org/search?q=Trinity+College+Dublin&format=json&limit=1",
+   "st": 75127,
+   "d": 598,
+   "status": 200,
+   "b": "[{\"place_id\": 396742295, \"osm_type\": \"relation\", \"osm_id\": 311466843, \"lat\": \"53.3438\", \"lon\": \"-6.2546\", \"class\": \"amenity\", \"type\": \"university\", \"name\": \"Trinity College Dublin\", \"display_name\": \"Trinity College Dublin, College Green, Dublin, Ireland\"}]",
+   "method": "GET"
+  },
+  {
+   "u": "https://nominatim.openstreetmap.org/lookup?osm_ids=R311466843&format=json",
+   "st": 75725,
+   "d": 958,
+   "status": 200,
+   "b": "[]",
+   "method": "GET"
+  }
+ ]
+}

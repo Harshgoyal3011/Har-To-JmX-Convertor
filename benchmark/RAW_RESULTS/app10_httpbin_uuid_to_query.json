@@ -1,0 +1,36 @@
+{
+ "har": "app10_httpbin_uuid_to_query.har",
+ "path": "benchmark\\normalized\\app10_httpbin_uuid_to_query.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "httpbin",
+ "domain": "Generic HTTP service",
+ "flow": "obtain a server-generated UUID -> send it as a trace parameter",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "uuidUuid"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 1,
+ "unknown_values": 6,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://httpbin.org/uuid",
+  "GET https://httpbin.org/anything?trace=31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10547
+}

@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "app": "DummyJSON",
+  "domain": "SaaS / demo commerce API",
+  "flow": "login -> fetch own profile with the issued bearer token",
+  "source": "https://dummyjson.com (public sandbox, documented test user) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Consumer (/auth/me) body shortened by the harness to the first fields; it produces nothing downstream. Producer body complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://dummyjson.com/auth/login",
+   "st": 287,
+   "d": 973,
+   "status": 200,
+   "reqBody": "{\"username\": \"emilys\", \"password\": \"emilyspass\", \"expiresInMins\": 30}",
+   "reqMime": "application/json",
+   "b": "{\"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiaWF0IjoxNzkwMjI1MzI2LCJleHAiOjE3OTAyMjcxMjZ9.Yp1FajaS-7kfMvhRlEtZFsie4p2xE6F7twlzPg8i3Co\", \"id\": 1, \"username\": \"emilys\", \"email\": \"emily.johnson@x.dummyjson.com\", \"firstName\": \"Emily\", \"lastName\": \"Johnson\", \"gender\": \"female\"}",
+   "method": "POST"
+  },
+  {
+   "u": "https://dummyjson.com/auth/me",
+   "st": 1260,
+   "d": 643,
+   "status": 200,
+   "reqHeaders": [
+    {
+     "name": "Authorization",
+     "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiaWF0IjoxNzkwMjI1MzI2LCJleHAiOjE3OTAyMjcxMjZ9.Yp1FajaS-7kfMvhRlEtZFsie4p2xE6F7twlzPg8i3Co"
+    },
+    {
+     "name": "Accept",
+     "value": "application/json"
+    }
+   ],
+   "b": "{\"id\": 1, \"firstName\": \"Emily\", \"lastName\": \"Johnson\", \"username\": \"emilys\", \"email\": \"emily.johnson@x.dummyjson.com\", \"role\": \"admin\"}",
+   "method": "GET"
+  }
+ ]
+}

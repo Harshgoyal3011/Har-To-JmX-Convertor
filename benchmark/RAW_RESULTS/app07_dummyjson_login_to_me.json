@@ -1,0 +1,39 @@
+{
+ "har": "app07_dummyjson_login_to_me.har",
+ "path": "benchmark\\normalized\\app07_dummyjson_login_to_me.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "DummyJSON",
+ "domain": "SaaS / demo commerce API",
+ "flow": "login -> fetch own profile with the issued bearer token",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "accessToken"
+ ],
+ "csv_columns": [
+  "username",
+  "password"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://dummyjson.com/auth/login",
+  "GET https://dummyjson.com/auth/me"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12355
+}

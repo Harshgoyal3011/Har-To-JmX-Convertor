@@ -1,0 +1,41 @@
+{
+ "meta": {
+  "app": "restful-booker",
+  "domain": "Travel / booking",
+  "flow": "authenticate -> create a booking -> read the created booking",
+  "source": "https://restful-booker.herokuapp.com (public sandbox, documented test user) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies verbatim."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://restful-booker.herokuapp.com/auth",
+   "st": 1202,
+   "d": 267,
+   "status": 200,
+   "reqBody": "{\"username\": \"admin\", \"password\": \"password123\"}",
+   "reqMime": "application/json",
+   "b": "{\"token\": \"817d15644a2398c\"}",
+   "method": "POST"
+  },
+  {
+   "u": "https://restful-booker.herokuapp.com/booking",
+   "st": 1469,
+   "d": 252,
+   "status": 200,
+   "reqBody": "{\"firstname\": \"Perf\", \"lastname\": \"Test\", \"totalprice\": 111, \"depositpaid\": true, \"bookingdates\": {\"checkin\": \"2026-01-01\", \"checkout\": \"2026-01-05\"}, \"additionalneeds\": \"Breakfast\"}",
+   "reqMime": "application/json",
+   "b": "{\"bookingid\": 5454, \"booking\": {\"firstname\": \"Perf\", \"lastname\": \"Test\", \"totalprice\": 111, \"depositpaid\": true, \"bookingdates\": {\"checkin\": \"2026-01-01\", \"checkout\": \"2026-01-05\"}, \"additionalneeds\": \"Breakfast\"}}",
+   "method": "POST"
+  },
+  {
+   "u": "https://restful-booker.herokuapp.com/booking/5454",
+   "st": 1721,
+   "d": 253,
+   "status": 200,
+   "b": "{\"firstname\": \"Perf\", \"lastname\": \"Test\", \"totalprice\": 111, \"depositpaid\": true, \"bookingdates\": {\"checkin\": \"2026-01-01\", \"checkout\": \"2026-01-05\"}, \"additionalneeds\": \"Breakfast\"}",
+   "method": "GET"
+  }
+ ]
+}

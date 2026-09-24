@@ -1,0 +1,39 @@
+{
+ "har": "app11_openmeteo_geocode_to_forecast.har",
+ "path": "benchmark\\normalized\\app11_openmeteo_geocode_to_forecast.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 2,
+ "application": "Open-Meteo",
+ "domain": "Geo / weather",
+ "flow": "geocode a city -> request the forecast at the returned coordinates",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.006,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "latitude",
+  "longitude"
+ ],
+ "csv_columns": [
+  "name"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 7,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://geocoding-api.open-meteo.com/v1/search?name=Dublin&count=1&language=en&format=json",
+  "GET https://api.open-meteo.com/v1/forecast?latitude=53.33306&longitude=-6.24889&current=temperature_2m"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 14610
+}

@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Open-Meteo",
+  "domain": "Geo / weather",
+  "flow": "geocode a city -> request the forecast at the returned coordinates",
+  "source": "https://open-meteo.com (public) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies verbatim."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://geocoding-api.open-meteo.com/v1/search?name=Dublin&count=1&language=en&format=json",
+   "st": 37448,
+   "d": 811,
+   "status": 200,
+   "b": "{\"results\": [{\"id\": 2964574, \"name\": \"Dublin\", \"latitude\": 53.33306, \"longitude\": -6.24889, \"elevation\": 17.0, \"country_code\": \"IE\", \"timezone\": \"Europe/Dublin\", \"population\": 1024027, \"country\": \"Ireland\"}], \"generationtime_ms\": 0.39839745}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.open-meteo.com/v1/forecast?latitude=53.33306&longitude=-6.24889&current=temperature_2m",
+   "st": 38258,
+   "d": 792,
+   "status": 200,
+   "b": "{\"latitude\": 53.329914, \"longitude\": -6.2360687, \"timezone\": \"GMT\", \"current\": {\"time\": \"2026-09-24T04:45\", \"temperature_2m\": 12.9}}",
+   "method": "GET"
+  }
+ ]
+}
