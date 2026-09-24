@@ -212,6 +212,7 @@ def _sub_json(obj: Any, sub: dict[str, str]) -> Any:
 
 # What may follow a correlated resource path inside the consumer's path: an extension
 # (/works/OL1904498W -> .json) and/or a further static sub-resource (-> /editions.json).
+_PATH_EXT_RE = _re.compile(r"\.[A-Za-z0-9]{1,8}$")
 _PATH_TAIL_RE = _re.compile(r"^(?:\.[A-Za-z0-9]{1,8})?(?:/[^?]*)?$")
 
 
@@ -232,8 +233,22 @@ def _sub_path(path: str, sub: dict[str, str], url: str = "") -> str:
             best = (value, var, tail)
     if best is not None:
         return best[1] + best[2]
-    parts = path.split("/")
-    return "/".join(_apply(p, sub) if p else p for p in parts)
+    # 3) per segment. A segment may carry the correlated value plus a static file extension
+    #    ("49823582.json"); replace only the value and keep the suffix.
+    out: list[str] = []
+    for part in path.split("/"):
+        if not part:
+            out.append(part)
+            continue
+        applied = _apply(part, sub)
+        if applied == part:
+            m = _PATH_EXT_RE.search(part)
+            if m:
+                core_hit = _sub_lookup(part[: m.start()], sub)
+                if core_hit is not None:
+                    applied = core_hit + m.group(0)
+        out.append(applied)
+    return "/".join(out)
 
 
 def _sub_raw(text: str, sub: dict[str, str]) -> str:
@@ -824,7 +839,9 @@ def build_jmx_xml(result: EngineResult, config: dict[str, str] | None = None,
 
 _MAX_CSV_ROWS = 200
 _CRED_RE = _re.compile(r"user|pass|pwd|pin\b|otp|secret|token|login|credential|cvv|card", _re.IGNORECASE)
-_CODED_ID_RE = _re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
+# kept in step with classify.value_engine._CODED_ID_RE: the code part must contain a digit,
+# so an ordinary hyphenated name is not mistaken for a catalog identifier.
+_CODED_ID_RE = _re.compile(r"^[A-Za-z]{2,}[-_](?=[\w-]*\d)[A-Za-z0-9][\w-]*$")
 _EMAIL_RE = _re.compile(r"^([^@]+)@(.+)$")
 _TRAIL_RE = _re.compile(r"^(.*?)(\d+)$")
 _DATE_FORMATS = ("%Y-%m-%d", "%d-%m-%Y", "%m/%d/%Y", "%Y/%m/%d", "%d/%m/%Y",

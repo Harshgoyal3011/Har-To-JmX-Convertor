@@ -253,7 +253,12 @@ def _is_config_constant(flow: ValueFlow) -> bool:
     return any(_norm_field(o.field) in _CONFIG_FIELD_NAMES for o in flow.occurrences)
 
 
-_CODED_ID_RE = re.compile(r"^[A-Za-z]{2,}[-_][A-Za-z0-9][\w-]*$")
+# A structured catalog/business code: a letter prefix, a separator, then a code part that
+# CONTAINS AT LEAST ONE DIGIT (PROD-4400, MBR-88213, POL-2025-77, CHK-9f8e7d6c). The digit
+# requirement is what separates a real coded identifier from an ordinary hyphenated NAME
+# (a kebab-case slug or package name such as "performance-results-parser"), which is not
+# catalog data and must stay eligible for correlation.
+_CODED_ID_RE = re.compile(r"^[A-Za-z]{2,}[-_](?=[\w-]*\d)[A-Za-z0-9][\w-]*$")
 _GENERATED_REF_RE = re.compile(r"^[A-Za-z]{2,}[-_](?P<code>.+)$")
 # A field named like a per-run REFERENCE/handle (checkoutRef, bookingReference, uploadTicket, drawHandle)
 # — as opposed to an entity id (patientId, orderId). A "…Ref/Reference/Handle/Ticket" name is what

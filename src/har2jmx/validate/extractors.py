@@ -100,6 +100,10 @@ def _producer_body_json(req: NormalizedRequest) -> Any:
     return None
 
 
+# "$..leaf[0]" or "$[0]" - an extractor addressing one scalar element of an array
+_IDX_EXPR_RE = _re.compile(r"^\$(?:\.\.(?P<leaf>[^\[\]]+))?\[(?P<i>\d+)\]$")
+
+
 def _leaf_of(expression: str) -> str:
     e = expression.strip()
     if e.startswith("$.."):
@@ -146,6 +150,30 @@ def _check_json(dec: CorrelationDecision, producer: NormalizedRequest) -> Extrac
                             "cannot be verified and would fall back to NOT_FOUND at run time."),
                     suggestion=("Re-record the capture with response bodies enabled so this value's issuing "
                                 "response is present, then it can be correlated automatically."))
+
+    # An INDEXED expression addresses one scalar array element ("$..characters[0]", "$[0]"). The
+    # leaf-name walk below cannot describe it, so resolve it directly against the indexed walk: the
+    # element either holds the recorded value or the extractor is wrong.
+    mi = _IDX_EXPR_RE.match(dec.expression.strip())
+    if mi:
+        indexed: list[tuple[str, Any]] = []
+        _walk_json_indexed(body, "", indexed)
+        leaf, i = mi.group("leaf"), mi.group("i")
+        want = f"[{i}]" if not leaf else f"{leaf}[{i}]"
+        hits = [(kp, v) for kp, v in indexed if kp == want or kp.endswith("." + want)]
+        if not hits:
+            return make(ExtractorStatus.UNRESOLVED,
+                        reason=(f"{dec.expression} does not resolve in the producing response — it would "
+                                "fall back to NOT_FOUND at run time."))
+        if len(hits) > 1:
+            return make(ExtractorStatus.UNRESOLVED,
+                        reason=(f"{dec.expression} matches {len(hits)} nodes, so it does not uniquely "
+                                "address the recorded element."))
+        if _norm(hits[0][1]) != target:
+            return make(ExtractorStatus.UNRESOLVED,
+                        reason=(f"{dec.expression} resolves to a different value than recorded — the "
+                                "correlation would replay the wrong value."))
+        return make(ExtractorStatus.UNIQUE)
 
     # collapsed walk = what JMeter's `$..leaf` sees (every node named `leaf`, in document order)
     collapsed: list[tuple[str, Any]] = []

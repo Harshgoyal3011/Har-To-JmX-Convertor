@@ -44,6 +44,8 @@ class CorrelationDecision:
 
 
 _LIST_IDX_RE = re.compile(r"\[\d+\]")
+# a scalar array element: trailing [i], optionally under a container path ("characters[0]", "[0]")
+_SCALAR_ITEM_RE = re.compile(r"^(?P<container>.*?)\[(?P<i>\d+)\]$")
 _GENERIC_ID_NAMES = {"id", "code", "key", "number", "uuid", "guid", "ref", "reference", "identifier", "no"}
 
 
@@ -61,6 +63,16 @@ def _json_path(producer_location: str) -> str:
     NOT_FOUND default. The leaf name is specific (addressId, accountId, cartId), so ``$..<leaf>`` matches
     the intended value and works whether the container is an object or a list."""
     keypath = producer_location.split("response.body:", 1)[1]
+    # A SCALAR ARRAY ELEMENT ("characters[0]", or "[0]" at the document root) has no field name of its
+    # own, so the leaf-name form cannot address it — "$..characters" would select the whole array and the
+    # extractor would resolve to the wrong thing. Keep the index so the element itself is selected.
+    m = _SCALAR_ITEM_RE.match(keypath)
+    if m:
+        container, index = m.group("container"), m.group("i")
+        if not container:
+            return f"$[{index}]"                      # root-level array of scalars
+        leaf = container.split(".")[-1] or container
+        return f"$..{leaf}[{index}]"
     keypath = _LIST_IDX_RE.sub("", keypath)
     leaf = keypath.split(".")[-1] or keypath
     return f"$..{leaf}"

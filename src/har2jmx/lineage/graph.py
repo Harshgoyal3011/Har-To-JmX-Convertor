@@ -146,8 +146,16 @@ def _walk_json(obj: Any, prefix: str, out: list[tuple[str, Any]], depth: int = 0
             elif isinstance(v, (dict, list)):
                 _walk_json(v, kp, out, depth + 1)
     elif isinstance(obj, list):
-        for item in obj[:_MAX_LIST]:
-            _walk_json(item, prefix, out, depth + 1)
+        for i, item in enumerate(obj[:_MAX_LIST]):
+            # A SCALAR list item is a real value slot: {"characters": ["https://…/1", …]},
+            # {"ids": [49823582, …]}. Recursing without emitting it (the previous behaviour) made every
+            # array of scalars invisible to lineage — the value never entered the graph, so no later
+            # stage could recover the dependency. Keep the index in the path so the exact element can be
+            # addressed by an extractor later; array items of objects keep recursing as before.
+            if _scalar(item):
+                out.append((f"{prefix}[{i}]" if prefix else f"[{i}]", item))
+            else:
+                _walk_json(item, prefix, out, depth + 1)
 
 
 def _emit(value: Any, side: str, location: str, field_name: str, idx: int) -> Occurrence | None:
@@ -163,9 +171,18 @@ _PATH_EXT_RE = re.compile(r"\.[A-Za-z0-9]{1,8}$")
 def _request_slots(req: NormalizedRequest, emit_url: bool = True) -> Iterator[Occurrence]:
     idx = req.index
     for i, seg in enumerate(req.request.path_segments):
-        o = _emit(unquote(seg), "request", "request.path", "path", idx)
+        decoded = unquote(seg)
+        o = _emit(decoded, "request", "request.path", "path", idx)
         if o:
             yield o
+        # …and the same segment with a file extension stripped ("49823582.json" -> "49823582"). The
+        # produced id and the consumer's segment then differ only by the suffix, which is the
+        # already-supported "path + suffix" shape; without this the whole-segment slot never matches.
+        core = _PATH_EXT_RE.sub("", decoded)
+        if core != decoded:
+            o = _emit(core, "request", "request.path", "path", idx)
+            if o:
+                yield o
     # Composite-path and absolute-URL consumer slots.
     # A server-returned resource PATH ("/works/OL1904498W") or an absolute URL
     # ("https://pokeapi.co/api/v2/pokemon/1/") is commonly reused by the next request as its path with

@@ -10,16 +10,17 @@
  "conversion": "PASS",
  "crash": "",
  "stage": "",
- "conversion_time": 0.014,
+ "conversion_time": 0.016,
  "samplers": 7,
  "transactions": 4,
  "kept_requests": 5,
  "excluded_requests": 0,
  "assertions": 4,
- "correlations": 1,
- "correlations_verified": 1,
+ "correlations": 2,
+ "correlations_verified": 2,
  "correlation_vars": [
-  "access_token"
+  "access_token",
+  "image"
  ],
  "csv_columns": [
   "password",
@@ -41,5 +42,5 @@
   "GET https://api.escuelajs.co/api/v1/products/1"
  ],
  "excluded_hosts": [],
- "jmx_bytes": 23387
+ "jmx_bytes": 24641
 }
