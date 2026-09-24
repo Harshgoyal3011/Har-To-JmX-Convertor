@@ -169,11 +169,34 @@ def _has_content_disposition_attachment(req: NormalizedRequest) -> bool:
     return False
 
 
+_API_MIME_HINTS = ("json", "xml", "graphql")
+
+
+def _serves_structured_api(req: NormalizedRequest) -> bool:
+    """The response carries a structured API payload (JSON/XML/GraphQL), not a static asset.
+
+    Exists so a PATH WORD cannot be decisive. Real applications serve business data from /images/,
+    /media/, /assets/ and /photos/ (image search, DAM, CMS, catalogue services); judging those by the
+    path alone deletes the WORKLOAD rather than one request - the plan can end up with no samplers at
+    all. Content type is the evidence that outranks the path word here.
+    """
+    mime = (req.response.mime or "").lower()
+    if "html" in mime:
+        return False
+    if any(h in mime for h in _API_MIME_HINTS):
+        return True
+    return req.response.body.kind in {BodyKind.JSON, BodyKind.GRAPHQL, BodyKind.XML, BodyKind.SOAP}
+
+
 def _is_static(req: NormalizedRequest) -> tuple[bool, str]:
     suffix = _suffix(req.request.path)
     if suffix in STATIC_EXTENSIONS:
         return True, f"static file extension '{suffix}'"
-    if STATIC_PATH_RE.search(req.request.path):
+    # A generic resource word in the path (/images/, /media/, /assets/, /photos/) is SUPPORTING
+    # evidence, never decisive: it marks the request static only when the response is not a structured
+    # API payload. A genuine static asset still matches via its extension above or its response type
+    # below, so legitimate noise filtering is unchanged.
+    if STATIC_PATH_RE.search(req.request.path) and not _serves_structured_api(req):
         return True, "static resource path"
     mime = (req.response.mime or "").lower()
     if any(h in mime for h in _STATIC_MIME_HINTS):

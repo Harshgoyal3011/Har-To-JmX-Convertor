@@ -70,7 +70,13 @@ E_NEW: dict[str, dict] = {
    "c": [{"v": "hashbrown", "s": [1, 9, 20, 21, 28], "cl": "path",
           "policy": "entity-identifier carve-out"}]},
  "app41_openverse_image_search": {"dom": "Media / CC images", "pm": "GET", "vt": "uuid",
-   "c": [{"v": "1c5442f6-6bb6-4ab7-b603-f598e7579dd2", "s": [1, 9, 15, 21, 27], "cl": "path"}]},
+   # detail_url is a SECOND genuine dependency: the search response carries the exact URL of the next
+   # request (the HATEOAS shape). It was missing from the original ground truth only because the whole
+   # workflow was being dropped as noise, so it was never observable. Added on the same standard
+   # already applied to the Hugging Face sibling fields.
+   "c": [{"v": "1c5442f6-6bb6-4ab7-b603-f598e7579dd2", "s": [1, 9, 15, 21, 27], "cl": "path"},
+         {"v": "https://api.openverse.org/v1/images/1c5442f6-6bb6-4ab7-b603-f598e7579dd2/",
+          "s": [6, 9, 12, 21], "cl": "url", "secondary": True}]},
  "app42_dummyjson_put_producer": {"dom": "E-commerce", "pm": "PUT", "vt": "short-numeric",
    "c": [{"v": "78", "s": [1, 13, 14, 23, 25], "cl": "path", "below": True}]},
  "app43_ukpolice_forces": {"dom": "Government / policing", "pm": "GET", "vt": "slug",
