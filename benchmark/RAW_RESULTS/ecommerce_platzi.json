@@ -24,12 +24,13 @@
  "csv_columns": [
   "password",
   "email",
+  "path",
   "title",
   "description"
  ],
- "csv_column_count": 4,
+ "csv_column_count": 5,
  "review_items": 0,
- "unknown_values": 5,
+ "unknown_values": 16,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -40,5 +41,5 @@
   "GET https://api.escuelajs.co/api/v1/products/1"
  ],
  "excluded_hosts": [],
- "jmx_bytes": 23404
+ "jmx_bytes": 23387
 }

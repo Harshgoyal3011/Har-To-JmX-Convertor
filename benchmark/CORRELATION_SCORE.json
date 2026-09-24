@@ -2,16 +2,16 @@
  "summary": {
   "applications_scored": 6,
   "expected_correlations": 6,
-  "detected_correlations": 0,
-  "missed_correlations": 6,
+  "detected_correlations": 4,
+  "missed_correlations": 2,
   "missed_below_documented_threshold": 1,
   "false_correlations": 0,
-  "correlation_recall": 0.0,
-  "correlation_recall_excluding_below_threshold": 0.0,
-  "correlation_precision": null,
-  "unnecessary_csv_columns": 7,
+  "correlation_recall": 0.667,
+  "correlation_recall_excluding_below_threshold": 0.8,
+  "correlation_precision": 1.0,
+  "unnecessary_csv_columns": 5,
   "missed_parameters": 2,
-  "dependent_values_miscast_as_parameters": 3
+  "dependent_values_miscast_as_parameters": 1
  },
  "rows": [
   {
@@ -19,14 +19,14 @@
    "application": "OpenLibrary",
    "domain": "Library / public catalogue",
    "expected_correlations": 1,
-   "detected_correlations": 0,
-   "missed_correlations": 1,
+   "detected_correlations": 1,
+   "missed_correlations": 0,
    "missed_below_threshold": 0,
    "false_correlations": 0,
    "false_correlation_values": [],
    "miscast_as_parameter": [],
-   "recall": 0.0,
-   "precision": null,
+   "recall": 1.0,
+   "precision": 1.0,
    "expected_parameters": [
     "q"
    ],
@@ -42,91 +42,72 @@
     "donation_identifier",
     "pv_id"
    ],
-   "shapes_missed": [
-    "path-style resource key returned in JSON, reused as URL path + extension"
-   ]
+   "shapes_missed": []
   },
   {
    "har": "app02_wikipedia_search_to_article",
    "application": "Wikipedia",
    "domain": "Knowledge / media",
    "expected_correlations": 1,
-   "detected_correlations": 0,
-   "missed_correlations": 1,
+   "detected_correlations": 1,
+   "missed_correlations": 0,
    "missed_below_threshold": 0,
    "false_correlations": 0,
    "false_correlation_values": [],
-   "miscast_as_parameter": [
-    "6615610"
-   ],
-   "recall": 0.0,
-   "precision": null,
+   "miscast_as_parameter": [],
+   "recall": 1.0,
+   "precision": 1.0,
    "expected_parameters": [
     "srsearch"
    ],
    "detected_csv_columns": [
-    "pageid",
     "srsearch"
    ],
    "missed_parameters": [],
-   "unnecessary_parameters": [
-    "pageid"
-   ],
-   "shapes_missed": [
-    "numeric id returned in JSON, reused as a query parameter"
-   ]
+   "unnecessary_parameters": [],
+   "shapes_missed": []
   },
   {
    "har": "app03_pokeapi_list_to_detail",
    "application": "PokeAPI",
    "domain": "Media / gaming catalogue",
    "expected_correlations": 1,
-   "detected_correlations": 0,
-   "missed_correlations": 1,
+   "detected_correlations": 1,
+   "missed_correlations": 0,
    "missed_below_threshold": 0,
    "false_correlations": 0,
    "false_correlation_values": [],
    "miscast_as_parameter": [],
-   "recall": 0.0,
-   "precision": null,
+   "recall": 1.0,
+   "precision": 1.0,
    "expected_parameters": [],
    "detected_csv_columns": [],
    "missed_parameters": [],
    "unnecessary_parameters": [],
-   "shapes_missed": [
-    "ABSOLUTE URL returned in JSON, reused verbatim as the next request URL"
-   ]
+   "shapes_missed": []
   },
   {
    "har": "app04_openfoodfacts_search_to_product",
    "application": "OpenFoodFacts",
    "domain": "Retail / food",
    "expected_correlations": 1,
-   "detected_correlations": 0,
-   "missed_correlations": 1,
+   "detected_correlations": 1,
+   "missed_correlations": 0,
    "missed_below_threshold": 0,
    "false_correlations": 0,
    "false_correlation_values": [],
-   "miscast_as_parameter": [
-    "3168930010265"
-   ],
-   "recall": 0.0,
-   "precision": null,
+   "miscast_as_parameter": [],
+   "recall": 1.0,
+   "precision": 1.0,
    "expected_parameters": [
     "categories_tags_en"
    ],
-   "detected_csv_columns": [
-    "code"
-   ],
+   "detected_csv_columns": [],
    "missed_parameters": [
     "categories_tags_en"
    ],
-   "unnecessary_parameters": [
-    "code"
-   ],
-   "shapes_missed": [
-    "string id returned in JSON, reused as a URL path segment"
-   ]
+   "unnecessary_parameters": [],
+   "shapes_missed": []
   },
   {
    "har": "app05_reqres_list_to_user",

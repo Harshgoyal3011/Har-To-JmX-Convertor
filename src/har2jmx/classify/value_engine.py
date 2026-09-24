@@ -436,8 +436,39 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                           "bookingRef) reused downstream: per-run state, not one of a catalog list; "
                           "correlate it, a recorded value goes stale")
             elif method == "GET" or search:
-                cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
-                reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"
+                # The producer is a read/search. Historically EVERY such value was read as "an existing
+                # record the user selected" => master data => CSV. Real captures showed that is wrong for
+                # the commonest real journey there is: search -> open the thing the search returned. The
+                # deciding evidence is not the producer's HTTP method but whether a LATER REQUEST
+                # DEPENDS ON THE VALUE:
+                #   * consumed downstream -> the request only works with the value THIS run returned, so
+                #     it is a runtime dependency and must be correlated (replaying a recorded id pins
+                #     every virtual user to one record and breaks when the dataset changes);
+                #   * not consumed        -> nothing depends on it, so it stays selectable master data
+                #     and remains a parameterization candidate exactly as before.
+                # This deliberately does NOT promote every GET response value. Two gates apply:
+                #   * `consumers` — something downstream must actually depend on the value; and
+                #   * `not is_id` — the value must NOT be the identifier of a discovered multi-instance
+                #     entity collection. Such a value is catalog/master data (patient list -> PAT-9001,
+                #     customer list -> 1001): a performance engineer wants load SPREAD across the catalog
+                #     from a CSV, not pinned to whatever the list happened to return first. That stays
+                #     parameterized. Entity identity is discovered structurally (entities/ relationship
+                #     model), never from field names, so this holds for an unseen application.
+                #   * not a structured coded id — a PREFIX-CODE value (PROD-4400, MBR-88213, POL-2025-77)
+                #     is a stable business catalog identifier. The engine already treats these as
+                #     selectable master data elsewhere (see _is_opaque_handle), and the same reasoning
+                #     applies here: they belong in a CSV so load spreads across the catalog rather than
+                #     being pinned to whichever one the list returned first.
+                catalog_code = bool(_CODED_ID_RE.match(str(flow.value).strip()))
+                if consumers and not is_id and not catalog_code:
+                    cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.EXISTING_BEFORE_RUN, "High"
+                    reason = (f"returned by a {'search' if search else 'read'} ({method}) and consumed by a "
+                              f"later request — proven runtime dependency, correlated so replay uses the "
+                              f"value this run returned rather than a recorded one")
+                else:
+                    cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
+                    reason = (f"returned by a {'search' if search else 'read'} ({method}) — existing record, "
+                              f"nothing downstream depends on it")
             elif method in {"POST", "PUT", "PATCH"} and (status == "201" or CREATION_VERB_RE.search(path) or not search):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = f"created this run ({method} {status or ''}), then reused downstream"

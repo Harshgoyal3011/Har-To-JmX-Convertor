@@ -10,19 +10,24 @@
  "conversion": "PASS",
  "crash": "",
  "stage": "",
- "conversion_time": 0.004,
+ "conversion_time": 0.007,
  "samplers": 4,
  "transactions": 3,
  "kept_requests": 3,
  "excluded_requests": 0,
  "assertions": 3,
- "correlations": 0,
- "correlations_verified": 0,
- "correlation_vars": [],
- "csv_columns": [],
- "csv_column_count": 0,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "homeworld"
+ ],
+ "csv_columns": [
+  "url",
+  "People_url"
+ ],
+ "csv_column_count": 2,
  "review_items": 0,
- "unknown_values": 3,
+ "unknown_values": 10,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -31,5 +36,5 @@
   "GET https://swapi.info/api/films/1"
  ],
  "excluded_hosts": [],
- "jmx_bytes": 14316
+ "jmx_bytes": 15559
 }

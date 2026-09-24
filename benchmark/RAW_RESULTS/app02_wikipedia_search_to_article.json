@@ -16,16 +16,17 @@
  "kept_requests": 5,
  "excluded_requests": 23,
  "assertions": 2,
- "correlations": 0,
- "correlations_verified": 0,
- "correlation_vars": [],
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "pageid"
+ ],
  "csv_columns": [
-  "pageid",
   "srsearch"
  ],
- "csv_column_count": 2,
+ "csv_column_count": 1,
  "review_items": 0,
- "unknown_values": 9,
+ "unknown_values": 21,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -39,5 +40,5 @@
   "en.wikipedia.org",
   "upload.wikimedia.org"
  ],
- "jmx_bytes": 23612
+ "jmx_bytes": 24214
 }

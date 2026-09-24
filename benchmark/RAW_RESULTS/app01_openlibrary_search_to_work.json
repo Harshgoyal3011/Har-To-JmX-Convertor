@@ -10,15 +10,17 @@
  "conversion": "PASS",
  "crash": "",
  "stage": "",
- "conversion_time": 0.02,
+ "conversion_time": 0.021,
  "samplers": 10,
  "transactions": 4,
  "kept_requests": 7,
  "excluded_requests": 44,
  "assertions": 4,
- "correlations": 0,
- "correlations_verified": 0,
- "correlation_vars": [],
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "docKey"
+ ],
  "csv_columns": [
   "q",
   "donation_identifier",
@@ -27,7 +29,7 @@
  ],
  "csv_column_count": 4,
  "review_items": 0,
- "unknown_values": 17,
+ "unknown_values": 37,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -46,5 +48,5 @@
   "openlibrary.org",
   "sink.archive.org"
  ],
- "jmx_bytes": 37350
+ "jmx_bytes": 38596
 }

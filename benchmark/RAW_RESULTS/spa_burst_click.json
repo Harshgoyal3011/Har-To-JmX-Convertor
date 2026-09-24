@@ -10,24 +10,24 @@
  "conversion": "PASS",
  "crash": "",
  "stage": "",
- "conversion_time": 0.01,
+ "conversion_time": 0.006,
  "samplers": 10,
  "transactions": 2,
  "kept_requests": 7,
  "excluded_requests": 0,
  "assertions": 2,
- "correlations": 1,
- "correlations_verified": 1,
+ "correlations": 2,
+ "correlations_verified": 2,
  "correlation_vars": [
+  "ward",
   "adviceId"
  ],
  "csv_columns": [
-  "ward",
   "patientId"
  ],
- "csv_column_count": 2,
+ "csv_column_count": 1,
  "review_items": 0,
- "unknown_values": 9,
+ "unknown_values": 30,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -40,5 +40,5 @@
   "POST https://his.example.com/api/admission/acknowledgeAdmissionAdvice"
  ],
  "excluded_hosts": [],
- "jmx_bytes": 20216
+ "jmx_bytes": 20769
 }

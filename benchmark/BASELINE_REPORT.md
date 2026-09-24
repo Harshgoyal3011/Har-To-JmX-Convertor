@@ -1,5 +1,11 @@
 # HAR → JMeter Converter — Real-World Black-Box Baseline
 
+> **STATUS — superseded in part (2026-09-24).** The correlation defects below were subsequently fixed.
+> Correlation recall on this benchmark moved **0/6 → 4/6** (0.80 excluding the one value below the
+> documented short-value floor), precision 1.0, **0 false correlations**, synthetic correlations
+> 94 → 96 (nothing lost), suite 527 passed. See `REMEDIATION.md`. The measurements in this report are
+> the untouched BASELINE and are kept as the before-picture.
+
 **Date:** 2026-09-24 **Tool version:** committed `main` baseline, worktree `feat/param-priority-urls`
 **Rule observed:** the converter was **not modified** during this baseline (Phase 9).
 

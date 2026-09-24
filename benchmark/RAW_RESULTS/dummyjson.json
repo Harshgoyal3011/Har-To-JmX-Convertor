@@ -10,7 +10,7 @@
  "conversion": "PASS",
  "crash": "",
  "stage": "",
- "conversion_time": 0.016,
+ "conversion_time": 0.014,
  "samplers": 9,
  "transactions": 4,
  "kept_requests": 6,
@@ -29,7 +29,7 @@
  ],
  "csv_column_count": 3,
  "review_items": 0,
- "unknown_values": 6,
+ "unknown_values": 20,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
