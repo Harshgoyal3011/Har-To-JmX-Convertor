@@ -12,7 +12,7 @@
   "recall_excl_policy_and_threshold": 0.708,
   "precision": 1.0,
   "verified_extractor_rate": 1.0,
-  "materialization_rate": 0.941
+  "materialization_rate": 1.0
  },
  "by_shape": {
   " 1 JSON -> URL path": {

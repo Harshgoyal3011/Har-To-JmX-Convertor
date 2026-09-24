@@ -14,6 +14,7 @@ from __future__ import annotations
 import csv as _csv
 import json as _json
 import re as _re
+from urllib.parse import unquote as _unquote, unquote_plus as _unquote_plus
 from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -152,8 +153,31 @@ def _build_sub_map(result: EngineResult) -> dict[str, str]:
     return sub
 
 
+def _sub_lookup(text: Any, sub: dict[str, str]) -> str | None:
+    """Resolve ONE consumer slot's representation to its variable, or None.
+
+    Discovery compares values after URL-decoding, so a consumer may legitimately carry the same logical
+    value in a DIFFERENT representation from the producer ("S13 7JT" returned, "S13%207JT" sent). Matching
+    only the raw producer literal leaves that consumer hardcoded: the correlation is discovered, classified
+    and verified, yet never materialises in the JMX — a correlation that exists only in the report.
+
+    Normalization here is deliberately narrow and one-way: the exact text wins first, and a decoded form is
+    considered only when the text actually looks percent/plus-encoded. It never rewrites a slot whose
+    decoded form differs from what was matched, so unrelated values cannot be touched.
+    """
+    s = str(text)
+    if s in sub:
+        return sub[s]
+    if "%" in s or "+" in s:
+        for dec in (_unquote(s), _unquote_plus(s)):
+            if dec != s and dec in sub:
+                return sub[dec]
+    return None
+
+
 def _apply(value: Any, sub: dict[str, str]) -> str:
-    return sub.get(str(value), str(value))
+    hit = _sub_lookup(value, sub)
+    return hit if hit is not None else str(value)
 
 
 _SCHEME_RE = _re.compile(r"^(\s*\S+\s+)(\S.*)$")
@@ -162,11 +186,14 @@ _SCHEME_RE = _re.compile(r"^(\s*\S+\s+)(\S.*)$")
 def _apply_header(value: str, sub: dict[str, str]) -> str:
     """Whole-value substitution, plus scheme-prefixed credentials (e.g. 'Bearer <token>')."""
     s = str(value)
-    if s in sub:
-        return sub[s]
+    hit = _sub_lookup(s, sub)
+    if hit is not None:
+        return hit
     m = _SCHEME_RE.match(s)
-    if m and m.group(2).strip() in sub:
-        return m.group(1) + sub[m.group(2).strip()]
+    if m:
+        inner = _sub_lookup(m.group(2).strip(), sub)
+        if inner is not None:
+            return m.group(1) + inner
     return s
 
 
@@ -178,8 +205,8 @@ def _sub_json(obj: Any, sub: dict[str, str]) -> Any:
     if isinstance(obj, bool) or obj is None:
         return obj
     if isinstance(obj, (str, int, float)):
-        s = str(obj)
-        return sub[s] if s in sub else obj
+        hit = _sub_lookup(obj, sub)
+        return hit if hit is not None else obj
     return obj
 
 

@@ -31,6 +31,13 @@ def validate_plan(result: EngineResult, xml: str | bytes) -> list[str]:
         issues.append(f"malformed XML: {e}")
         return issues  # nothing else is meaningful if the XML is broken
 
+    # A correlation only counts when the emitted plan proves it: the extractor sits on the producer
+    # sampler, a consumer references ${var}, and no consumer still sends the original value in ANY
+    # representation. Anything else is a correlation that exists only in an intermediate report.
+    from har2jmx.validate import MaterializationStatus, audit_materialization
+    issues.extend(c.diagnostic() for c in audit_materialization(result, x)
+                  if c.status == MaterializationStatus.FAILED)
+
     # A think-time pause is emitted only BETWEEN consecutive transactions, so a UniformRandomTimer
     # exists only when the plan has at least two business transactions. A single-transaction plan
     # legitimately has no between-transaction pause — do not require the timer there.
