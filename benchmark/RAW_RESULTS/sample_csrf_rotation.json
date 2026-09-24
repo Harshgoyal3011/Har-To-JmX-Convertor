@@ -1,0 +1,41 @@
+{
+ "har": "sample_csrf_rotation.har",
+ "path": "tests\\fixtures\\sample_csrf_rotation.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "sample_csrf_rotation",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.008,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "csrf",
+  "csrf2"
+ ],
+ "csv_columns": [
+  "name",
+  "city"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://shop.example.com/form",
+  "POST https://shop.example.com/step1",
+  "POST https://shop.example.com/step2"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 19296
+}

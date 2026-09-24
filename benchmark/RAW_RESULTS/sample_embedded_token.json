@@ -1,0 +1,39 @@
+{
+ "har": "sample_embedded_token.har",
+ "path": "tests\\fixtures\\sample_embedded_token.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "sample_embedded_token",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "cookie"
+ ],
+ "csv_columns": [
+  "username"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.example.com/login",
+  "POST https://api.example.com/check",
+  "POST https://api.example.com/addtocart"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 17759
+}

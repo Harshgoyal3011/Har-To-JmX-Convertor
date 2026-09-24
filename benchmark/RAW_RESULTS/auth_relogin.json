@@ -1,0 +1,37 @@
+{
+ "har": "auth_relogin.har",
+ "path": "tests\\fixtures\\auth_relogin.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "auth_relogin",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "username"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://app.example.com/account/login",
+  "POST https://app.example.com/account/logout",
+  "POST https://app.example.com/account/login"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 18325
+}

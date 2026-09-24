@@ -1,0 +1,36 @@
+{
+ "har": "library_openlibrary.har",
+ "path": "examples\\library_openlibrary.har",
+ "bucket": "REAL_API",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "library_openlibrary",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 3,
+ "transactions": 2,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "q"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://openlibrary.org/search.json?q=performance+engineering&limit=3",
+  "GET https://openlibrary.org/works/OL45883W.json"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 13272
+}

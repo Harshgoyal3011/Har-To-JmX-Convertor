@@ -1,0 +1,48 @@
+{
+ "har": "complex_upload.har",
+ "path": "examples\\complex_upload.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 4,
+ "har_hosts": 1,
+ "application": "complex_upload",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.009,
+ "samplers": 6,
+ "transactions": 4,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 4,
+ "correlations": 3,
+ "correlations_verified": 3,
+ "correlation_vars": [
+  "accessToken",
+  "claimId",
+  "documentId"
+ ],
+ "csv_columns": [
+  "amount",
+  "lossType",
+  "policyNumber",
+  "documentType",
+  "password",
+  "description",
+  "username"
+ ],
+ "csv_column_count": 7,
+ "review_items": 0,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://claims.example.com/api/login",
+  "POST https://claims.example.com/api/claims",
+  "POST https://claims.example.com/api/claims/CLM-900123/documents",
+  "GET https://claims.example.com/api/claims/CLM-900123/documents/DOC-4455"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 24202
+}

@@ -1,0 +1,47 @@
+{
+ "har": "sample_catalog.har",
+ "path": "tests\\fixtures\\sample_catalog.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "sample_catalog",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.007,
+ "samplers": 9,
+ "transactions": 6,
+ "kept_requests": 6,
+ "excluded_requests": 0,
+ "assertions": 6,
+ "correlations": 3,
+ "correlations_verified": 3,
+ "correlation_vars": [
+  "nextPageToken",
+  "ETag",
+  "appointmentId"
+ ],
+ "csv_columns": [
+  "patientId",
+  "doctorId",
+  "slot",
+  "phone"
+ ],
+ "csv_column_count": 4,
+ "review_items": 0,
+ "unknown_values": 2,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://his.example.com/api/patients?limit=2",
+  "GET https://his.example.com/api/patients?limit=2&pageToken=CURSOR-eyJvZmZzZXQiOjJ9",
+  "GET https://his.example.com/api/patients/PAT-9001",
+  "PUT https://his.example.com/api/patients/PAT-9001",
+  "POST https://his.example.com/api/appointments",
+  "GET https://his.example.com/api/appointments/APPT-7788"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 28933
+}

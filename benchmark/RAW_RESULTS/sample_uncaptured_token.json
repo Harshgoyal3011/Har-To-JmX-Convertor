@@ -1,0 +1,38 @@
+{
+ "har": "sample_uncaptured_token.har",
+ "path": "tests\\fixtures\\sample_uncaptured_token.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "sample_uncaptured_token",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "password",
+  "username"
+ ],
+ "csv_column_count": 2,
+ "review_items": 1,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.shop.example.com/login",
+  "POST https://api.shop.example.com/check",
+  "POST https://api.shop.example.com/addtocart"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 17237
+}

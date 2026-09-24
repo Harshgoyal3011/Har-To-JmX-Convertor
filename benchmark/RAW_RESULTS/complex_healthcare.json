@@ -1,0 +1,52 @@
+{
+ "har": "complex_healthcare.har",
+ "path": "examples\\complex_healthcare.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 8,
+ "har_hosts": 1,
+ "application": "complex_healthcare",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.008,
+ "samplers": 12,
+ "transactions": 8,
+ "kept_requests": 8,
+ "excluded_requests": 0,
+ "assertions": 8,
+ "correlations": 3,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "AHSSESSION",
+  "accessToken",
+  "appointmentId"
+ ],
+ "csv_columns": [
+  "doctorId",
+  "patientId",
+  "slotId",
+  "password",
+  "username",
+  "reason",
+  "date"
+ ],
+ "csv_column_count": 7,
+ "review_items": 0,
+ "unknown_values": 12,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://his.example.com/portal",
+  "POST https://his.example.com/api/auth/login",
+  "GET https://his.example.com/api/doctors?specialty=cardiology",
+  "GET https://his.example.com/api/doctors/DOC-4451/slots?date=2026-02-10",
+  "GET https://his.example.com/api/patients/search?mrn=88213",
+  "POST https://his.example.com/api/appointments",
+  "POST https://his.example.com/api/appointments/APPT-556012/confirm",
+  "GET https://his.example.com/api/appointments/APPT-556012"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 36624
+}

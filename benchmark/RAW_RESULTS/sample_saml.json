@@ -1,0 +1,45 @@
+{
+ "har": "sample_saml.har",
+ "path": "tests\\fixtures\\sample_saml.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 5,
+ "har_hosts": 2,
+ "application": "sample_saml",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.01,
+ "samplers": 7,
+ "transactions": 2,
+ "kept_requests": 5,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 4,
+ "correlations_verified": 3,
+ "correlation_vars": [
+  "RelayState",
+  "SAMLRequest",
+  "SAMLResponse",
+  "SPSESSION"
+ ],
+ "csv_columns": [
+  "password",
+  "username"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 2,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://sp.example.com/app",
+  "GET https://idp.example.com/sso?SAMLRequest=fZFRa8IwFIX%2FSsl7m6TVaYMtDGEgOB%2Bmex9pcqcBmtTctPv7dXNj7GHP53znch5uhTr0Y7EY%2FTG8w2UEP4mvvnc4nZuygj56g51x&RelayState=rs-token-88213abc9d",
+  "POST https://idp.example.com/login",
+  "POST https://sp.example.com/acs",
+  "GET https://sp.example.com/dashboard"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 21769
+}

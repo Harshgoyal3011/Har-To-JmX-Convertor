@@ -1,0 +1,36 @@
+{
+ "har": "sample_params.har",
+ "path": "tests\\fixtures\\sample_params.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 1,
+ "har_hosts": 1,
+ "application": "sample_params",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 1,
+ "transactions": 1,
+ "kept_requests": 1,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "email",
+  "password"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 1,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://app.example.com/api/login"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 9977
+}

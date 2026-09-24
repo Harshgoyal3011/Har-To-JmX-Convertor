@@ -1,0 +1,39 @@
+{
+ "har": "content_jsonplaceholder.har",
+ "path": "examples\\content_jsonplaceholder.har",
+ "bucket": "REAL_API",
+ "har_requests": 4,
+ "har_hosts": 1,
+ "application": "content_jsonplaceholder",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.006,
+ "samplers": 6,
+ "transactions": 4,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 4,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "title",
+  "body"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 2,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://jsonplaceholder.typicode.com/posts?userId=1",
+  "GET https://jsonplaceholder.typicode.com/posts/1",
+  "POST https://jsonplaceholder.typicode.com/posts",
+  "GET https://jsonplaceholder.typicode.com/posts/1/comments"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 19075
+}

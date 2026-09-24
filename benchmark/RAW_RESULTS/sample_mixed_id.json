@@ -1,0 +1,37 @@
+{
+ "har": "sample_mixed_id.har",
+ "path": "tests\\fixtures\\sample_mixed_id.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "sample_mixed_id",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 2,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "title",
+  "body"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 1,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://blog.example.com/api/posts/1",
+  "POST https://blog.example.com/api/posts"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 13160
+}

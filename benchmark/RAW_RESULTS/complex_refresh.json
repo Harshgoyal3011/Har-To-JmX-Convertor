@@ -1,0 +1,46 @@
+{
+ "har": "complex_refresh.har",
+ "path": "examples\\complex_refresh.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "complex_refresh",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.006,
+ "samplers": 7,
+ "transactions": 4,
+ "kept_requests": 5,
+ "excluded_requests": 1,
+ "assertions": 4,
+ "correlations": 3,
+ "correlations_verified": 3,
+ "correlation_vars": [
+  "access_token",
+  "refresh_token",
+  "access_token2"
+ ],
+ "csv_columns": [
+  "password",
+  "username"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 9,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.example.com/auth/login",
+  "GET https://api.example.com/api/profile",
+  "POST https://api.example.com/oauth/token",
+  "GET https://api.example.com/api/orders",
+  "GET https://api.example.com/api/settings"
+ ],
+ "excluded_hosts": [
+  "api.example.com"
+ ],
+ "jmx_bytes": 23903
+}

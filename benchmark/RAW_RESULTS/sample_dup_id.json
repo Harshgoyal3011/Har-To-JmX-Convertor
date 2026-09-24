@@ -1,0 +1,39 @@
+{
+ "har": "sample_dup_id.har",
+ "path": "tests\\fixtures\\sample_dup_id.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 4,
+ "har_hosts": 1,
+ "application": "sample_dup_id",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 6,
+ "transactions": 4,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 4,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "orderId",
+  "shipmentId"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 2,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://x.example.com/api/orders",
+  "POST https://x.example.com/api/shipments",
+  "GET https://x.example.com/api/orders/ORD-111",
+  "GET https://x.example.com/api/shipments/SHP-999"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 19603
+}

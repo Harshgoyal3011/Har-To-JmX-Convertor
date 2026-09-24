@@ -1,0 +1,41 @@
+{
+ "har": "retail_fakestore.har",
+ "path": "examples\\retail_fakestore.har",
+ "bucket": "REAL_API",
+ "har_requests": 5,
+ "har_hosts": 1,
+ "application": "retail_fakestore",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.01,
+ "samplers": 7,
+ "transactions": 4,
+ "kept_requests": 5,
+ "excluded_requests": 0,
+ "assertions": 4,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "password",
+  "username",
+  "date"
+ ],
+ "csv_column_count": 3,
+ "review_items": 0,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://fakestoreapi.com/auth/login",
+  "GET https://fakestoreapi.com/products?limit=5",
+  "GET https://fakestoreapi.com/products/1",
+  "POST https://fakestoreapi.com/carts",
+  "GET https://fakestoreapi.com/carts/1"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 21676
+}

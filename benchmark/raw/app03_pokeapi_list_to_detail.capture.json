@@ -1,0 +1,27 @@
+{
+ "meta": {
+  "app": "PokeAPI",
+  "domain": "Media / gaming catalogue",
+  "flow": "list resources -> open resource by returned URL",
+  "source": "https://pokeapi.co (public, no login) - captured live from the public API via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "API-only journey; no browser UI noise. Bodies verbatim as returned."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://pokeapi.co/api/v2/pokemon?limit=2&offset=0",
+   "st": 313,
+   "d": 497,
+   "status": 200,
+   "b": "{\"count\": 1351, \"next\": \"https://pokeapi.co/api/v2/pokemon?offset=2&limit=2\", \"previous\": null, \"results\": [{\"name\": \"bulbasaur\", \"url\": \"https://pokeapi.co/api/v2/pokemon/1/\"}, {\"name\": \"ivysaur\", \"url\": \"https://pokeapi.co/api/v2/pokemon/2/\"}]}"
+  },
+  {
+   "u": "https://pokeapi.co/api/v2/pokemon/1/",
+   "st": 810,
+   "d": 1291,
+   "status": 200,
+   "b": "{\"id\": 1, \"name\": \"bulbasaur\", \"base_experience\": 64, \"height\": 7, \"is_default\": true, \"order\": 1, \"weight\": 69}"
+  }
+ ]
+}

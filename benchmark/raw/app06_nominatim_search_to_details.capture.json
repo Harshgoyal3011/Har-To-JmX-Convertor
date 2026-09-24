@@ -1,0 +1,27 @@
+{
+ "meta": {
+  "app": "Nominatim (OpenStreetMap)",
+  "domain": "Geo / logistics",
+  "flow": "search place -> open place details by returned place_id",
+  "source": "https://nominatim.openstreetmap.org (public, no login) - captured live from the public API via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "API-only journey; no browser UI noise. Bodies verbatim as returned."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://nominatim.openstreetmap.org/search?q=Dublin&format=json&limit=1",
+   "st": 4606,
+   "d": 42,
+   "status": 200,
+   "b": "[{\"place_id\": 275905280, \"osm_type\": \"relation\", \"osm_id\": 1109531, \"lat\": \"53.3493795\", \"lon\": \"-6.2605593\", \"class\": \"boundary\", \"type\": \"administrative\", \"place_rank\": 14, \"name\": \"Dublin\", \"display_name\": \"Dublin, County Dublin, Leinster, Ireland\"}]"
+  },
+  {
+   "u": "https://nominatim.openstreetmap.org/details?place_id=275905280&format=json&addressdetails=0",
+   "st": 4648,
+   "d": 490,
+   "status": 200,
+   "b": "{\"place_id\": 275905280, \"parent_place_id\": 276481818, \"osm_type\": \"N\", \"osm_id\": 4031270667, \"category\": \"building\", \"type\": \"yes\", \"localname\": \"Maes yr Allt\", \"country_code\": \"gb\", \"rank_address\": 30}"
+  }
+ ]
+}

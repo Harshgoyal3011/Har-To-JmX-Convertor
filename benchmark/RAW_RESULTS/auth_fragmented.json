@@ -1,0 +1,40 @@
+{
+ "har": "auth_fragmented.har",
+ "path": "tests\\fixtures\\auth_fragmented.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "auth_fragmented",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 9,
+ "transactions": 1,
+ "kept_requests": 6,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "username"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 6,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://id.example.com/connect/authorize?client_id=web&response_type=code",
+  "GET https://id.example.com/connect/authorize?client_id=web&prompt=none",
+  "GET https://id.example.com/account/login?returnUrl=/",
+  "POST https://id.example.com/account/login",
+  "GET https://id.example.com/account/login?returnUrl=/app",
+  "POST https://id.example.com/connect/token"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 20412
+}

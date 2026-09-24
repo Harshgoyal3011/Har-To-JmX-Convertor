@@ -1,0 +1,39 @@
+{
+ "har": "sample_csrf.har",
+ "path": "tests\\fixtures\\sample_csrf.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "sample_csrf",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "RequestVerificationToken"
+ ],
+ "csv_columns": [
+  "Password",
+  "Username"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 2,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://webapp.example.com/account/login",
+  "POST https://webapp.example.com/account/login"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 13446
+}

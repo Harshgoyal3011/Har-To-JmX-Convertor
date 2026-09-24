@@ -1,0 +1,27 @@
+{
+ "meta": {
+  "app": "OpenFoodFacts",
+  "domain": "Retail / food",
+  "flow": "search products by category -> open product by returned code",
+  "source": "https://world.openfoodfacts.org (public, no login) - captured live from the public API via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "API-only journey; no browser UI noise. Bodies verbatim as returned."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://world.openfoodfacts.org/api/v2/search?categories_tags_en=Breakfast%20cereals&fields=code,product_name&page_size=2",
+   "st": 2478,
+   "d": 1119,
+   "status": 200,
+   "b": "{\"count\": 27303, \"page\": 1, \"page_count\": 2, \"page_size\": 2, \"skip\": 0, \"products\": [{\"code\": \"3168930010265\", \"product_name\": \"cruesly melange de noix\"}, {\"code\": \"3229820160672\", \"product_name\": \"Croustillant Chocolat\"}]}"
+  },
+  {
+   "u": "https://world.openfoodfacts.org/api/v2/product/3168930010265?fields=code,product_name,brands",
+   "st": 3597,
+   "d": 174,
+   "status": 200,
+   "b": "{\"code\": \"3168930010265\", \"status\": 1, \"status_verbose\": \"product found\", \"product\": {\"brands\": \"PEPSICO FRANCE, Quaker\", \"code\": \"3168930010265\", \"product_name\": \"cruesly melange de noix\"}}"
+  }
+ ]
+}

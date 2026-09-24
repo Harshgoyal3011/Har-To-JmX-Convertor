@@ -1,0 +1,186 @@
+{
+ "summary": {
+  "applications_scored": 6,
+  "expected_correlations": 6,
+  "detected_correlations": 0,
+  "missed_correlations": 6,
+  "missed_below_documented_threshold": 1,
+  "false_correlations": 0,
+  "correlation_recall": 0.0,
+  "correlation_recall_excluding_below_threshold": 0.0,
+  "correlation_precision": null,
+  "unnecessary_csv_columns": 7,
+  "missed_parameters": 2,
+  "dependent_values_miscast_as_parameters": 3
+ },
+ "rows": [
+  {
+   "har": "app01_openlibrary_search_to_work",
+   "application": "OpenLibrary",
+   "domain": "Library / public catalogue",
+   "expected_correlations": 1,
+   "detected_correlations": 0,
+   "missed_correlations": 1,
+   "missed_below_threshold": 0,
+   "false_correlations": 0,
+   "false_correlation_values": [],
+   "miscast_as_parameter": [],
+   "recall": 0.0,
+   "precision": null,
+   "expected_parameters": [
+    "q"
+   ],
+   "detected_csv_columns": [
+    "action_name",
+    "donation_identifier",
+    "pv_id",
+    "q"
+   ],
+   "missed_parameters": [],
+   "unnecessary_parameters": [
+    "action_name",
+    "donation_identifier",
+    "pv_id"
+   ],
+   "shapes_missed": [
+    "path-style resource key returned in JSON, reused as URL path + extension"
+   ]
+  },
+  {
+   "har": "app02_wikipedia_search_to_article",
+   "application": "Wikipedia",
+   "domain": "Knowledge / media",
+   "expected_correlations": 1,
+   "detected_correlations": 0,
+   "missed_correlations": 1,
+   "missed_below_threshold": 0,
+   "false_correlations": 0,
+   "false_correlation_values": [],
+   "miscast_as_parameter": [
+    "6615610"
+   ],
+   "recall": 0.0,
+   "precision": null,
+   "expected_parameters": [
+    "srsearch"
+   ],
+   "detected_csv_columns": [
+    "pageid",
+    "srsearch"
+   ],
+   "missed_parameters": [],
+   "unnecessary_parameters": [
+    "pageid"
+   ],
+   "shapes_missed": [
+    "numeric id returned in JSON, reused as a query parameter"
+   ]
+  },
+  {
+   "har": "app03_pokeapi_list_to_detail",
+   "application": "PokeAPI",
+   "domain": "Media / gaming catalogue",
+   "expected_correlations": 1,
+   "detected_correlations": 0,
+   "missed_correlations": 1,
+   "missed_below_threshold": 0,
+   "false_correlations": 0,
+   "false_correlation_values": [],
+   "miscast_as_parameter": [],
+   "recall": 0.0,
+   "precision": null,
+   "expected_parameters": [],
+   "detected_csv_columns": [],
+   "missed_parameters": [],
+   "unnecessary_parameters": [],
+   "shapes_missed": [
+    "ABSOLUTE URL returned in JSON, reused verbatim as the next request URL"
+   ]
+  },
+  {
+   "har": "app04_openfoodfacts_search_to_product",
+   "application": "OpenFoodFacts",
+   "domain": "Retail / food",
+   "expected_correlations": 1,
+   "detected_correlations": 0,
+   "missed_correlations": 1,
+   "missed_below_threshold": 0,
+   "false_correlations": 0,
+   "false_correlation_values": [],
+   "miscast_as_parameter": [
+    "3168930010265"
+   ],
+   "recall": 0.0,
+   "precision": null,
+   "expected_parameters": [
+    "categories_tags_en"
+   ],
+   "detected_csv_columns": [
+    "code"
+   ],
+   "missed_parameters": [
+    "categories_tags_en"
+   ],
+   "unnecessary_parameters": [
+    "code"
+   ],
+   "shapes_missed": [
+    "string id returned in JSON, reused as a URL path segment"
+   ]
+  },
+  {
+   "har": "app05_reqres_list_to_user",
+   "application": "reqres.in",
+   "domain": "SaaS / demo REST service",
+   "expected_correlations": 1,
+   "detected_correlations": 0,
+   "missed_correlations": 1,
+   "missed_below_threshold": 1,
+   "false_correlations": 0,
+   "false_correlation_values": [],
+   "miscast_as_parameter": [],
+   "recall": 0.0,
+   "precision": null,
+   "expected_parameters": [],
+   "detected_csv_columns": [],
+   "missed_parameters": [],
+   "unnecessary_parameters": [],
+   "shapes_missed": [
+    "SMALL numeric id reused as a URL path segment"
+   ]
+  },
+  {
+   "har": "app06_nominatim_search_to_details",
+   "application": "Nominatim (OpenStreetMap)",
+   "domain": "Geo / logistics",
+   "expected_correlations": 1,
+   "detected_correlations": 0,
+   "missed_correlations": 1,
+   "missed_below_threshold": 0,
+   "false_correlations": 0,
+   "false_correlation_values": [],
+   "miscast_as_parameter": [
+    "275905280"
+   ],
+   "recall": 0.0,
+   "precision": null,
+   "expected_parameters": [
+    "q"
+   ],
+   "detected_csv_columns": [
+    "name",
+    "place_id"
+   ],
+   "missed_parameters": [
+    "q"
+   ],
+   "unnecessary_parameters": [
+    "name",
+    "place_id"
+   ],
+   "shapes_missed": [
+    "numeric id returned in a JSON ARRAY root, reused as a query parameter"
+   ]
+  }
+ ]
+}

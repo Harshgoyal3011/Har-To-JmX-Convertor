@@ -1,0 +1,43 @@
+{
+ "har": "sample_logout.har",
+ "path": "tests\\fixtures\\sample_logout.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 5,
+ "har_hosts": 1,
+ "application": "sample_logout",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.007,
+ "samplers": 7,
+ "transactions": 5,
+ "kept_requests": 5,
+ "excluded_requests": 0,
+ "assertions": 5,
+ "correlations": 2,
+ "correlations_verified": 0,
+ "correlation_vars": [
+  "SID",
+  "SID2"
+ ],
+ "csv_columns": [
+  "password",
+  "username"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://app.example.com/login",
+  "GET https://app.example.com/dashboard",
+  "POST https://app.example.com/logout",
+  "POST https://app.example.com/login",
+  "GET https://app.example.com/dashboard"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 21608
+}

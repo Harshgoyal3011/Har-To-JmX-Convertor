@@ -1,0 +1,27 @@
+{
+ "meta": {
+  "app": "reqres.in",
+  "domain": "SaaS / demo REST service",
+  "flow": "list users -> open user by returned id",
+  "source": "https://reqres.in (public demo API, no login) - captured live from the public API via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "API-only journey; no browser UI noise. NOTE: the dependent id is the single digit 3, below the converter's documented minimum correlatable length."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://reqres.in/api/users?page=2&per_page=2",
+   "st": 3772,
+   "d": 459,
+   "status": 200,
+   "b": "{\"page\": 2, \"per_page\": 2, \"total\": 12, \"total_pages\": 6, \"data\": [{\"id\": 3, \"email\": \"emma.wong@reqres.in\", \"first_name\": \"Emma\", \"last_name\": \"Wong\", \"avatar\": \"https://reqres.in/img/faces/3-image.jpg\"}, {\"id\": 4, \"email\": \"eve.holt@reqres.in\", \"first_name\": \"Eve\", \"last_name\": \"Holt\", \"avatar\": \"https://reqres.in/img/faces/4-image.jpg\"}]}"
+  },
+  {
+   "u": "https://reqres.in/api/users/3",
+   "st": 4230,
+   "d": 376,
+   "status": 200,
+   "b": "{\"data\": {\"id\": 3, \"email\": \"emma.wong@reqres.in\", \"first_name\": \"Emma\", \"last_name\": \"Wong\", \"avatar\": \"https://reqres.in/img/faces/3-image.jpg\"}}"
+  }
+ ]
+}

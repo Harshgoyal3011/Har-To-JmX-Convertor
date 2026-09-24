@@ -1,0 +1,38 @@
+{
+ "har": "sample_config_fields.har",
+ "path": "tests\\fixtures\\sample_config_fields.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 1,
+ "har_hosts": 1,
+ "application": "sample_config_fields",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 1,
+ "transactions": 1,
+ "kept_requests": 1,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "firstName",
+  "customerId",
+  "keyword",
+  "cat"
+ ],
+ "csv_column_count": 4,
+ "review_items": 0,
+ "unknown_values": 1,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://app.ex.com/api/list"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10124
+}

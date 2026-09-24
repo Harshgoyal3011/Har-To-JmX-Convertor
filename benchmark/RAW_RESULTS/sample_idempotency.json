@@ -1,0 +1,35 @@
+{
+ "har": "sample_idempotency.har",
+ "path": "tests\\fixtures\\sample_idempotency.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 1,
+ "har_hosts": 1,
+ "application": "sample_idempotency",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.002,
+ "samplers": 1,
+ "transactions": 1,
+ "kept_requests": 1,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "amount"
+ ],
+ "csv_column_count": 1,
+ "review_items": 1,
+ "unknown_values": 2,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://pay.example.com/api/charges"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10337
+}

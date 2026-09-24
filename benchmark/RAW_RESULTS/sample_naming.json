@@ -1,0 +1,43 @@
+{
+ "har": "sample_naming.har",
+ "path": "tests\\fixtures\\sample_naming.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "sample_naming",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.006,
+ "samplers": 9,
+ "transactions": 6,
+ "kept_requests": 6,
+ "excluded_requests": 0,
+ "assertions": 6,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "orderId"
+ ],
+ "csv_columns": [
+  "note",
+  "productId"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://shop.example.com/api/catalog",
+  "GET https://shop.example.com/api/products/SKU-88231-ALPHA",
+  "POST https://shop.example.com/api/cart",
+  "POST https://shop.example.com/api/orders",
+  "GET https://shop.example.com/api/orders/ORD-5501-2026",
+  "PUT https://shop.example.com/api/orders/ORD-5501-2026"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 28049
+}

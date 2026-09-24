@@ -1,0 +1,48 @@
+{
+ "har": "genai_assistant.har",
+ "path": "examples\\genai_assistant.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "genai_assistant",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.007,
+ "samplers": 9,
+ "transactions": 6,
+ "kept_requests": 6,
+ "excluded_requests": 0,
+ "assertions": 6,
+ "correlations": 3,
+ "correlations_verified": 3,
+ "correlation_vars": [
+  "access_token",
+  "conversationId",
+  "messageId"
+ ],
+ "csv_columns": [
+  "title",
+  "model",
+  "password",
+  "email",
+  "content"
+ ],
+ "csv_column_count": 5,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.assistant.example.com/v1/auth/login",
+  "POST https://api.assistant.example.com/v1/conversations",
+  "POST https://api.assistant.example.com/v1/conversations/conv_7h3k9m2p/messages",
+  "GET https://api.assistant.example.com/v1/conversations/conv_7h3k9m2p/messages/msg_a1b2c3d4/completion",
+  "POST https://api.assistant.example.com/v1/conversations/conv_7h3k9m2p/messages/msg_a1b2c3d4/feedback",
+  "GET https://api.assistant.example.com/v1/conversations?limit=20"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 31610
+}

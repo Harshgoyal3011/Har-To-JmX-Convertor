@@ -1,0 +1,44 @@
+{
+ "har": "ecommerce_platzi.har",
+ "path": "examples\\ecommerce_platzi.har",
+ "bucket": "REAL_API",
+ "har_requests": 5,
+ "har_hosts": 1,
+ "application": "ecommerce_platzi",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.014,
+ "samplers": 7,
+ "transactions": 4,
+ "kept_requests": 5,
+ "excluded_requests": 0,
+ "assertions": 4,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "access_token"
+ ],
+ "csv_columns": [
+  "password",
+  "email",
+  "title",
+  "description"
+ ],
+ "csv_column_count": 4,
+ "review_items": 0,
+ "unknown_values": 5,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.escuelajs.co/api/v1/auth/login",
+  "GET https://api.escuelajs.co/api/v1/auth/profile",
+  "GET https://api.escuelajs.co/api/v1/products?offset=0&limit=3",
+  "POST https://api.escuelajs.co/api/v1/products",
+  "GET https://api.escuelajs.co/api/v1/products/1"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 23404
+}

@@ -1,0 +1,38 @@
+{
+ "har": "petretail_petstore.har",
+ "path": "examples\\petretail_petstore.har",
+ "bucket": "REAL_API",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "petretail_petstore",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "petId",
+  "status"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://petstore3.swagger.io/api/v3/store/order",
+  "GET https://petstore3.swagger.io/api/v3/store/order/10",
+  "GET https://petstore3.swagger.io/api/v3/pet/findByStatus?status=available"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 16503
+}

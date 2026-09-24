@@ -1,0 +1,50 @@
+{
+ "har": "app01_openlibrary_search_to_work.har",
+ "path": "benchmark\\normalized\\app01_openlibrary_search_to_work.har",
+ "bucket": "REAL_CAPTURE",
+ "har_requests": 51,
+ "har_hosts": 6,
+ "application": "OpenLibrary",
+ "domain": "Library / public catalogue",
+ "flow": "search books -> open work -> list editions",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.02,
+ "samplers": 10,
+ "transactions": 4,
+ "kept_requests": 7,
+ "excluded_requests": 44,
+ "assertions": 4,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "q",
+  "donation_identifier",
+  "action_name",
+  "pv_id"
+ ],
+ "csv_column_count": 4,
+ "review_items": 0,
+ "unknown_values": 17,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://openlibrary.org/search?q=performance+engineering",
+  "GET https://archive.org/includes/donate.php?as_page=1&referer=https%3A%2F%2Fopenlibrary.org%2Fsearch%3Fq%3Dperformance%2Bengineering&platform=ol&donation-identifier=MC44MDg0NjEzODIyMDk3MzUy",
+  "GET https://apollo.archive.org/matomo.php?action_name=search%20%7C%20Open%20Library&idsite=6&rec=1&r=797011&h=9&m=34&s=9&url=https%3A%2F%2Fopenlibrary.org%2Fsearch%3Fq%3Dperformance%2Bengineering&_id=&_idn=1&send_image=0&_refts=0&dimension1=visitor&pv_id=x2WytV&pf_net=537&pf_srv=3105&pf_tfr=11&pf_dm1=1955&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=0x0",
+  "GET https://openlibrary.org/partials/MyBooksDropperLists.json",
+  "GET https://openlibrary.org/search.json?q=performance+engineering&limit=3&fields=key,title,author_name",
+  "GET https://openlibrary.org/works/OL1904498W.json",
+  "GET https://openlibrary.org/works/OL1904498W/editions.json?limit=2"
+ ],
+ "excluded_hosts": [
+  "apollo.archive.org",
+  "athena.archive.org",
+  "covers.openlibrary.org",
+  "openlibrary.org",
+  "sink.archive.org"
+ ],
+ "jmx_bytes": 37350
+}

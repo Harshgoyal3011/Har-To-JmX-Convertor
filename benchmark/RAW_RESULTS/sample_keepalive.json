@@ -1,0 +1,38 @@
+{
+ "har": "sample_keepalive.har",
+ "path": "tests\\fixtures\\sample_keepalive.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 4,
+ "har_hosts": 1,
+ "application": "sample_keepalive",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 6,
+ "transactions": 2,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "cat"
+ ],
+ "csv_column_count": 1,
+ "review_items": 1,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://shop.example.com/check",
+  "POST https://shop.example.com/bycat",
+  "POST https://shop.example.com/check",
+  "POST https://shop.example.com/viewcart"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 17420
+}

@@ -1,0 +1,367 @@
+{
+ "doc": "https://openlibrary.org/search?q=performance+engineering",
+ "rows": [
+  {
+   "t": "navigation",
+   "st": 0,
+   "d": 9997,
+   "s": 19567,
+   "u": "https://openlibrary.org/search?q=performance+engineering"
+  },
+  {
+   "t": "link",
+   "st": 3665,
+   "d": 285,
+   "s": 4325,
+   "u": "https://openlibrary.org/static/build/css/tokens.css?v=eea388d7418c955de621fe0afbfd7484"
+  },
+  {
+   "t": "link",
+   "st": 3666,
+   "d": 285,
+   "s": 2678,
+   "u": "https://openlibrary.org/static/build/css/ol-components.css?v=534d6babd1fa6d19ba017b8c253a99bb"
+  },
+  {
+   "t": "link",
+   "st": 3666,
+   "d": 544,
+   "s": 41642,
+   "u": "https://openlibrary.org/static/build/css/page-user.css?v=3b2f71f4a3ba0325ee22f161066bc5ca"
+  },
+  {
+   "t": "script",
+   "st": 3666,
+   "d": 856,
+   "s": 11999,
+   "u": "https://openlibrary.org/cdn/archive.org/donate.js"
+  },
+  {
+   "t": "img",
+   "st": 3666,
+   "d": 1233,
+   "s": 9721,
+   "u": "https://openlibrary.org/static/images/ia-logo.svg?v=a01876b378eb260334ee915282df715b"
+  },
+  {
+   "t": "img",
+   "st": 3666,
+   "d": 2226,
+   "s": 7983,
+   "u": "https://openlibrary.org/static/images/openlibrary-logo-tighter.svg"
+  },
+  {
+   "t": "img",
+   "st": 3666,
+   "d": 1941,
+   "s": 0,
+   "u": "https://covers.openlibrary.org/b/id/1878858-M.jpg"
+  },
+  {
+   "t": "img",
+   "st": 3666,
+   "d": 1945,
+   "s": 0,
+   "u": "https://covers.openlibrary.org/b/id/55146-M.jpg"
+  },
+  {
+   "t": "img",
+   "st": 3666,
+   "d": 2226,
+   "s": 457,
+   "u": "https://openlibrary.org/static/images/icons/avatar_book-sm.png"
+  },
+  {
+   "t": "img",
+   "st": 3666,
+   "d": 3432,
+   "s": 0,
+   "u": "https://covers.openlibrary.org/b/id/8211535-M.jpg"
+  },
+  {
+   "t": "script",
+   "st": 3666,
+   "d": 592,
+   "s": 1364,
+   "u": "https://openlibrary.org/static/build/js/all.js?v=6cdf20da8def13255c209302d992cb75"
+  },
+  {
+   "t": "script",
+   "st": 3666,
+   "d": 1944,
+   "s": 15427,
+   "u": "https://openlibrary.org/cdn/archive.org/athena.js"
+  },
+  {
+   "t": "script",
+   "st": 3667,
+   "d": 1233,
+   "s": 145692,
+   "u": "https://openlibrary.org/static/build/components/production/ol-components.js?v=a3c7cc6da1a4c7c1e7cd0c8127288814"
+  },
+  {
+   "t": "script",
+   "st": 4219,
+   "d": 4434,
+   "s": 0,
+   "u": "https://apollo.archive.org/js/container_7cLc1b4U.js"
+  },
+  {
+   "t": "iframe",
+   "st": 4527,
+   "d": 881,
+   "s": 0,
+   "u": "https://archive.org/includes/donate.php?as_page=1&referer=https%3A%2F%2Fopenlibrary.org%2Fsearch%3Fq%3Dperformance%2Bengineering&platform=ol&donation-identifier=MC44MDg0NjEzODIyMDk3MzUy"
+  },
+  {
+   "t": "other",
+   "st": 4537,
+   "d": 4099,
+   "s": 21752,
+   "u": "https://openlibrary.org/static/icons/sprite.svg?v=002e98681eadabf2907f88458cfb35c8"
+  },
+  {
+   "t": "css",
+   "st": 4556,
+   "d": 4080,
+   "s": 709,
+   "u": "https://openlibrary.org/static/images/search-icon.svg"
+  },
+  {
+   "t": "css",
+   "st": 4557,
+   "d": 5287,
+   "s": 799,
+   "u": "https://openlibrary.org/static/images/icons/octicon-link-external-24.svg"
+  },
+  {
+   "t": "css",
+   "st": 4558,
+   "d": 5431,
+   "s": 553,
+   "u": "https://openlibrary.org/static/images/icons/icon_dropit.png"
+  },
+  {
+   "t": "script",
+   "st": 5615,
+   "d": 555,
+   "s": 985,
+   "u": "https://openlibrary.org/static/build/components/production/assets/chunk-CMxvf4Kt.js"
+  },
+  {
+   "t": "script",
+   "st": 5616,
+   "d": 902,
+   "s": 696,
+   "u": "https://openlibrary.org/static/build/components/production/assets/defineProperty-BbfpZ9Tg.js"
+  },
+  {
+   "t": "script",
+   "st": 5617,
+   "d": 930,
+   "s": 87046,
+   "u": "https://openlibrary.org/static/build/js/main.BetajRup.js"
+  },
+  {
+   "t": "script",
+   "st": 5617,
+   "d": 1309,
+   "s": 1085,
+   "u": "https://openlibrary.org/static/build/js/chunk.BLj-jMpM.js"
+  },
+  {
+   "t": "script",
+   "st": 5617,
+   "d": 1477,
+   "s": 35701,
+   "u": "https://openlibrary.org/static/build/js/jquery.DSlugHSX.js"
+  },
+  {
+   "t": "script",
+   "st": 5617,
+   "d": 1749,
+   "s": 1291,
+   "u": "https://openlibrary.org/static/build/js/jsdef.BlL0E1r-.js"
+  },
+  {
+   "t": "script",
+   "st": 5618,
+   "d": 1749,
+   "s": 1526,
+   "u": "https://openlibrary.org/static/build/js/utils.DzlhbAEF.js"
+  },
+  {
+   "t": "script",
+   "st": 5618,
+   "d": 1749,
+   "s": 634,
+   "u": "https://openlibrary.org/static/build/js/nonjquery_utils.CMj587y-.js"
+  },
+  {
+   "t": "script",
+   "st": 5618,
+   "d": 2451,
+   "s": 1089,
+   "u": "https://openlibrary.org/static/build/js/ol.analytics.BIM9gngX.js"
+  },
+  {
+   "t": "script",
+   "st": 5618,
+   "d": 2452,
+   "s": 2735,
+   "u": "https://openlibrary.org/static/build/js/searchFacets.oWHONxBa.js"
+  },
+  {
+   "t": "link",
+   "st": 5619,
+   "d": 552,
+   "s": 3905,
+   "u": "https://openlibrary.org/static/build/js/main.B0H1m7CK.css"
+  },
+  {
+   "t": "css",
+   "st": 6563,
+   "d": 3430,
+   "s": 2302,
+   "u": "https://openlibrary.org/static/images/icons/open-book.svg"
+  },
+  {
+   "t": "script",
+   "st": 6673,
+   "d": 1398,
+   "s": 1364,
+   "u": "https://openlibrary.org/static/build/js/all.js"
+  },
+  {
+   "t": "fetch",
+   "st": 8141,
+   "d": 837,
+   "s": 0,
+   "u": "https://sink.archive.org/api/82/envelope/?sentry_version=7&sentry_key=8470b9d8af98fa200a09162f2e30ac87&sentry_client=sentry.javascript.browser%2F10.60.0"
+  },
+  {
+   "t": "beacon",
+   "st": 8156,
+   "d": 813,
+   "s": 0,
+   "u": "https://athena.archive.org/0.gif?cache_bust=0.9688383277926913&server_ms=0.0&server_name=ol-web.us.archive.org&service=ol&kind=pageview&timediff=5.5&locale=en-US&referrer=-&loadtime=4494&nav_to_done_ms=8155&iaprop_fontSize=25.6px&iaprop_devicePixelRatio=1&version=2&count=14"
+  },
+  {
+   "t": "script",
+   "st": 8171,
+   "d": 798,
+   "s": 1361,
+   "u": "https://openlibrary.org/static/build/js/search.DvIc4r-L.js"
+  },
+  {
+   "t": "script",
+   "st": 8171,
+   "d": 797,
+   "s": 1761,
+   "u": "https://openlibrary.org/static/build/js/SearchFilterBar.gbZrK3nZ.js"
+  },
+  {
+   "t": "script",
+   "st": 8172,
+   "d": 1090,
+   "s": 864,
+   "u": "https://openlibrary.org/static/build/js/dropper.BUS5vH2i.js"
+  },
+  {
+   "t": "script",
+   "st": 8173,
+   "d": 1091,
+   "s": 8059,
+   "u": "https://openlibrary.org/static/build/js/my-books.7LXQlWaI.js"
+  },
+  {
+   "t": "script",
+   "st": 8173,
+   "d": 1095,
+   "s": 5450,
+   "u": "https://openlibrary.org/static/build/js/jquery.colorbox.CZflEfcW.js"
+  },
+  {
+   "t": "script",
+   "st": 8173,
+   "d": 1388,
+   "s": 985,
+   "u": "https://openlibrary.org/static/build/js/Toast.D2F2H6j-.js"
+  },
+  {
+   "t": "link",
+   "st": 8176,
+   "d": 792,
+   "s": 655,
+   "u": "https://openlibrary.org/static/build/js/Toast.Crrs_-E6.css"
+  },
+  {
+   "t": "script",
+   "st": 8176,
+   "d": 1386,
+   "s": 1481,
+   "u": "https://openlibrary.org/static/build/js/dialog.C-1J0-Zq.js"
+  },
+  {
+   "t": "script",
+   "st": 8180,
+   "d": 1382,
+   "s": 864,
+   "u": "https://openlibrary.org/static/build/js/list_books.BKuxPel6.js"
+  },
+  {
+   "t": "script",
+   "st": 8180,
+   "d": 1663,
+   "s": 693,
+   "u": "https://openlibrary.org/static/build/js/sort_options.-1Hdz3jc.js"
+  },
+  {
+   "t": "script",
+   "st": 8193,
+   "d": 1650,
+   "s": 891,
+   "u": "https://openlibrary.org/static/build/js/hamburger-drawer.C5s-aRtw.js"
+  },
+  {
+   "t": "beacon",
+   "st": 8711,
+   "d": 414,
+   "s": 0,
+   "u": "https://apollo.archive.org/matomo.php?action_name=search%20%7C%20Open%20Library&idsite=6&rec=1&r=797011&h=9&m=34&s=9&url=https%3A%2F%2Fopenlibrary.org%2Fsearch%3Fq%3Dperformance%2Bengineering&_id=&_idn=1&send_image=0&_refts=0&dimension1=visitor&pv_id=x2WytV&pf_net=537&pf_srv=3105&pf_tfr=11&pf_dm1=1955&pdf=1&qt=0&realp=0&wma=0&fla=0&java=0&ag=0&cookie=1&res=0x0"
+  },
+  {
+   "t": "fetch",
+   "st": 9585,
+   "d": 316,
+   "s": 336,
+   "u": "https://openlibrary.org/partials/MyBooksDropperLists.json"
+  },
+  {
+   "t": "fetch",
+   "st": 249214,
+   "d": 303,
+   "s": 517,
+   "u": "https://openlibrary.org/search.json?q=performance+engineering&limit=3&fields=key,title,author_name"
+  },
+  {
+   "t": "fetch",
+   "st": 249519,
+   "d": 306,
+   "s": 722,
+   "u": "https://openlibrary.org/works/OL1904498W.json"
+  },
+  {
+   "t": "fetch",
+   "st": 249825,
+   "d": 376,
+   "s": 1432,
+   "u": "https://openlibrary.org/works/OL1904498W/editions.json?limit=2"
+  }
+ ],
+ "bodies": {
+  "https://openlibrary.org/search.json?q=performance+engineering&limit=3&fields=key,title,author_name": "{\"numFound\":6121,\"start\":0,\"numFoundExact\":true,\"num_found\":6121,\"documentation_url\":\"https://openlibrary.org/dev/docs/api/search\",\"q\":\"performance engineering\",\"offset\":null,\"docs\":[{\"author_name\":[\"Dennis Moore\"],\"key\":\"/works/OL1904498W\",\"title\":\"Small-Block Chevy Marine Performance\"},{\"author_name\":[\"Roger S. Pressman\",\"Bruce Maxim\"],\"key\":\"/works/OL284009W\",\"title\":\"Software Engineering\"},{\"author_name\":[\"Robert G. Cole\"],\"key\":\"/works/OL13506365W\",\"title\":\"Wide-area data network performance engineering\"}]}",
+  "https://openlibrary.org/works/OL1904498W.json": "{\"title\": \"Small-Block Chevy Marine Performance\", \"covers\": [1878858], \"first_publish_date\": \"January 10, 2000\", \"key\": \"/works/OL1904498W\", \"authors\": [{\"type\": {\"key\": \"/type/author_role\"}, \"author\": {\"key\": \"/authors/OL227996A\"}}], \"type\": {\"key\": \"/type/work\"}, \"subjects\": [\"Maintenance and repair\", \"Marine engines\"], \"latest_revision\": 5, \"revision\": 5, \"created\": {\"type\": \"/type/datetime\", \"value\": \"2009-12-09T22:32:55.165173\"}, \"last_modified\": {\"type\": \"/type/datetime\", \"value\": \"2022-12-17T16:02:13.388699\"}}",
+  "https://openlibrary.org/works/OL1904498W/editions.json?limit=2": "{\"links\":{\"self\":\"/works/OL1904498W/editions.json?limit=2\",\"work\":\"/works/OL1904498W\"},\"size\":1,\"entries\":[{\"publishers\":[\"HP Trade\"],\"identifiers\":{\"goodreads\":[\"3081202\"]},\"isbn_10\":[\"1557883173\"],\"covers\":[1878858],\"physical_format\":\"Paperback\",\"key\":\"/books/OL9394128M\",\"authors\":[{\"key\":\"/authors/OL227996A\"}],\"languages\":[{\"key\":\"/languages/eng\"}],\"title\":\"Small-Block Chevy Marine Performance\",\"lccn\":[\"99047390\"],\"number_of_pages\":213,\"isbn_13\":[\"9781557883179\"],\"works\":[{\"key\":\"/works/OL1904498W\"}],\"type\":{\"key\":\"/type/edition\"},\"latest_revision\":10,\"revision\":10,\"created\":{\"type\":\"/type/datetime\",\"value\":\"2008-04-30T09:38:13.731961\"},\"last_modified\":{\"type\":\"/type/datetime\",\"value\":\"2022-12-17T16:02:13.388699\"}}]}"
+ }
+}

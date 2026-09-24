@@ -1,0 +1,38 @@
+{
+ "har": "auth_manual_paused.har",
+ "path": "tests\\fixtures\\auth_manual_paused.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 4,
+ "har_hosts": 1,
+ "application": "auth_manual_paused",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 6,
+ "transactions": 1,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "username"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 5,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://id.example.com/connect/authorize?client_id=web&response_type=code",
+  "GET https://id.example.com/account/login?returnUrl=/",
+  "POST https://id.example.com/account/login",
+  "POST https://id.example.com/connect/token"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 16900
+}

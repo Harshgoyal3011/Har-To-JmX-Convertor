@@ -1,0 +1,36 @@
+{
+ "har": "app04_openfoodfacts_search_to_product.har",
+ "path": "benchmark\\normalized\\app04_openfoodfacts_search_to_product.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "OpenFoodFacts",
+ "domain": "Retail / food",
+ "flow": "search products by category -> open product by returned code",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.006,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "code"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 5,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://world.openfoodfacts.org/api/v2/search?categories_tags_en=Breakfast%20cereals&fields=code,product_name&page_size=2",
+  "GET https://world.openfoodfacts.org/api/v2/product/3168930010265?fields=code,product_name,brands"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12123
+}

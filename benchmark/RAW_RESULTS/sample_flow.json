@@ -1,0 +1,46 @@
+{
+ "har": "sample_flow.har",
+ "path": "tests\\fixtures\\sample_flow.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 10,
+ "har_hosts": 1,
+ "application": "sample_flow",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.007,
+ "samplers": 15,
+ "transactions": 5,
+ "kept_requests": 10,
+ "excluded_requests": 0,
+ "assertions": 5,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "orderId"
+ ],
+ "csv_columns": [
+  "id"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://app.example.com/login",
+  "POST https://app.example.com/api/authenticate",
+  "GET https://app.example.com/api/profile",
+  "GET https://app.example.com/customers?q=acme",
+  "GET https://app.example.com/api/customers/facets",
+  "GET https://app.example.com/customers/1001",
+  "GET https://app.example.com/api/customers/1001/orders",
+  "POST https://app.example.com/api/orders",
+  "GET https://app.example.com/api/orders/ORD1",
+  "POST https://app.example.com/logout"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 31408
+}

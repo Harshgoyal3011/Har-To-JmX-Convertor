@@ -1,0 +1,36 @@
+{
+ "har": "sample_search.har",
+ "path": "tests\\fixtures\\sample_search.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "sample_search",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.003,
+ "samplers": 3,
+ "transactions": 2,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "cat"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.ex.com/bycat",
+  "GET https://api.ex.com/search?q=laptop"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 13093
+}

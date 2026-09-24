@@ -1,0 +1,39 @@
+{
+ "har": "sample_oauth.har",
+ "path": "tests\\fixtures\\sample_oauth.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 4,
+ "har_hosts": 3,
+ "application": "sample_oauth",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.008,
+ "samplers": 6,
+ "transactions": 2,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "code",
+  "access_token"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://idp.example.com/oauth2/authorize?response_type=code&client_id=myapp&redirect_uri=https://app.example.com/callback&scope=openid%20profile&state=stateABC123",
+  "GET https://app.example.com/callback?code=AUTHCODE-9f8e7d6c5b4a3210&state=stateABC123",
+  "POST https://idp.example.com/oauth2/token",
+  "GET https://api.example.com/userinfo"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 22143
+}

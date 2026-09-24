@@ -1,0 +1,43 @@
+{
+ "har": "sample_mini.har",
+ "path": "tests\\fixtures\\sample_mini.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "sample_mini",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 6,
+ "transactions": 2,
+ "kept_requests": 4,
+ "excluded_requests": 2,
+ "assertions": 2,
+ "correlations": 1,
+ "correlations_verified": 0,
+ "correlation_vars": [
+  "SESSIONID"
+ ],
+ "csv_columns": [
+  "username",
+  "password"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 7,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://app.example.com/api/authenticate",
+  "GET https://app.example.com/api/patients?ward=3&status=active",
+  "POST https://app.example.com/graphql",
+  "GET https://app.example.com/connect/authorize?state=xyzstate&client_id=web"
+ ],
+ "excluded_hosts": [
+  "app.example.com"
+ ],
+ "jmx_bytes": 18426
+}

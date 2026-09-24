@@ -1,0 +1,44 @@
+{
+ "har": "spa_burst_click.har",
+ "path": "tests\\fixtures\\spa_burst_click.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 7,
+ "har_hosts": 1,
+ "application": "spa_burst_click",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.01,
+ "samplers": 10,
+ "transactions": 2,
+ "kept_requests": 7,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "adviceId"
+ ],
+ "csv_columns": [
+  "ward",
+  "patientId"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 9,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://his.example.com/HISJson/BedType.json",
+  "GET https://his.example.com/HISJson/Title.json",
+  "GET https://his.example.com/HISJson/Relationship.json",
+  "POST https://his.example.com/api/admission/saveAdmissionAdvice",
+  "GET https://his.example.com/api/admission/findAdmissionAdvice?adviceId=ADV-9001",
+  "GET https://his.example.com/HISJson/Ward.json",
+  "POST https://his.example.com/api/admission/acknowledgeAdmissionAdvice"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 20216
+}

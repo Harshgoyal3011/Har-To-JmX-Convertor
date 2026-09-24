@@ -1,0 +1,45 @@
+{
+ "har": "dummyjson.har",
+ "path": "examples\\dummyjson.har",
+ "bucket": "REAL_API",
+ "har_requests": 6,
+ "har_hosts": 1,
+ "application": "dummyjson",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.016,
+ "samplers": 9,
+ "transactions": 4,
+ "kept_requests": 6,
+ "excluded_requests": 0,
+ "assertions": 4,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "accessToken",
+  "cartId"
+ ],
+ "csv_columns": [
+  "username",
+  "password",
+  "Product_id"
+ ],
+ "csv_column_count": 3,
+ "review_items": 0,
+ "unknown_values": 6,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://dummyjson.com/auth/login",
+  "GET https://dummyjson.com/auth/me",
+  "GET https://dummyjson.com/products?limit=5&skip=10&select=title,price",
+  "GET https://dummyjson.com/products/144",
+  "POST https://dummyjson.com/carts/add",
+  "GET https://dummyjson.com/carts/209"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 26860
+}

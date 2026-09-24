@@ -1,0 +1,42 @@
+{
+ "har": "sample_noise.har",
+ "path": "tests\\fixtures\\sample_noise.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 11,
+ "har_hosts": 2,
+ "application": "sample_noise",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 10,
+ "transactions": 1,
+ "kept_requests": 7,
+ "excluded_requests": 4,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://app.example.com/api/documents/upload",
+  "GET https://app.example.com/api/invoices/export?id=5",
+  "GET https://app.example.com/api/notifications/poll",
+  "GET https://app.example.com/api/notifications/poll",
+  "GET https://app.example.com/api/notifications/poll",
+  "GET https://app.example.com/api/notifications/poll",
+  "POST https://app.example.com/api/orders"
+ ],
+ "excluded_hosts": [
+  "app.example.com",
+  "www.google-analytics.com"
+ ],
+ "jmx_bytes": 17003
+}

@@ -1,0 +1,40 @@
+{
+ "har": "sample_realworld.har",
+ "path": "tests\\fixtures\\sample_realworld.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "sample_realworld",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "quoteRef"
+ ],
+ "csv_columns": [
+  "note",
+  "productCode"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 4,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://shop.example.com/api/products",
+  "GET https://shop.example.com/api/checkout/quote?productCode=PROD-4400",
+  "POST https://shop.example.com/api/orders"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 17173
+}

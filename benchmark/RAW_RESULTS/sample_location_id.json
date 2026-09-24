@@ -1,0 +1,36 @@
+{
+ "har": "sample_location_id.har",
+ "path": "tests\\fixtures\\sample_location_id.har",
+ "bucket": "SYNTHETIC",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "sample_location_id",
+ "domain": "",
+ "flow": "",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 3,
+ "transactions": 2,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 2,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "orderId"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 1,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.example.com/orders",
+  "GET https://api.example.com/orders/ORD-88231"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 13130
+}
