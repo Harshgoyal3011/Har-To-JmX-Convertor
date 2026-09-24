@@ -157,10 +157,39 @@ def _emit(value: Any, side: str, location: str, field_name: str, idx: int) -> Oc
     return Occurrence(request_index=idx, side=side, location=location, field=field_name, raw=str(value))
 
 
-def _request_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
+_PATH_EXT_RE = re.compile(r"\.[A-Za-z0-9]{1,8}$")
+
+
+def _request_slots(req: NormalizedRequest, emit_url: bool = True) -> Iterator[Occurrence]:
     idx = req.index
     for i, seg in enumerate(req.request.path_segments):
         o = _emit(unquote(seg), "request", "request.path", "path", idx)
+        if o:
+            yield o
+    # Composite-path and absolute-URL consumer slots.
+    # A server-returned resource PATH ("/works/OL1904498W") or an absolute URL
+    # ("https://pokeapi.co/api/v2/pokemon/1/") is commonly reused by the next request as its path with
+    # a suffix appended ("/works/OL1904498W.json", "/works/OL1904498W/editions.json") or as the request
+    # URL itself. Whole-slot matching on individual segments can never see either shape, so also expose
+    # the cumulative path prefixes (plus the extension-stripped final form) and the full URL. These are
+    # REQUEST-side slots only, so they can add consumers but can never invent a producer.
+    segs = [unquote(s) for s in req.request.path_segments]
+    for i in range(1, len(segs) + 1):
+        prefix = "/" + "/".join(segs[:i])
+        o = _emit(prefix, "request", "request.pathprefix", "path", idx)
+        if o:
+            yield o
+        core = _PATH_EXT_RE.sub("", prefix)
+        if core != prefix:
+            o = _emit(core, "request", "request.pathprefix", "path", idx)
+            if o:
+                yield o
+    # The absolute-URL slot exists for the HATEOAS case (a response body returns the next request's
+    # URL). It is deliberately NOT emitted for a redirect target: a 3xx Location already has dedicated
+    # producer handling and is replayed by redirect-following, so matching it here would mint a second,
+    # redundant correlation whose variable no sampler consumes.
+    if emit_url and getattr(req.request, "url", ""):
+        o = _emit(req.request.url, "request", "request.url", "url", idx)
         if o:
             yield o
     for k, v in req.request.query:
@@ -283,10 +312,20 @@ def build_lineage(cap: NormalizedCapture) -> LineageGraph:
     def add(o: Occurrence) -> None:
         index.setdefault(_norm(o.raw), []).append(o)
 
+    # A request reached by following a 3xx is a redirect target; its URL came from a Location header
+    # that already has its own producer handling, so it must not also be matched as an absolute-URL slot.
+    redirect_targets: set[int] = set()
+    prev = None
+    for req in cap.requests:
+        if prev is not None and (str(getattr(prev, "status", "")).startswith("3")
+                                 or getattr(prev.response, "redirect_location", "")):
+            redirect_targets.add(req.index)
+        prev = req
+
     for req in cap.requests:
         if req.classification.excluded:
             continue
-        for o in _request_slots(req):
+        for o in _request_slots(req, emit_url=req.index not in redirect_targets):
             add(o)
         for o in _response_slots(req):
             add(o)

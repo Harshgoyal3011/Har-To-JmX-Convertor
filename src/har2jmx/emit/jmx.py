@@ -183,7 +183,28 @@ def _sub_json(obj: Any, sub: dict[str, str]) -> Any:
     return obj
 
 
-def _sub_path(path: str, sub: dict[str, str]) -> str:
+# What may follow a correlated resource path inside the consumer's path: an extension
+# (/works/OL1904498W -> .json) and/or a further static sub-resource (-> /editions.json).
+_PATH_TAIL_RE = _re.compile(r"^(?:\.[A-Za-z0-9]{1,8})?(?:/[^?]*)?$")
+
+
+def _sub_path(path: str, sub: dict[str, str], url: str = "") -> str:
+    # 1) the whole request URL was correlated (a response returned the next request's absolute URL).
+    #    JMeter accepts a full URL in HTTPSampler.path, so the variable stands alone.
+    if url and url in sub:
+        return sub[url]
+    # 2) a correlated resource PATH is the prefix of this path, with only a static tail after it
+    #    ("/works/OL1904498W" + ".json" / "/editions.json"). Per-segment substitution cannot express
+    #    this, so take the LONGEST such prefix before falling back to per-segment matching.
+    best: tuple[str, str, str] | None = None
+    for value, var in sub.items():
+        if not value.startswith("/") or len(value) < 3 or not path.startswith(value):
+            continue
+        tail = path[len(value):]
+        if _PATH_TAIL_RE.match(tail) and (best is None or len(value) > len(best[0])):
+            best = (value, var, tail)
+    if best is not None:
+        return best[1] + best[2]
     parts = path.split("/")
     return "/".join(_apply(p, sub) if p else p for p in parts)
 
@@ -249,7 +270,7 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _s(http, "HTTPSampler.domain", "" if on_primary else req.request.host)
     _s(http, "HTTPSampler.port", req.request.port)
     _s(http, "HTTPSampler.protocol", "" if on_primary else req.request.scheme)
-    _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub))
+    _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub, getattr(req.request, "url", "")))
     _s(http, "HTTPSampler.method", req.method)
     _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)

@@ -175,11 +175,26 @@ def _check_json(dec: CorrelationDecision, producer: NormalizedRequest) -> Extrac
         return make(ExtractorStatus.AMBIGUOUS_REFINED, refined=f"$.{stable[0]}",
                     reason=(f"$..{leaf} is ambiguous (matches {len(named)} nodes); pinned to the concrete "
                             f"path $.{stable[0]} so the correct value is extracted under load."))
-    # value lives inside a per-run list (or is itself duplicated) → no stable static path
+    # The recorded value is the FIRST node named `leaf` in document order — exactly what the emitted
+    # extractor selects (JSONPostProcessor.match_numbers = 1). For a list/search response that is the
+    # CORRECT behaviour, not a hazard: the consumer's job is to follow whatever the server returned
+    # THIS run (search -> open the first result), never to reproduce the recorded element. Accept it.
+    # If the recorded value sits at a LATER index the user picked a specific item out of the list, and
+    # match #1 genuinely would change the scenario — that case still falls through to UNRESOLVED.
+    # Only for a READ/SEARCH producer. If the producer CREATED the value (POST/PUT), the consumer needs
+    # that specific new record, and "whatever is first in the list" would silently address a different
+    # one — so a created id inside a list stays UNRESOLVED and ships as a literal for review.
+    if _norm(named[0][1]) == target and (producer.method or "GET").upper() == "GET":
+        return make(ExtractorStatus.AMBIGUOUS_REFINED, refined=dec.expression,
+                    reason=(f"$..{leaf} matches {len(named)} nodes, but the recorded value is match #1 of a "
+                            "READ/search response and the extractor takes match #1, so it follows whatever "
+                            "the search returns at run time — the intended list -> detail dependency."))
+
+    # value sits at a NON-FIRST position inside a per-run list → no stable static path
     return make(ExtractorStatus.UNRESOLVED,
-                reason=(f"$..{leaf} matches {len(named)} nodes and the recorded value sits inside a per-run "
-                        "list, so no stable JSONPath selects it — match #1 would grab the wrong element "
-                        "under load."),
+                reason=(f"$..{leaf} matches {len(named)} nodes and the recorded value sits at a non-first "
+                        "position inside a per-run list, so no stable JSONPath selects it — match #1 "
+                        "would grab a different element under load."),
                 suggestion=_json_suggestion(leaf))
 
 
