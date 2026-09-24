@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "DummyJSON",
+  "domain": "E-commerce",
+  "flow": "search products -> open the returned product",
+  "source": "https://dummyjson.com (public sandbox) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies re-serialized from the captured JSON; producer complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://dummyjson.com/products/search?q=phone&limit=1&select=id,title,brand",
+   "st": 186458,
+   "d": 397,
+   "status": 200,
+   "b": "{\"products\": [{\"id\": 101, \"title\": \"Apple AirPods Max Silver\", \"brand\": \"Apple\"}], \"total\": 23, \"skip\": 0, \"limit\": 1}",
+   "method": "GET"
+  },
+  {
+   "u": "https://dummyjson.com/products/101?select=id,title",
+   "st": 186855,
+   "d": 365,
+   "status": 200,
+   "b": "{\"id\": 101, \"title\": \"Apple AirPods Max Silver\"}",
+   "method": "GET"
+  }
+ ]
+}

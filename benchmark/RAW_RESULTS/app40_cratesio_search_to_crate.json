@@ -1,0 +1,36 @@
+{
+ "har": "app40_cratesio_search_to_crate.har",
+ "path": "benchmark\\normalized\\app40_cratesio_search_to_crate.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "crates.io",
+ "domain": "Developer platform",
+ "flow": "list crates -> open the top crate",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.007,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "id"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 7,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://crates.io/api/v1/crates?per_page=1&sort=downloads",
+  "GET https://crates.io/api/v1/crates/hashbrown"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 11061
+}

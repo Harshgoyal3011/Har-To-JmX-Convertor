@@ -10,7 +10,7 @@
  "conversion": "PASS",
  "crash": "",
  "stage": "",
- "conversion_time": 0.01,
+ "conversion_time": 0.016,
  "samplers": 9,
  "transactions": 6,
  "kept_requests": 6,

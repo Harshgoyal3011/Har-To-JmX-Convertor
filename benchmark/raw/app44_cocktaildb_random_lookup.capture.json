@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "TheCocktailDB",
+  "domain": "Food & beverage",
+  "flow": "random drink -> look it up by the returned id",
+  "source": "https://www.thecocktaildb.com (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies re-serialized from the captured JSON; producer complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://www.thecocktaildb.com/api/json/v1/1/random.php",
+   "st": 228494,
+   "d": 596,
+   "status": 200,
+   "b": "{\"drinks\": [{\"idDrink\": \"13020\", \"strDrink\": \"Sangria\", \"strDrinkAlternate\": null, \"strCategory\": \"Punch / Party Drink\", \"strAlcoholic\": \"Alcoholic\", \"strGlass\": \"Pitcher\", \"strInstructions\": \"Mix all together in a pitcher and refrigerate.\", \"strDrinkThumb\": \"https://www.thecocktaildb.com/images/media/drink/xrvxpp1441249280.jpg\", \"strIngredient1\": \"Red wine\", \"strIngredient2\": \"Sugar\", \"strIngredient3\": \"Orange juice\", \"strIngredient4\": \"Lemon juice\", \"strMeasure1\": \"1 bottle \", \"strMeasure2\": \"1/2 cup \", \"dateModified\": \"2015-09-03 04:01:20\"}]}",
+   "method": "GET"
+  },
+  {
+   "u": "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=13020",
+   "st": 229090,
+   "d": 1490,
+   "status": 200,
+   "b": "{\"drinks\": [{\"idDrink\": \"13020\", \"strDrink\": \"Sangria\"}]}",
+   "method": "GET"
+  }
+ ]
+}

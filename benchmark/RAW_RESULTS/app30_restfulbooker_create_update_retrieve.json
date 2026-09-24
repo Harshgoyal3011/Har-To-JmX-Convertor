@@ -1,0 +1,47 @@
+{
+ "har": "app30_restfulbooker_create_update_retrieve.har",
+ "path": "benchmark\\normalized\\app30_restfulbooker_create_update_retrieve.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 4,
+ "har_hosts": 1,
+ "application": "restful-booker",
+ "domain": "Travel / booking",
+ "flow": "authenticate -> create booking -> UPDATE it -> retrieve it",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.015,
+ "samplers": 6,
+ "transactions": 1,
+ "kept_requests": 4,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "bookingid"
+ ],
+ "csv_columns": [
+  "username",
+  "password",
+  "lastname",
+  "totalprice",
+  "additionalneeds",
+  "firstname",
+  "checkin",
+  "checkout"
+ ],
+ "csv_column_count": 8,
+ "review_items": 1,
+ "unknown_values": 10,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://restful-booker.herokuapp.com/auth",
+  "POST https://restful-booker.herokuapp.com/booking",
+  "PUT https://restful-booker.herokuapp.com/booking/4248",
+  "GET https://restful-booker.herokuapp.com/booking/4248"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 17831
+}

@@ -1,0 +1,42 @@
+{
+ "har": "SYNTHETIC_MFA_challenge_otp.har",
+ "path": "benchmark\\normalized\\SYNTHETIC_MFA_challenge_otp.har",
+ "bucket": "SYNTHETIC_MFA",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "SYNTHETIC_MFA fixture",
+ "domain": "SYNTHETIC - not a real application",
+ "flow": "login -> MFA challenge -> OTP verification -> authenticated business call",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.022,
+ "samplers": 4,
+ "transactions": 3,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 3,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "challengeId",
+  "accessToken"
+ ],
+ "csv_columns": [
+  "otp",
+  "password",
+  "username"
+ ],
+ "csv_column_count": 3,
+ "review_items": 0,
+ "unknown_values": 14,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://mfa.example.com/api/login",
+  "POST https://mfa.example.com/api/mfa/verify",
+  "GET https://mfa.example.com/api/account/summary"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 18189
+}

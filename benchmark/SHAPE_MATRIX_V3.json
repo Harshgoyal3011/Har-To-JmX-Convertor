@@ -1,0 +1,1568 @@
+{
+ "summary": {
+  "real_workflows": 44,
+  "expected": 48,
+  "detected": 32,
+  "missed_total": 16,
+  "missed_policy": 8,
+  "missed_floor": 2,
+  "missed_engine_gaps": 6,
+  "false_correlations": 0,
+  "recall": 0.667,
+  "recall_excl_policy_and_floor": 0.842,
+  "precision": 1.0,
+  "verified_extractor_rate": 1.0,
+  "materialization_rate": 1.0,
+  "workflows_lost_to_noise": 1,
+  "plan_problems": 1,
+  "total_csv_columns": 49
+ },
+ "authentication": {
+  "apps": 3,
+  "corr_exp": 4,
+  "corr_det": 4,
+  "cred_ok": 0,
+  "auth_correlation_recall": 1.0
+ },
+ "by_shape": {
+  " 1 JSON -> URL path": {
+   "exp": 31,
+   "det": 18,
+   "recall": 0.581
+  },
+  " 2 JSON -> query param": {
+   "exp": 9,
+   "det": 6,
+   "recall": 0.667
+  },
+  " 4 JSON -> header": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  " 6 JSON -> full URL": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  " 7 JSON -> path + suffix": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  " 8 nested JSON": {
+   "exp": 10,
+   "det": 8,
+   "recall": 0.8
+  },
+  " 9 array of objects": {
+   "exp": 22,
+   "det": 12,
+   "recall": 0.545
+  },
+  "10 array of scalar STRINGS": {
+   "exp": 3,
+   "det": 2,
+   "recall": 0.667
+  },
+  "11 array of scalar NUMBERS": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "12 array -> HATEOAS link": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  "13 numeric id": {
+   "exp": 16,
+   "det": 8,
+   "recall": 0.5
+  },
+  "14 very short id": {
+   "exp": 2,
+   "det": 0,
+   "recall": 0.0
+  },
+  "15 UUID": {
+   "exp": 3,
+   "det": 2,
+   "recall": 0.667
+  },
+  "16 JWT": {
+   "exp": 4,
+   "det": 4,
+   "recall": 1.0
+  },
+  "18 opaque random string": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  "19 embedded in consumer string": {
+   "exp": 2,
+   "det": 0,
+   "recall": 0.0
+  },
+  "20 producer/consumer names differ": {
+   "exp": 8,
+   "det": 6,
+   "recall": 0.75
+  },
+  "21 GET producer": {
+   "exp": 39,
+   "det": 24,
+   "recall": 0.615
+  },
+  "22 POST producer": {
+   "exp": 8,
+   "det": 8,
+   "recall": 1.0
+  },
+  "23 ?": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "24 multiple consumers": {
+   "exp": 4,
+   "det": 4,
+   "recall": 1.0
+  },
+  "25 multiple possible producers": {
+   "exp": 2,
+   "det": 1,
+   "recall": 0.5
+  },
+  "26 reused after encoding": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "27 resource id -> detail endpoint": {
+   "exp": 19,
+   "det": 12,
+   "recall": 0.632
+  },
+  "28 search result -> selected entity": {
+   "exp": 12,
+   "det": 5,
+   "recall": 0.417
+  },
+  "30 create -> retrieve": {
+   "exp": 4,
+   "det": 4,
+   "recall": 1.0
+  },
+  "31 one response -> multiple values": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  }
+ },
+ "by_domain": {
+  "Auth sandbox": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Culture / museum": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Developer platform": {
+   "exp": 3,
+   "det": 2,
+   "recall": 0.667
+  },
+  "E-commerce": {
+   "exp": 3,
+   "det": 1,
+   "recall": 0.333
+  },
+  "E-commerce / SaaS": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Education/publishing": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Education/research": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Finance / FX": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Food & beverage": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Gaming/entertainment": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Gaming/media": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "GenAI / AI": {
+   "exp": 4,
+   "det": 2,
+   "recall": 0.5
+  },
+  "Generic HTTP": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Generic web": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Geo/logistics": {
+   "exp": 2,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Geo/weather": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "Government / policing": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Government/clinical": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Government/science": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Healthcare": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Healthcare data": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Knowledge graph": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Knowledge/media": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Library": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Logistics/geo": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Media / CC images": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Media / TV": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "Media/entertainment": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "Media/gaming": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Retail/food": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Retail/hospitality": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "SaaS": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "SaaS / commerce": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "SaaS/commerce": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Social/news": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Travel / booking": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "Travel/booking": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  }
+ },
+ "by_producer_method": {
+  "GET": {
+   "exp": 39,
+   "det": 24,
+   "recall": 0.615
+  },
+  "POST": {
+   "exp": 8,
+   "det": 8,
+   "recall": 1.0
+  },
+  "PUT": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  }
+ },
+ "by_value_type": {
+  "absolute-url": {
+   "exp": 4,
+   "det": 3,
+   "recall": 0.75
+  },
+  "coded-id": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "date": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "hyphenated-name": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "jwt": {
+   "exp": 4,
+   "det": 4,
+   "recall": 1.0
+  },
+  "name": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "numeric": {
+   "exp": 16,
+   "det": 10,
+   "recall": 0.625
+  },
+  "opaque": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  "path-string": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "short-code": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "short-numeric": {
+   "exp": 2,
+   "det": 0,
+   "recall": 0.0
+  },
+  "slash-bearing-id": {
+   "exp": 5,
+   "det": 2,
+   "recall": 0.4
+  },
+  "slug": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "string-id": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "string-with-space": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "uuid": {
+   "exp": 3,
+   "det": 2,
+   "recall": 0.667
+  },
+  "version-tag": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  }
+ },
+ "by_consumer_location": {
+  "body": {
+   "exp": 2,
+   "det": 2,
+   "recall": 1.0
+  },
+  "header": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  },
+  "path": {
+   "exp": 26,
+   "det": 17,
+   "recall": 0.654
+  },
+  "path-derived": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "path-encoded": {
+   "exp": 1,
+   "det": 1,
+   "recall": 1.0
+  },
+  "path-multisegment": {
+   "exp": 3,
+   "det": 0,
+   "recall": 0.0
+  },
+  "query": {
+   "exp": 8,
+   "det": 6,
+   "recall": 0.75
+  },
+  "query-embedded": {
+   "exp": 1,
+   "det": 0,
+   "recall": 0.0
+  },
+  "url": {
+   "exp": 3,
+   "det": 3,
+   "recall": 1.0
+  }
+ },
+ "rows": [
+  {
+   "har": "app01_openlibrary_search_to_work",
+   "dom": "Library",
+   "v": "/works/OL1904498W",
+   "shapes": [
+    1,
+    7,
+    9,
+    20,
+    21,
+    24,
+    27,
+    28
+   ],
+   "pm": "GET",
+   "vt": "path-string",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "q",
+    "donation_identifier",
+    "action_name",
+    "pv_id"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app02_wikipedia_search_to_article",
+   "dom": "Knowledge/media",
+   "v": "6615610",
+   "shapes": [
+    2,
+    8,
+    9,
+    13,
+    20,
+    21,
+    24,
+    28
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "query",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "srsearch"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app03_pokeapi_list_to_detail",
+   "dom": "Media/gaming",
+   "v": "https://pokeapi.co/api/v2/pokemon/1/",
+   "shapes": [
+    6,
+    9,
+    12,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "absolute-url",
+   "cl": "url",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app04_openfoodfacts_search_to_product",
+   "dom": "Retail/food",
+   "v": "3168930010265",
+   "shapes": [
+    1,
+    9,
+    21,
+    27,
+    28
+   ],
+   "pm": "GET",
+   "vt": "string-id",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app05_reqres_list_to_user",
+   "dom": "SaaS",
+   "v": "3",
+   "shapes": [
+    1,
+    9,
+    13,
+    14,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "short-numeric",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "FLOOR",
+   "cause": "below the documented short-value floor",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app06_nominatim_search_to_details",
+   "dom": "Geo/logistics",
+   "v": "275905280",
+   "shapes": [
+    2,
+    9,
+    13,
+    21,
+    28
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "query",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "place_id",
+    "name"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app07_dummyjson_login_to_me",
+   "dom": "SaaS/commerce",
+   "v": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI",
+   "shapes": [
+    4,
+    16,
+    20,
+    22
+   ],
+   "pm": "POST",
+   "vt": "jwt",
+   "cl": "header",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "username",
+    "password"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app08_jsonplaceholder_create_to_comments",
+   "dom": "Generic web",
+   "v": "101",
+   "shapes": [
+    1,
+    13,
+    22,
+    30
+   ],
+   "pm": "POST",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "title"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app09_rickandmorty_episode_to_character",
+   "dom": "Media/entertainment",
+   "v": "https://rickandmortyapi.com/api/character/1",
+   "shapes": [
+    6,
+    10,
+    12,
+    21
+   ],
+   "pm": "GET",
+   "vt": "absolute-url",
+   "cl": "url",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "url"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app10_httpbin_uuid_to_query",
+   "dom": "Generic HTTP",
+   "v": "31bcf27e-5e87-47c1-bb31-d9f6a1acf6b9",
+   "shapes": [
+    2,
+    15,
+    21
+   ],
+   "pm": "GET",
+   "vt": "uuid",
+   "cl": "query",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app11_openmeteo_geocode_to_forecast",
+   "dom": "Geo/weather",
+   "v": "53.33306",
+   "shapes": [
+    2,
+    8,
+    9,
+    21,
+    31
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "query",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "name"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app11_openmeteo_geocode_to_forecast",
+   "dom": "Geo/weather",
+   "v": "-6.24889",
+   "shapes": [
+    2,
+    8,
+    9,
+    21,
+    31
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "query",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "name"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app12_nominatim_osmid_embedded",
+   "dom": "Geo/logistics",
+   "v": "311466843",
+   "shapes": [
+    2,
+    13,
+    19,
+    21
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "query-embedded",
+   "hit": false,
+   "secondary": false,
+   "stage": "DISCOVERY",
+   "cause": "producer found, consumer slot never matched",
+   "csv": [
+    "name",
+    "osm_ids"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app13_restfulbooker_auth_create_read",
+   "dom": "Travel/booking",
+   "v": "5454",
+   "shapes": [
+    1,
+    13,
+    22,
+    30
+   ],
+   "pm": "POST",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "totalprice",
+    "additionalneeds",
+    "firstname",
+    "lastname",
+    "checkin",
+    "checkout",
+    "username",
+    "password"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app14_hackernews_topstories_to_item",
+   "dom": "Social/news",
+   "v": "49823582",
+   "shapes": [
+    1,
+    11,
+    13,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "orderBy"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app15_openalex_referenced_works",
+   "dom": "Education/research",
+   "v": "https://openalex.org/W2069091362",
+   "shapes": [
+    1,
+    10,
+    19,
+    21
+   ],
+   "pm": "GET",
+   "vt": "absolute-url",
+   "cl": "path-derived",
+   "hit": false,
+   "secondary": false,
+   "stage": "DISCOVERY",
+   "cause": "producer found, consumer slot never matched",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app16_postcodes_random_to_lookup",
+   "dom": "Logistics/geo",
+   "v": "S13 7JT",
+   "shapes": [
+    1,
+    8,
+    21,
+    26
+   ],
+   "pm": "GET",
+   "vt": "string-with-space",
+   "cl": "path-encoded",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app17_openbrewery_list_to_detail",
+   "dom": "Retail/hospitality",
+   "v": "ae7b3174-8be8-4d53-a3a5-9b8240970eea",
+   "shapes": [
+    1,
+    9,
+    15,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "uuid",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app18_fhir_patient_search_to_read",
+   "dom": "Healthcare",
+   "v": "4202",
+   "shapes": [
+    1,
+    8,
+    9,
+    13,
+    21,
+    27,
+    28
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "resourceType"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app19_clinicaltrials_search_to_study",
+   "dom": "Government/clinical",
+   "v": "NCT05604235",
+   "shapes": [
+    1,
+    8,
+    9,
+    21,
+    27,
+    28
+   ],
+   "pm": "GET",
+   "vt": "string-id",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app20_gbif_species_search_to_names",
+   "dom": "Government/science",
+   "v": "116892593",
+   "shapes": [
+    1,
+    8,
+    9,
+    13,
+    21,
+    25,
+    27
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app21_npm_search_to_package",
+   "dom": "Developer platform",
+   "v": "performance-results-parser",
+   "shapes": [
+    1,
+    8,
+    9,
+    20,
+    21,
+    27,
+    28
+   ],
+   "pm": "GET",
+   "vt": "hyphenated-name",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app22_crossref_works_to_doi",
+   "dom": "Education/publishing",
+   "v": "10.1002/9781119584414.ch4",
+   "shapes": [
+    1,
+    8,
+    9,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "slash-bearing-id",
+   "cl": "path-multisegment",
+   "hit": false,
+   "secondary": false,
+   "stage": "DISCOVERY",
+   "cause": "producer found, consumer slot never matched",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app23_platzi_create_to_retrieve",
+   "dom": "E-commerce",
+   "v": "428",
+   "shapes": [
+    1,
+    13,
+    22,
+    30
+   ],
+   "pm": "POST",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "title",
+    "description"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app24_deckofcards_shuffle_draw_shuffle",
+   "dom": "Gaming/entertainment",
+   "v": "hoe4kg03jrmq",
+   "shapes": [
+    1,
+    18,
+    21,
+    24
+   ],
+   "pm": "GET",
+   "vt": "opaque",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app25_swapi_film_to_character",
+   "dom": "Media/entertainment",
+   "v": "https://swapi.info/api/people/1",
+   "shapes": [
+    6,
+    10,
+    12,
+    21
+   ],
+   "pm": "GET",
+   "vt": "absolute-url",
+   "cl": "url",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "url"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app26_opentdb_token_to_questions",
+   "dom": "Gaming/media",
+   "v": "d23c01dff6f90c5e440739ca69c476173b42c9f52bcc",
+   "shapes": [
+    2,
+    18,
+    21
+   ],
+   "pm": "GET",
+   "vt": "opaque",
+   "cl": "query",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app27_quotes_csrf_form_login",
+   "dom": "Auth sandbox",
+   "v": "dVacEpRxvlUBjTtGKOJhqmbkIgDysQWYHorLZNzwMeiu",
+   "shapes": [
+    18,
+    20,
+    21
+   ],
+   "pm": "GET",
+   "vt": "opaque",
+   "cl": "body",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "password",
+    "username"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app28_platzi_email_login_to_profile",
+   "dom": "E-commerce / SaaS",
+   "v": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWI",
+   "shapes": [
+    4,
+    16,
+    20,
+    22
+   ],
+   "pm": "POST",
+   "vt": "jwt",
+   "cl": "header",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "password",
+    "email"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app29_dummyjson_refresh_token_chain",
+   "dom": "SaaS / commerce",
+   "v": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI",
+   "shapes": [
+    16,
+    22
+   ],
+   "pm": "POST",
+   "vt": "jwt",
+   "cl": "body",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "username",
+    "password"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app29_dummyjson_refresh_token_chain",
+   "dom": "SaaS / commerce",
+   "v": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI",
+   "shapes": [
+    4,
+    16,
+    22
+   ],
+   "pm": "POST",
+   "vt": "jwt",
+   "cl": "header",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "username",
+    "password"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app30_restfulbooker_create_update_retrieve",
+   "dom": "Travel / booking",
+   "v": "4248",
+   "shapes": [
+    1,
+    13,
+    22,
+    24,
+    30
+   ],
+   "pm": "POST",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "username",
+    "password",
+    "lastname",
+    "totalprice",
+    "additionalneeds",
+    "firstname",
+    "checkin",
+    "checkout"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app31_huggingface_models",
+   "dom": "GenAI / AI",
+   "v": "sentence-transformers/all-MiniLM-L6-v2",
+   "shapes": [
+    1,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "slash-bearing-id",
+   "cl": "path-multisegment",
+   "hit": false,
+   "secondary": false,
+   "stage": "DISCOVERY",
+   "cause": "producer found, consumer slot never matched",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app31_huggingface_models",
+   "dom": "GenAI / AI",
+   "v": "sentence-transformers",
+   "shapes": [
+    1,
+    21
+   ],
+   "pm": "GET",
+   "vt": "slash-bearing-id",
+   "cl": "path",
+   "hit": true,
+   "secondary": true,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app32_huggingface_datasets",
+   "dom": "GenAI / AI",
+   "v": "m-a-p/FineFineWeb",
+   "shapes": [
+    1,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "slash-bearing-id",
+   "cl": "path-multisegment",
+   "hit": false,
+   "secondary": false,
+   "stage": "DISCOVERY",
+   "cause": "producer found, consumer slot never matched",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app32_huggingface_datasets",
+   "dom": "GenAI / AI",
+   "v": "m-a-p",
+   "shapes": [
+    1,
+    21
+   ],
+   "pm": "GET",
+   "vt": "slash-bearing-id",
+   "cl": "path",
+   "hit": true,
+   "secondary": true,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app33_frankfurter_rate_date",
+   "dom": "Finance / FX",
+   "v": "2026-09-23",
+   "shapes": [
+    1,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "date",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [
+    "base"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app34_wikidata_search_to_entity",
+   "dom": "Knowledge graph",
+   "v": "Q1761",
+   "shapes": [
+    2,
+    9,
+    21,
+    28
+   ],
+   "pm": "GET",
+   "vt": "coded-id",
+   "cl": "query",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "id",
+    "value"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app35_dummyjson_product_search",
+   "dom": "E-commerce",
+   "v": "101",
+   "shapes": [
+    1,
+    9,
+    13,
+    21,
+    28
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "id"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app36_diseasesh_country_iso3",
+   "dom": "Healthcare data",
+   "v": "IRL",
+   "shapes": [
+    1,
+    8,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "short-code",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app37_artic_artwork_search",
+   "dom": "Culture / museum",
+   "v": "656",
+   "shapes": [
+    1,
+    9,
+    13,
+    21,
+    28
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "id"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app38_github_tag_to_ref",
+   "dom": "Developer platform",
+   "v": "v5.6.3-rc2",
+   "shapes": [
+    1,
+    9,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "version-tag",
+   "cl": "path",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app39_tvmaze_show_to_seasons",
+   "dom": "Media / TV",
+   "v": "139",
+   "shapes": [
+    1,
+    13,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "id"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app40_cratesio_search_to_crate",
+   "dom": "Developer platform",
+   "v": "hashbrown",
+   "shapes": [
+    1,
+    9,
+    20,
+    21,
+    28
+   ],
+   "pm": "GET",
+   "vt": "name",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "id"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app41_openverse_image_search",
+   "dom": "Media / CC images",
+   "v": "1c5442f6-6bb6-4ab7-b603-f598e7579dd2",
+   "shapes": [
+    1,
+    9,
+    15,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "uuid",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "NOISE",
+   "cause": "entire workflow excluded as noise; JMX has no samplers",
+   "csv": [],
+   "plan_problems": [
+    "missing constituents: HTTP Request Defaults, ResponseAssertion, TransactionController, HTTPSamplerProxy"
+   ]
+  },
+  {
+   "har": "app42_dummyjson_put_producer",
+   "dom": "E-commerce",
+   "v": "78",
+   "shapes": [
+    1,
+    13,
+    14,
+    23,
+    25
+   ],
+   "pm": "PUT",
+   "vt": "short-numeric",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "FLOOR",
+   "cause": "below the documented short-value floor",
+   "csv": [],
+   "plan_problems": []
+  },
+  {
+   "har": "app43_ukpolice_forces",
+   "dom": "Government / policing",
+   "v": "avon-and-somerset",
+   "shapes": [
+    1,
+    9,
+    20,
+    21,
+    28
+   ],
+   "pm": "GET",
+   "vt": "slug",
+   "cl": "path",
+   "hit": false,
+   "secondary": false,
+   "stage": "POLICY",
+   "cause": "entity-identifier carve-out",
+   "csv": [
+    "id"
+   ],
+   "plan_problems": []
+  },
+  {
+   "har": "app44_cocktaildb_random_lookup",
+   "dom": "Food & beverage",
+   "v": "13020",
+   "shapes": [
+    2,
+    9,
+    13,
+    21,
+    27
+   ],
+   "pm": "GET",
+   "vt": "numeric",
+   "cl": "query",
+   "hit": true,
+   "secondary": false,
+   "stage": "",
+   "cause": "",
+   "csv": [],
+   "plan_problems": []
+  }
+ ]
+}

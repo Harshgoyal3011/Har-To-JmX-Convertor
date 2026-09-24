@@ -1,0 +1,36 @@
+{
+ "har": "app36_diseasesh_country_iso3.har",
+ "path": "benchmark\\normalized\\app36_diseasesh_country_iso3.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "disease.sh",
+ "domain": "Healthcare / public-health data",
+ "flow": "country stats -> re-query by the returned ISO3 code",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.009,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "iso3"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://disease.sh/v3/covid-19/countries/Ireland?strict=true",
+  "GET https://disease.sh/v3/covid-19/countries/IRL"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 10515
+}

@@ -52,6 +52,8 @@ def bucket_of(path: Path, har: dict) -> str:
             return "REAL_CAPTURE"
         if prov == "REAL_API_JOURNEY":
             return "REAL_API_JOURNEY"
+        if prov == "SYNTHETIC_MFA":
+            return "SYNTHETIC_MFA"
     except Exception:  # noqa: BLE001
         pass
     hosts = _hosts(har)
@@ -161,7 +163,7 @@ def main() -> None:
     n = len(rows)
     ok = sum(1 for r in rows if r.get("conversion") == "PASS")
     print(f"\nHARs: {n}   conversion PASS: {ok} ({ok/n*100:.1f}%)   FAIL: {n-ok}")
-    for b in ("REAL_CAPTURE", "REAL_API_JOURNEY", "REAL_API", "SYNTHETIC"):
+    for b in ("REAL_CAPTURE", "REAL_API_JOURNEY", "REAL_API", "SYNTHETIC_MFA", "SYNTHETIC"):
         sub = [r for r in rows if r.get("bucket") == b]
         if not sub:
             continue

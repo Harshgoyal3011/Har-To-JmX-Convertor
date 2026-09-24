@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Hugging Face Hub",
+  "domain": "GenAI / AI model registry",
+  "flow": "list models -> open the top model",
+  "source": "https://huggingface.co (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "The model id CONTAINS A SLASH, so the produced value spans two path segments."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://huggingface.co/api/models?limit=1&sort=downloads&direction=-1",
+   "st": 183866,
+   "d": 326,
+   "status": 200,
+   "b": "[{\"_id\": \"621ffdc136468d709f180294\", \"id\": \"sentence-transformers/all-MiniLM-L6-v2\", \"likes\": 6113, \"private\": false, \"downloads\": 250598416, \"pipeline_tag\": \"sentence-similarity\", \"library_name\": \"sentence-transformers\", \"createdAt\": \"2022-03-02T23:29:05.000Z\", \"modelId\": \"sentence-transformers/all-MiniLM-L6-v2\"}]",
+   "method": "GET"
+  },
+  {
+   "u": "https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2",
+   "st": 184192,
+   "d": 410,
+   "status": 200,
+   "b": "{\"_id\": \"621ffdc136468d709f180294\", \"id\": \"sentence-transformers/all-MiniLM-L6-v2\", \"private\": false, \"pipeline_tag\": \"sentence-similarity\"}",
+   "method": "GET"
+  }
+ ]
+}

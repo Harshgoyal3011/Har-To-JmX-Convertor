@@ -1,0 +1,39 @@
+{
+ "meta": {
+  "app": "DummyJSON",
+  "domain": "E-commerce",
+  "flow": "search a product -> UPDATE it (PUT) -> retrieve it",
+  "source": "https://dummyjson.com (public sandbox) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "PUT is itself a PRODUCER of the id, which is therefore emitted by TWO producers (the search and the update) and consumed by the retrieve."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://dummyjson.com/products/search?q=laptop&limit=1&select=id,title",
+   "st": 207918,
+   "d": 355,
+   "status": 200,
+   "b": "{\"products\": [{\"id\": 78, \"title\": \"Apple MacBook Pro 14 Inch Space Grey\"}], \"total\": 5, \"skip\": 0, \"limit\": 1}",
+   "method": "GET"
+  },
+  {
+   "u": "https://dummyjson.com/products/78",
+   "st": 208273,
+   "d": 689,
+   "status": 200,
+   "b": "{\"id\": 78, \"title\": \"PerfUpdatedTitle\", \"price\": 1999.99, \"stock\": 24, \"rating\": 3.65, \"brand\": \"Apple\", \"category\": \"laptops\"}",
+   "method": "PUT",
+   "reqBody": "{\"title\": \"PerfUpdatedTitle\"}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://dummyjson.com/products/78?select=id,title",
+   "st": 208962,
+   "d": 421,
+   "status": 200,
+   "b": "{\"id\": 78, \"title\": \"Apple MacBook Pro 14 Inch Space Grey\"}",
+   "method": "GET"
+  }
+ ]
+}

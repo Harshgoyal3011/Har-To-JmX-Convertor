@@ -1,0 +1,35 @@
+{
+ "har": "app41_openverse_image_search.har",
+ "path": "benchmark\\normalized\\app41_openverse_image_search.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Openverse",
+ "domain": "Media / openly-licensed images",
+ "flow": "search images -> open the returned image",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.006,
+ "samplers": 0,
+ "transactions": 1,
+ "kept_requests": 0,
+ "excluded_requests": 2,
+ "assertions": 0,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 0,
+ "validate_problems": 1,
+ "validate_detail": [
+  "missing constituents: HTTP Request Defaults, ResponseAssertion, TransactionController, HTTPSamplerProxy"
+ ],
+ "kept_urls": [],
+ "excluded_hosts": [
+  "api.openverse.org"
+ ],
+ "jmx_bytes": 5803
+}

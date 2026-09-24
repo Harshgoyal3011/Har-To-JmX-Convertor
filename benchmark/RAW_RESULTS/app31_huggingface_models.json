@@ -1,0 +1,36 @@
+{
+ "har": "app31_huggingface_models.har",
+ "path": "benchmark\\normalized\\app31_huggingface_models.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Hugging Face Hub",
+ "domain": "GenAI / AI model registry",
+ "flow": "list models -> open the top model",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.005,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "library_name"
+ ],
+ "csv_columns": [],
+ "csv_column_count": 0,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://huggingface.co/api/models?limit=1&sort=downloads&direction=-1",
+  "GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 11506
+}

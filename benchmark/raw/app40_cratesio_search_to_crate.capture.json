@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "crates.io",
+  "domain": "Developer platform",
+  "flow": "list crates -> open the top crate",
+  "source": "https://crates.io (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "The dependent value is a package NAME, not an id - a direct check that an ordinary lowercase name is not mistaken for catalog data."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://crates.io/api/v1/crates?per_page=1&sort=downloads",
+   "st": 205114,
+   "d": 905,
+   "status": 200,
+   "b": "{\"crates\": [{\"id\": \"hashbrown\", \"name\": \"hashbrown\", \"updated_at\": \"2026-05-09T04:35:04.251Z\", \"downloads\": 2510962353, \"default_version\": \"0.17.1\", \"num_versions\": 56, \"yanked\": false, \"max_version\": \"0.17.1\", \"newest_version\": \"0.17.1\", \"description\": \"A Rust port of Google's SwissTable hash map\", \"repository\": \"https://github.com/rust-lang/hashbrown\"}], \"meta\": {\"total\": 338773}}",
+   "method": "GET"
+  },
+  {
+   "u": "https://crates.io/api/v1/crates/hashbrown",
+   "st": 206019,
+   "d": 859,
+   "status": 200,
+   "b": "{\"crate\": {\"id\": \"hashbrown\", \"name\": \"hashbrown\", \"max_version\": \"0.17.1\"}}",
+   "method": "GET"
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "GitHub API",
+  "domain": "Developer platform",
+  "flow": "list tags -> resolve the tag's git ref",
+  "source": "https://api.github.com (public, unauthenticated) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies re-serialized from the captured JSON; producer complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.github.com/repos/apache/jmeter/tags?per_page=1",
+   "st": 189183,
+   "d": 540,
+   "status": 200,
+   "b": "[{\"name\": \"v5.6.3-rc2\", \"zipball_url\": \"https://api.github.com/repos/apache/jmeter/zipball/refs/tags/v5.6.3-rc2\", \"commit\": {\"sha\": \"34a2785748e9e0b14702595e8682c387869deda3\"}, \"node_id\": \"MDM6UmVmNjg4MzUyOnJlZnMvdGFncy92NS42LjMtcmMy\"}]",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.github.com/repos/apache/jmeter/git/ref/tags/v5.6.3-rc2",
+   "st": 189723,
+   "d": 346,
+   "status": 200,
+   "b": "{\"ref\": \"refs/tags/v5.6.3-rc2\", \"node_id\": \"MDM6UmVmNjg4MzUyOnJlZnMvdGFncy92NS42LjMtcmMy\"}",
+   "method": "GET"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "har": "app34_wikidata_search_to_entity.har",
+ "path": "benchmark\\normalized\\app34_wikidata_search_to_entity.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Wikidata",
+ "domain": "Knowledge graph / open data",
+ "flow": "search entities -> fetch the entity by Q-id",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.01,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "id",
+  "value"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 8,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://www.wikidata.org/w/api.php?action=wbsearchentities&search=Dublin&language=en&format=json&limit=1&origin=*",
+  "GET https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q1761&format=json&props=labels&languages=en&origin=*"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 15753
+}

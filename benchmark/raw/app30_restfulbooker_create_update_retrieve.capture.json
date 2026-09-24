@@ -1,0 +1,61 @@
+{
+ "meta": {
+  "app": "restful-booker",
+  "domain": "Travel / booking",
+  "flow": "authenticate -> create booking -> UPDATE it -> retrieve it",
+  "source": "https://restful-booker.herokuapp.com (public sandbox, documented test user) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "create->update->retrieve; the booking id has TWO consumers. The auth token is issued but never consumed (Basic auth is used for the PUT), so correlating it would be a false positive. Basic credential is Base64 of documented sandbox credentials."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://restful-booker.herokuapp.com/auth",
+   "st": 30939,
+   "d": 274,
+   "status": 200,
+   "b": "{\"token\": \"ffb48ff29777745\"}",
+   "method": "POST",
+   "reqBody": "{\"username\": \"admin\", \"password\": \"password123\"}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://restful-booker.herokuapp.com/booking",
+   "st": 31213,
+   "d": 261,
+   "status": 200,
+   "b": "{\"bookingid\": 4248, \"booking\": {\"firstname\": \"Perf\", \"lastname\": \"Probe\", \"totalprice\": 250, \"depositpaid\": true, \"bookingdates\": {\"checkin\": \"2026-03-01\", \"checkout\": \"2026-03-07\"}, \"additionalneeds\": \"Late checkout\"}}",
+   "method": "POST",
+   "reqBody": "{\"firstname\": \"Perf\", \"lastname\": \"Probe\", \"totalprice\": 250, \"depositpaid\": true, \"bookingdates\": {\"checkin\": \"2026-03-01\", \"checkout\": \"2026-03-07\"}, \"additionalneeds\": \"Late checkout\"}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://restful-booker.herokuapp.com/booking/4248",
+   "st": 31473,
+   "d": 264,
+   "status": 200,
+   "b": "{\"firstname\": \"PerfUpdated\", \"lastname\": \"Probe\", \"totalprice\": 399, \"depositpaid\": false, \"bookingdates\": {\"checkin\": \"2026-03-02\", \"checkout\": \"2026-03-09\"}, \"additionalneeds\": \"Breakfast\"}",
+   "method": "PUT",
+   "reqBody": "{\"firstname\": \"PerfUpdated\", \"lastname\": \"Probe\", \"totalprice\": 399, \"depositpaid\": false, \"bookingdates\": {\"checkin\": \"2026-03-02\", \"checkout\": \"2026-03-09\"}, \"additionalneeds\": \"Breakfast\"}",
+   "reqMime": "application/json",
+   "reqHeaders": [
+    {
+     "name": "Authorization",
+     "value": "Basic YWRtaW46cGFzc3dvcmQxMjM="
+    },
+    {
+     "name": "Accept",
+     "value": "application/json"
+    }
+   ]
+  },
+  {
+   "u": "https://restful-booker.herokuapp.com/booking/4248",
+   "st": 31737,
+   "d": 261,
+   "status": 200,
+   "b": "{\"firstname\": \"PerfUpdated\", \"lastname\": \"Probe\", \"totalprice\": 399}",
+   "method": "GET"
+  }
+ ]
+}

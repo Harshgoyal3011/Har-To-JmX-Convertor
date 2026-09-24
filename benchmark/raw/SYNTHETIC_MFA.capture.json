@@ -1,0 +1,51 @@
+{
+ "meta": {
+  "app": "SYNTHETIC_MFA fixture",
+  "domain": "SYNTHETIC - not a real application",
+  "flow": "login -> MFA challenge -> OTP verification -> authenticated business call",
+  "source": "SYNTHETIC_MFA - NOT REAL-WORLD BENCHMARK (invented, no capture exists)",
+  "provenance": "SYNTHETIC_MFA",
+  "notes": "Excluded from all real-application precision/recall figures."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://mfa.example.com/api/login",
+   "method": "POST",
+   "st": 0,
+   "d": 240,
+   "status": 200,
+   "reqBody": "{\"username\": \"perfuser\", \"password\": \"Str0ngPass1\"}",
+   "reqMime": "application/json",
+   "b": "{\"mfaRequired\": true, \"challengeId\": \"CHL-8f2a9d3e7b61\", \"channel\": \"totp\", \"expiresIn\": 300}"
+  },
+  {
+   "u": "https://mfa.example.com/api/mfa/verify",
+   "method": "POST",
+   "st": 4300,
+   "d": 260,
+   "status": 200,
+   "reqBody": "{\"challengeId\": \"CHL-8f2a9d3e7b61\", \"otp\": \"482913\"}",
+   "reqMime": "application/json",
+   "b": "{\"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwZXJmdXNlciIsIm1mYSI6dHJ1ZSwiaWF0IjoxNzkwMjI4NDE5fQ.q7Rm2XbN4pLtVyCeZa1Ws9KdHgUjFoI3xMnBvQrTiAY\", \"tokenType\": \"Bearer\", \"expiresIn\": 1800}"
+  },
+  {
+   "u": "https://mfa.example.com/api/account/summary",
+   "method": "GET",
+   "st": 8600,
+   "d": 210,
+   "status": 200,
+   "reqHeaders": [
+    {
+     "name": "Authorization",
+     "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwZXJmdXNlciIsIm1mYSI6dHJ1ZSwiaWF0IjoxNzkwMjI4NDE5fQ.q7Rm2XbN4pLtVyCeZa1Ws9KdHgUjFoI3xMnBvQrTiAY"
+    },
+    {
+     "name": "Accept",
+     "value": "application/json"
+    }
+   ],
+   "b": "{\"accountId\": \"ACC-44120\", \"balance\": 1284.55, \"currency\": \"EUR\"}"
+  }
+ ]
+}

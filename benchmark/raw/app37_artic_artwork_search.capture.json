@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Art Institute of Chicago",
+  "domain": "Culture / museum",
+  "flow": "search artworks -> open the returned artwork",
+  "source": "https://api.artic.edu (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies re-serialized from the captured JSON; producer complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.artic.edu/api/v1/artworks/search?q=cat&limit=1&fields=id,title",
+   "st": 188791,
+   "d": 211,
+   "status": 200,
+   "b": "{\"pagination\": {\"total\": 133118, \"limit\": 1, \"offset\": 0, \"current_page\": 1}, \"data\": [{\"_score\": 92.31233, \"id\": 656, \"title\": \"Lion (One of a Pair, South Pedestal)\"}], \"config\": {\"iiif_url\": \"https://www.artic.edu/iiif/2\", \"website_url\": \"http://www.artic.edu\"}}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.artic.edu/api/v1/artworks/656?fields=id,title",
+   "st": 189002,
+   "d": 181,
+   "status": 200,
+   "b": "{\"data\": {\"id\": 656, \"title\": \"Lion (One of a Pair, South Pedestal)\"}}",
+   "method": "GET"
+  }
+ ]
+}

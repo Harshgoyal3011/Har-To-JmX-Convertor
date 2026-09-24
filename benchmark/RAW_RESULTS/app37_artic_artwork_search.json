@@ -1,0 +1,36 @@
+{
+ "har": "app37_artic_artwork_search.har",
+ "path": "benchmark\\normalized\\app37_artic_artwork_search.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Art Institute of Chicago",
+ "domain": "Culture / museum",
+ "flow": "search artworks -> open the returned artwork",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.01,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 0,
+ "correlations_verified": 0,
+ "correlation_vars": [],
+ "csv_columns": [
+  "id"
+ ],
+ "csv_column_count": 1,
+ "review_items": 0,
+ "unknown_values": 10,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://api.artic.edu/api/v1/artworks/search?q=cat&limit=1&fields=id,title",
+  "GET https://api.artic.edu/api/v1/artworks/656?fields=id,title"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12047
+}

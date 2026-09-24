@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "disease.sh",
+  "domain": "Healthcare / public-health data",
+  "flow": "country stats -> re-query by the returned ISO3 code",
+  "source": "https://disease.sh (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "The dependent value 'IRL' is exactly 3 characters - at the documented floor boundary."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://disease.sh/v3/covid-19/countries/Ireland?strict=true",
+   "st": 187220,
+   "d": 1374,
+   "status": 200,
+   "b": "{\"updated\": 1790240502061, \"country\": \"Ireland\", \"countryInfo\": {\"_id\": 372, \"iso2\": \"IE\", \"iso3\": \"IRL\", \"lat\": 53, \"long\": -8, \"flag\": \"https://disease.sh/assets/img/flags/ie.png\"}, \"cases\": 1734582, \"deaths\": 9491, \"recovered\": 1724921, \"active\": 170, \"population\": 5020199, \"continent\": \"Europe\"}",
+   "method": "GET"
+  },
+  {
+   "u": "https://disease.sh/v3/covid-19/countries/IRL",
+   "st": 188595,
+   "d": 196,
+   "status": 200,
+   "b": "{\"updated\": 1790240502061, \"country\": \"Ireland\", \"countryInfo\": {\"_id\": 372, \"iso2\": \"IE\", \"iso3\": \"IRL\"}}",
+   "method": "GET"
+  }
+ ]
+}

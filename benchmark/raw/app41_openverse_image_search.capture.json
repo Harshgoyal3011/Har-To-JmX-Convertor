@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Openverse",
+  "domain": "Media / openly-licensed images",
+  "flow": "search images -> open the returned image",
+  "source": "https://api.openverse.org (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "UUID inside a results array; the producer also carries detail_url, the FULL consumer URL."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.openverse.org/v1/images/?q=cat&page_size=1",
+   "st": 207813,
+   "d": 53,
+   "status": 200,
+   "b": "{\"result_count\": 240, \"page_count\": 240, \"page_size\": 1, \"page\": 1, \"results\": [{\"id\": \"1c5442f6-6bb6-4ab7-b603-f598e7579dd2\", \"title\": \"Cat Fish 2\", \"url\": \"https://live.staticflickr.com/3313/3481540500_c846c62863_b.jpg\", \"creator\": \"admiller\", \"license\": \"by\", \"license_version\": \"2.0\", \"provider\": \"flickr\", \"source\": \"flickr\", \"detail_url\": \"https://api.openverse.org/v1/images/1c5442f6-6bb6-4ab7-b603-f598e7579dd2/\", \"height\": 1024, \"width\": 716}]}",
+   "method": "GET"
+  },
+  {
+   "u": "https://api.openverse.org/v1/images/1c5442f6-6bb6-4ab7-b603-f598e7579dd2/",
+   "st": 207866,
+   "d": 52,
+   "status": 200,
+   "b": "{\"id\": \"1c5442f6-6bb6-4ab7-b603-f598e7579dd2\", \"title\": \"Cat Fish 2\"}",
+   "method": "GET"
+  }
+ ]
+}

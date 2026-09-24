@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "app": "Wikidata",
+  "domain": "Knowledge graph / open data",
+  "flow": "search entities -> fetch the entity by Q-id",
+  "source": "https://www.wikidata.org (public, no login) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Bodies re-serialized from the captured JSON; producer complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=Dublin&language=en&format=json&limit=1&origin=*",
+   "st": 185301,
+   "d": 682,
+   "status": 200,
+   "b": "{\"searchinfo\": {\"search\": \"Dublin\"}, \"search\": [{\"id\": \"Q1761\", \"title\": \"Q1761\", \"pageid\": 2302, \"concepturi\": \"http://www.wikidata.org/entity/Q1761\", \"label\": \"Dublin\", \"description\": \"capital and largest city of Ireland\"}], \"success\": 1}",
+   "method": "GET"
+  },
+  {
+   "u": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q1761&format=json&props=labels&languages=en&origin=*",
+   "st": 185984,
+   "d": 474,
+   "status": 200,
+   "b": "{\"entities\": {\"Q1761\": {\"type\": \"item\", \"id\": \"Q1761\", \"labels\": {\"en\": {\"language\": \"en\", \"value\": \"Dublin\"}}}}, \"success\": 1}",
+   "method": "GET"
+  }
+ ]
+}
