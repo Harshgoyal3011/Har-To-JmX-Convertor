@@ -1,0 +1,41 @@
+{
+ "har": "app29_dummyjson_refresh_token_chain.har",
+ "path": "benchmark\\normalized\\app29_dummyjson_refresh_token_chain.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 3,
+ "har_hosts": 1,
+ "application": "DummyJSON",
+ "domain": "SaaS / commerce API",
+ "flow": "login -> exchange refresh token for a new access token -> authenticated profile call",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.015,
+ "samplers": 4,
+ "transactions": 1,
+ "kept_requests": 3,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 2,
+ "correlations_verified": 2,
+ "correlation_vars": [
+  "refreshToken",
+  "accessToken"
+ ],
+ "csv_columns": [
+  "username",
+  "password"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 11,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://dummyjson.com/auth/login",
+  "POST https://dummyjson.com/auth/refresh",
+  "GET https://dummyjson.com/auth/me"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 14875
+}

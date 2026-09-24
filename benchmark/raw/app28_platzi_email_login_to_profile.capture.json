@@ -1,0 +1,43 @@
+{
+ "meta": {
+  "app": "Platzi Fake Store API",
+  "domain": "E-commerce / SaaS",
+  "flow": "email+password JSON login -> read own profile with the issued bearer token",
+  "source": "https://api.escuelajs.co (public sandbox, documented demo user) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Consumer body shortened; producer complete."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://api.escuelajs.co/api/v1/auth/login",
+   "st": 43376,
+   "d": 483,
+   "status": 201,
+   "b": "{\"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc5MDIyODQxOSwiZXhwIjoxNzkxOTU2NDE5fQ.cWIU6d-5MADfM9esdKDtHHEJr0ni4h222HjirBmsfpE\", \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc5MDIyODQxOSwiZXhwIjoxNzkwMjY0NDE5fQ.vAuQ4ysR3EgWQ7Opo8cNW_bHbM4MN-fQYJMW9ovaXf4\"}",
+   "method": "POST",
+   "mime": "application/json",
+   "reqBody": "{\"email\": \"john@mail.com\", \"password\": \"changeme\"}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://api.escuelajs.co/api/v1/auth/profile",
+   "st": 43859,
+   "d": 484,
+   "status": 200,
+   "b": "{\"id\": 1, \"email\": \"john@mail.com\", \"name\": \"Jhon\", \"role\": \"customer\"}",
+   "method": "GET",
+   "mime": "application/json",
+   "reqHeaders": [
+    {
+     "name": "Authorization",
+     "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc5MDIyODQxOSwiZXhwIjoxNzkxOTU2NDE5fQ.cWIU6d-5MADfM9esdKDtHHEJr0ni4h222HjirBmsfpE"
+    },
+    {
+     "name": "Accept",
+     "value": "application/json"
+    }
+   ]
+  }
+ ]
+}

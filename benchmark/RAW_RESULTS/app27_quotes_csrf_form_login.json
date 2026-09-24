@@ -1,0 +1,39 @@
+{
+ "har": "app27_quotes_csrf_form_login.har",
+ "path": "benchmark\\normalized\\app27_quotes_csrf_form_login.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Quotes to Scrape",
+ "domain": "Generic web / auth sandbox",
+ "flow": "open login page -> submit the form-urlencoded login with its CSRF token",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "csrf_token"
+ ],
+ "csv_columns": [
+  "password",
+  "username"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 3,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "GET https://quotes.toscrape.com/login",
+  "POST https://quotes.toscrape.com/login"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12280
+}

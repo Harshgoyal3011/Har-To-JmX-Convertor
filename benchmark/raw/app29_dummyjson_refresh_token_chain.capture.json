@@ -1,0 +1,54 @@
+{
+ "meta": {
+  "app": "DummyJSON",
+  "domain": "SaaS / commerce API",
+  "flow": "login -> exchange refresh token for a new access token -> authenticated profile call",
+  "source": "https://dummyjson.com (public sandbox, documented test user) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Refresh-token chain. NOTE the first access token is superseded and never used downstream - correlating it would be a false positive."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://dummyjson.com/auth/login",
+   "st": 44343,
+   "d": 628,
+   "status": 200,
+   "b": "{\"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3OTAyMjg0MjAsImV4cCI6MTc5MDIzMDIyMH0.7MesqdjENv4iY7_rCi8tEdXcgbFaIx7hoHh17IcMp7Q\", \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3OTAyMjg0MjAsImV4cCI6MTc5MjgyMDQyMH0.JbxreBnwb5HqOpxnfW7eOt5gm6jCdMsvgAbuiwC6WV0\", \"id\": 1, \"username\": \"emilys\", \"email\": \"emily.johnson@x.dummyjson.com\", \"firstName\": \"Emily\"}",
+   "method": "POST",
+   "mime": "application/json",
+   "reqBody": "{\"username\": \"emilys\", \"password\": \"emilyspass\", \"expiresInMins\": 30}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://dummyjson.com/auth/refresh",
+   "st": 44971,
+   "d": 591,
+   "status": 200,
+   "b": "{\"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3OTAyMjg0MjEsImV4cCI6MTc5MDIzMDIyMX0.Mnm-PzzY3prtVGegZXlgpww8u_FW8lHCj8xfJroAskQ\", \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3OTAyMjg0MjEsImV4cCI6MTc5MjgyMDQyMX0.zS__Ocq4NDT-yCopSfd0Zu5u6SQY8Xndu1MbJUaShnQ\"}",
+   "method": "POST",
+   "mime": "application/json",
+   "reqBody": "{\"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3OTAyMjg0MjAsImV4cCI6MTc5MjgyMDQyMH0.JbxreBnwb5HqOpxnfW7eOt5gm6jCdMsvgAbuiwC6WV0\", \"expiresInMins\": 30}",
+   "reqMime": "application/json"
+  },
+  {
+   "u": "https://dummyjson.com/auth/me",
+   "st": 45562,
+   "d": 595,
+   "status": 200,
+   "b": "{\"id\": 1, \"firstName\": \"Emily\", \"lastName\": \"Johnson\", \"username\": \"emilys\"}",
+   "method": "GET",
+   "mime": "application/json",
+   "reqHeaders": [
+    {
+     "name": "Authorization",
+     "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3OTAyMjg0MjEsImV4cCI6MTc5MDIzMDIyMX0.Mnm-PzzY3prtVGegZXlgpww8u_FW8lHCj8xfJroAskQ"
+    },
+    {
+     "name": "Accept",
+     "value": "application/json"
+    }
+   ]
+  }
+ ]
+}

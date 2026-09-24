@@ -1,0 +1,33 @@
+{
+ "meta": {
+  "app": "Quotes to Scrape",
+  "domain": "Generic web / auth sandbox",
+  "flow": "open login page -> submit the form-urlencoded login with its CSRF token",
+  "source": "https://quotes.toscrape.com (public scraping sandbox, any credentials) - captured live via the Claude browser pane",
+  "provenance": "REAL_API_JOURNEY",
+  "notes": "Anti-forgery token delivered as an HTML hidden input and posted back in a form-urlencoded body. Fake credentials perfuser/Str0ngPass1; no real account exists."
+ },
+ "rows": [],
+ "api": [
+  {
+   "u": "https://quotes.toscrape.com/login",
+   "st": 1538,
+   "d": 299,
+   "status": 200,
+   "b": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n\t<meta charset=\"UTF-8\">\n\t<title>Quotes to Scrape</title>\n    <link rel=\"stylesheet\" href=\"/static/bootstrap.min.css\">\n    <link rel=\"stylesheet\" href=\"/static/main.css\">\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"row header-box\">\n            <div class=\"col-md-8\">\n                <h1>\n                    <a href=\"/\" style=\"text-decoration: none\">Quotes to Scrape</a>\n                </h1>\n            </div>\n            <div class=\"col-md-4\">\n                <p>\n                    <a href=\"/login\">Login</a>\n                </p>\n            </div>\n        </div>\n<body>\n    <form action=\"/login\" method=\"post\" accept-charset=\"utf-8\" >\n        <input type=\"hidden\" name=\"csrf_token\" value=\"dVacEpRxvlUBjTtGKOJhqmbkIgDysQWYHorLZNzwMeiuXAfnPSCF\"/>\n        <div class=\"row\">\n            <div class=\"form-group col-xs-3\">\n                <label for=\"username\">Username</label>\n                <input type=\"text\" class=\"form-control\" id=\"username\" name=\"username\" />\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"form-group col-xs-3\">\n                <label for=\"username\">Password</label>\n                <input type=\"password\" class=\"form-control\" id=\"password\" name=\"password\" />\n            </div>\n        </div>\n        <input type=\"submit\" value=\"Login\" class=\"btn btn-primary\" />\n    </form>\n</body>\n    </div>\n</body>\n</html>",
+   "method": "GET",
+   "mime": "text/html"
+  },
+  {
+   "u": "https://quotes.toscrape.com/login",
+   "st": 1837,
+   "d": 674,
+   "status": 200,
+   "b": "<!DOCTYPE html>\n<html lang=\"en\"><head><title>Quotes to Scrape</title></head><body>ok</body></html>",
+   "method": "POST",
+   "mime": "text/html",
+   "reqBody": "csrf_token=dVacEpRxvlUBjTtGKOJhqmbkIgDysQWYHorLZNzwMeiuXAfnPSCF&username=perfuser&password=Str0ngPass1",
+   "reqMime": "application/x-www-form-urlencoded"
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+ "har": "app28_platzi_email_login_to_profile.har",
+ "path": "benchmark\\normalized\\app28_platzi_email_login_to_profile.har",
+ "bucket": "REAL_API_JOURNEY",
+ "har_requests": 2,
+ "har_hosts": 1,
+ "application": "Platzi Fake Store API",
+ "domain": "E-commerce / SaaS",
+ "flow": "email+password JSON login -> read own profile with the issued bearer token",
+ "conversion": "PASS",
+ "crash": "",
+ "stage": "",
+ "conversion_time": 0.004,
+ "samplers": 3,
+ "transactions": 1,
+ "kept_requests": 2,
+ "excluded_requests": 0,
+ "assertions": 1,
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "access_token"
+ ],
+ "csv_columns": [
+  "password",
+  "email"
+ ],
+ "csv_column_count": 2,
+ "review_items": 0,
+ "unknown_values": 11,
+ "validate_problems": 0,
+ "validate_detail": [],
+ "kept_urls": [
+  "POST https://api.escuelajs.co/api/v1/auth/login",
+  "GET https://api.escuelajs.co/api/v1/auth/profile"
+ ],
+ "excluded_hosts": [],
+ "jmx_bytes": 12371
+}
