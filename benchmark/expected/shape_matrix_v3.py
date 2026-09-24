@@ -135,7 +135,15 @@ def score() -> dict:
             if hit:
                 dec = next(c for c in res.correlations if str(c.value) == v)
                 t["ver"] += int(v in ok)
-                t["mat"] += int(matz.get(dec.variable) == MaterializationStatus.MATERIALIZED)
+                # "materialized" = the dependency is expressed in the emitted JMX. That is true when the
+                # value has its own variable (MATERIALIZED), when a LONGER substituted value covers its
+                # span (SUPERSEDED — e.g. an org segment inside ${modelId}), and when JMeter's Cookie
+                # Manager replays it. SKIPPED_UNVERIFIED and FAILED are not. This is exactly the audit's
+                # own `.ok`, so the metric and the audit cannot drift apart.
+                st = matz.get(dec.variable)
+                t["mat"] += int(st in (MaterializationStatus.MATERIALIZED,
+                                       MaterializationStatus.SUPERSEDED,
+                                       MaterializationStatus.COOKIE_MANAGER))
             for sh in e["s"]:
                 agg["shape"][sh]["exp"] += 1
                 agg["shape"][sh]["det"] += int(hit)

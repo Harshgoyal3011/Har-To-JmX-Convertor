@@ -28,6 +28,7 @@ from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
 from har2jmx.validate import ExtractorStatus
+from har2jmx.validate.materialization import covered_by_longer_span as _covered_by_longer_span
 
 # Headers JMeter must not replay. HTTP/2 pseudo-headers (:authority/:method/:path/:scheme) are illegal
 # HTTP/1 header names and duplicate what the sampler already sets — emitting them breaks the request.
@@ -133,11 +134,14 @@ def _build_sub_map(result: EngineResult) -> dict[str, str]:
     # ${var} with no working extractor resolves to NOT_FOUND at run time (a false green). Ship the
     # literal and escalate it to the manual-review report instead.
     unresolved = {chk.value for chk in result.extractor_checks if not chk.ok}
+    covered_spans = _covered_by_longer_span(result)
     for c in result.correlations:                       # correlations win over parameters
         if c.extractor == ExtractorType.COOKIE_MANAGER:
             continue                                    # Cookie Manager replays it; no ${var}
         if c.value in unresolved:
             continue                                    # no verified extractor → keep the literal
+        if str(c.value) in covered_spans:
+            continue                                # a longer correlated span already covers it
         if _sub_ok(c.value):
             sub[str(c.value)] = f"${{{c.variable}}}"
     for uuid_val in _generated_uuid_values(result):     # fresh UUID per request (beats a CSV value)
@@ -233,7 +237,25 @@ def _sub_path(path: str, sub: dict[str, str], url: str = "") -> str:
             best = (value, var, tail)
     if best is not None:
         return best[1] + best[2]
-    # 3) per segment. A segment may carry the correlated value plus a static file extension
+    # 3) a correlated value that spans SEVERAL whole path segments (a DOI, an org/repo id). Replace
+    #    that run of segments with the variable and keep the surrounding structure intact. Both ends of
+    #    the run are segment boundaries, matching how the span was discovered, so the canonical
+    #    representation used for matching and for substitution is the same one. Longest run wins.
+    parts = path.split("/")
+    filled = [i for i, seg in enumerate(parts) if seg]
+    span: tuple[int, int, str] | None = None
+    for ai in range(len(filled)):
+        for bi in range(len(filled) - 1, ai, -1):
+            a, b = filled[ai], filled[bi]
+            hit = _sub_lookup("/".join(parts[a:b + 1]), sub)
+            if hit is not None and (span is None or (b - a) > (span[1] - span[0])):
+                span = (a, b, hit)
+                break
+    if span is not None:
+        a, b, var = span
+        return "/".join(parts[:a] + [var] + parts[b + 1:])
+
+    # 4) per segment. A segment may carry the correlated value plus a static file extension
     #    ("49823582.json"); replace only the value and keep the suffix.
     out: list[str] = []
     for part in path.split("/"):
@@ -674,9 +696,10 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
     # extractor self-check: only ship an extractor proven to resolve; refine ambiguous JSONPaths; drop
     # (and let the manual-review path flag) any that could not be verified against the capture.
     check_by_var = {chk.variable: chk for chk in result.extractor_checks}
+    covered = _covered_by_longer_span(result)
     producer_map: dict[int, list] = {}
     for c in result.correlations:
-        if c.extractor != ExtractorType.COOKIE_MANAGER:
+        if c.extractor != ExtractorType.COOKIE_MANAGER and str(c.value) not in covered:
             producer_map.setdefault(c.producer_index, []).append(c)
 
     root = Element("jmeterTestPlan", {"version": "1.2", "properties": "5.0", "jmeter": "5.6.3"})

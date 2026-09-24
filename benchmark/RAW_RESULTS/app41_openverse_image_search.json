@@ -24,8 +24,8 @@
  ],
  "csv_columns": [],
  "csv_column_count": 0,
- "review_items": 1,
- "unknown_values": 4,
+ "review_items": 3,
+ "unknown_values": 7,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -33,5 +33,5 @@
   "GET https://api.openverse.org/v1/images/1c5442f6-6bb6-4ab7-b603-f598e7579dd2/"
  ],
  "excluded_hosts": [],
- "jmx_bytes": 11597
+ "jmx_bytes": 11076
 }

@@ -16,13 +16,15 @@
  "kept_requests": 2,
  "excluded_requests": 0,
  "assertions": 1,
- "correlations": 0,
- "correlations_verified": 0,
- "correlation_vars": [],
+ "correlations": 1,
+ "correlations_verified": 1,
+ "correlation_vars": [
+  "DOI"
+ ],
  "csv_columns": [],
  "csv_column_count": 0,
  "review_items": 0,
- "unknown_values": 12,
+ "unknown_values": 14,
  "validate_problems": 0,
  "validate_detail": [],
  "kept_urls": [
@@ -30,5 +32,5 @@
   "GET https://api.crossref.org/works/10.1002/9781119584414.ch4"
  ],
  "excluded_hosts": [],
- "jmx_bytes": 10398
+ "jmx_bytes": 10917
 }

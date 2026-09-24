@@ -166,6 +166,8 @@ def _emit(value: Any, side: str, location: str, field_name: str, idx: int) -> Oc
 
 
 _PATH_EXT_RE = re.compile(r"\.[A-Za-z0-9]{1,8}$")
+# cap on segments considered for multi-segment spans (spans are O(n^2) in the count)
+_MAX_PATH_SEGMENTS = 12
 
 
 def _request_slots(req: NormalizedRequest, emit_url: bool = True) -> Iterator[Occurrence]:
@@ -201,6 +203,19 @@ def _request_slots(req: NormalizedRequest, emit_url: bool = True) -> Iterator[Oc
             o = _emit(core, "request", "request.pathprefix", "path", idx)
             if o:
                 yield o
+    # Contiguous MULTI-SEGMENT spans. One logical identifier can legitimately contain "/": a DOI
+    # (10.1002/9781119584414.ch4), an org/repo id (sentence-transformers/all-MiniLM-L6-v2). Such a value
+    # spans several URL segments, so neither a single-segment slot nor a root-anchored prefix can ever
+    # equal it. Every span here starts and ends on a SEGMENT BOUNDARY, which is what makes this
+    # path-aware matching rather than substring matching: a value is only ever matched as a whole run of
+    # complete segments, never as a fragment of one. Spans of length 1 are already covered above, and
+    # the segment count is capped so a pathological URL cannot make this quadratic blow up.
+    if 2 <= len(segs) <= _MAX_PATH_SEGMENTS:
+        for a in range(len(segs)):
+            for b in range(a + 1, len(segs)):
+                o = _emit("/".join(segs[a:b + 1]), "request", "request.pathspan", "path", idx)
+                if o:
+                    yield o
     # The absolute-URL slot exists for the HATEOAS case (a response body returns the next request's
     # URL). It is deliberately NOT emitted for a redirect target: a 3xx Location already has dedicated
     # producer handling and is replayed by redirect-following, so matching it here would mint a second,
