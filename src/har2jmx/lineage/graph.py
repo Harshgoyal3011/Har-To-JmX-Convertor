@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from typing import Any, Iterator
 from urllib.parse import parse_qsl, unquote, urlparse
 
-from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest
+from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest, RequestRole
 from har2jmx.patterns import GUID_RE, HIDDEN_INPUT_RE, META_TAG_RE
 
 # Headers whose value carries a credential after a scheme word (Bearer <token>, Token <t>, …).
@@ -45,6 +45,19 @@ def _iter_xml_values(raw: str) -> Iterator[tuple[str, str]]:
         yield name, val.strip()
 
 _TRIVIAL = {"", "true", "false", "null", "none", "undefined", "0", "1", "-1"}
+_TRIVIAL_BOOL = {"", "true", "false", "null", "none", "undefined"}
+# Whole request slots (query/path/body) stay candidates even when the value is a short numeric
+# ("2", "3"). Response/header inventory still uses _TRIVIAL so "0"/"1" in JSON lists don't explode.
+_INPUT_SLOT_PREFIXES = (
+    "request.query:", "request.path", "request.body:", "request.xml:", "request.header:",
+)
+
+
+def _is_input_slot_location(location: str) -> bool:
+    loc = location or ""
+    return loc == "request.path" or loc.startswith(_INPUT_SLOT_PREFIXES)
+
+
 _MAX_LIST = 25
 _MAX_DEPTH = 6
 
@@ -135,34 +148,72 @@ def _scalar(v: Any) -> bool:
     return isinstance(v, (str, int, float)) and not isinstance(v, bool)
 
 
-def _walk_json(obj: Any, prefix: str, out: list[tuple[str, Any]], depth: int = 0) -> None:
+def _walk_json(obj: Any, prefix: str, out: list[tuple[str, Any]], depth: int = 0,
+               catalog_keys: bool = False) -> None:
     if depth > _MAX_DEPTH:
         return
     if isinstance(obj, dict):
+        # A JSON object whose values are themselves collections is a catalog map keyed by identity
+        # (breed name → images, country → stats). Emit the keys so a later path can consume them.
+        if catalog_keys and len(obj) >= 5:
+            nested = sum(1 for v in obj.values() if isinstance(v, (dict, list)))
+            if nested >= max(4, int(0.7 * len(obj))):
+                for k in obj:
+                    if isinstance(k, str) and k.strip():
+                        out.append((prefix or k, k))
         for k, v in obj.items():
             kp = f"{prefix}.{k}" if prefix else str(k)
             if _scalar(v):
                 out.append((kp, v))
             elif isinstance(v, (dict, list)):
-                _walk_json(v, kp, out, depth + 1)
+                _walk_json(v, kp, out, depth + 1, catalog_keys=catalog_keys)
     elif isinstance(obj, list):
         for item in obj[:_MAX_LIST]:
-            _walk_json(item, prefix, out, depth + 1)
+            _walk_json(item, prefix, out, depth + 1, catalog_keys=catalog_keys)
 
 
 def _emit(value: Any, side: str, location: str, field_name: str, idx: int) -> Occurrence | None:
     norm = _norm(value)
-    if norm.lower() in _TRIVIAL or len(norm) < 2:
+    if not norm:
+        return None
+    if _is_input_slot_location(location):
+        if norm.lower() in _TRIVIAL_BOOL:
+            return None
+    elif norm.lower() in _TRIVIAL or len(norm) < 2:
         return None
     return Occurrence(request_index=idx, side=side, location=location, field=field_name, raw=str(value))
 
 
+_PATH_FILE_EXT_RE = re.compile(
+    r"\.(?:json|php|xml|html?|aspx|jsp|cgi)$", re.IGNORECASE
+)
+
+
+def _path_stem(seg: str) -> str:
+    s = unquote(seg)
+    return _PATH_FILE_EXT_RE.sub("", s) if _PATH_FILE_EXT_RE.search(s) else s
+
+
+def _path_field_for_segment(segs: list[str], index: int) -> str:
+    if index > 0:
+        return unquote(segs[index - 1]) or "path"
+    return "path"
+
+
 def _request_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
     idx = req.index
-    for i, seg in enumerate(req.request.path_segments):
-        o = _emit(unquote(seg), "request", "request.path", "path", idx)
+    segs = list(req.request.path_segments)
+    for i, seg in enumerate(segs):
+        raw = unquote(seg)
+        field = _path_field_for_segment(segs, i)
+        o = _emit(raw, "request", "request.path", field, idx)
         if o:
             yield o
+        stem = _path_stem(seg)
+        if stem != raw:
+            oc = _emit(stem, "request", "request.path", field, idx)
+            if oc:
+                yield oc
     for k, v in req.request.query:
         o = _emit(v, "request", f"request.query:{k}", k, idx)
         if o:
@@ -242,7 +293,7 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
                     yield oc
     if req.response.body.json is not None:
         pairs: list[tuple[str, Any]] = []
-        _walk_json(req.response.body.json, "", pairs)
+        _walk_json(req.response.body.json, "", pairs, catalog_keys=True)
         for kp, v in pairs:
             o = _emit(v, "response", f"response.body:{kp}", kp.split(".")[-1], idx)
             if o:
@@ -277,6 +328,18 @@ def _response_slots(req: NormalizedRequest) -> Iterator[Occurrence]:
 
 # ---------------------------------------------------------------- graph construction
 
+def _api_like_for_params(req: NormalizedRequest) -> bool:
+    """JSON/query/body APIs mis-tagged as static still carry client input slots."""
+    if req.classification.role == RequestRole.TELEMETRY:
+        return False
+    mime = (req.response.mime or "").lower()
+    if "json" in mime or mime in {"text/javascript", "application/javascript"}:
+        return True
+    if req.request.query or req.request.body.json is not None or req.request.body.form:
+        return True
+    return False
+
+
 def build_lineage(cap: NormalizedCapture) -> LineageGraph:
     index: dict[str, list[Occurrence]] = {}
 
@@ -284,10 +347,13 @@ def build_lineage(cap: NormalizedCapture) -> LineageGraph:
         index.setdefault(_norm(o.raw), []).append(o)
 
     for req in cap.requests:
-        if req.classification.excluded:
+        excluded = req.classification.excluded
+        if excluded and not _api_like_for_params(req):
             continue
         for o in _request_slots(req):
             add(o)
+        if excluded:
+            continue
         for o in _response_slots(req):
             add(o)
 
@@ -301,13 +367,14 @@ def build_lineage(cap: NormalizedCapture) -> LineageGraph:
                 o for o in occ
                 if o.side == "request" and o.request_index > first_producer.request_index
             ]
+        slot_input = any(o.side == "request" and _is_input_slot_location(o.location) for o in occ)
         flows.append(ValueFlow(
             value=value,
             occurrences=occ,
             producers=producers,
             consumers=consumers,
             first_producer=first_producer,
-            significant=_is_significant(value),
+            significant=_is_significant(value) or slot_input,
         ))
 
     _augment_embedded(cap, flows)

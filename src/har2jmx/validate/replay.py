@@ -44,9 +44,18 @@ def validate_replay(cap: NormalizedCapture,
                     correlations: list[CorrelationDecision],
                     plan: ParameterizationPlan,
                     classification: ClassificationResult | None = None,
-                    lineage: LineageGraph | None = None) -> ReplayReport:
+                    lineage: LineageGraph | None = None,
+                    correlation_audit=None) -> ReplayReport:
     lineage = lineage if lineage is not None else build_lineage(cap)
     classification = classification if classification is not None else classify_values(cap, lineage)
+    if correlation_audit is None:
+        from har2jmx.correlate.decide import discover_correlation_candidates
+        from har2jmx.correlate.necessity import apply_necessity_gate
+        correlation_audit = apply_necessity_gate(
+            cap, lineage, classification,
+            discover_correlation_candidates(cap, classification, lineage),
+        )
+    not_required = {r.decision.value for r in correlation_audit.rejected}
     value_class = {v.value: v.classification for v in classification.verdicts}
     corr_values = {c.value for c in correlations}
 
@@ -86,13 +95,16 @@ def validate_replay(cap: NormalizedCapture,
     add("Every extractor is consumed", not unused, "MEDIUM",
         "No unused extractors." if not unused else f"Unused extractors: {', '.join(unused[:5])}")
 
-    # 5. Missing correlations — server-issued, reused, but not correlated
+    # 5. Missing correlations — proven runtime necessity, but not emitted
     missing_runtime = sorted({
         v.value for v in classification.verdicts
-        if v.classification == ValueClass.RUNTIME_GENERATED and v.consumers and v.value not in corr_values
+        if v.classification == ValueClass.RUNTIME_GENERATED
+        and v.consumers
+        and v.value not in corr_values
+        and v.value not in not_required
     })
     add("No missing runtime correlations", not missing_runtime, "HIGH",
-        "Every proven runtime dependency has an extractor." if not missing_runtime
+        "Every necessary runtime dependency has an extractor." if not missing_runtime
         else f"Runtime values reused but not correlated: {', '.join(missing_runtime[:5])}")
 
     # 6. Ambiguous produced-and-reused values (review, not a hard failure)

@@ -79,13 +79,12 @@ def test_existing_record_id_is_master_data():
     assert v.entity == "Customer" and v.is_identifier
 
 
-def test_ambiguous_value_is_unknown_not_wired():
+def test_search_term_is_client_originated_master_data():
     r = _result("sample_flow.har")
-    v = r.by_value("acme")           # ?q=acme search term, no business-name / entity signal
-    assert v is not None and v.classification == ValueClass.UNKNOWN
-    # UNKNOWN must never silently become a correlation or a parameter
+    v = r.by_value("acme")           # ?q=acme — whole query slot, even without a business-y field name
+    assert v is not None and v.classification == ValueClass.BUSINESS_MASTER_DATA
+    assert v.lifecycle == Lifecycle.USER_INPUT
     assert v not in r.correlations()
-    assert v not in r.parameters()
 
 
 def test_echoed_user_input_is_master_data_not_runtime():

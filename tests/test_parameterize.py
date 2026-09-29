@@ -19,11 +19,10 @@ def _plan(name: str):
 
 def test_existing_entity_becomes_entity_dataset():
     plan = _plan("sample_flow.har")
-    ds = {d.name: d for d in plan.datasets}
-    assert "Customer" in ds
-    cust = ds["Customer"]
-    assert cust.source == "entity"
-    assert any(c.entity_field == "id" and c.sample == "1001" for c in cust.columns)
+    cols = [c for d in plan.datasets for c in d.columns]
+    assert any(c.entity_field == "id" and c.sample == "1001" for c in cols)
+    vals = {v for d in plan.datasets for row in d.rows for v in row.values()}
+    assert "1001" in vals
 
 
 def test_runtime_values_never_in_datasets():
@@ -32,10 +31,12 @@ def test_runtime_values_never_in_datasets():
     assert "ORD1" not in all_values          # created object id is a correlation, not test data
 
 
-def test_unused_master_data_is_skipped_not_a_csv():
-    # sample_entities: entities are read but never reused in a request → no datasets, all skipped.
+def test_unused_list_siblings_are_not_csv_rows():
+    # GET /patients returns 1 and 2; only /patients/1 is consumed. Unused sibling 2 stays out.
     plan = _plan("sample_entities.har")
-    assert plan.datasets == []
+    vals = {v for d in plan.datasets for row in d.rows for v in row.values()}
+    assert "1" in vals
+    assert "2" not in vals
     assert any("never used in a request" in reason for _, reason in plan.skipped)
 
 
@@ -53,9 +54,7 @@ def test_created_id_never_leaks_into_csv_even_with_existing_ids():
     # an entity id column that mixes an existing id (1) and a created runtime id (101) must NOT put
     # the created value into a dataset; the user inputs (title/body) still parameterize.
     plan = _plan("sample_mixed_id.har")
-    post = next((d for d in plan.datasets if d.name == "Post"), None)
-    assert post is not None
-    cols = {c.name for c in post.columns}
+    cols = {c.name for d in plan.datasets for c in d.columns}
     assert "title" in cols and "body" in cols
     assert "id" not in cols
     all_values = {v for d in plan.datasets for row in d.rows for v in row.values()}

@@ -25,6 +25,7 @@ from har2jmx.correlate import ExtractorType
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
+from har2jmx.utils import variable_name
 from har2jmx.validate import ExtractorStatus
 
 # Headers JMeter must not replay. HTTP/2 pseudo-headers (:authority/:method/:path/:scheme) are illegal
@@ -71,9 +72,47 @@ def _coll(parent, name):
 # ---------------------------------------------------------------- substitution
 
 def _sub_ok(value: str) -> bool:
-    # never blanket-replace short/ambiguous values (e.g. "1", "12") — they collide everywhere
+    # never blanket-replace short/ambiguous values (e.g. "1", "12") — they collide everywhere.
+    # Short numerics are substituted only via slot_subs (exact query/path/body slot).
     v = str(value)
     return len(v) >= 3 and v.lower() not in {"true", "false", "null", "none"}
+
+
+def _param_slot_subs(result: EngineResult) -> list[tuple[str, str, frozenset]]:
+    """(value, csv_column, request locations) for slot-exact substitution."""
+    out: list[tuple[str, str, frozenset]] = []
+    for d in result.parameterization.datasets:
+        for col in d.columns:
+            slots = [s for s in col.slots if getattr(s, "side", "request") == "request"]
+            named = [s for s in slots if variable_name(s.field or "") == col.name]
+            locs = frozenset(s.location for s in (named or slots))
+            vals = {str(col.sample or ""), str(col.original or ""), str(col.normalized or "")}
+            for row in d.rows:
+                v = row.get(col.name)
+                if v not in (None, ""):
+                    vals.add(str(v))
+            for v in vals:
+                if v:
+                    out.append((v, col.name, locs))
+    return out
+
+
+def _slot_apply(value: Any, slot_key: str, slot_subs: list, sub: dict[str, str]) -> str:
+    """Replace ``value`` only when this exact request slot is a parameterized column."""
+    s = str(value)
+    leaf = slot_key.split(":")[-1] if ":" in slot_key else slot_key
+    for raw, var, locs in slot_subs:
+        if raw != s:
+            continue
+        if slot_key in locs:
+            return f"${{{var}}}"
+        if slot_key.startswith("request.path") and any(l.startswith("request.path") for l in locs):
+            return f"${{{var}}}"
+        if slot_key.startswith("request.body:") and any(
+            l == slot_key or l.endswith("." + leaf) or l.endswith(":" + leaf) for l in locs
+        ):
+            return f"${{{var}}}"
+    return sub.get(s, s)
 
 
 def _cookie_manager_values(result: EngineResult) -> frozenset:
@@ -155,22 +194,53 @@ def _apply_header(value: str, sub: dict[str, str]) -> str:
     return s
 
 
-def _sub_json(obj: Any, sub: dict[str, str]) -> Any:
+def _sub_json(obj: Any, sub: dict[str, str], slot_subs: list | None = None, prefix: str = "") -> Any:
+    slot_subs = slot_subs or []
     if isinstance(obj, dict):
-        return {k: _sub_json(v, sub) for k, v in obj.items()}
+        return {
+            k: _sub_json(v, sub, slot_subs, f"{prefix}.{k}" if prefix else str(k))
+            for k, v in obj.items()
+        }
     if isinstance(obj, list):
-        return [_sub_json(v, sub) for v in obj]
+        return [_sub_json(v, sub, slot_subs, prefix) for v in obj]
     if isinstance(obj, bool) or obj is None:
         return obj
     if isinstance(obj, (str, int, float)):
+        applied = _slot_apply(obj, f"request.body:{prefix}", slot_subs, sub)
+        if applied != str(obj):
+            return applied
         s = str(obj)
         return sub[s] if s in sub else obj
     return obj
 
 
-def _sub_path(path: str, sub: dict[str, str]) -> str:
+_PATH_FILE_EXT_RE = _re.compile(r"\.(?:json|php|xml|html?|aspx|jsp|cgi)$", _re.IGNORECASE)
+
+
+def _sub_path(path: str, sub: dict[str, str], slot_subs: list | None = None) -> str:
+    slot_subs = slot_subs or []
+    for raw, var, locs in sorted(slot_subs, key=lambda t: len(t[0]), reverse=True):
+        if "/" not in raw:
+            continue
+        if not any(l.startswith("request.path") for l in locs):
+            continue
+        if raw in path:
+            path = path.replace(raw, f"${{{var}}}", 1)
     parts = path.split("/")
-    return "/".join(_apply(p, sub) if p else p for p in parts)
+    out: list[str] = []
+    for p in parts:
+        if not p or p.startswith("${"):
+            out.append(p)
+            continue
+        applied = _slot_apply(p, "request.path", slot_subs, sub)
+        if applied == p:
+            stem = _PATH_FILE_EXT_RE.sub("", p) if _PATH_FILE_EXT_RE.search(p) else p
+            if stem != p:
+                slotted = _slot_apply(stem, "request.path", slot_subs, sub)
+                if slotted != stem:
+                    applied = slotted + p[len(stem):]
+        out.append(applied)
+    return "/".join(out)
 
 
 def _sub_raw(text: str, sub: dict[str, str]) -> str:
@@ -194,10 +264,11 @@ def _sub_raw(text: str, sub: dict[str, str]) -> str:
 
 def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True,
                       global_headers: frozenset = frozenset(), cookie_mgr_values: frozenset = frozenset(),
-                      primary_host: str = "") -> None:
+                      primary_host: str = "", slot_subs: list | None = None) -> None:
+    slot_subs = slot_subs or []
     http = SubElement(parent_ht, "HTTPSamplerProxy", {
         "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
-        "testname": f"{req.method} {_sub_path(req.request.path, sub)}",
+        "testname": f"{req.method} {_sub_path(req.request.path, sub, slot_subs)}",
         "enabled": "true",
     })
     args = _elem(http, "HTTPsampler.Arguments", "Arguments")
@@ -205,7 +276,13 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
 
     raw_body = ""
     if req.request.body.kind in {BodyKind.JSON, BodyKind.GRAPHQL} and req.request.body.json is not None:
-        raw_body = _json.dumps(_sub_json(req.request.body.json, sub))
+        js = req.request.body.json
+        if req.request.body.kind == BodyKind.GRAPHQL and isinstance(js, dict) and "variables" in js:
+            js = dict(js)
+            js["variables"] = _sub_json(js.get("variables") or {}, sub, slot_subs, "")
+            raw_body = _json.dumps(js)
+        else:
+            raw_body = _json.dumps(_sub_json(js, sub, slot_subs))
     elif req.request.body.kind in {BodyKind.XML, BodyKind.SOAP, BodyKind.TEXT} and req.request.body.raw:
         raw_body = _sub_raw(req.request.body.raw, sub)
 
@@ -216,7 +293,11 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
         _s(arg, "Argument.value", raw_body)
         _s(arg, "Argument.metadata", "=")
     else:
-        for name, value in list(req.request.query) + list(req.request.body.form):
+        args_list = (
+            [(n, v, f"request.query:{n}") for n, v in req.request.query]
+            + [(n, v, f"request.body:{n}") for n, v in req.request.body.form]
+        )
+        for name, value, slot_key in args_list:
             arg = _elem(coll, name, "HTTPArgument")
             # Query/form values are stored DECODED (parse_qsl), so JMeter must URL-encode them or a value
             # with a space/&/+/= (e.g. q="red running shoes") ships as a malformed request line. Encoding
@@ -224,7 +305,7 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
             # JSON/XML body above keeps always_encode=false — a body blob must not be URL-encoded.)
             _b(arg, "HTTPArgument.always_encode", True)
             _s(arg, "Argument.name", name)
-            _s(arg, "Argument.value", _apply(value, sub))
+            _s(arg, "Argument.value", _slot_apply(value, slot_key, slot_subs, sub))
             _s(arg, "Argument.metadata", "=")
             _b(arg, "HTTPArgument.use_equals", True)
 
@@ -234,7 +315,7 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _s(http, "HTTPSampler.domain", "" if on_primary else req.request.host)
     _s(http, "HTTPSampler.port", req.request.port)
     _s(http, "HTTPSampler.protocol", "" if on_primary else req.request.scheme)
-    _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub))
+    _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub, slot_subs))
     _s(http, "HTTPSampler.method", req.method)
     _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)
@@ -256,12 +337,14 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
             _s(fa, "File.mimetype", mimetype)
 
     sampler_ht = SubElement(parent_ht, "hashTree")
-    _add_header_manager(sampler_ht, req, sub, global_headers, cookie_mgr_values)
+    _add_header_manager(sampler_ht, req, sub, global_headers, cookie_mgr_values, slot_subs)
 
 
 def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str],
                         global_headers: frozenset = frozenset(),
-                        cookie_mgr_values: frozenset = frozenset()) -> None:
+                        cookie_mgr_values: frozenset = frozenset(),
+                        slot_subs: list | None = None) -> None:
+    slot_subs = slot_subs or []
     # request-specific headers only — headers already carried by the global manager are skipped, and
     # non-replayable ones (HTTP/2 pseudo-headers, client-hints, forwarding) are dropped entirely.
     headers = [(n, v) for n, v in req.request.headers
@@ -290,7 +373,12 @@ def _add_header_manager(parent_ht, req: NormalizedRequest, sub: dict[str, str],
     for name, value in headers:
         h = _elem(coll, "", "Header")
         _s(h, "Header.name", name)
-        _s(h, "Header.value", value if name == "Cookie" else _apply_header(value, sub))
+        if name == "Cookie":
+            hdr_val = value
+        else:
+            slotted = _slot_apply(value, f"request.header:{name}", slot_subs, {})
+            hdr_val = slotted if slotted != str(value) else _apply_header(value, sub)
+        _s(h, "Header.value", hdr_val)
     SubElement(parent_ht, "hashTree")
 
 
@@ -592,6 +680,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
     if not str(config.get("thinktime", "")).strip():
         config["thinktime"] = str(_observed_think_time(result.capture))
     sub = _build_sub_map(result)
+    slot_subs = _param_slot_subs(result)
     # extractor self-check: only ship an extractor proven to resolve; refine ambiguous JSONPaths; drop
     # (and let the manual-review path flag) any that could not be verified against the capture.
     check_by_var = {chk.variable: chk for chk in result.extractor_checks}
@@ -650,7 +739,8 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
             # if this request produces a value read from its redirect, it must not follow the redirect
             follow = not any(c.from_redirect for c in produced)
             _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names,
-                              cookie_mgr_values=cookie_mgr_values, primary_host=base_url)
+                              cookie_mgr_values=cookie_mgr_values, primary_host=base_url,
+                              slot_subs=slot_subs)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             for c in produced:

@@ -136,7 +136,7 @@ function render(d) {
   [
     [rq.business, "Requests scripted"],
     [rq.excluded, "Noise filtered"],
-    [m.correlations, "Correlations"],
+    [m.correlations, "Required correlations"],
     [m.parameters, "Parameters"],
     [m.transactions, "Transactions"],
   ].forEach(([n, l]) => {
@@ -182,8 +182,21 @@ function render(d) {
       <td class="val">${c.consumers}</td>`;
     cbody.appendChild(tr);
   });
-  $("#corrCount").textContent = d.correlations.length + " runtime values";
-  if (!d.correlations.length) cbody.innerHTML = `<tr><td colspan="6" class="val">No runtime correlations needed for this flow.</td></tr>`;
+  const ca = d.correlationAudit || {};
+  const required = d.correlations.length;
+  $("#corrCount").textContent = required + " required"
+    + (ca.candidates != null ? ` · ${ca.candidates} candidates` : "");
+  if (ca.candidates != null) {
+    const bits = [];
+    if (ca.superseded) bits.push(ca.superseded + " superseded");
+    if (ca.rejectedConfiguration) bits.push(ca.rejectedConfiguration + " configuration");
+    if (ca.rejectedProtocol) bits.push(ca.rejectedProtocol + " protocol metadata");
+    if (ca.rejectedMasterData) bits.push(ca.rejectedMasterData + " master data");
+    if (ca.noConsumer) bits.push(ca.noConsumer + " no consumer");
+    if (ca.review) bits.push(ca.review + " review");
+    if (bits.length) $("#corrCount").textContent += " · " + bits.join(", ");
+  }
+  if (!d.correlations.length) cbody.innerHTML = `<tr><td colspan="6" class="val">No required runtime correlations for this flow.</td></tr>`;
 
   // datasets
   const ds = $("#datasets"); ds.innerHTML = "";

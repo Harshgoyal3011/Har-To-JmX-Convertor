@@ -104,9 +104,10 @@ def _choose_extractor(location: str, cookie_name: str, consumers: list[Occurrenc
     return ExtractorType.REGEX, ""
 
 
-def build_correlations(cap: NormalizedCapture,
-                       classification: ClassificationResult | None = None,
-                       lineage: LineageGraph | None = None) -> list[CorrelationDecision]:
+def discover_correlation_candidates(cap: NormalizedCapture,
+                                    classification: ClassificationResult | None = None,
+                                    lineage: LineageGraph | None = None) -> list[CorrelationDecision]:
+    """High-recall producer→consumer relationships (question A). Does not imply emission."""
     lineage = lineage if lineage is not None else build_lineage(cap)
     classification = classification if classification is not None else classify_values(cap, lineage)
 
@@ -166,3 +167,15 @@ def build_correlations(cap: NormalizedCapture,
 
     decisions.sort(key=lambda d: (d.producer_index, d.variable))
     return decisions
+
+
+def build_correlations(cap: NormalizedCapture,
+                       classification: ClassificationResult | None = None,
+                       lineage: LineageGraph | None = None) -> list[CorrelationDecision]:
+    """Emitted correlations only (question B — necessity). Discovery is unchanged."""
+    from har2jmx.correlate.necessity import apply_necessity_gate
+
+    lineage = lineage if lineage is not None else build_lineage(cap)
+    classification = classification if classification is not None else classify_values(cap, lineage)
+    candidates = discover_correlation_candidates(cap, classification, lineage)
+    return apply_necessity_gate(cap, lineage, classification, candidates).emitted

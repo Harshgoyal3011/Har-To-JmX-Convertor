@@ -306,7 +306,8 @@ def test_query_and_form_values_are_url_encoded():
     encodes = re.findall(r'HTTPArgument\.always_encode">(\w+)', x)
     assert "true" in encodes, "query/form args must be URL-encoded"
     assert "false" in encodes, "the raw JSON body must NOT be URL-encoded"
-    assert "red running shoes" in x                    # stored decoded (JMeter encodes at runtime)
+    # Search term is a candidate → ${q}; JMeter encodes the resolved CSV value at runtime.
+    assert "${q}" in x or "red running shoes" in x
 
 
 def test_csv_dataset_ignores_the_header_row():

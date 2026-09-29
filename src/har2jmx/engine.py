@@ -12,7 +12,13 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from har2jmx.classify import ClassificationResult, classify_capture, classify_values
-from har2jmx.correlate import CorrelationDecision, build_correlations
+from har2jmx.correlate import (
+    CorrelationAudit,
+    CorrelationDecision,
+    RejectionKind,
+    apply_necessity_gate,
+    discover_correlation_candidates,
+)
 from har2jmx.entities import RelationshipModel, discover_relationships
 from har2jmx.ir.build import build_capture
 from har2jmx.ir.normalized import NormalizedCapture
@@ -35,6 +41,7 @@ class EngineResult:
     parameterization: ParameterizationPlan
     replay: ReplayReport
     extractor_checks: list[ExtractorCheck] = field(default_factory=list)
+    correlation_audit: CorrelationAudit = field(default_factory=CorrelationAudit)
     metrics: dict[str, Any] = field(default_factory=dict)
 
 
@@ -44,6 +51,7 @@ def _metrics(res: EngineResult) -> dict[str, Any]:
     business = [r for r in reqs if not r.classification.excluded]
     excluded = total - len(business)
     corr = res.correlations
+    audit = res.correlation_audit
     datasets = res.parameterization.datasets
     from har2jmx.validate import ExtractorStatus
     checks = res.extractor_checks
@@ -65,6 +73,14 @@ def _metrics(res: EngineResult) -> dict[str, Any]:
         },
         "correlation": {
             "count": len(corr),
+            "candidates": len(audit.candidates),
+            "required": len(corr),
+            "superseded": audit.count(RejectionKind.SUPERSEDED),
+            "rejected_configuration": audit.count(RejectionKind.CONFIGURATION),
+            "rejected_protocol": audit.count(RejectionKind.PROTOCOL_METADATA),
+            "rejected_master_data": audit.count(RejectionKind.MASTER_DATA),
+            "no_consumer": audit.count(RejectionKind.NO_CONSUMER),
+            "review": audit.count(RejectionKind.REVIEW),
             "high_confidence": sum(1 for c in corr if c.confidence == "High"),
             "coverage_per_business_request": round(len(corr) / max(len(business), 1), 2),
             "verified_unique": sum(1 for c in checks if c.status == ExtractorStatus.UNIQUE),
@@ -96,15 +112,20 @@ def analyze(har: bytes | dict) -> EngineResult:
     model = discover_relationships(cap)         # M5 + M6 (entities + relationships + aligned rows)
     lineage = build_lineage(cap)                # M7
     classification = classify_values(cap, lineage, model)   # M8 (reuse the model — no recompute)
-    correlations = build_correlations(cap, classification, lineage)   # M9
+    candidates = discover_correlation_candidates(cap, classification, lineage)
+    correlation_audit = apply_necessity_gate(cap, lineage, classification, candidates)
+    correlations = correlation_audit.emitted   # M9 — emit only necessary runtime correlations
     parameterization = build_parameterization(cap, classification, model, lineage)  # M10
-    replay = validate_replay(cap, correlations, parameterization, classification, lineage)  # M11
+    replay = validate_replay(
+        cap, correlations, parameterization, classification, lineage, correlation_audit,
+    )  # M11
     extractor_checks = verify_extractors(cap, correlations)   # resolve each extractor against its response
 
     result = EngineResult(
         capture=cap, application=application, auth=auth, transactions=transactions,
         entities_model=model, classification=classification, correlations=correlations,
         parameterization=parameterization, replay=replay, extractor_checks=extractor_checks,
+        correlation_audit=correlation_audit,
     )
     result.metrics = _metrics(result)           # M12
     return result

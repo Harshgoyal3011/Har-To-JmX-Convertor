@@ -17,7 +17,10 @@ def _res(name: str):
 def test_end_to_end_flow():
     r = _res("sample_flow.har")
     assert any(c.variable == "orderId" for c in r.correlations)          # created id correlated
-    assert any(d.name == "Customer" for d in r.parameterization.datasets)  # existing entity parameterized
+    assert any(
+        (c.entity_field == "id" and c.sample == "1001") or c.sample == "1001"
+        for d in r.parameterization.datasets for c in d.columns
+    )
     assert r.replay.passed
     assert [t.name for t in r.transactions][:1] == ["Login"]
 

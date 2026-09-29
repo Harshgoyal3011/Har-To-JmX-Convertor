@@ -17,6 +17,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from enum import Enum
+from urllib.parse import unquote
 
 from har2jmx.entities import RelationshipModel, discover_relationships
 from har2jmx.ir.normalized import NormalizedCapture
@@ -148,6 +149,7 @@ _CONFIG_FIELD_NAMES = {
     "tab", "tabname", "activetab", "selectedtab", "currenttab",
     "screen", "screentab", "screentype", "screenname", "screenmode",
     "wizard", "wizardstep", "step", "perpage", "pagesize", "columns", "toggle",
+    "limit", "offset", "formatted", "results", "order", "apikey",
     # public OAuth/OIDC configuration identifiers — the same for every user & run, so hardcoded, never
     # a "secret needing correlation" (client_secret, which IS a secret, is deliberately not here).
     "clientid", "tenantid", "applicationid", "responsetype", "granttype", "scope", "audience",
@@ -156,7 +158,8 @@ _CONFIG_FIELD_NAMES = {
     # path/param must stay hardcoded, never be "correlated" as if it were per-run runtime state.
     "region", "environment", "env", "zone", "availabilityzone", "datacenter", "datacentre", "dc",
     "cluster", "realm", "stage", "partition", "shard",
-    "countrycode", "currencycode", "country", "currency", "locale", "language", "languagecode",
+    "countrycode", "currencycode", "locale", "language", "languagecode",
+    "apiversion", "version",
 }
 _KNOWN_ENUM_VALUES = {
     "asc", "desc", "true", "false", "grid", "list", "table", "card", "dark", "light", "auto",
@@ -264,12 +267,17 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
             producer_field_values.setdefault(f.first_producer.location, set()).add(f.value)
 
     verdicts: list[ValueVerdict] = []
+    path_boilerplate = _path_boilerplate_segments(cap)
+    query_coverage = _query_key_coverage(cap)
+    n_business = max(1, sum(1 for r in cap.requests if not r.classification.excluded))
+
     for flow in lineage.flows:
-        # Short values (e.g. "1", "10") are too ambiguous to correlate or parameterize — they
-        # collide across unrelated fields (a page number vs a stock count). Leave them literal.
-        if len(str(flow.value)) < 3:
+        input_occs = _input_request_occs(flow)
+        # Short values are eligible when they occupy a whole request slot (page=2). Skip them
+        # only when they have no such slot — global "2" in a JSON blob is still too ambiguous.
+        if len(str(flow.value)) < 3 and not input_occs:
             continue
-        if not flow.significant and flow.value not in value_entity:
+        if not flow.significant and flow.value not in value_entity and not input_occs:
             continue
 
         ent = value_entity.get(flow.value)
@@ -278,25 +286,26 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
         is_id = ent[2] if ent else False
         consumers = flow.consumer_indices
 
-        # A UI/config enum (layout=grid, sort=asc, view=list) is constant for every user and run —
-        # leave it hardcoded rather than mint a noise CSV column. Decided before entity association,
-        # which would otherwise pull it in as "master data".
-        if _is_config_constant(flow):
-            verdicts.append(ValueVerdict(
-                value=flow.value, classification=ValueClass.STATIC, lifecycle=Lifecycle.UNKNOWN,
-                confidence="Medium", reason="UI/config enum (same for every user) — left hardcoded, not parameterized",
-                source=(flow.occurrences[0].location if flow.occurrences else ""),
-                consumers=consumers, entity=None, entity_field=None,
-            ))
-            continue
-
-        # Lifecycle turns on the EARLIEST occurrence overall, not merely "has a producer".
-        # If the client sent the value before (or at) the response that returned it, the value is
-        # client-originated (user input echoed back) — master data, NOT a runtime correlation.
         req_occs = [o for o in flow.occurrences if o.side == "request"]
         earliest_req = min((o.request_index for o in req_occs), default=None)
         earliest_resp = min((o.request_index for o in flow.producers), default=None)
         client_originated = earliest_req is not None and (earliest_resp is None or earliest_req <= earliest_resp)
+
+        # UI/protocol enums stay hardcoded. A unique client query that only matches a config-ish
+        # field because the name ends in "code" (countryCode=US) is still a candidate slot.
+        if _is_config_constant(flow):
+            fields = {_norm_field(o.field) for o in flow.occurrences}
+            protocol_on_client = bool(fields & (_CONFIG_FIELD_NAMES - {"countrycode"})) or (
+                str(flow.value).strip().lower() in _KNOWN_ENUM_VALUES
+            )
+            if not (client_originated and not protocol_on_client):
+                verdicts.append(ValueVerdict(
+                    value=flow.value, classification=ValueClass.STATIC, lifecycle=Lifecycle.UNKNOWN,
+                    confidence="Medium", reason="UI/config enum (same for every user) — left hardcoded, not parameterized",
+                    source=(flow.occurrences[0].location if flow.occurrences else ""),
+                    consumers=consumers, entity=None, entity_field=None,
+                ))
+                continue
 
         producer_scope: frozenset = frozenset()
         needs_corr = False
@@ -311,10 +320,19 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
             if producer:
                 producer_scope = _scope_tokens(producer)
 
+            n_at = len(producer_field_values.get(flow.first_producer.location, ()))
             if source.startswith("response.regex:"):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = ("found embedded inside an earlier response (server-issued, e.g. a token "
                           "wrapped in a string) and reused — correlated via a boundary extractor")
+            elif _is_secret(flow) and (
+                (method == "GET" or search)
+                and n_at > 1
+                and source.startswith("response.body:")
+            ):
+                cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
+                reason = ("GUID/token-shaped value returned as one-of-many by a read/search — "
+                          "selected catalog identity, not a session secret")
             elif _is_secret(flow):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = "server-issued session/token/secret, reused in a later request"
@@ -343,8 +361,15 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                           "bookingRef) reused downstream: per-run state, not one of a catalog list; "
                           "correlate it, a recorded value goes stale")
             elif method == "GET" or search:
-                cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
-                reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"
+                n_at = len(producer_field_values.get(flow.first_producer.location, ()))
+                if (n_at <= 1 and consumers and not search
+                        and producer is not None and _producer_is_client_observation(producer)):
+                    cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
+                    reason = ("singleton client observation from a GET (not a catalog collection) — "
+                              "this-run state, correlate rather than CSV")
+                else:
+                    cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
+                    reason = f"returned by a {'search' if search else 'read'} ({method}) and reused — existing record selected, not created"
             elif method in {"POST", "PUT", "PATCH"} and (status == "201" or CREATION_VERB_RE.search(path) or not search):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = f"created this run ({method} {status or ''}), then reused downstream"
@@ -365,20 +390,43 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                 reason = ("client-side auth/protocol value (scheme wrapper or OAuth nonce) — not a "
                           "server-issued secret; handled with its own token flow or left as-is")
             elif _is_secret(flow):
-                # A token / session id / GUID first seen in a REQUEST usually means the response that
-                # issued it was not captured (an empty login body, or the flow starts mid-session).
-                # It must NEVER be parameterized — a fixed token in a CSV makes every virtual user share
-                # one stale session. Flag it for correlation instead (capture the issuing response, or
-                # add a boundary extractor); never wire it as static test data.
                 cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Medium"
                 reason = ("token/session/secret sent in a request but its issuing response was not "
                           "captured — needs correlation (capture the response that returns it), "
                           "never safe as a static CSV value")
                 needs_corr = True
+            elif input_occs and (
+                _is_boilerplate_path_value(flow, path_boilerplate, cap)
+                or _is_wide_query_constant(flow, query_coverage, n_business)
+                or _is_query_field_selector(flow, cap)
+                or _is_search_facet(flow, cap)
+                or (
+                    str(flow.value).strip().lower() in _KNOWN_ENUM_VALUES
+                    and any((o.location or "").startswith("request.query:") for o in input_occs)
+                )
+            ):
+                cls, life, conf = ValueClass.STATIC, Lifecycle.UNKNOWN, "Medium"
+                reason = "client-originated protocol/config/facet slot — hardcoded, not test data"
             elif entity_name or _business_named(flow) or _is_search_input(flow):
                 strong = _business_named(flow) or _is_search_input(flow)
                 cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "High" if strong else "Medium"
                 reason = f"client-supplied business/master data (varies per user){echoed}"
+            elif input_occs:
+                # Whole-slot client input (query/path/body) — a candidate for the intent engine even
+                # when the field name is unknown and USER_DATA_RE does not match. Capture-wide
+                # constants (api/v1 path segments, format=json on every request) stay STATIC.
+                if _is_boilerplate_path_value(flow, path_boilerplate, cap) or _is_wide_query_constant(
+                    flow, query_coverage, n_business
+                ):
+                    cls, life, conf = ValueClass.STATIC, Lifecycle.UNKNOWN, "Medium"
+                    reason = "client-originated but capture-wide constant (protocol/path boilerplate) — hardcoded"
+                elif _is_opaque_handle(flow.value) and not entity_name and not _business_named(flow):
+                    # Opaque client tokens stay UNKNOWN: candidates reach intent as REVIEW, not CSV.
+                    cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
+                    reason = f"client-originated opaque handle — review, do not auto-CSV{echoed}"
+                else:
+                    cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.USER_INPUT, "Medium"
+                    reason = f"client-originated whole request slot (candidate for parameterization){echoed}"
             else:
                 cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
                 reason = f"client-supplied value with no business/entity signal{echoed}"
@@ -445,3 +493,199 @@ def _producer_is_search(req) -> bool:
     if keys & {"q", "query", "search", "keyword", "term", "filter"}:
         return True
     return bool(re.search(r"/(search|find|lookup|query|browse|list)", req.request.path, re.IGNORECASE))
+
+
+_HEADER_NOT_INPUT = {
+    "accept", "accept-encoding", "accept-language", "accept-charset", "user-agent", "referer",
+    "origin", "host", "content-type", "content-length", "connection", "cache-control", "pragma",
+    "cookie", "authorization", "proxy-authorization", "if-none-match", "if-modified-since",
+    "if-match", "if-unmodified-since", "range", "te", "expect", "dnt", "upgrade-insecure-requests",
+}
+
+
+def _input_request_occs(flow: ValueFlow) -> list:
+    out = []
+    for o in flow.occurrences:
+        if o.side != "request":
+            continue
+        loc = o.location or ""
+        if loc == "request.path" or loc.startswith(("request.query:", "request.body:", "request.xml:")):
+            out.append(o)
+        elif loc.startswith("request.header:") and (o.field or "").lower() not in _HEADER_NOT_INPUT:
+            out.append(o)
+    return out
+
+
+_PATH_FILE_EXT_RE = re.compile(r"\.(?:json|php|xml|html?|aspx|jsp|cgi)$", re.IGNORECASE)
+_DOTTED_VERSION_RE = re.compile(r"^\d+\.\d+(?:\.\d+)?$")
+_SEARCH_QUERY_KEYS = {"q", "query", "term", "search", "intitle", "keyword", "kw", "s"}
+
+
+def _path_stem(seg: str) -> str:
+    s = unquote(seg)
+    return _PATH_FILE_EXT_RE.sub("", s) if _PATH_FILE_EXT_RE.search(s) else s
+
+
+def _param_requests(cap: NormalizedCapture) -> list:
+    from har2jmx.lineage.graph import _api_like_for_params
+    out = []
+    for r in cap.requests:
+        if r.classification.excluded and not _api_like_for_params(r):
+            continue
+        out.append(r)
+    return out
+
+
+def _producer_is_client_observation(req) -> bool:
+    """A tiny JSON object of scalars (e.g. {\"ip\": \"1.2.3.4\"}) — this-run observation, not a catalog."""
+    j = req.response.body.json
+    if isinstance(j, str) and j.strip() and " " not in j.strip() and len(j.strip()) < 80:
+        return True
+    if not isinstance(j, dict) or not (1 <= len(j) <= 2):
+        return False
+    return all(not isinstance(v, (dict, list)) for v in j.values())
+
+
+def _json_keys(obj, out: set, depth: int = 0) -> None:
+    if depth > 5 or obj is None:
+        return
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            out.add(str(k))
+            _json_keys(v, out, depth + 1)
+    elif isinstance(obj, list):
+        for it in obj[:15]:
+            _json_keys(it, out, depth + 1)
+
+
+def _is_query_field_selector(flow: ValueFlow, cap: NormalizedCapture) -> bool:
+    """Query value names a response field (current=temperature_2m) — API projection, not user data."""
+    val = str(flow.value).strip()
+    q_occs = [o for o in flow.occurrences if o.side == "request" and (o.location or "").startswith("request.query:")]
+    if not q_occs:
+        return False
+    for o in q_occs:
+        if not (0 <= o.request_index < len(cap.requests)):
+            continue
+        keys: set[str] = set()
+        _json_keys(cap.requests[o.request_index].response.body.json, keys)
+        if val in keys:
+            return True
+    return False
+
+
+def _is_search_facet(flow: ValueFlow, cap: NormalizedCapture) -> bool:
+    """Non-search query slots on a request that already has a search term are facets/config."""
+    val = str(flow.value).strip()
+    if " " in val:
+        return False
+    # Place names / titles (India, Albert) are inputs; lowercase facets (story) and camelCase
+    # resource types (musicTrack) on a search request are configuration.
+    is_facet_token = (val.islower() and val.replace("_", "").isalnum()) or (
+        val[:1].islower() and any(c.isupper() for c in val[1:])
+    )
+    if not is_facet_token:
+        return False
+    q_occs = [o for o in flow.occurrences if o.side == "request" and (o.location or "").startswith("request.query:")]
+    if not q_occs:
+        return False
+    for o in q_occs:
+        field = (o.field or "").lower()
+        if field in _SEARCH_QUERY_KEYS:
+            return False
+        if not (0 <= o.request_index < len(cap.requests)):
+            continue
+        keys = {k.lower() for k, _ in cap.requests[o.request_index].request.query}
+        if keys & _SEARCH_QUERY_KEYS:
+            return True
+    return False
+
+
+def _path_boilerplate_segments(cap: NormalizedCapture) -> frozenset:
+    """Shared *prefix* path segments — never the last identity/stem of a request."""
+    from collections import Counter
+    biz = _param_requests(cap)
+    if not biz:
+        return frozenset()
+    c: Counter = Counter()
+    lasts: set[str] = set()
+    for r in biz:
+        segs = [unquote(s) for s in r.request.path_segments if s]
+        c.update(segs)
+        if segs:
+            lasts.add(segs[-1])
+            lasts.add(_path_stem(segs[-1]))
+    thresh = max(2, int(round(0.6 * len(biz))))
+    return frozenset(seg for seg, n in c.items() if n >= thresh and seg not in lasts)
+
+
+def _is_boilerplate_path_value(flow: ValueFlow, boilerplate: frozenset, cap: NormalizedCapture) -> bool:
+    path_occs = [o for o in flow.occurrences if o.side == "request" and (o.location or "").startswith("request.path")]
+    if not path_occs:
+        return False
+    val = str(flow.value)
+    if _DOTTED_VERSION_RE.match(val) or _PATH_FILE_EXT_RE.search(val):
+        return True
+    if re.match(r"^v\d+$", val, re.IGNORECASE):
+        return True
+    if val.isalpha() and val.upper() == val and len(val) >= 2:
+        return True
+    if val in boilerplate:
+        return True
+    for req in _param_requests(cap):
+        segs = [unquote(s) for s in req.request.path_segments if s]
+        stems = [_path_stem(s) for s in segs]
+        if val not in segs and val not in stems:
+            continue
+        last = segs[-1] if segs else ""
+        last_stem = _path_stem(last) if last else ""
+        if val == last and _PATH_FILE_EXT_RE.search(last):
+            return True
+        if val == last or val == last_stem:
+            if any(s.isalpha() and s.upper() == s and len(s) >= 2 for s in segs[:-1]):
+                return True
+            if last_stem.isalpha() and last_stem.islower():
+                if len(last_stem) <= 3:
+                    return False
+                if any(s.isalpha() and len(s) == 2 for s in segs[:-1]):
+                    return False
+                if segs[:-1] and len(last_stem) > 3:
+                    return True
+                return False
+            return False
+        pred = segs[-2] if len(segs) >= 2 else ""
+        if val == unquote(pred) and last_stem.isdigit() and val.isalpha() and len(val) <= 3:
+            return False
+        if val.isalpha() and val.islower():
+            return True
+    return False
+
+
+def _query_key_coverage(cap: NormalizedCapture) -> dict[str, tuple[int, set[str]]]:
+    """query key -> (how many business requests carry it, distinct values)."""
+    from collections import defaultdict
+    biz = [r for r in cap.requests if not r.classification.excluded]
+    present: dict[str, int] = defaultdict(int)
+    values: dict[str, set[str]] = defaultdict(set)
+    for r in biz:
+        seen: set[str] = set()
+        for k, v in r.request.query:
+            low = k.lower()
+            if low in seen:
+                continue
+            seen.add(low)
+            present[low] += 1
+            values[low].add(str(v).strip())
+    return {k: (present[k], values[k]) for k in present}
+
+
+def _is_wide_query_constant(flow: ValueFlow, coverage: dict, n_business: int) -> bool:
+    """A query key present on most requests with a single value is protocol/config, not test data."""
+    q_occs = [o for o in flow.occurrences if o.side == "request" and (o.location or "").startswith("request.query:")]
+    if not q_occs:
+        return False
+    field = (q_occs[0].field or "").lower()
+    n, vals = coverage.get(field, (0, set()))
+    if n_business <= 0 or n < max(2, int(round(0.6 * n_business))):
+        return False
+    return len(vals) <= 1

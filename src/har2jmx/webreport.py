@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from har2jmx.correlate import RejectionKind
 from har2jmx.engine import EngineResult
 
 _TOKENISH = re.compile(r"token|session|auth|jwt|sid", re.IGNORECASE)
@@ -153,7 +154,8 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
         },
         "metrics": {
             "transactions": m["transactions"]["count"],
-            "correlations": len(shown_correlations),   # count what's actually in the script, not dropped ones
+            "correlations": len(shown_correlations),   # required/emitted only — not discovery candidates
+            "correlationCandidates": len(getattr(result.correlation_audit, "candidates", []) or []),
             # count the parameters/datasets actually in the plan (usage-aware pruning may have dropped
             # unreferenced columns during emission) — keep this in step with the CSV and the list below
             "parameters": sum(len(d.columns) for d in result.parameterization.datasets),
@@ -205,6 +207,16 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             }
             for d in result.parameterization.datasets
         ],
+        "parameterizationReview": [
+            {
+                "value": it.value[:24],
+                "intent": it.intent,
+                "reason": it.reason,
+                "field": it.logical_field,
+                "slots": it.slots,
+            }
+            for it in result.parameterization.review[:24]
+        ],
         "replay": {
             "passed": result.replay.passed,
             "score": result.replay.score,
@@ -222,6 +234,16 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             for r in cap.requests if r.classification.excluded
         ][:14],
         "manualCorrelations": build_manual_correlations(result),
+        "correlationAudit": {
+            "candidates": len(result.correlation_audit.candidates),
+            "required": len(shown_correlations),
+            "superseded": result.correlation_audit.count(RejectionKind.SUPERSEDED),
+            "rejectedConfiguration": result.correlation_audit.count(RejectionKind.CONFIGURATION),
+            "rejectedProtocol": result.correlation_audit.count(RejectionKind.PROTOCOL_METADATA),
+            "rejectedMasterData": result.correlation_audit.count(RejectionKind.MASTER_DATA),
+            "noConsumer": result.correlation_audit.count(RejectionKind.NO_CONSUMER),
+            "review": result.correlation_audit.count(RejectionKind.REVIEW),
+        },
         "captureQuality": assess_capture_quality(cap),
         "downloads": downloads,
     }
