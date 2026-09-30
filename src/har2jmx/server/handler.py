@@ -140,7 +140,7 @@ class AppHandler(SimpleHTTPRequestHandler):
                 "csvs": [c.name for c in csv_paths],
                 "reports": [rp.name for rp in report_paths],
             }
-            payload = build_web_summary(result, result_id, downloads)
+            payload = build_web_summary(result, result_id, downloads, jmx_xml=jmx_path.read_bytes())
             payload["config"] = config
             self.respond_json(payload)
         except ValueError as exc:

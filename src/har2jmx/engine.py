@@ -81,6 +81,7 @@ def _metrics(res: EngineResult) -> dict[str, Any]:
             "rejected_master_data": audit.count(RejectionKind.MASTER_DATA),
             "no_consumer": audit.count(RejectionKind.NO_CONSUMER),
             "review": audit.count(RejectionKind.REVIEW),
+            "not_required": audit.count(RejectionKind.NOT_REQUIRED),
             "high_confidence": sum(1 for c in corr if c.confidence == "High"),
             "coverage_per_business_request": round(len(corr) / max(len(business), 1), 2),
             "verified_unique": sum(1 for c in checks if c.status == ExtractorStatus.UNIQUE),

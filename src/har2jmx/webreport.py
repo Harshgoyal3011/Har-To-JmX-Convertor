@@ -5,10 +5,21 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from har2jmx.correlate import RejectionKind
+from har2jmx.correlate import ExtractorType, RejectionKind
 from har2jmx.engine import EngineResult
 
 _TOKENISH = re.compile(r"token|session|auth|jwt|sid", re.IGNORECASE)
+_EXTRACTOR_NAME_RE = re.compile(
+    r'(?:JSONPostProcessor\.referenceNames|RegexExtractor\.refname)">([^<]+)<'
+)
+
+
+def _extractor_names_from_jmx(jmx_xml: str | bytes | None) -> set[str] | None:
+    """Names of extractors that actually shipped in the JMX — the product source of truth."""
+    if jmx_xml is None:
+        return None
+    x = jmx_xml.decode("utf-8") if isinstance(jmx_xml, (bytes, bytearray)) else jmx_xml
+    return set(_EXTRACTOR_NAME_RE.findall(x)) | set(re.findall(r'referenceNames">([^<]+)<', x))
 
 
 def _mask(value: str) -> str:
@@ -120,7 +131,8 @@ def _derived_auth(result: EngineResult) -> str | None:
     return d[0] if d else None
 
 
-def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str, Any]) -> dict[str, Any]:
+def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str, Any],
+                      jmx_xml: str | bytes | None = None) -> dict[str, Any]:
     cap = result.capture
     m = result.metrics
     app = result.application
@@ -144,6 +156,12 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
         return chk.refined_expression if (chk and chk.refined_expression) else c.expression
 
     shown_correlations = [c for c in result.correlations if _emitted(c)]
+    jmx_extractors = _extractor_names_from_jmx(jmx_xml)
+    if jmx_extractors is not None:
+        shown_correlations = [
+            c for c in shown_correlations
+            if c.extractor == ExtractorType.COOKIE_MANAGER or c.variable in jmx_extractors
+        ]
 
     reqs = m["requests"]
     return {
@@ -243,6 +261,7 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             "rejectedMasterData": result.correlation_audit.count(RejectionKind.MASTER_DATA),
             "noConsumer": result.correlation_audit.count(RejectionKind.NO_CONSUMER),
             "review": result.correlation_audit.count(RejectionKind.REVIEW),
+            "notRequired": result.correlation_audit.count(RejectionKind.NOT_REQUIRED),
         },
         "captureQuality": assess_capture_quality(cap),
         "downloads": downloads,

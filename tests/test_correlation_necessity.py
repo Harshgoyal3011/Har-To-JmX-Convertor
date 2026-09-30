@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from har2jmx.correlate import (
@@ -28,13 +29,13 @@ CSRF = "csrfTokenValue99abxxZZ"
 TXN = "TXN-991122334455"
 CREATED = "CUST-created-88421"
 SELECTED = "CUST-existing-10019"
-CONT = "https://login.example.com/te/oauth2/authorize?tx=TxRuntime99abxx"
+TX = "StatePropertiesTx99abxxZZ"
+CONT = f"https://login.example.com/te/oauth2/authorize?tx={TX}"
 PATH2 = "/te/oauth2/authorize"
-TX = "TxRuntime99abxx"
 DEAD = "deadTokenNeverUsed99"
 
 
-def _e(method, url, status=200, resp="{}", body=None, mime="application/json", headers=None):
+def _e(method, url, status=200, resp="{}", body=None, mime="application/json", headers=None, form=None):
     req_h = [{"name": "Accept", "value": "application/json"}]
     for k, v in (headers or {}).items():
         req_h.append({"name": k, "value": v})
@@ -50,6 +51,12 @@ def _e(method, url, status=200, resp="{}", body=None, mime="application/json", h
     if body is not None:
         e["request"]["postData"] = {"mimeType": "application/json", "text": body}
         e["request"]["headers"].append({"name": "Content-Type", "value": "application/json"})
+    if form is not None:
+        e["request"]["postData"] = {
+            "mimeType": "application/x-www-form-urlencoded",
+            "text": form,
+        }
+        e["request"]["headers"].append({"name": "Content-Type", "value": "application/x-www-form-urlencoded"})
     return e
 
 
@@ -225,6 +232,132 @@ def test_discovery_recall_is_unchanged_for_necessary_tokens():
     cands = discover_correlation_candidates(cap, cls, lin)
     assert any(c.variable == "RequestVerificationToken" for c in cands)
     assert any(c.variable == "RequestVerificationToken" for c in r.correlations)
+
+
+def _b2c_settings():
+    return {
+        "appId": APP,
+        "groupName": "B2C_1_signupsignin",
+        "redirectParam": "redirect_uri",
+        "redirectUrl": REDIRECT,
+        "clientId": CLIENT,
+        "getcustomizationCode": "GetCustomization",
+        "X_CSRF_TOKEN": CSRF,
+        "path": "/contoso.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/authorize",
+        "path2": "/contoso.onmicrosoft.com/B2C_1_signupsignin/api/SelfAsserted",
+        "tx": TX,
+        "url": CONT,
+        "remoteResource": "https://contoso.b2clogin.com/static/bundle.js",
+        "hosts": {"tenant": "contoso.b2clogin.com"},
+        "response_modes_supported": ["query", "fragment", "form_post"],
+        "response_types_supported": ["code", "id_token", "code id_token"],
+    }
+
+
+def _b2c_har(html_wrapped: bool = False):
+    settings = _b2c_settings()
+    if html_wrapped:
+        body = "<html><script>var SETTINGS = " + json.dumps(settings) + ";</script></html>"
+        mime = "text/html"
+    else:
+        body = json.dumps(settings)
+        mime = "application/json"
+    path2 = settings["path2"]
+    return _har([
+        _e("GET", "https://contoso.b2clogin.com/contoso.onmicrosoft.com/v2.0/.well-known/openid-configuration",
+           resp=json.dumps({
+               "issuer": "https://contoso.b2clogin.com/",
+               "authorization_endpoint": AUTH_URL,
+               "token_endpoint": "https://contoso.b2clogin.com/oauth2/v2.0/token",
+               "jwks_uri": "https://contoso.b2clogin.com/discovery/v2.0/keys",
+               "response_types_supported": settings["response_types_supported"],
+               "response_modes_supported": settings["response_modes_supported"],
+           })),
+        _e("GET", "https://contoso.b2clogin.com/contoso.onmicrosoft.com/B2C_1_signupsignin/api/CombinedSigninAndSignup/unified",
+           resp=body, mime=mime),
+        _e("POST", f"https://contoso.b2clogin.com{path2}?tx={TX}",
+           form=(
+               f"request_type=RESPONSE&tx={TX}&redirect_uri={REDIRECT}"
+               f"&redirectUrl={REDIRECT}&appId={APP}&groupName=B2C_1_signupsignin"
+               f"&getcustomizationCode=GetCustomization&url={CONT}"
+               f"&path={settings['path']}"
+           ),
+           headers={"X-CSRF-TOKEN": CSRF}),
+        _e("GET",
+           f"{AUTH_URL}?client_id={CLIENT}&redirect_uri={REDIRECT}"
+           f"&response_type=id_token&response_mode=query"),
+    ])
+
+
+def _jmx_extractors(xml: str) -> set[str]:
+    return set(re.findall(r'referenceNames">([^<]+)<', xml)) | set(
+        re.findall(r'RegexExtractor\.refname">([^<]+)<', xml)
+    )
+
+
+def test_b2c_settings_config_is_not_required_correlation():
+    r = analyze(_b2c_har())
+    x = build_jmx_xml(r).decode()
+    ui = build_web_summary(r, "b2c", {}, jmx_xml=x)
+    ui_vars = {c["variable"] for c in ui["correlations"]}
+    extractors = _jmx_extractors(x)
+    assert ui_vars - {"AUTH"} <= extractors | {c.variable for c in r.correlations
+                                               if c.extractor.value == "cookie_manager"}
+    banned_vals = {APP, CLIENT, REDIRECT, "B2C_1_signupsignin", "redirect_uri", "GetCustomization",
+                   "/contoso.onmicrosoft.com/B2C_1_signupsignin/oauth2/v2.0/authorize",
+                   "/contoso.onmicrosoft.com/B2C_1_signupsignin/api/SelfAsserted",
+                   CONT, "query", "id_token"}
+    assert not (_vals(r) & banned_vals)
+    for var in _vars(r):
+        if var in extractors:
+            assert f"${{{var}}}" in x
+    # config values must not be extractor names
+    for name in ("appId", "groupName", "redirectParam", "redirectUrl", "clientId",
+                 "getcustomizationCode", "path", "path2", "url"):
+        assert name not in extractors
+        assert name not in ui_vars
+    assert "X_CSRF_TOKEN" in _vars(r)
+    assert TX in _vals(r)
+    assert "X_CSRF_TOKEN" in extractors and "X_CSRF_TOKEN" in ui_vars
+    assert next(c.variable for c in r.correlations if c.value == TX) in extractors
+
+
+def test_b2c_html_settings_json_is_still_config():
+    r = analyze(_b2c_har(html_wrapped=True))
+    assert CLIENT not in _vals(r)
+    assert APP not in _vals(r)
+    assert CSRF in _vals(r) or any(c.variable == "X_CSRF_TOKEN" for c in r.correlations)
+
+
+def test_path2_without_consumer_is_not_emitted():
+    r = analyze(_b2c_har())
+    path2 = "/contoso.onmicrosoft.com/B2C_1_signupsignin/api/SelfAsserted"
+    assert path2 not in _vals(r)
+    cands = [c for c in r.correlation_audit.candidates if c.value == path2]
+    if cands:
+        assert r.correlation_audit.count(RejectionKind.NO_CONSUMER) >= 1 or cands[0] not in r.correlations
+
+
+def test_config_candidate_with_consumer_is_rejected_by_gate():
+    r = analyze(_b2c_har())
+    assert CLIENT in {c.value for c in r.correlation_audit.candidates} or CLIENT not in _vals(r)
+    if CLIENT in {c.value for c in r.correlation_audit.candidates}:
+        kinds = {x.kind for x in r.correlation_audit.rejected if x.decision.value == CLIENT}
+        assert RejectionKind.CONFIGURATION in kinds
+        assert CLIENT not in _vals(r)
+    x = build_jmx_xml(r).decode()
+    assert "clientId" not in _jmx_extractors(x)
+
+
+def test_ui_required_list_matches_jmx_extractors():
+    r = analyze(_b2c_har())
+    x = build_jmx_xml(r).decode()
+    ui = build_web_summary(r, "b2c", {}, jmx_xml=x)
+    ui_vars = {c["variable"] for c in ui["correlations"]}
+    extractors = _jmx_extractors(x)
+    cookie = {c.variable for c in r.correlations if c.extractor.value == "cookie_manager"}
+    assert ui_vars <= extractors | cookie
+    assert ui["metrics"]["correlations"] == len(ui["correlations"])
 
 
 def _oidc_har():

@@ -184,17 +184,20 @@ function render(d) {
   });
   const ca = d.correlationAudit || {};
   const required = d.correlations.length;
-  $("#corrCount").textContent = required + " required"
-    + (ca.candidates != null ? ` · ${ca.candidates} candidates` : "");
-  if (ca.candidates != null) {
+  $("#corrCount").textContent = required + " required";
+  const auditEl = $("#corrAudit");
+  if (auditEl) {
     const bits = [];
-    if (ca.superseded) bits.push(ca.superseded + " superseded");
-    if (ca.rejectedConfiguration) bits.push(ca.rejectedConfiguration + " configuration");
-    if (ca.rejectedProtocol) bits.push(ca.rejectedProtocol + " protocol metadata");
-    if (ca.rejectedMasterData) bits.push(ca.rejectedMasterData + " master data");
-    if (ca.noConsumer) bits.push(ca.noConsumer + " no consumer");
-    if (ca.review) bits.push(ca.review + " review");
-    if (bits.length) $("#corrCount").textContent += " · " + bits.join(", ");
+    if (ca.candidates != null) bits.push("Candidates: " + ca.candidates);
+    bits.push("Required: " + required);
+    if (ca.superseded) bits.push("Superseded: " + ca.superseded);
+    if (ca.rejectedConfiguration) bits.push("Configuration: " + ca.rejectedConfiguration);
+    if (ca.rejectedProtocol) bits.push("Protocol metadata: " + ca.rejectedProtocol);
+    if (ca.rejectedMasterData) bits.push("Master data: " + ca.rejectedMasterData);
+    if (ca.noConsumer) bits.push("No consumer: " + ca.noConsumer);
+    if (ca.review) bits.push("Review: " + ca.review);
+    if (ca.notRequired) bits.push("Not required: " + ca.notRequired);
+    auditEl.textContent = bits.join(" · ");
   }
   if (!d.correlations.length) cbody.innerHTML = `<tr><td colspan="6" class="val">No required runtime correlations for this flow.</td></tr>`;
 
