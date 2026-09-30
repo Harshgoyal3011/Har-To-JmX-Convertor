@@ -18,8 +18,6 @@ dependencies = []
 dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]
 
 [project.scripts]
-# Today this launches the local web UI. Phase 3 turns it into `convert` / `serve`
-# subcommands (see docs/ARCHITECTURE.md → Roadmap).
 har2jmx = "har2jmx.__main__:main"
 
 [tool.setuptools.packages.find]

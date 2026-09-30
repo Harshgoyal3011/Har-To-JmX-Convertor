@@ -1,105 +1,130 @@
 # Architecture
 
-This is the source-of-truth design for `har2jmx`. It describes the target the codebase is
-being shaped toward — chosen so the same core can ship as a CLI today and a hosted service
-later without a rewrite. Legacy design notes live in [`archive/`](archive/).
+`har2jmx` turns a browser HAR into a JMeter plan. Decisions are **behavioural** (producer → consumer,
+lifecycle, replay necessity), never field-name blacklists or app-specific tables.
 
-## Guiding principle: a pure core, with thin adapters
+The 12-stage reasoning pipeline is the live product. There is no second converter (`pipeline_v2` and
+the old `correlations/` / `parameters/` / `analyzer/` trees are gone).
+
+## Adapters vs core
 
 ```
-                 ┌─────────────────────────────────────────────┐
-   HAR bytes ───▶│                CORE ENGINE                  │───▶ BuildResult
-   + config      │   pure functions · no HTTP · no filesystem  │     (+ .jmx, CSVs, reports)
-                 │   convert(har_bytes, config) -> BuildResult │
-                 └─────────────────────────────────────────────┘
-                        ▲                 ▲                 ▲
-                        │                 │                 │
-                 ┌──────┴──────┐   ┌──────┴──────┐   ┌──────┴───────┐
-                 │  CLI (Phase │   │  Web server │   │  SaaS backend│
-                 │  3)         │   │  (server/)  │   │  (future)    │
-                 └─────────────┘   └─────────────┘   └──────────────┘
+HAR bytes ──▶ engine.analyze() ──▶ EngineResult ──▶ emit_jmx() ──▶ .jmx + CSV + reports
+                    ▲                                      ▲
+                    │                                      │
+              no I/O, no HTTP                    writes generated/
+                    │
+         ┌──────────┴──────────┐
+         │  har2jmx (web UI)   │  stdlib HTTP server + static/
+         └─────────────────────┘
 ```
 
-The engine knows nothing about how it was invoked. Every surface — the CLI in someone's
-CI pipeline, the local web UI, a future hosted product — is a **thin adapter** that calls one
-stable function and formats the result. Improve the engine and every adapter benefits; change
-an adapter and the engine is untouched. This separation is what keeps the product cheap to
-evolve, and the codebase is already ~80% of the way there.
+- **`analyze(har)`** (`engine.py`) — pure: parse, reason, return decisions and measured metrics.
+- **`emit_jmx(result, …)`** (`emit/jmx.py`) — materialize a runnable JMeter 5.x plan.
+- **`server/handler.py`** — upload HAR, call analyze + emit, zip the bundle, return a UI summary.
+- **`webreport.py`** — JSON the browser renders. Required-correlation rows are filtered to extractors
+  that actually exist in the generated JMX (JMX is the source of truth).
 
-## The one contract
+Entry point: `python -m har2jmx` / `har2jmx` → `har2jmx.__main__:main` → `server.handler.main`
+(default `http://127.0.0.1:8000`).
 
-```python
-def convert(har_bytes: bytes, config: dict) -> BuildResult: ...
+## Reasoning pipeline
+
+```
+HAR
+  → M1  IR (normalized capture)
+  → M2  request-role / noise tags
+  → M3  application + auth profile (evidence only)
+  → M4  transactions (user actions)
+  → M5–M6  entities + relationships
+  → M7  lineage (producer → value → consumers)
+  → M8  value class (STATIC / MASTER / RUNTIME / UNKNOWN)
+  →     discover correlation CANDIDATES   (high recall — do not thin here)
+  →     necessity GATE                    (required vs rejected)
+  → M9  REQUIRED correlations only
+  → M10 parameterization (+ intent)
+  → M11 replay validator + extractor verify
+  → M12 metrics on EngineResult
+  → emit JMX
+  → UI audit (must match extractors in XML)
 ```
 
-Everything flows through this. `BuildResult` (`models.py`) is the complete, serializable
-output: samplers, parameters, correlations, entities, output paths, quality-gate score and
-auto-corrections. Reports and the JSON summary are *projections* of `BuildResult` — they never
-recompute anything.
+Discovery must **not** jump straight to “final correlation.” A candidate is required only when
+provenance, lifecycle, downstream use, and replay necessity all agree.
 
-## Six stages as explicit seams
+### Correlation gate (after discovery)
 
-The pipeline is a fixed sequence of stages, each with a clear input → output contract. New
-capabilities slot into a seam without touching the orchestrator.
+A candidate is **emitted** only if it is server-generated, consumed later, session/transaction/entity
+scoped, and hardcoding the recorded value would break another VU. Otherwise it is classified, not
+wired:
 
-| # | Stage | Input → Output | Home | Extends to… |
-|---|-------|----------------|------|-------------|
-| 1 | **analyze** | HAR bytes → samplers + transactions + value index | `har/`, `analyzer/engine.py` | new protocols (GraphQL, gRPC-web), new transaction rules |
-| 2 | **correlate** | samplers → proven correlation rules + dependency graph | `correlations/`, `analyzer/dependency_graph.py` | path-value correlation, boundary extractors |
-| 3 | **parameterize** | samplers → parameters → CSV entities | `parameters/` | smarter entity clustering, data generators |
-| 4 | **validate** | everything → quality gate (score + corrections) | `validation/` | new rules, configurable thresholds |
-| 5 | **review** | everything → findings + recommendations | `analyzer/review.py` | genuine ML scoring (today: heuristics) |
-| 6 | **emit** | model → `.jmx` (+ reports) | `jmx/`, `reports/` | alternate outputs (Gatling, k6, JUnit) |
+| Kind | Meaning |
+|------|---------|
+| `CONFIGURATION` | Environment / SETTINGS / static URLs and ids |
+| `PROTOCOL_METADATA` | OIDC/OAuth capability arrays, well-known vocab |
+| `MASTER_DATA` | Existing catalog/selected records (CSV/hardcode policy, not extract) |
+| `NO_CONSUMER` | No downstream use — never emit a dead extractor |
+| `SUPERSEDED` | Covered by a longer runtime variable |
+| `REVIEW` / `NOT_REQUIRED` | Insufficient or not needed for replay |
 
-**Design rule:** a stage depends only on the models produced by earlier stages, never on an
-adapter or on global state. Keep the seams clean and stages 2–6 stay independently testable
-and replaceable.
+Created-this-run entity ids (POST/PUT/PATCH) can correlate; GET/search selected records follow the
+master-data / parameter policy. Same field name can be either, depending on evidence.
 
-## The vocabulary (`models.py`)
+The UI reports **candidates vs required vs rejection counts**, and the **Correlations** panel lists
+only required/emitted variables.
 
-Five dataclasses are the shared language every stage speaks:
+## What each module does
 
-- **`SamplerModel`** — one HTTP exchange; the working unit through the whole pipeline.
-- **`CorrelationRule`** — a proven dynamic value: producer, extractor, confidence, consumers.
-- **`Parameter`** — a business input lifted to a variable; may be CSV-bound.
-- **`DataEntity`** — a cluster of parameters that form one record → one CSV file.
-- **`BuildResult`** — the full conversion output; what adapters and reports read.
+| Path | Role |
+|------|------|
+| **`har/reader.py`** | Parse HAR JSON: headers, cookies, post bodies, response text. Shared primitives only. |
+| **`ir/normalized.py`** | Dataclasses: capture, request/response, typed body (JSON/form/multipart/GraphQL/SOAP/XML). |
+| **`ir/build.py`** | HAR → `NormalizedCapture`. Keeps every entry; later stages tag, they do not drop here. |
+| **`classify/request_noise.py`** | Role + exclude: static, telemetry/RUM vendors, CORS, vs auth/business. Auth is kept. |
+| **`understand/application.py`** | API style / SPA / stack from HAR evidence, not assumed product names. |
+| **`understand/auth.py`** | Cookie, bearer, form login, refresh, SAML/OAuth traces when present. |
+| **`understand/models.py`** | `Detection` / `EvidenceBag` shared by understanders. |
+| **`workflow/transactions.py`** | Group into user actions (navigation + think-time). Supporting calls nest; names from the anchor request. |
+| **`entities/discovery.py`** | Business entities and attributes from payload/URL structure. |
+| **`entities/relationships.py`** | Parent/child, aligned instance rows for CSV. |
+| **`lineage/graph.py`** | Whole-slot matching (not substring) + transform-aware equality. |
+| **`classify/value_engine.py`** | Lifecycle: existed-before vs created-this-run vs user input → `ValueClass`. UNKNOWN is never auto-wired. |
+| **`correlate/decide.py`** | High-recall **candidate** discovery and extractor choice (JSON, regex, Cookie Manager). |
+| **`correlate/necessity.py`** | Gate: required vs configuration / protocol / master / superseded / no consumer. |
+| **`parameterize/intent.py`** | Would a PE vary this as test data? User input / selected existing → CSV; config and runtime state do not. |
+| **`parameterize/decide.py`** | Entity-centric datasets, need-gated columns, aligned rows. |
+| **`validate/replay.py`** | Static multi-VU checks (order, missing runtime, CSV vs correlate conflicts). Honors the necessity audit. |
+| **`validate/extractors.py`** | Does each extractor uniquely hit the producer response? Refine or flag. |
+| **`engine.py`** | Orchestrates M1–M11, attaches metrics (`EngineResult`). |
+| **`emit/jmx.py`** | Thread group, Cookie Manager, CSV Data Sets, transactions, samplers, extractors, whole-slot `${var}`. |
+| **`emit/validate.py`** | Dry-run XML: constituents, unused extractors/CSV columns, unresolved variables. |
+| **`webreport.py`** | UI payload; correlation list ∩ JMX extractor names. |
+| **`server/handler.py`** | HTTP routes, upload limits, result prune, zip downloads. |
+| **`server/multipart.py`** | Multipart parse for HAR upload (stdlib). |
+| **`static/`** | Console UI (`index.html`, `app.js`, `styles.css`). |
+| **`patterns.py`** | Shared regexes (GUID, hidden input, token-ish names, static extensions) — structural, not app catalogs. |
+| **`utils.py`** | Safe JMeter variable names. |
+| **`paths.py`** | Package root and `generated/` output directory. |
 
-## Physical layout
+Tests live in `tests/` (fixtures + example HARs). Runtime output is `generated/` (git-ignored except `.gitkeep`).
 
-`src/` layout with a real package name (`har2jmx`) — the modern packaging standard: it prevents
-import-shadowing, makes `pip install` unambiguous, and separates shippable code from repo
-scaffolding. Runtime output (`generated/`) lives **outside** the package; static web assets ship
-**inside** it (`har2jmx/static/`) so the server works when pip-installed.
+## Parameterization vs correlation
 
-See the tree in the [README](../README.md#project-layout).
+| | Correlate | Parameterize | Hardcode |
+|--|-----------|--------------|----------|
+| **When** | Server issued this run, consumed later, needed for another session | User-typed or user-selected existing data | Config, protocol metadata, unused master |
+| **JMX** | Extractor + `${var}`, literal gone | CSV Data Set + `${col}` | Recorded literal |
 
-## Known debt (being paid down, in order)
+Intent (`parameterize/intent.py`) does not rewrite lineage or candidate discovery.
 
-These are consolidation tasks, not redesigns — the domain logic is sound. Full detail in the
-Phase-1 context map.
+## Layout
 
-1. **Two pipelines** — `pipeline.py` (dead) vs `pipeline_v2.py` (live). Collapse to one
-   `pipeline.py` exposing `convert()`.
-2. **Engine twins** — `discover.py` + `discover_enhanced.py` in both `correlations/` and
-   `parameters/`. Merge each pair into one module (the enhanced logic is the keeper; it reuses
-   the base's helpers).
-3. **IR half-migration** — `HAR → ScriptIR → samplers` flattens immediately. Either finish the
-   migration deliberately or drop the IR; don't carry a half-built one.
-4. **Redundant scan** — `value_origin.py` re-walks every request/response that `correlate`
-   already scanned; fold it into the single scan.
-5. **Honest naming** — `AIReviewLayer` contains no model; rename to `HeuristicReviewer`.
+```
+src/har2jmx/     package (stdlib only)
+tests/           pytest
+examples/        sample HARs
+docs/            this file + SUPPORTED_PATTERNS.md
+generated/       conversion output
+```
 
-## Roadmap to market-ready
-
-Ordered so the base is clean before features land (audience: performance/QA engineers).
-
-- **Phase 0 — Structure** ✅ *(done)* — `src/` layout, package rename, docs/tests homes,
-  `pyproject.toml`, git checkpoint.
-- **Phase 1 — Consolidate** — pay down the debt above; one pipeline, one engine per concern.
-- **Phase 2 — Test harness** — real pytest suite + a **golden-file JMX test** (locks behaviour
-  so refactors can't silently drift), ruff + mypy, CI.
-- **Phase 3 — CLI** — `har2jmx convert capture.har -o out/` with a `--min-score` gate for CI;
-  `har2jmx serve` for the UI. One entry point over the same `convert()`.
-- **Phase 4 — Features** — path-value correlation, boundary extractors, multipart/GraphQL,
-  capture allow/deny controls, a self-contained HTML report, PyPI + Docker publishing.
+Capability matrix (locations, extractors, known limits): [SUPPORTED_PATTERNS.md](SUPPORTED_PATTERNS.md).
