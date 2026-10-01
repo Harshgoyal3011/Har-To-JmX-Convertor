@@ -68,3 +68,11 @@ pytest
 ruff check src
 mypy
 ```
+
+## Automatic deployment
+
+The included [Render Blueprint](render.yaml) deploys pushes to `main` after
+GitHub Actions tests and a web-service smoke check pass. Connect the repository
+to Render once using the [deployment guide](docs/DEPLOYMENT.md).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Harshgoyal3011/Har-To-JmX-Convertor)

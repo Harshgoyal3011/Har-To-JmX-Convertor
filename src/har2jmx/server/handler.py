@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import functools
 import json
+import os
 import re
 import traceback
 import uuid
@@ -82,6 +83,9 @@ def _prune_output(out_dir: Path, keep: int) -> None:
 
 class AppHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:
+        if self.path == "/healthz":
+            self.respond_json({"status": "ok"})
+            return
         if self.path == "/":
             self.path = "/static/index.html"
         if self.path.startswith("/download/"):
@@ -190,13 +194,18 @@ def _lan_ip() -> str:
         s.close()
 
 
-def main() -> None:
-    import os
+def _listen_address() -> tuple[str, int]:
+    """Use the hosting platform's PORT unless the app-specific port is supplied."""
     host = os.environ.get("HAR2JMX_HOST", "127.0.0.1")
     try:
-        port = int(os.environ.get("HAR2JMX_PORT", "8000"))
+        port = int(os.environ.get("HAR2JMX_PORT") or os.environ.get("PORT") or "8000")
     except ValueError:
         port = 8000
+    return host, port
+
+
+def main() -> None:
+    host, port = _listen_address()
 
     handler = functools.partial(AppHandler, directory=str(ROOT))
     server = ThreadingHTTPServer((host, port), handler)
