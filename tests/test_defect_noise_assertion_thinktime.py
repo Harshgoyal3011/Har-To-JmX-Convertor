@@ -3,8 +3,8 @@
 1. Irrelevant third-party / browser traffic (maps, analytics, fonts, reCAPTCHA) must NOT become
    samplers — including when a widget loads as a *document*/iframe (which otherwise looks like a
    navigation) — while a required external dependency (an auth/identity provider) is preserved.
-2. Exactly ONE response-code assertion per business transaction, placed INSIDE its Transaction
-   Controller — never one global assertion at Thread Group level, never one per sampler.
+2. Exactly ONE response-code assertion per HTTP sampler, placed in that sampler's own hashTree —
+   never directly under a Transaction Controller or another container.
 3. Think time is emitted only BETWEEN Transaction Controllers — never inside a transaction and never
    before the first transaction.
 
@@ -169,25 +169,61 @@ def test_exclusion_reasons_are_explainable():
 
 # ============================================================ Defect 2 — assertion placement
 
-def test_one_response_assertion_per_transaction_inside_the_controller():
-    _res, doc, _xml = _plan()
+def test_one_response_assertion_per_sampler_inside_its_own_hash_tree():
+    res, doc, _xml = _plan()
     tg = _thread_group_container(doc)
 
-    # (E) NO response-code assertion directly at Thread Group level
-    tg_direct = [a for a, _ in _response_code_assertions_direct(tg)]
-    assert tg_direct == [], "a response-code assertion must not sit directly under the Thread Group"
-
-    # exactly one response-code assertion inside EACH Transaction Controller (D), none elsewhere
     tcs = []
     _collect(tg, "TransactionController", tcs)
     assert len(tcs) >= 2
-    for tc, tc_ht in tcs:
-        inside = _response_code_assertions_direct(tc_ht)
-        assert len(inside) == 1, f"{tc.getAttribute('testname')} must have exactly one response assertion"
+    emitted = [txn for txn in res.transactions
+               if any(not res.capture.requests[i].classification.excluded for i in txn.request_indices)]
+    assert len(tcs) == len(emitted)
+    expected_names = {"Login": ["GET /login", "POST /oauth/token"],
+                      "Create Order": ["GET /${path}", "POST /api/orders"]}
+    sampler_count = 0
+    for (tc, tc_ht), txn in zip(tcs, emitted):
+        assert tc.getAttribute("testname") == txn.name
+        assert not any(e.tagName == "ResponseAssertion" for e in _elems(tc_ht)), \
+            "a request-level assertion must not be directly under the Transaction Controller"
+        samplers = []
+        _collect(tc_ht, "HTTPSamplerProxy", samplers)
+        assert len(samplers) >= 2, "regression capture must include multiple requests per transaction"
+        assert [sampler.getAttribute("testname") for sampler, _ in samplers] == expected_names[txn.name], \
+            "request ordering and existing parameterized paths must be preserved"
+        for sampler, sampler_ht in samplers:
+            assertions = _response_code_assertions_direct(sampler_ht)
+            assert len(assertions) == 1, \
+                f"{sampler.getAttribute('testname')} must have exactly one response-code assertion"
+            assertion, assertion_ht = assertions[0]
+            assert assertion.getAttribute("testname") == "Assert Response Code (2xx/3xx)"
+            assert assertion.getAttribute("enabled") == "true"
+            props = {p.getAttribute("name"): "".join(c.data for c in p.childNodes if c.nodeType == c.TEXT_NODE)
+                     for p in _elems(assertion) if p.tagName in {"stringProp", "boolProp", "intProp"}}
+            assert props == {"Assertion.test_field": "Assertion.response_code",
+                             "Assertion.assume_success": "false", "Assertion.test_type": "1"}
+            patterns = assertion.getElementsByTagName("collectionProp")
+            assert len(patterns) == 1 and patterns[0].getAttribute("name") == "Asserion.test_strings"
+            assert [(p.getAttribute("name"), p.firstChild.data) for p in _elems(patterns[0])] == [
+                ("assert_pattern", r"^(2\d\d|3\d\d)$")
+            ]
+            assert assertion_ht is not None and _elems(assertion_ht) == []
+        sampler_count += len(samplers)
 
-    # and the plan-wide count equals the number of transactions (not one-per-sampler)
-    total = _response_code_assertions(tg)
-    assert len(total) == len(tcs)
+    assert len(_response_code_assertions(doc.documentElement)) == sampler_count
+
+
+def test_every_request_level_assertion_is_owned_by_an_http_sampler():
+    _res, doc, _xml = _plan()
+    assertions = doc.getElementsByTagName("ResponseAssertion")
+    assert assertions
+    for assertion in assertions:
+        assert assertion.parentNode.tagName == "hashTree"
+        owner = assertion.parentNode.previousSibling
+        while owner is not None and owner.nodeType != owner.ELEMENT_NODE:
+            owner = owner.previousSibling
+        assert owner is not None and owner.tagName == "HTTPSamplerProxy", \
+            "request-level assertions must belong to HTTP samplers, never controllers, groups, or the plan"
 
 
 def _response_code_assertions_direct(container):

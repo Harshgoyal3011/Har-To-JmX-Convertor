@@ -574,8 +574,7 @@ def _add_correlation_health_assertion(parent_ht, variable: str) -> None:
 
 
 def _add_response_assertion(parent_ht):
-    """Transaction scope: added inside a Transaction Controller's subtree, so every sampler in that one
-    business transaction must return a 2xx/3xx code — surfaces failures under load. One per transaction."""
+    """Request scope: added inside the HTTP sampler's own subtree to require a 2xx/3xx code."""
     a = SubElement(parent_ht, "ResponseAssertion", {
         "guiclass": "AssertionGui", "testclass": "ResponseAssertion",
         "testname": "Assert Response Code (2xx/3xx)", "enabled": "true"})
@@ -763,10 +762,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
                 certain = chk is not None and chk.status == ExtractorStatus.UNIQUE and c.confidence == "High"
                 if not certain:
                     _add_correlation_health_assertion(sampler_ht, c.variable)
-        # ONE response assertion per business transaction: it belongs to the Transaction Controller's
-        # subtree, so it validates every HTTP request in THIS transaction returns 2xx/3xx — never one
-        # global assertion at Thread Group level, never one duplicated per sampler.
-        _add_response_assertion(tc_ht)
+            _add_response_assertion(sampler_ht)
         emitted_txns += 1
 
     rough = tostring(root, encoding="utf-8")
