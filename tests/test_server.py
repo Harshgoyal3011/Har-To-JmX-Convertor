@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import functools
 import http.client
+import json
 import os
 import re
 import socket
@@ -12,12 +13,14 @@ from http.server import ThreadingHTTPServer
 import tempfile
 import time
 from pathlib import Path
+from unittest.mock import patch
 
 from har2jmx.paths import ROOT
 from har2jmx.server.handler import (
     AppHandler,
     _clamp,
     _keep_results,
+    _listen_address,
     _max_upload_bytes,
     _prune_output,
 )
@@ -169,6 +172,32 @@ def test_index_and_unknown_post():
         assert c.getresponse().status == 404               # unknown POST route
     finally:
         srv.shutdown()
+
+
+def test_hosted_port_and_local_defaults():
+    with patch.dict(os.environ, {}, clear=True):
+        assert _listen_address() == ("127.0.0.1", 8000)
+    with patch.dict(os.environ, {"PORT": "10000", "HAR2JMX_HOST": "0.0.0.0"}, clear=True):
+        assert _listen_address() == ("0.0.0.0", 10000)
+        os.environ["HAR2JMX_PORT"] = "9000"
+        assert _listen_address() == ("0.0.0.0", 9000)
+        os.environ["HAR2JMX_PORT"] = "invalid"
+        assert _listen_address() == ("0.0.0.0", 8000)
+
+
+def test_health_check():
+    srv, port = _start()
+    connection = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+    try:
+        connection.request("GET", "/healthz")
+        response = connection.getresponse()
+        assert response.status == 200
+        assert response.headers["Content-Type"] == "application/json"
+        assert json.loads(response.read()) == {"status": "ok"}
+    finally:
+        connection.close()
+        srv.shutdown()
+        srv.server_close()
 
 
 if __name__ == "__main__":

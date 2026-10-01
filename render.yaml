@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: har-to-jmx-convertor
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: python -m pip install .
+    startCommand: har2jmx
+    healthCheckPath: /healthz
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.14.6"
+      - key: HAR2JMX_HOST
+        value: "0.0.0.0"
+      - key: HAR2JMX_OUTPUT
+        value: /tmp/har2jmx-generated
