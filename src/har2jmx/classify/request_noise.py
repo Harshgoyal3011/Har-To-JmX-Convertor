@@ -19,6 +19,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import PurePosixPath
 
+from har2jmx.classify.content_role import business_content_evidence
 from har2jmx.ir.normalized import BodyKind, NormalizedCapture, NormalizedRequest, RequestRole
 from har2jmx.patterns import STATIC_EXTENSIONS
 
@@ -123,11 +124,17 @@ def _has_content_disposition_attachment(req: NormalizedRequest) -> bool:
 
 def _is_static(req: NormalizedRequest) -> tuple[bool, str]:
     suffix = _suffix(req.request.path)
+    mime = (req.response.mime or "").lower()
+    # Path vocabulary is weaker than a data contract, but actual rendering
+    # content and known telemetry (checked earlier) retain their existing roles.
+    if (suffix in STATIC_EXTENSIONS or STATIC_PATH_RE.search(req.request.path)) and not any(
+        hint in mime for hint in _STATIC_MIME_HINTS
+    ) and business_content_evidence(req, api_path=bool(API_PATH_RE.search(req.request.path))):
+        return False, ""
     if suffix in STATIC_EXTENSIONS:
         return True, f"static file extension '{suffix}'"
     if STATIC_PATH_RE.search(req.request.path):
         return True, "static resource path"
-    mime = (req.response.mime or "").lower()
     if any(h in mime for h in _STATIC_MIME_HINTS):
         # Guard: a JS/CSS/image response that also sets cookies or is JSON-shaped may carry state.
         if not req.response.set_cookies:
@@ -254,6 +261,8 @@ def classify_request(req: NormalizedRequest) -> None:
         c.role = RequestRole.BUSINESS
         c.business_candidate = True
         c.reasons.append("application/API request (structured payload, API path, or write method)")
+        if STATIC_PATH_RE.search(req.request.path) or _suffix(req.request.path) in STATIC_EXTENSIONS:
+            c.reasons.append(business_content_evidence(req, api_path=bool(API_PATH_RE.search(req.request.path))))
         return
 
     # 7. Otherwise unknown — kept, flagged for review, never silently wired downstream.
