@@ -8,8 +8,8 @@ entity association — never from field-name/shape alone:
     RUNTIME_GENERATED      created/issued during this run (token, session, new object id) → correlate
     UNKNOWN                insufficient evidence → flag for review, never silently wired
 
-The decisive discriminator is lifecycle: was the value present in a request *before* any response
-produced it (master data / user input), or first issued by the server this run (runtime)?
+The decisive discriminator is lifecycle. Request-first values may be user inputs; response-first
+values still require operation evidence to distinguish reads from creation or runtime issuance.
 """
 
 from __future__ import annotations
@@ -19,6 +19,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 from urllib.parse import unquote
 
+from har2jmx.classify.lifecycle import (
+    graphql_operation_kind,
+    graphql_schema_value,
+    read_result_is_runtime_state,
+)
 from har2jmx.entities import RelationshipModel, discover_relationships
 from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import LineageGraph, ValueFlow, build_lineage
@@ -256,6 +261,7 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
     lineage = lineage if lineage is not None else build_lineage(cap)
     value_entity = _build_value_entity_map(cap, model)
     req_by_index = {r.index: r for r in cap.requests}
+    operation_by_request = {r.index: graphql_operation_kind(r) for r in cap.requests}
 
     # How many distinct values each producer field emitted. A field that produced several values
     # (products[].productId → {5, 6, ...}) is a selectable catalog collection; a field that produced
@@ -310,7 +316,7 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
         producer_scope: frozenset = frozenset()
         needs_corr = False
         if flow.first_producer is not None and not client_originated:
-            # server-originated: the server introduced this value this run
+            # Response provenance establishes where it was observed, not when it was created.
             producer = req_by_index.get(flow.first_producer.request_index)
             source = flow.first_producer.location
             method = producer.method if producer else "GET"
@@ -321,7 +327,24 @@ def classify_values(cap: NormalizedCapture, lineage: LineageGraph | None = None,
                 producer_scope = _scope_tokens(producer)
 
             n_at = len(producer_field_values.get(flow.first_producer.location, ()))
-            if source.startswith("response.regex:"):
+            operation = operation_by_request.get(flow.first_producer.request_index)
+            graphql_read_data = (operation == "query" and source.startswith("response.body:")
+                                 and not read_result_is_runtime_state(flow) and not _is_pagination_token(flow))
+            if operation == "query" and graphql_schema_value(source):
+                cls, life, conf = ValueClass.STATIC, Lifecycle.UNKNOWN, "High"
+                reason = "GraphQL introspection describes schema/capability configuration, not created runtime data"
+            elif graphql_read_data and (entity_name is not None or n_at > 1):
+                cls, life, conf = ValueClass.BUSINESS_MASTER_DATA, Lifecycle.EXISTING_BEFORE_RUN, "High"
+                reason = ("GraphQL query reads pre-existing data; HTTP POST does not establish creation. "
+                          "Response origin and downstream selection do not imply runtime issuance")
+            elif graphql_read_data:
+                cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
+                reason = ("GraphQL read is not creation evidence; no catalog/entity or credential transport "
+                          "evidence establishes the returned value's role")
+            elif operation in {"unknown", "subscription"} and source.startswith("response.body:") and not read_result_is_runtime_state(flow):
+                cls, life, conf = ValueClass.UNKNOWN, Lifecycle.UNKNOWN, "Low"
+                reason = "GraphQL operation lifecycle is unresolved; response origin/reuse alone cannot prove creation"
+            elif source.startswith("response.regex:"):
                 cls, life, conf = ValueClass.RUNTIME_GENERATED, Lifecycle.CREATED_THIS_RUN, "High"
                 reason = ("found embedded inside an earlier response (server-issued, e.g. a token "
                           "wrapped in a string) and reused — correlated via a boundary extractor")
