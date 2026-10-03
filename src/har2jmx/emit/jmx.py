@@ -22,6 +22,14 @@ from xml.dom import minidom
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 from har2jmx.correlate import ExtractorType
+from har2jmx.correlate.cookies import cookie_value_expression
+from har2jmx.emit.authentication import (
+    add_cookie_normalization,
+    add_runtime_checks,
+    auth_representations,
+    authentication_dependency,
+    cookie_decoding_required,
+)
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
@@ -152,17 +160,21 @@ def _generated_uuid_values(result: EngineResult) -> set[str]:
 
 def _build_sub_map(result: EngineResult) -> dict[str, str]:
     sub: dict[str, str] = {}
-    # values whose extractor could not be verified against the capture must NOT be substituted: a
-    # ${var} with no working extractor resolves to NOT_FOUND at run time (a false green). Ship the
-    # literal and escalate it to the manual-review report instead.
+    # Preserve the existing review policy for unresolved non-auth values. Accepted
+    # auth dependencies always use runtime vars and fail closed at their producer;
+    # an extraction failure must never fall back to a captured authentication value.
     unresolved = {chk.value for chk in result.extractor_checks if not chk.ok}
     for c in result.correlations:                       # correlations win over parameters
         if c.extractor == ExtractorType.COOKIE_MANAGER:
             continue                                    # Cookie Manager replays it; no ${var}
-        if c.value in unresolved:
+        auth_state = authentication_dependency(result, c)
+        if c.value in unresolved and not auth_state:
             continue                                    # no verified extractor → keep the literal
-        if _sub_ok(c.value):
+        if _sub_ok(c.value) or auth_state:
             sub[str(c.value)] = f"${{{c.variable}}}"
+            if auth_state:
+                for raw in auth_representations(result, c):
+                    sub[raw] = f"${{__urlencode(${{{c.variable}}})}}"
     for uuid_val in _generated_uuid_values(result):     # fresh UUID per request (beats a CSV value)
         sub.setdefault(uuid_val, "${__UUID()}")
     for d in result.parameterization.datasets:
@@ -742,18 +754,25 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
                               slot_subs=slot_subs)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
+            auth_produced = [c for c in produced if authentication_dependency(result, c)]
+            add_runtime_checks(sampler_ht, auth_produced, SubElement, _s)
             for c in produced:
                 chk = check_by_var.get(c.variable)
                 if chk is not None and not chk.ok:
-                    # unverifiable extractor — omit it (and its ${var}) rather than ship a false green;
-                    # the value stays a literal and is listed in the manual-review report.
+                    # Omit unverifiable extractors. Accepted auth still consumes a
+                    # runtime variable and stops at the producer; other values keep
+                    # the existing literal/manual-review policy.
                     continue
                 if c.extractor == ExtractorType.JSON:
                     expr = chk.refined_expression if (chk and chk.refined_expression) else c.expression
                     _add_json_extractor(sampler_ht, c.variable, expr)
                 else:
                     use_headers = c.producer_location.startswith(("set-cookie:", "response.header:", "response.location:", "response.locpath:"))
-                    _add_regex_extractor(sampler_ht, c.variable, c.expression, use_headers)
+                    expr = (cookie_value_expression(c.producer_location.split(':', 1)[1])
+                            if c.producer_location.startswith('set-cookie:') else c.expression)
+                    _add_regex_extractor(sampler_ht, c.variable, expr, use_headers)
+                    if c in auth_produced and cookie_decoding_required(result, c):
+                        add_cookie_normalization(sampler_ht, c.variable, SubElement, _s)
                 # Only guard correlations with residual doubt. A correlation proven correct against the
                 # capture (extractor verified UNIQUE) with strong lifecycle evidence (High confidence) is
                 # 100% right — no runtime "did it resolve?" review needed, it would just add clutter. Keep

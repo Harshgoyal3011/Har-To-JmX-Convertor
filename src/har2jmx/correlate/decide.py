@@ -15,6 +15,7 @@ from enum import Enum
 
 from har2jmx.classify import ClassificationResult, ValueClass, classify_values
 from har2jmx.classify.value_engine import ValueVerdict
+from har2jmx.correlate.cookies import cookie_value_expression
 from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import LineageGraph, Occurrence, build_lineage
 from har2jmx.utils import variable_name
@@ -74,7 +75,7 @@ def _choose_extractor(location: str, cookie_name: str, consumers: list[Occurrenc
     if location.startswith("set-cookie:"):
         if _all_consumers_are_cookies(consumers):
             return ExtractorType.COOKIE_MANAGER, ""
-        return ExtractorType.REGEX, rf"Set-Cookie:\s*{re.escape(cookie_name)}=([^;]+)"
+        return ExtractorType.REGEX, cookie_value_expression(cookie_name)
     if location.startswith("response.regex:"):        # embedded / boundary match (prebuilt regex)
         return ExtractorType.REGEX, location.split("response.regex:", 1)[1]
     if location.startswith("response.body:"):
