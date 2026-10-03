@@ -30,6 +30,7 @@ from har2jmx.emit.authentication import (
     authentication_dependency,
     cookie_decoding_required,
 )
+from har2jmx.emit.redirects import add_location_capture, location_variable, redirect_execution
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
@@ -276,11 +277,12 @@ def _sub_raw(text: str, sub: dict[str, str]) -> str:
 
 def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True,
                       global_headers: frozenset = frozenset(), cookie_mgr_values: frozenset = frozenset(),
-                      primary_host: str = "", slot_subs: list | None = None) -> None:
+                      primary_host: str = "", slot_subs: list | None = None,
+                      redirect_target: str = "") -> None:
     slot_subs = slot_subs or []
     http = SubElement(parent_ht, "HTTPSamplerProxy", {
         "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
-        "testname": f"{req.method} {_sub_path(req.request.path, sub, slot_subs)}",
+        "testname": f"{req.method} {redirect_target or _sub_path(req.request.path, sub, slot_subs)}",
         "enabled": "true",
     })
     args = _elem(http, "HTTPsampler.Arguments", "Arguments")
@@ -309,6 +311,9 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
             [(n, v, f"request.query:{n}") for n, v in req.request.query]
             + [(n, v, f"request.body:{n}") for n, v in req.request.body.form]
         )
+        if redirect_target:
+            # Location owns the query; method-preserving redirects retain form bodies.
+            args_list = [(n, v, f"request.body:{n}") for n, v in req.request.body.form]
         for name, value, slot_key in args_list:
             arg = _elem(coll, name, "HTTPArgument")
             # Query/form values are stored DECODED (parse_qsl), so JMeter must URL-encode them or a value
@@ -327,7 +332,7 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _s(http, "HTTPSampler.domain", "" if on_primary else req.request.host)
     _s(http, "HTTPSampler.port", req.request.port)
     _s(http, "HTTPSampler.protocol", "" if on_primary else req.request.scheme)
-    _s(http, "HTTPSampler.path", _sub_path(req.request.path, sub, slot_subs))
+    _s(http, "HTTPSampler.path", redirect_target or _sub_path(req.request.path, sub, slot_subs))
     _s(http, "HTTPSampler.method", req.method)
     _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)
@@ -691,6 +696,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
     if not str(config.get("thinktime", "")).strip():
         config["thinktime"] = str(_observed_think_time(result.capture))
     sub = _build_sub_map(result)
+    redirects = redirect_execution(result, _replayable_header)
     slot_subs = _param_slot_subs(result)
     # extractor self-check: only ship an extractor proven to resolve; refine ambiguous JSONPaths; drop
     # (and let the manual-review path flag) any that could not be verified against the capture.
@@ -745,15 +751,21 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
         _b(tc, "TransactionController.includeTimers", False)
         tc_ht = SubElement(tg_ht, "hashTree")
         for idx in biz:
+            if idx in redirects.automatic_targets:
+                continue  # Executed exactly once by its preceding redirect follower.
             req = cap.requests[idx]
             produced = producer_map.get(idx, [])
             # if this request produces a value read from its redirect, it must not follow the redirect
-            follow = not any(c.from_redirect for c in produced)
+            follow = idx not in redirects.explicit_sources and not any(c.from_redirect for c in produced)
+            redirect_source = redirects.location_targets.get(idx)
+            redirect_target = (f"${{{location_variable(redirect_source)}}}" if redirect_source is not None else "")
             _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names,
                               cookie_mgr_values=cookie_mgr_values, primary_host=base_url,
-                              slot_subs=slot_subs)
+                              slot_subs=slot_subs, redirect_target=redirect_target)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
+            if idx in redirects.location_targets.values():
+                add_location_capture(sampler_ht, idx, SubElement, _s, _add_regex_extractor)
             auth_produced = [c for c in produced if authentication_dependency(result, c)]
             add_runtime_checks(sampler_ht, auth_produced, SubElement, _s)
             for c in produced:
