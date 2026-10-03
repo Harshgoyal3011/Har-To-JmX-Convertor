@@ -32,8 +32,9 @@ from enum import Enum
 from typing import Any
 
 from har2jmx.correlate import CorrelationDecision, ExtractorType
+from har2jmx.correlate.cookies import cookie_value_expression
 from har2jmx.ir.normalized import NormalizedCapture, NormalizedRequest
-from har2jmx.lineage.graph import _norm, _walk_json   # reuse the exact traversal + equality the pipeline uses
+from har2jmx.lineage.graph import _norm, _walk_json  # reuse the exact traversal + equality the pipeline uses
 
 _MAX_DEPTH = 6
 _MAX_LIST = 25
@@ -122,7 +123,10 @@ def _regex_suggestion() -> str:
 def _headers_text(req: NormalizedRequest) -> str:
     """Approximate JMeter's 'Response Headers' field, which useHeaders extractors match against."""
     lines: list[str] = [f"{n}: {v}" for n, v in req.response.headers if v]
-    lines += [f"Set-Cookie: {n}={v}" for n, v in req.response.set_cookies if v]
+    # Parsed cookies are a fallback for captures with no wire Set-Cookie header,
+    # never duplicate actual headers or invent an additional first match.
+    if not any(n.lower() == "set-cookie" for n, _ in req.response.headers):
+        lines += [f"Set-Cookie: {n}={v}" for n, v in req.response.set_cookies if v]
     loc = req.response.redirect_location
     if loc and not any(n.lower() == "location" for n, _ in req.response.headers):
         lines.append(f"Location: {loc}")
@@ -196,8 +200,12 @@ def _check_regex(dec: CorrelationDecision, producer: NormalizedRequest) -> Extra
     if not dec.expression:
         return make(ExtractorStatus.UNRESOLVED,
                     reason="no extractor pattern was produced for this value.", suggestion=_regex_suggestion())
+    # Cookie verification uses the same grammar as generation, including older
+    # saved decisions whose expressions predate the boundary fix.
+    expression = (cookie_value_expression(dec.producer_location.split(":", 1)[1])
+                  if dec.producer_location.startswith("set-cookie:") else dec.expression)
     try:
-        matches = [m.group(1) for m in _re.finditer(dec.expression, text) if m.groups()]
+        matches = [m.group(1) for m in _re.finditer(expression, text) if m.groups()]
     except _re.error:
         return make(ExtractorStatus.UNRESOLVED,
                     reason="the produced extractor pattern is not a valid regex.", suggestion=_regex_suggestion())
