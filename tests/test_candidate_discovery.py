@@ -69,12 +69,12 @@ def _arg_value(xml, name):
     return m.group(1) if m else None
 
 
-def test_path_only_business_input():
+def test_path_only_value_requires_selection_evidence():
     res, xml = _run([_e("GET", "https://wiki.example/wiki/Albert_Einstein")])
     vals = _csv_values(res)
-    assert "Albert_Einstein" in vals
+    assert "Albert_Einstein" not in vals
     assert "wiki" not in vals
-    assert "${" in xml and "Albert_Einstein" not in re.findall(r'HTTPSampler.path">([^<]+)<', xml)[0]
+    assert "Albert_Einstein" in re.findall(r'HTTPSampler.path">([^<]+)<', xml)[0]
 
 
 def test_query_only_business_input():
@@ -105,7 +105,7 @@ def test_short_numeric_query_slot_aware():
     vals = _csv_values(res)
     for v in ("2", "100", "2026", "3"):
         assert v in vals
-    assert _arg_value(xml, "page") == "${page}"
+    assert _arg_value(xml, "page") == "2"  # pagination is a control, even when count has the same value
     assert _arg_value(xml, "count") == "${count}"
     assert _arg_value(xml, "amount") == "${amount}"
     assert _arg_value(xml, "year") == "${year}"
@@ -115,7 +115,7 @@ def test_short_numeric_query_slot_aware():
 
 
 def test_short_numeric_path_input():
-    res, xml = _run([_e("GET", "https://shop.example/product/123")])
+    res, xml = _run([_e("GET", "https://shop.example/product/123", resp='{"productId":123}')])
     assert "123" in _csv_values(res)
     path = re.findall(r'HTTPSampler.path">([^<]+)<', xml)[0]
     assert "${" in path and "123" not in path
@@ -190,22 +190,22 @@ def test_runtime_correlation_candidate_not_csv():
     assert "JSONPostProcessor" in xml
 
 
-def test_unknown_field_names_become_candidates():
+def test_unknown_rpc_field_is_review_until_intent_is_supported():
     res, xml = _run([_e("POST", "https://n.example/rpc", body='{"zxqv":"harbour-port"}')])
-    assert "harbour-port" in _csv_values(res)
-    cols = [c for d in res.parameterization.datasets for c in d.columns]
-    chosen = next(c for c in cols if "harbour-port" in {c.sample, c.original, c.normalized})
-    assert chosen.intent == ParameterIntent.USER_INPUT.value
-    assert "${zxqv}" in xml or _arg_value(xml, "zxqv") is None  # json body
+    assert "harbour-port" not in _csv_values(res)
+    assert any(r.value == "harbour-port" and r.intent == ParameterIntent.UNKNOWN.value
+               for r in res.parameterization.review)
+    assert "${zxqv}" not in xml
 
 
 def test_unfamiliar_domain_path_and_query():
     res, _xml = _run([
-        _e("GET", "https://n.example/widgets/W-4400?flux=amber"),
+        _e("GET", "https://n.example/widgets/W-4400?flux=amber", resp='{"widgetId":"W-4400"}'),
     ])
     vals = _csv_values(res)
     assert "W-4400" in vals
-    assert "amber" in vals
+    assert "amber" not in vals
+    assert any(r.value == "amber" for r in res.parameterization.review)
 
 
 def test_opaque_unknown_is_review_not_csv():
@@ -218,15 +218,15 @@ def test_slot_aware_does_not_global_replace_short_numeric():
         _e("GET", "https://api.example/catalog?page=2"),
         _e("GET", "https://api.example/catalog?sortOrder=asc&n=2", ts="2026-01-01T10:00:02.000Z"),
     ])
-    assert "2" in _csv_values(res)
+    assert "2" not in _csv_values(res)
     # second request: n=2 is a slot; sortOrder stays literal asc — and the path/query
     # must not become ${page} on a request that has no page parameter.
-    assert xml.count("${page}") >= 1
+    assert "${page}" not in xml
     assert _arg_value(xml, "sortOrder") == "asc"
     # the second sampler's n slot is its own column if parameterized, not a blanket ${page}
     n_val = _arg_value(xml, "n")
     assert n_val != "${page}"
-    assert n_val in {"${n}", "2"}
+    assert n_val == "2"
 
 
 def test_short_numeric_json_body():
@@ -235,11 +235,11 @@ def test_short_numeric_json_body():
     assert "${qty}" in xml or '"${qty}"' in xml
 
 
-def test_package_style_path_value():
+def test_package_route_without_input_evidence_stays_literal():
     res, xml = _run([_e("GET", "https://registry.example/package/performance-results-parser")])
-    assert "performance-results-parser" in _csv_values(res)
+    assert "performance-results-parser" not in _csv_values(res)
     path = re.findall(r'HTTPSampler.path">([^<]+)<', xml)[0]
-    assert "performance-results-parser" not in path
+    assert "performance-results-parser" in path
 
 
 def test_static_api_version_query():
@@ -302,17 +302,18 @@ def test_selected_guid_from_list_is_csv_not_correlation():
 
 
 def test_path_file_stem_is_parameterized():
-    res, xml = _run([_e("GET", "https://off.example/api/v2/product/737628064502.json")])
+    res, xml = _run([_e("GET", "https://off.example/api/v2/product/737628064502.json",
+                       resp='{"productId":"737628064502"}')])
     assert "737628064502" in _csv_values(res)
     path = re.findall(r'HTTPSampler.path">([^<]+)<', xml)[0]
     assert "737628064502" not in path or "${" in path
 
 
 def test_country_path_selector_with_numeric_identity():
-    res, xml = _run([_e("GET", "https://zip.example/us/90210")])
+    res, xml = _run([_e("GET", "https://zip.example/us/90210", resp='{"locationId":"90210"}')])
     vals = _csv_values(res)
     assert "90210" in vals
-    assert "us" in vals
+    assert "us" not in vals  # a fixed route prefix is not a selected location
 
 
 def test_static_configuration_intent_not_csv():

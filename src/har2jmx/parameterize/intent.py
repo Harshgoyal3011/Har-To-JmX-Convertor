@@ -24,6 +24,9 @@ from har2jmx.classify import ValueClass
 from har2jmx.classify.value_engine import Lifecycle, ValueVerdict
 from har2jmx.ir.normalized import NormalizedCapture
 from har2jmx.lineage import LineageGraph, Occurrence
+from har2jmx.parameterize.context import (
+    credential_kind, first_request_value, selected_record, slot_role,
+)
 
 # Transport/protocol request headers — IANA/HTTP, not business domains.
 _INFRA_HEADERS = {
@@ -51,6 +54,7 @@ class ParameterAction(str, Enum):
     HARDCODE = "HARDCODE"
     REVIEW = "REVIEW"
     CORRELATE = "CORRELATE"   # not our job — no CSV
+    EXCLUDE = "EXCLUDE"       # exclude from test data, without changing request replay/noise roles
 
 
 @dataclass
@@ -199,7 +203,7 @@ def classify_intent(cap: NormalizedCapture, lineage: LineageGraph, v: ValueVerdi
 
     if req_occs and not live:
         return IntentDecision(
-            intent=ParameterIntent.TELEMETRY, action=ParameterAction.HARDCODE,
+            intent=ParameterIntent.TELEMETRY, action=ParameterAction.EXCLUDE,
             reason="value only sent on excluded (telemetry/static) requests — not test data",
             **base,
         )
@@ -247,7 +251,56 @@ def classify_intent(cap: NormalizedCapture, lineage: LineageGraph, v: ValueVerdi
             **base,
         )
 
+    roles = [(o, *slot_role(cap.requests[o.request_index], o)) for o in business]
+    # Lifecycle is evidence, not a necessity decision. Browser observations can
+    # be client-originated and still have no place in a performance-test CSV.
+    eligible = [(o, reason) for o, role, reason in roles if role == "input" or (
+        role == "route" and v.is_identifier and v.entity
+    )]
+    client_first = flow is not None and first_request_value(flow)
+    credentials = [o for o, _ in eligible if credential_kind(o.field)]
+    if client_first and credentials:
+        base["slots"] = [_occurrence_to_slot(cap, o, str(v.value)) for o in credentials]
+        base["logical_field"] = min(
+            credentials, key=lambda o: (not o.location.startswith("request.body:"), o.request_index)
+        ).field
+        base["controller"] = "user"
+        return IntentDecision(
+            intent=ParameterIntent.USER_INPUT, action=ParameterAction.PARAMETERIZE,
+            reason="explicit client-supplied credential/OTP; subsequent server echoes are not issuance",
+            **base,
+        )
+    if not eligible:
+        selected = [o for o, role, _ in roles if role not in {"telemetry", "technical", "configuration"}
+                    and v.lifecycle == Lifecycle.EXISTING_BEFORE_RUN
+                    and selected_record(cap.requests[o.request_index], o, v, producer)]
+        if selected:
+            base["slots"] = [_occurrence_to_slot(cap, o, str(v.value)) for o in selected]
+        else:
+            all_telemetry = all(role == "telemetry" for _, role, _ in roles)
+            known_system = all(role in {"telemetry", "technical", "configuration", "route"}
+                               for _, role, _ in roles)
+            return IntentDecision(
+                intent=(ParameterIntent.TELEMETRY if all_telemetry else
+                        ParameterIntent.STATIC_CONFIGURATION if known_system else ParameterIntent.UNKNOWN),
+                action=(ParameterAction.EXCLUDE if all_telemetry else
+                        ParameterAction.HARDCODE if known_system else ParameterAction.REVIEW),
+                reason="; ".join(dict.fromkeys(reason for _, _, reason in roles)),
+                **base,
+            )
+    else:
+        base["slots"] = [_occurrence_to_slot(cap, o, str(v.value)) for o, _ in eligible]
+
     if v.classification == ValueClass.STATIC:
+        if client_first and eligible and any(not o.location.startswith("request.path") for o, _ in eligible):
+            # A value-level STATIC verdict may come from an equal-valued page
+            # control. Only these independently evidenced input occurrences
+            # become test data; the control occurrences stay literal.
+            return IntentDecision(
+                intent=ParameterIntent.USER_INPUT, action=ParameterAction.PARAMETERIZE,
+                reason="client business-input occurrence; equal-valued configuration is kept outside its slots",
+                **base,
+            )
         return IntentDecision(
             intent=ParameterIntent.STATIC_CONFIGURATION, action=ParameterAction.HARDCODE,
             reason="classified static/config — same for every user, leave literal",
@@ -258,6 +311,13 @@ def classify_intent(cap: NormalizedCapture, lineage: LineageGraph, v: ValueVerdi
         return IntentDecision(
             intent=ParameterIntent.UNKNOWN, action=ParameterAction.REVIEW,
             reason=v.reason or "insufficient evidence to vary as test data",
+            **base,
+        )
+
+    if v.needs_correlation:
+        return IntentDecision(
+            intent=ParameterIntent.SERVER_RUNTIME_STATE, action=ParameterAction.CORRELATE,
+            reason="unresolved runtime dependency remains owned by correlation; never CSV fallback",
             **base,
         )
 
@@ -272,8 +332,11 @@ def classify_intent(cap: NormalizedCapture, lineage: LineageGraph, v: ValueVerdi
     if v.lifecycle == Lifecycle.EXISTING_BEFORE_RUN:
         # Listed then sent back in path/query/body = the user selected an existing record.
         # Extra catalog attributes that never leave the list response never reach here (no request slot).
-        kinds = {_slot_kind(o.location) for o in business}
-        if kinds & {"path", "query", "body", "xml"}:
+        selections = [o for o in business if selected_record(cap.requests[o.request_index], o, v, producer)
+                      and slot_role(cap.requests[o.request_index], o)[0]
+                      not in {"telemetry", "technical", "configuration"}]
+        if selections:
+            base["slots"] = [_occurrence_to_slot(cap, o, str(v.value)) for o in selections]
             return IntentDecision(
                 intent=ParameterIntent.SELECTED_EXISTING_DATA, action=ParameterAction.PARAMETERIZE,
                 reason="existing record returned by a read, then used in a later request slot — CSV identity",

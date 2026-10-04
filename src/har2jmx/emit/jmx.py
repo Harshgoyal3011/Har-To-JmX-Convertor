@@ -33,8 +33,8 @@ from har2jmx.emit.authentication import (
 from har2jmx.emit.redirects import add_location_capture, location_variable, redirect_execution
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
+from har2jmx.parameterize.context import credential_kind, field_key
 from har2jmx.patterns import GUID_RE, ID_FIELD_RE
-from har2jmx.utils import variable_name
 from har2jmx.validate import ExtractorStatus
 
 # Headers JMeter must not replay. HTTP/2 pseudo-headers (:authority/:method/:path/:scheme) are illegal
@@ -87,15 +87,29 @@ def _sub_ok(value: str) -> bool:
     return len(v) >= 3 and v.lower() not in {"true", "false", "null", "none"}
 
 
-def _param_slot_subs(result: EngineResult) -> list[tuple[str, str, frozenset]]:
+def _param_slot_subs(result: EngineResult, request_index: int | None = None) -> list[tuple[str, str, frozenset]]:
     """(value, csv_column, request locations) for slot-exact substitution."""
     out: list[tuple[str, str, frozenset]] = []
     for d in result.parameterization.datasets:
         for col in d.columns:
-            slots = [s for s in col.slots if getattr(s, "side", "request") == "request"]
-            named = [s for s in slots if variable_name(s.field or "") == col.name]
-            locs = frozenset(s.location for s in (named or slots))
+            slots = [s for s in col.slots if getattr(s, "side", "request") == "request"
+                     and (request_index is None or s.request_index == request_index)]
+            own = [s for s in slots if field_key(s.field) == field_key(col.logical_field or col.name)
+                   or field_key(s.field) == field_key(col.name)]
+            if credential_kind(col.logical_field) == "identity":
+                own = [s for s in slots if credential_kind(s.field) == "identity"]
+            # Distinct fields with equal samples retain distinct bindings;
+            # entity identities may deliberately span differently named slots.
+            if col.entity_field is None and own:
+                slots = own
+            if not slots:
+                continue
+            locs = frozenset(s.location for s in slots)
             vals = {str(col.sample or ""), str(col.original or ""), str(col.normalized or "")}
+            # HAR form params can contain an encoded spelling while lineage and
+            # the CSV use its decoded logical value. Match the recorded spelling
+            # only in the approved parameter slots; JMeter encodes the CSV value.
+            vals.update(s.original for s in slots if s.original)
             for row in d.rows:
                 v = row.get(col.name)
                 if v not in (None, ""):
@@ -109,7 +123,6 @@ def _param_slot_subs(result: EngineResult) -> list[tuple[str, str, frozenset]]:
 def _slot_apply(value: Any, slot_key: str, slot_subs: list, sub: dict[str, str]) -> str:
     """Replace ``value`` only when this exact request slot is a parameterized column."""
     s = str(value)
-    leaf = slot_key.split(":")[-1] if ":" in slot_key else slot_key
     for raw, var, locs in slot_subs:
         if raw != s:
             continue
@@ -118,7 +131,7 @@ def _slot_apply(value: Any, slot_key: str, slot_subs: list, sub: dict[str, str])
         if slot_key.startswith("request.path") and any(l.startswith("request.path") for l in locs):
             return f"${{{var}}}"
         if slot_key.startswith("request.body:") and any(
-            l == slot_key or l.endswith("." + leaf) or l.endswith(":" + leaf) for l in locs
+            l == slot_key or l == "request.body:variables." + slot_key.split(":", 1)[1] for l in locs
         ):
             return f"${{{var}}}"
     return sub.get(s, s)
@@ -178,14 +191,8 @@ def _build_sub_map(result: EngineResult) -> dict[str, str]:
                     sub[raw] = f"${{__urlencode(${{{c.variable}}})}}"
     for uuid_val in _generated_uuid_values(result):     # fresh UUID per request (beats a CSV value)
         sub.setdefault(uuid_val, "${__UUID()}")
-    for d in result.parameterization.datasets:
-        for col in d.columns:
-            for row in d.rows:
-                v = row.get(col.name)
-                if v not in (None, "") and _sub_ok(v):
-                    sub.setdefault(str(v), f"${{{col.name}}}")
-            if col.sample and _sub_ok(col.sample):
-                sub.setdefault(str(col.sample), f"${{{col.name}}}")
+    # CSV substitutions are applied only through approved request slots. The
+    # existing correlation/UUID map above retains its discovery and matching.
     return sub
 
 
@@ -298,7 +305,13 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
         else:
             raw_body = _json.dumps(_sub_json(js, sub, slot_subs))
     elif req.request.body.kind in {BodyKind.XML, BodyKind.SOAP, BodyKind.TEXT} and req.request.body.raw:
-        raw_body = _sub_raw(req.request.body.raw, sub)
+        # XML parameter slots are scoped to this request; correlation continues
+        # to use the existing whole-token substitution behavior unchanged.
+        body_sub = dict(sub)
+        for raw, var, locs in slot_subs:
+            if any(l.startswith("request.xml:") for l in locs):
+                body_sub.setdefault(raw, f"${{{var}}}")
+        raw_body = _sub_raw(req.request.body.raw, body_sub)
 
     _b(http, "HTTPSampler.postBodyRaw", bool(raw_body))
     if raw_body:
@@ -697,7 +710,6 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
         config["thinktime"] = str(_observed_think_time(result.capture))
     sub = _build_sub_map(result)
     redirects = redirect_execution(result, _replayable_header)
-    slot_subs = _param_slot_subs(result)
     # extractor self-check: only ship an extractor proven to resolve; refine ambiguous JSONPaths; drop
     # (and let the manual-review path flag) any that could not be verified against the capture.
     check_by_var = {chk.variable: chk for chk in result.extractor_checks}
@@ -761,7 +773,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
             redirect_target = (f"${{{location_variable(redirect_source)}}}" if redirect_source is not None else "")
             _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names,
                               cookie_mgr_values=cookie_mgr_values, primary_host=base_url,
-                              slot_subs=slot_subs, redirect_target=redirect_target)
+                              slot_subs=_param_slot_subs(result, idx), redirect_target=redirect_target)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             if idx in redirects.location_targets.values():

@@ -24,6 +24,7 @@ from har2jmx.parameterize.intent import (
     decide_intents,
 )
 from har2jmx.utils import variable_name
+from har2jmx.parameterize.context import credential_kind, field_key
 
 
 @dataclass
@@ -39,6 +40,7 @@ class ParameterColumn:
     normalized: str = ""
     slots: list[ParameterSlot] = field(default_factory=list)
     controller: str = ""
+    reason: str = ""
 
 
 @dataclass
@@ -71,18 +73,24 @@ class ParameterizationPlan:
 
 
 def _column_from_decision(name: str, d: IntentDecision, sample: str, entity_field: str | None) -> ParameterColumn:
+    logical_field = d.logical_field
+    if entity_field is None:
+        logical_field = next((s.field for s in d.slots
+                              if variable_name(s.field) == name
+                              or name.startswith(variable_name(s.field) + "_step")), logical_field)
     return ParameterColumn(
         name=name,
         sample=sample,
         entity_field=entity_field,
         intent=d.intent.value,
-        logical_field=d.logical_field,
+        logical_field=logical_field,
         producer_index=d.producer_index,
         producer_location=d.producer_location,
         original=d.value,
         normalized=d.value,
         slots=list(d.slots),
         controller=d.controller,
+        reason=d.reason,
     )
 
 
@@ -108,8 +116,7 @@ def build_parameterization(cap: NormalizedCapture,
 
     plan = ParameterizationPlan()
     # Intent over master-data candidates AND unknowns (unknowns → REVIEW, never CSV).
-    candidates = [v for v in classification.verdicts
-                  if v.classification in {ValueClass.BUSINESS_MASTER_DATA, ValueClass.UNKNOWN, ValueClass.STATIC}]
+    candidates = classification.verdicts
     decisions = decide_intents(cap, lineage, candidates)
     by_value = {d.value: d for d in decisions}
 
@@ -137,12 +144,25 @@ def build_parameterization(cap: NormalizedCapture,
                 if s.side == "request" and not s.excluded
                 and s.slot_kind in {"path", "query", "body", "xml", "header"}
             ] or [d.logical_field or "value"]
+            # One decision has one normalized value. Alias merging additionally
+            # requires normalized field identity or an explicit login-identity
+            # relationship; equal values alone never merge unrelated fields.
+            aliases: dict[str, list[str]] = {}
+            for fld in fields:
+                alias = "login_identity" if credential_kind(fld) == "identity" else field_key(fld)
+                aliases.setdefault(alias, []).append(fld)
+            fields = [d.logical_field if d.logical_field in names else names[0]
+                      for names in aliases.values()]
             seen_f: set[str] = set()
             for fld in fields:
                 col = variable_name(fld)
                 if col in seen_f:
                     continue
                 seen_f.add(col)
+                if col in inputs and inputs[col].value != d.value:
+                    # Same spelling at different journey steps is not identity.
+                    index = min(s.request_index for s in d.slots if not s.excluded)
+                    col = variable_name(f"{col}_step{index + 1}")
                 inputs.setdefault(col, d)
 
     _promote_request_siblings(cap, decisions, inputs)
@@ -286,6 +306,7 @@ def _consolidate_single_row(plan: ParameterizationPlan) -> None:
                 producer_index=col.producer_index, producer_location=col.producer_location,
                 original=col.original or value, normalized=col.normalized or value,
                 slots=list(col.slots), controller=col.controller,
+                reason=col.reason,
             ))
 
     plan.datasets = multi + [ParameterDataset(
