@@ -180,7 +180,7 @@ def test_one_response_assertion_per_sampler_inside_its_own_hash_tree():
                if any(not res.capture.requests[i].classification.excluded for i in txn.request_indices)]
     assert len(tcs) == len(emitted)
     expected_names = {"Login": ["GET /login", "POST /oauth/token"],
-                      "Create Order": ["GET /${path}", "POST /api/orders"]}
+                      "Create Order": ["GET /dashboard", "POST /api/orders"]}
     sampler_count = 0
     for (tc, tc_ht), txn in zip(tcs, emitted):
         assert tc.getAttribute("testname") == txn.name
@@ -190,7 +190,7 @@ def test_one_response_assertion_per_sampler_inside_its_own_hash_tree():
         _collect(tc_ht, "HTTPSamplerProxy", samplers)
         assert len(samplers) >= 2, "regression capture must include multiple requests per transaction"
         assert [sampler.getAttribute("testname") for sampler, _ in samplers] == expected_names[txn.name], \
-            "request ordering and existing parameterized paths must be preserved"
+            "request ordering and fixed navigation paths must be preserved"
         for sampler, sampler_ht in samplers:
             assertions = _response_code_assertions_direct(sampler_ht)
             assert len(assertions) == 1, \
