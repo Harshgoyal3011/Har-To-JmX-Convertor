@@ -81,6 +81,7 @@ only required/emitted variables.
 | **`ir/normalized.py`** | Dataclasses: capture, request/response, typed body (JSON/form/multipart/GraphQL/SOAP/XML). |
 | **`ir/build.py`** | HAR → `NormalizedCapture`. Keeps every entry; later stages tag, they do not drop here. |
 | **`classify/request_noise.py`** | Role + exclude: static, telemetry/RUM vendors, CORS, vs auth/business. Auth is kept. |
+| **`classify/content_role.py`** | Parsed response contracts and HTTP role evidence for business data on static-looking paths. |
 | **`understand/application.py`** | API style / SPA / stack from HAR evidence, not assumed product names. |
 | **`understand/auth.py`** | Cookie, bearer, form login, refresh, SAML/OAuth traces when present. |
 | **`understand/models.py`** | `Detection` / `EvidenceBag` shared by understanders. |
@@ -89,14 +90,19 @@ only required/emitted variables.
 | **`entities/relationships.py`** | Parent/child, aligned instance rows for CSV. |
 | **`lineage/graph.py`** | Whole-slot matching (not substring) + transform-aware equality. |
 | **`classify/value_engine.py`** | Lifecycle: existed-before vs created-this-run vs user input → `ValueClass`. UNKNOWN is never auto-wired. |
+| **`classify/lifecycle.py`** | Resolve GraphQL operations and separate schema/catalog reads from runtime creation. |
 | **`correlate/decide.py`** | High-recall **candidate** discovery and extractor choice (JSON, regex, Cookie Manager). |
 | **`correlate/necessity.py`** | Gate: required vs configuration / protocol / master / superseded / no consumer. |
+| **`correlate/cookies.py`** | Shared bounded Set-Cookie grammar for extraction and verification. |
 | **`parameterize/intent.py`** | Would a PE vary this as test data? User input / selected existing → CSV; config and runtime state do not. |
+| **`parameterize/context.py`** | Request occurrences and payload context used to approve individual test-input slots. |
 | **`parameterize/decide.py`** | Entity-centric datasets, need-gated columns, aligned rows. |
 | **`validate/replay.py`** | Static multi-VU checks (order, missing runtime, CSV vs correlate conflicts). Honors the necessity audit. |
 | **`validate/extractors.py`** | Does each extractor uniquely hit the producer response? Refine or flag. |
 | **`engine.py`** | Orchestrates M1–M11, attaches metrics (`EngineResult`). |
 | **`emit/jmx.py`** | Thread group, Cookie Manager, CSV Data Sets, transactions, samplers, extractors, whole-slot `${var}`. |
+| **`emit/authentication.py`** | Reset thread-local authentication state and stop a thread when required fresh extraction fails. |
+| **`emit/redirects.py`** | Assign observed redirect chains to following or explicit runtime Location execution. |
 | **`emit/validate.py`** | Dry-run XML: constituents, unused extractors/CSV columns, unresolved variables. |
 | **`webreport.py`** | UI payload; correlation list ∩ JMX extractor names. |
 | **`server/handler.py`** | HTTP routes, upload limits, result prune, zip downloads. |
@@ -117,14 +123,47 @@ Tests live in `tests/` (fixtures + example HARs). Runtime output is `generated/`
 
 Intent (`parameterize/intent.py`) does not rewrite lineage or candidate discovery.
 
+## Authentication and redirect execution
+
+Set-Cookie extraction stops at cookie attributes and header line boundaries.
+Verification uses the same grammar, with parsed cookies as a fallback only when
+wire headers are absent. Cookie-only sessions use JMeter's per-thread Cookie
+Manager; accepted cookie-to-header dependencies use explicit extraction.
+
+Accepted authentication dependencies use runtime variables even when extractor
+verification fails. Their producers reset thread-local values before extraction
+and stop the thread if fresh state is missing. Unverifiable extractors are
+reported for manual review without replaying the captured credential.
+
+Observed redirect targets have one execution owner. Consecutive GET/HEAD chains
+with compatible origin, transaction, headers and bindings can use JMeter
+following; the separately captured target samplers are then omitted. Chains
+requiring explicit execution disable following and use accepted Location
+correlations or a whole-Location extractor with runtime URI resolution. Missing
+required Location state fails the producer and stops that thread.
+
+## Lifecycle and request retention
+
+GraphQL operation evidence takes precedence over HTTP POST as a creation signal.
+Schema reads are configuration; catalog/entity reads describe existing data.
+Read-issued credentials and pagination handles retain runtime ownership.
+Unresolved read lifecycles remain UNKNOWN for review.
+
+Static-looking paths can contain business data. Parsed resource catalogs and
+record collections can establish an API role, while singleton or XML records
+need additional request evidence. Rendering and telemetry evidence takes
+precedence; HTML, SVG, malformed bodies and flat bootstrap configuration do not
+qualify merely because their content is structured.
+
 ## Layout
 
 ```
 src/har2jmx/     package (stdlib only)
 tests/           pytest
 examples/        sample HARs
-docs/            this file + SUPPORTED_PATTERNS.md
+docs/            architecture, supported patterns, parameterization and deployment
 generated/       conversion output
 ```
 
 Capability matrix (locations, extractors, known limits): [SUPPORTED_PATTERNS.md](SUPPORTED_PATTERNS.md).
+Test-input decisions and approved CSV substitutions: [PARAMETERIZATION.md](PARAMETERIZATION.md).
