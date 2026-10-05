@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import base64
 import json
+from email.errors import MessageError
+from email.parser import Parser
+from email.policy import default
 from typing import Any
 from urllib.parse import parse_qsl
 
@@ -33,6 +36,66 @@ def header_value(headers: list[tuple[str, str]], name: str) -> str:
     return ""
 
 
+def _multipart_parts(post: dict[str, Any]) -> tuple[list[tuple[str, str]], list[tuple[str, str, str]]]:
+    """Decode native HAR multipart text only when the exporter supplied no params.
+
+    HAR text is already Unicode: parsing it as text avoids re-encoding captured
+    characters with a guessed wire charset. Transfer-encoded text parts still
+    need their declared charset. File bytes have no slot in the existing IR;
+    retain supported file metadata without writing files. An empty filename has
+    no usable upload path in this IR; its part remains in the unchanged raw body.
+    """
+    text = post.get("text") or ""
+    mime = post.get("mimeType") or ""
+    if post.get("params") or not isinstance(text, str) or not isinstance(mime, str):
+        return [], []
+    if not text or "multipart/form-data" not in mime.lower():
+        return [], []
+    try:
+        message = Parser(policy=default).parsestr(
+            f"Content-Type: {mime}\r\nMIME-Version: 1.0\r\n\r\n{text}"
+        )
+        if message.get_content_type() != "multipart/form-data" or not message.is_multipart():
+            return [], []
+        # A truncated body cannot establish complete field values. Keep its raw
+        # text, but do not manufacture a normalized form from incomplete MIME.
+        if message.defects:
+            return [], []
+        form: list[tuple[str, str]] = []
+        files: list[tuple[str, str, str]] = []
+        for part in message.iter_parts():
+            if part.defects or part.is_multipart() or part.get_content_disposition() != "form-data":
+                continue
+            name = part.get_param("name", header="content-disposition")
+            if not isinstance(name, str):
+                continue
+            # get_filename() strips spaces inside a quoted filename; these are
+            # captured data, so use the parsed parameter without that trimming.
+            filename = part.get_param("filename", header="content-disposition")
+            if filename is not None:
+                content_type = next((value for key, value in part.raw_items()
+                                     if key.lower() == "content-type"), "application/octet-stream")
+                if filename:
+                    files.append((name, filename, content_type))
+                continue
+            encoding = (part.get("Content-Transfer-Encoding") or "").lower()
+            if encoding in {"base64", "quoted-printable"}:
+                payload = part.get_payload(decode=True)
+                if payload is None or part.defects:
+                    continue
+                try:
+                    value = payload.decode(part.get_content_charset() or "utf-8")
+                except (UnicodeError, LookupError):
+                    continue
+            else:
+                value = part.get_payload()
+            if isinstance(value, str):
+                form.append((name, value))
+        return form, files
+    except (MessageError, ValueError, TypeError, UnicodeError):
+        return [], []
+
+
 def post_pairs(entry: dict[str, Any]) -> tuple[list[tuple[str, str]], str, str]:
     post = entry.get("request", {}).get("postData") or {}
     mime_type = post.get("mimeType", "")
@@ -42,12 +105,17 @@ def post_pairs(entry: dict[str, Any]) -> tuple[list[tuple[str, str]], str, str]:
     text = post.get("text") or ""
     if not params and text and "application/x-www-form-urlencoded" in mime_type:
         params = parse_qsl(text, keep_blank_values=True)
+    elif not post.get("params"):
+        params, _ = _multipart_parts(post)
     return params, text, mime_type
 
 
 def post_files(entry: dict[str, Any]) -> list[tuple[str, str, str]]:
     """Multipart file parts as (param_name, filename, content_type)."""
     post = entry.get("request", {}).get("postData") or {}
+    if not post.get("params"):
+        _, files = _multipart_parts(post)
+        return files
     out: list[tuple[str, str, str]] = []
     for p in post.get("params", []):
         filename = p.get("fileName")
