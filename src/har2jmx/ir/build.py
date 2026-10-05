@@ -169,6 +169,9 @@ def build_capture(har: dict[str, Any] | bytes) -> NormalizedCapture:
             pageref=entry.get("pageref") or "",
             referer=header_value(req_headers, "referer"),
             initiator=_initiator(entry),
+            resource_type=str(entry.get("_resourceType") or ""),
+            frame_ref=str(entry.get("_frameref") or ""),
+            initiator_detail=entry.get("_initiator") if isinstance(entry.get("_initiator"), dict) else {},
         )
 
         requests.append(NormalizedRequest(request=http_request, response=http_response, context=context))

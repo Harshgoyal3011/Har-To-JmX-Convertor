@@ -89,6 +89,9 @@ class RequestContext:
     referer: str = ""
     initiator: str = ""                  # best-effort from HAR _initiator
     transaction: str = ""                # user-action name (Milestone 4)
+    resource_type: str = ""              # captured browser context; not a request classification
+    frame_ref: str = ""
+    initiator_detail: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass

@@ -100,10 +100,10 @@ def test_manual_paced_login_still_collapses_despite_gaps():
 
 def test_logout_is_a_barrier_between_two_logins():
     # login -> logout -> login are three deliberate actions; the logout must NOT glue the two logins
-    # into one. Two separate logins stay separate (numbered), never merged across a logout.
+    # into one. Two separate logins keep separate controllers with a shared operation label.
     _, txns = _txns("auth_relogin.har")
     names = [t.name for t in txns]
-    assert names == ["Login", "Logout", "Login (2)"], names
+    assert names == ["Login", "Logout", "Login"], names
 
 
 def test_rpc_and_suffixed_resource_naming():
