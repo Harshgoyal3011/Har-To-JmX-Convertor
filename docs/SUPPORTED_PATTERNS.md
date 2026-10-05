@@ -97,8 +97,8 @@ page reads as `Launch Application`; supporting XHRs nest inside their user actio
 Every plan contains: Test Plan + `THREADS`/`LOOPS`/`RAMP` variables · Thread Group (`${THREADS}`) ·
 HTTP Request Defaults · **HTTP Cookie Manager** · **global HTTP Header Manager** (shared headers
 hoisted once) · per-sampler Header Managers (request-specific only) · **Response Assertion** (2xx/3xx,
-thread-group scope) · **correlation-health assertions** (one per extractor, fail on unresolved
-correlation) · **Uniform Random Timer** (think time) · CSV Data Sets · Transaction Controllers ·
+attached to each HTTP sampler) · **correlation-health assertions** (required authentication and
+unverified/refined extractors) · **Uniform Random Timer** (think time) · CSV Data Sets · Transaction Controllers ·
 HTTP Samplers · JSON/Regex extractors (each with a `NOT_FOUND_<var>` default) · **multipart
 file-upload** elements where applicable.
 
