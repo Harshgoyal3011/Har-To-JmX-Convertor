@@ -30,6 +30,7 @@ from har2jmx.emit.authentication import (
     authentication_dependency,
     cookie_decoding_required,
 )
+from har2jmx.emit.bindings import VariableBindings
 from har2jmx.emit.redirects import add_location_capture, location_variable, redirect_execution
 from har2jmx.engine import EngineResult
 from har2jmx.ir.normalized import BodyKind, NormalizedRequest
@@ -87,9 +88,11 @@ def _sub_ok(value: str) -> bool:
     return len(v) >= 3 and v.lower() not in {"true", "false", "null", "none"}
 
 
-def _param_slot_subs(result: EngineResult, request_index: int | None = None) -> list[tuple[str, str, frozenset]]:
+def _param_slot_subs(result: EngineResult, request_index: int | None = None,
+                     bindings: VariableBindings | None = None) -> list[tuple[str, str, frozenset]]:
     """(value, csv_column, request locations) for slot-exact substitution."""
     out: list[tuple[str, str, frozenset]] = []
+    bindings = bindings if bindings is not None else VariableBindings(result)
     for d in result.parameterization.datasets:
         for col in d.columns:
             slots = [s for s in col.slots if getattr(s, "side", "request") == "request"
@@ -116,7 +119,7 @@ def _param_slot_subs(result: EngineResult, request_index: int | None = None) -> 
                     vals.add(str(v))
             for v in vals:
                 if v:
-                    out.append((v, col.name, locs))
+                    out.append((v, bindings.parameter_name(d, col), locs))
     return out
 
 
@@ -709,6 +712,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
     if not str(config.get("thinktime", "")).strip():
         config["thinktime"] = str(_observed_think_time(result.capture))
     sub = _build_sub_map(result)
+    bindings = VariableBindings(result)
     redirects = redirect_execution(result, _replayable_header)
     # extractor self-check: only ship an extractor proven to resolve; refine ambiguous JSONPaths; drop
     # (and let the manual-review path flag) any that could not be verified against the capture.
@@ -744,7 +748,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
     _add_global_header_manager(tg_ht, common_headers, sub)   # every plan gets an HTTP Header Manager
     for d in result.parameterization.datasets:
         fname = csv_files.get(d.name, f"{d.name.lower()}.csv")
-        _add_csv_dataset(tg_ht, d.name, fname, [c.name for c in d.columns])
+        _add_csv_dataset(tg_ht, d.name, fname, [bindings.parameter_name(d, c) for c in d.columns])
 
     emitted_txns = 0
     for txn in result.transactions:
@@ -773,7 +777,7 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
             redirect_target = (f"${{{location_variable(redirect_source)}}}" if redirect_source is not None else "")
             _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names,
                               cookie_mgr_values=cookie_mgr_values, primary_host=base_url,
-                              slot_subs=_param_slot_subs(result, idx), redirect_target=redirect_target)
+                              slot_subs=_param_slot_subs(result, idx, bindings), redirect_target=redirect_target)
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             if idx in redirects.location_targets.values():
@@ -828,10 +832,11 @@ def _prune_unused_parameters(result: EngineResult, xml: bytes) -> bool:
     gone. Returns True when anything changed (so the caller rebuilds the plan without the dead columns).
     """
     referenced = set(_JMX_VAR_RE.findall(xml.decode("utf-8") if isinstance(xml, (bytes, bytearray)) else xml))
+    bindings = VariableBindings(result)
     changed = False
     kept: list = []
     for d in result.parameterization.datasets:
-        cols = [c for c in d.columns if c.name in referenced]
+        cols = [c for c in d.columns if bindings.parameter_name(d, c) in referenced]
         if len(cols) != len(d.columns):
             changed = True
         if not cols:
@@ -992,6 +997,7 @@ def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] |
     jmx_path = out / f"{name}.jmx"
     jmx_path.write_bytes(xml)
 
+    bindings = VariableBindings(result)
     csv_paths: list[Path] = []
     for d in result.parameterization.datasets:           # datasets are now the pruned set
         fname = csv_files[d.name]
@@ -999,7 +1005,7 @@ def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] |
         cols = [c.name for c in d.columns]
         observed: list[tuple] = []
         seen: set[tuple] = set()
-        for row in d.rows:                               # unique observed rows
+        for row in bindings.parameter_rows(d):          # owned initial row + observed variation
             cells = tuple(str(row.get(c, "")) for c in cols)
             if cells not in seen:
                 seen.add(cells)
@@ -1007,7 +1013,7 @@ def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] |
         rows = _synthesize_rows(cols, observed, target)  # grow safe data toward N users
         with path.open("w", newline="", encoding="utf-8") as fh:
             w = _csv.writer(fh)
-            w.writerow(cols)
+            w.writerow([bindings.parameter_name(d, c) for c in d.columns])
             w.writerows(rows)
         csv_paths.append(path)
 
