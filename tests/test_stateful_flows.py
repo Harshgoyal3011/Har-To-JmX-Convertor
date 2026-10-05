@@ -35,7 +35,7 @@ def test_logout_then_relogin_names_and_session_handling():
     # carries both sessions across the teardown.
     r = _analyze("sample_logout.har")
     names = [t.name for t in r.transactions]
-    assert names == ["Login", "View Dashboard", "Logout", "Login (2)", "View Dashboard (2)"]
+    assert names == ["Login", "View Dashboard", "Logout", "Login", "View Dashboard"]
     # both session ids are handled by the Cookie Manager (never re-sent as a manual Cookie header)
     x = build_jmx_xml(r).decode()
     assert "SESS-first-111" not in x and "SESS-second-222" not in x

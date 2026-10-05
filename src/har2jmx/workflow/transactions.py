@@ -101,6 +101,11 @@ class Transaction:
     anchor_index: int
     request_indices: list[int] = field(default_factory=list)   # every request in this action
     business_indices: list[int] = field(default_factory=list)  # non-excluded subset
+    boundary_confidence: str = "uncertain"
+    boundary_reasons: list[str] = field(default_factory=list)
+    naming_confidence: str = "uncertain"
+    naming_reasons: list[str] = field(default_factory=list)
+    supporting_indices: list[int] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------- naming helpers
@@ -436,7 +441,13 @@ def discover_transactions(cap: NormalizedCapture) -> list[Transaction]:
     # the SSO redirect must stay "Launch Application", not get swallowed into the login-handshake merge.
     _label_launch(cap, transactions)
     transactions = _merge_fragmented(cap, transactions)   # collapse a fragmented login handshake / redirect-split fragments
-    _dedupe_names(cap, transactions)
+    # Final boundaries and names have separate evidence and ownership. Legacy
+    # page/gap partitions are retained as uncertain, not presented as UI clicks.
+    from har2jmx.workflow.boundaries import refine_boundaries
+    from har2jmx.workflow.naming import name_transactions
+
+    transactions = refine_boundaries(cap, transactions, _anchor_priority, _name_transaction)
+    name_transactions(cap, transactions)
     return transactions
 
 
