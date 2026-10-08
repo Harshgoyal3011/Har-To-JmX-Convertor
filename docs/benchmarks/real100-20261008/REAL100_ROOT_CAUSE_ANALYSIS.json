@@ -1,0 +1,439 @@
+{
+  "root_causes": [
+    {
+      "root_cause": "parameter discovery",
+      "affected_workflows": 43,
+      "workflows": [
+        "REAL100-005",
+        "REAL100-006",
+        "REAL100-010",
+        "REAL100-012",
+        "REAL100-013",
+        "REAL100-015",
+        "REAL100-021",
+        "REAL100-023",
+        "REAL100-024",
+        "REAL100-029",
+        "REAL100-034",
+        "REAL100-036",
+        "REAL100-037",
+        "REAL100-039",
+        "REAL100-040",
+        "REAL100-044",
+        "REAL100-045",
+        "REAL100-046",
+        "REAL100-047",
+        "REAL100-048",
+        "REAL100-049",
+        "REAL100-055",
+        "REAL100-056",
+        "REAL100-057",
+        "REAL100-058",
+        "REAL100-059",
+        "REAL100-060",
+        "REAL100-062",
+        "REAL100-064",
+        "REAL100-066",
+        "REAL100-067",
+        "REAL100-068",
+        "REAL100-071",
+        "REAL100-072",
+        "REAL100-073",
+        "REAL100-077",
+        "REAL100-079",
+        "REAL100-080",
+        "REAL100-082",
+        "REAL100-085",
+        "REAL100-090",
+        "REAL100-092",
+        "REAL100-100"
+      ],
+      "finding_count": 65,
+      "examples": [
+        {
+          "benchmark_id": "REAL100-005",
+          "category": "parameter discovery",
+          "request_index": 10,
+          "reason": "Meaningful input group REAL100-005:action:1:authUser lacks correct final CSV binding at request.form[2].authUser.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-006",
+          "category": "parameter discovery",
+          "request_index": 40,
+          "reason": "Meaningful input group REAL100-006:action:6:cust_ref lacks correct final CSV binding at request.multipart[3].cust_ref.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-010",
+          "category": "parameter discovery",
+          "request_index": 181,
+          "reason": "Meaningful input group REAL100-010:action:7:description lacks correct final CSV binding at request.multipart[2].description.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-012",
+          "category": "parameter discovery",
+          "request_index": 178,
+          "reason": "Meaningful input group REAL100-012:action:7:description lacks correct final CSV binding at request.multipart[2].description.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-013",
+          "category": "parameter discovery",
+          "request_index": 180,
+          "reason": "Meaningful input group REAL100-013:action:7:description lacks correct final CSV binding at request.multipart[6].description.",
+          "already_known": true,
+          "blocking": true
+        }
+      ],
+      "source_location": "src/har2jmx/parameterize/intent.py; src/har2jmx/parameterize/decide.py",
+      "already_known": true,
+      "new": false,
+      "blast_radius": "Any unfamiliar application exercising this representation/semantic owner; not application-specific."
+    },
+    {
+      "root_cause": "extractor generation",
+      "affected_workflows": 17,
+      "workflows": [
+        "REAL100-001",
+        "REAL100-002",
+        "REAL100-003",
+        "REAL100-005",
+        "REAL100-006",
+        "REAL100-007",
+        "REAL100-008",
+        "REAL100-009",
+        "REAL100-010",
+        "REAL100-011",
+        "REAL100-012",
+        "REAL100-013",
+        "REAL100-014",
+        "REAL100-015",
+        "REAL100-026",
+        "REAL100-027",
+        "REAL100-058"
+      ],
+      "finding_count": 56,
+      "examples": [
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "extractor generation",
+          "request_index": 230,
+          "reason": "Accepted modname2 lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "extractor generation",
+          "request_index": 230,
+          "reason": "Accepted modname3 lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "extractor generation",
+          "request_index": 375,
+          "reason": "Accepted saveanddisplay lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-002",
+          "category": "extractor generation",
+          "request_index": 250,
+          "reason": "Accepted tenants lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-003",
+          "category": "extractor generation",
+          "request_index": 126,
+          "reason": "Accepted viewId lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        }
+      ],
+      "source_location": "src/har2jmx/correlate/decide.py; src/har2jmx/validate/extractors.py",
+      "already_known": true,
+      "new": false,
+      "blast_radius": "Any unfamiliar application exercising this representation/semantic owner; not application-specific."
+    },
+    {
+      "root_cause": "materialization",
+      "affected_workflows": 12,
+      "workflows": [
+        "REAL100-001",
+        "REAL100-003",
+        "REAL100-004",
+        "REAL100-016",
+        "REAL100-017",
+        "REAL100-018",
+        "REAL100-026",
+        "REAL100-028",
+        "REAL100-029",
+        "REAL100-030",
+        "REAL100-031",
+        "REAL100-058"
+      ],
+      "finding_count": 23,
+      "examples": [
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "materialization",
+          "request_index": 230,
+          "reason": "Accepted modname lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "materialization",
+          "request_index": 230,
+          "reason": "Accepted name lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-003",
+          "category": "materialization",
+          "request_index": 64,
+          "reason": "Accepted token lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-004",
+          "category": "materialization",
+          "request_index": 3,
+          "reason": "Accepted v lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-004",
+          "category": "materialization",
+          "request_index": 35,
+          "reason": "Accepted v2 lacks complete resolving producer/extractor/consumer materialization.",
+          "already_known": true,
+          "blocking": true
+        }
+      ],
+      "source_location": "src/har2jmx/emit/jmx.py; src/har2jmx/correlate/decide.py",
+      "already_known": true,
+      "new": false,
+      "blast_radius": "Any unfamiliar application exercising this representation/semantic owner; not application-specific."
+    },
+    {
+      "root_cause": "JSON/type serialization",
+      "affected_workflows": 4,
+      "workflows": [
+        "REAL100-001",
+        "REAL100-007",
+        "REAL100-014",
+        "REAL100-028"
+      ],
+      "finding_count": 8,
+      "examples": [
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "JSON/type serialization",
+          "request_index": 270,
+          "reason": "request.body[0][\"args\"][\"aftereventid\"]: int becomes str",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "JSON/type serialization",
+          "request_index": 640,
+          "reason": "request.body[0][\"args\"][\"courseid\"]: int becomes str",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-007",
+          "category": "JSON/type serialization",
+          "request_index": 119,
+          "reason": "request.body[\"customFields\"][0][\"id\"]: int becomes str",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-007",
+          "category": "JSON/type serialization",
+          "request_index": 119,
+          "reason": "request.body[\"customFields\"][0][\"company_id\"]: int becomes str",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-007",
+          "category": "JSON/type serialization",
+          "request_index": 119,
+          "reason": "request.body[\"customFields\"][1][\"id\"]: int becomes str",
+          "already_known": true,
+          "blocking": true
+        }
+      ],
+      "source_location": "src/har2jmx/emit/jmx.py",
+      "already_known": true,
+      "new": false,
+      "blast_radius": "Any unfamiliar application exercising this representation/semantic owner; not application-specific."
+    },
+    {
+      "root_cause": "lifecycle classification",
+      "affected_workflows": 1,
+      "workflows": [
+        "REAL100-001"
+      ],
+      "finding_count": 4,
+      "examples": [
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "lifecycle classification",
+          "request_index": 230,
+          "reason": "Explicit selected existing catalog identity was correlated as runtime.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "lifecycle classification",
+          "request_index": 230,
+          "reason": "Explicit selected existing catalog identity was correlated as runtime.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "lifecycle classification",
+          "request_index": 230,
+          "reason": "Explicit selected existing catalog identity was correlated as runtime.",
+          "already_known": true,
+          "blocking": true
+        },
+        {
+          "benchmark_id": "REAL100-001",
+          "category": "lifecycle classification",
+          "request_index": 230,
+          "reason": "Explicit selected existing catalog identity was correlated as runtime.",
+          "already_known": true,
+          "blocking": true
+        }
+      ],
+      "source_location": "src/har2jmx/classify/lifecycle.py; src/har2jmx/classify/value_engine.py",
+      "already_known": true,
+      "new": false,
+      "blast_radius": "Any unfamiliar application exercising this representation/semantic owner; not application-specific."
+    },
+    {
+      "root_cause": "occurrence ownership / runtime state bound to CSV",
+      "affected_workflows": 5,
+      "workflows": [
+        "REAL100-001",
+        "REAL100-004",
+        "REAL100-005",
+        "REAL100-007",
+        "REAL100-023"
+      ],
+      "finding_count": 5,
+      "examples": [
+        {
+          "benchmark_id": "REAL100-001",
+          "producer_request_index": 512,
+          "producer_url": "https://sandbox.moodledemo.net/course/edit.php",
+          "producer_response_location_header": [
+            "https://sandbox.moodledemo.net/course/view.php?id=5"
+          ],
+          "producer_response_body_excerpt": "",
+          "consumer_request_index": 538,
+          "consumer_url": "https://sandbox.moodledemo.net/course/view.php?id=5",
+          "final_path": "/course/view.php?id=${__urlencode(${newsitems})}",
+          "final_body_arguments": [],
+          "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+          "explanation": "Create-course POST responds Location /course/view.php?id=5. Final course consumer uses newsitems CSV because that separate configuration input also equals 5.",
+          "known_defect": true,
+          "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+        },
+        {
+          "benchmark_id": "REAL100-004",
+          "producer_request_index": 25,
+          "producer_url": "https://demo.elabftw.net/api/v2/experiments",
+          "producer_response_location_header": [
+            "https://demo.elabftw.net/api/v2/experiments/28"
+          ],
+          "producer_response_body_excerpt": "",
+          "consumer_request_index": 26,
+          "consumer_url": "https://demo.elabftw.net/experiments.php?mode=edit&id=28",
+          "final_path": "/experiments.php?mode=edit&id=${__urlencode(${id})}",
+          "final_body_arguments": [],
+          "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+          "explanation": "Create-experiment POST responds Location /api/v2/experiments/28. Native edit consumer uses CSV id, so new experiment issuance is frozen as test data.",
+          "known_defect": true,
+          "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+        },
+        {
+          "benchmark_id": "REAL100-005",
+          "producer_request_index": 104,
+          "producer_url": "https://demo.openemr.io/openemr/interface/new/new_comprehensive_save.php",
+          "producer_response_location_header": [],
+          "producer_response_body_excerpt": "<html>\n<body>\n<script>\nwindow.location='/openemr/interface/patient_file/summary/demographics.php?set_pid=22&is_new=1';\n</script>\n\n</body>\n</html>\n",
+          "consumer_request_index": 105,
+          "consumer_url": "https://demo.openemr.io/openemr/interface/patient_file/summary/demographics.php?set_pid=22&is_new=1",
+          "final_path": "/openemr/interface/patient_file/summary/demographics.php?set_pid=${__urlencode(${set_pid})}&is_new=1",
+          "final_body_arguments": [],
+          "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+          "explanation": "Patient save response explicitly assigns window.location with set_pid=22. Demographics consumer uses CSV set_pid rather than its created-patient producer.",
+          "known_defect": true,
+          "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+        },
+        {
+          "benchmark_id": "REAL100-007",
+          "producer_request_index": 119,
+          "producer_url": "https://demo.invoiceshelf.com/api/v1/customers",
+          "producer_response_location_header": [],
+          "producer_response_body_excerpt": "{\"data\":{\"id\":9,\"name\":\"REAL100 Billing Customer\",\"email\":\"billing-real100@example.invalid\",\"phone\":\"0000000101\",\"contact_name\":null,\"company_name\":null,\"website\":null,\"enable_portal\":false,\"[REDACTED:5e884898da28]_added\":false,\"currency_id\":142,\"company_id\":1,\"facebook_id\":null,\"google_id\":null,\"github_id\":null,\"created_at\":\"2026-10-08T12:42:39.000000Z\",\"formatted_created_at\":\"2026\\/10\\/08\",\"updated_at\":\"2026-10-08T12:42:39.000000Z\",\"avatar\":0,\"due_amount\":0,\"base_due_amount\":0,\"invoice_due_amount\":0,\"base_invoice_due_amount\":0,\"available_credit\":0,\"base_available_credit\":0,\"account_balance\":0,\"base_account_balance\":0,\"prefix\":null,\"tax_id\":null,\"fields\":[{\"id\":1,\"custom_field_valuable_type\":\"App\\\\Models\\\\Customer\",\"custom_field_valuable_id\":9,\"type\":\"Input\",\"boolean_answer\":null,\"date_answer\":null,\"time_answer\":null,\"string_answer\":\"Dana Whitfield\",\"number_answer\":null,\"date_time_answer\":null,\"custom_field_id\":1,\"company_id\":1,\"default_answer\":\"Dana Whitfield\",\"default_formatted_answer\":\"Dana Whitf",
+          "consumer_request_index": 123,
+          "consumer_url": "https://demo.invoiceshelf.com/api/v1/customers/9/stats",
+          "final_path": "/api/v1/customers/${customers}/stats",
+          "final_body_arguments": [],
+          "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+          "explanation": "Customer save JSON data.id=9. Native customer stats URL uses CSV customers, retaining captured ID rather than new customer issuance.",
+          "known_defect": true,
+          "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+        },
+        {
+          "benchmark_id": "REAL100-023",
+          "producer_request_index": 170,
+          "producer_url": "https://demo.grocy.info/api/objects/chores",
+          "producer_response_location_header": [],
+          "producer_response_body_excerpt": "{\"created_object_id\":\"7\"}",
+          "consumer_request_index": 171,
+          "consumer_url": "https://demo.grocy.info/api/chores/executions/calculate-next-assignments",
+          "final_path": "/api/chores/executions/calculate-next-assignments",
+          "final_body_arguments": [
+            "{\"chore_id\": \"${chore_id}\"}"
+          ],
+          "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+          "explanation": "Chore save JSON created_object_id=7. Native calculate-next-assignments body uses CSV chore_id instead of the server-created value.",
+          "known_defect": true,
+          "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+        }
+      ],
+      "source_location": "src/har2jmx/classify/value_engine.py; src/har2jmx/lineage/graph.py; src/har2jmx/parameterize/intent.py; src/har2jmx/emit/bindings.py",
+      "already_known": true,
+      "new": false,
+      "blast_radius": "Created IDs equal to input/catalog values or read-back values can be assigned an unrelated CSV owner. Captured-value replay masks the error."
+    }
+  ],
+  "no_source_repairs": true,
+  "identity_testing_limit": "Natural equal-value occurrences retained with provenance; ambiguous edges REVIEW. This corpus does not establish exhaustive identity behavior or fresh runtime ownership."
+}

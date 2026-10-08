@@ -1,0 +1,80 @@
+{
+  "id": "api-final-011",
+  "application": "Scryfall",
+  "domain": "Public reference and business research",
+  "workflow": "Search trading-card catalog and inspect selected card",
+  "steps": [
+    {
+      "path": "/cards/search?q=name%3Alightning+bolt",
+      "inputs": {
+        "q": "name:lightning bolt"
+      }
+    },
+    {
+      "path": "/cards/{selected}",
+      "select": {
+        "path": [
+          "data",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://scryfall.com/docs/api",
+  "started_utc": "2026-10-08T17:18:42.204095+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.scryfall.com/cards/search?q=name%3Alightning+bolt",
+      "inputs": {
+        "q": "name:lightning bolt"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:43.315596+00:00",
+      "status": 200,
+      "response_sha256": "585cc10c607b2167402a34c2f4a08d11480e83a064e2dfe6a66c17f3fb98139a",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"object\":\"list\",\"total_cards\":2,\"has_more\":false,\"data\":[{\"object\":\"card\",\"id\":\"f58dba4f-1abb-47a3-a684-29c32bab95c0\",\"oracle_id\":\"5963eef1-1022-42b1-8a0c-fc9850bfc2a3\",\"multiverse_ids\":[],\"resource_"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.scryfall.com/cards/f58dba4f-1abb-47a3-a684-29c32bab95c0",
+      "inputs": {},
+      "selection": {
+        "value": "f58dba4f-1abb-47a3-a684-29c32bab95c0",
+        "source_step": 0,
+        "source_url": "https://api.scryfall.com/cards/search?q=name%3Alightning+bolt",
+        "source_response_path": [
+          "data",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "f58dba4f-1abb-47a3-a684-29c32bab95c0",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:44.942335+00:00",
+      "status": 200,
+      "response_sha256": "28915bd2e2f535813c8fa7a11c849cf4f54b7a8c3929cc48bb9e9c4159a53405",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"object\":\"card\",\"id\":\"f58dba4f-1abb-47a3-a684-29c32bab95c0\",\"oracle_id\":\"5963eef1-1022-42b1-8a0c-fc9850bfc2a3\",\"multiverse_ids\":[],\"resource_id\":\"07983FEAAA42E7A74D81C07D28F525A52CF8CAD64EF0D04C0E533"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.scryfall.com/cards/f58dba4f-1abb-47a3-a684-29c32bab95c0",
+  "finished_utc": "2026-10-08T17:18:45.412429+00:00",
+  "sha256": "252fb391cf5bd770529d406599abba8e4cb896ad5fd516fe7198e87c49c9edca",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

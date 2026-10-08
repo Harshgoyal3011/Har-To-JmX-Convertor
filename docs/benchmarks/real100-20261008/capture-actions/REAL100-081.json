@@ -1,0 +1,78 @@
+{
+  "id": "api-extra-012",
+  "application": "iNaturalist",
+  "domain": "Conservation project inventory",
+  "workflow": "Search public projects and inspect selected conservation project",
+  "steps": [
+    {
+      "path": "/v1/projects?q=birds&per_page=2",
+      "inputs": {
+        "q": "birds"
+      }
+    },
+    {
+      "path": "/v1/projects/{selected}",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://api.inaturalist.org/v1/docs/",
+  "started_utc": "2026-10-08T17:10:54.858156+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.inaturalist.org/v1/projects?q=birds&per_page=2",
+      "inputs": {
+        "q": "birds"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:55.969831+00:00",
+      "status": 200,
+      "response_sha256": "76de73900b4c953d751cc0b1382e9fe8cc1647e49dc5ac91b3ded4bf779e867b",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"total_results\":3588,\"page\":1,\"per_page\":2,\"results\":[{\"id\":2792,\"title\":\"How many birds are in nz\",\"hide_title\":false,\"hide_leaderboard\":false,\"description\":\"To see what birds are in nz\",\"slug\":\"how"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.inaturalist.org/v1/projects/2792",
+      "inputs": {},
+      "selection": {
+        "value": 2792,
+        "source_step": 0,
+        "source_url": "https://api.inaturalist.org/v1/projects?q=birds&per_page=2",
+        "source_response_path": [
+          "results",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:57.975404+00:00",
+      "status": 200,
+      "response_sha256": "1433c1c9cae540e3c39db140a5b04b382e4bfe0c685b6330fa9500abf50d8ac4",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"total_results\":1,\"page\":1,\"per_page\":1,\"results\":[{\"id\":2792,\"title\":\"How many birds are in nz\",\"hide_title\":false,\"hide_leaderboard\":false,\"description\":\"To see what birds are in nz\",\"slug\":\"how-ma"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.inaturalist.org/v1/projects/2792",
+  "finished_utc": "2026-10-08T17:10:58.391398+00:00",
+  "sha256": "58c19266c7911f1af0077790a2b5479826c4796f0d376016a2c10c8c096a540c",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

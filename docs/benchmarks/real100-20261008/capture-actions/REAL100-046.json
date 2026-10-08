@@ -1,0 +1,93 @@
+{
+  "application": "WoRMS",
+  "domain": "Marine taxonomy",
+  "workflow": "Find marine species and inspect accepted taxonomy record",
+  "steps": [
+    {
+      "path": "/rest/AphiaRecordsByName/Abra%20alba?like=false&marine_only=true",
+      "inputs": {
+        "scientific_name": "Abra alba"
+      }
+    },
+    {
+      "path": "/rest/AphiaRecordByAphiaID/{selected}",
+      "select": {
+        "path": [
+          0,
+          "AphiaID"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    },
+    {
+      "path": "/rest/AphiaClassificationByAphiaID/{selected}",
+      "reuse": true
+    }
+  ],
+  "id": "api-020-worms",
+  "permission_url": "https://www.marinespecies.org/rest/",
+  "started_utc": "2026-10-08T17:08:56.459772+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.marinespecies.org/rest/AphiaRecordsByName/Abra%20alba?like=false&marine_only=true",
+      "inputs": {
+        "scientific_name": "Abra alba"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:57.566687+00:00",
+      "status": 200,
+      "response_sha256": "cbc9b00d6ca10ca604ed13385acc34549688f5b39f3ffb178295440d361d1fb2",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"AphiaID\":141433,\"url\":\"https:\\/\\/www.marinespecies.org\\/aphia.php?p=taxdetails&id=141433\",\"scientificname\":\"Abra alba\",\"authority\":\"(W. Wood, 1802)\",\"status\":\"accepted\",\"unacceptreason\":null,\"taxon"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.marinespecies.org/rest/AphiaRecordByAphiaID/141433",
+      "inputs": {},
+      "selection": {
+        "value": 141433,
+        "source_step": 0,
+        "source_url": "https://www.marinespecies.org/rest/AphiaRecordsByName/Abra%20alba?like=false&marine_only=true",
+        "source_response_path": [
+          0,
+          "AphiaID"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:59.371160+00:00",
+      "status": 200,
+      "response_sha256": "73b7f19c417be17346e813593ef8c009321c48ac50c9afeb6786a09af5c40898",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"AphiaID\":141433,\"url\":\"https:\\/\\/www.marinespecies.org\\/aphia.php?p=taxdetails&id=141433\",\"scientificname\":\"Abra alba\",\"authority\":\"(W. Wood, 1802)\",\"status\":\"accepted\",\"unacceptreason\":null,\"taxonR"
+    },
+    {
+      "index": 2,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.marinespecies.org/rest/AphiaClassificationByAphiaID/141433",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:00.801205+00:00",
+      "status": 200,
+      "response_sha256": "5e0455229055a5f6ca6eab377e3a4871a4e91276469b5c4a2789ed773fe755b5",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"AphiaID\":1,\"rank\":\"Superdomain\",\"scientificname\":\"Biota\",\"child\":{\"AphiaID\":2,\"rank\":\"Kingdom\",\"scientificname\":\"Animalia\",\"child\":{\"AphiaID\":51,\"rank\":\"Phylum\",\"scientificname\":\"Mollusca\",\"child\":{"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://www.marinespecies.org/rest/AphiaClassificationByAphiaID/141433",
+  "finished_utc": "2026-10-08T17:09:01.102780+00:00",
+  "sha256": "064a866bc881a0cbfd8f66e908bd8c08ce131145fd23ac660cbacbf59fc0cf1c",
+  "request_count": 3,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

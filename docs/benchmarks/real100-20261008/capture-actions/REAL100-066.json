@@ -1,0 +1,82 @@
+{
+  "application": "Ergast Jolpica",
+  "domain": "Race event analysis",
+  "workflow": "Select season driver and inspect race result history",
+  "steps": [
+    {
+      "path": "/ergast/f1/2024/drivers.json?limit=2",
+      "inputs": {
+        "season": "2024"
+      }
+    },
+    {
+      "path": "/ergast/f1/2024/drivers/{selected}/results.json?limit=2",
+      "select": {
+        "path": [
+          "MRData",
+          "DriverTable",
+          "Drivers",
+          0,
+          "driverId"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-046-ergast-jolpica",
+  "permission_url": "https://api.jolpi.ca/ergast/",
+  "started_utc": "2026-10-08T17:10:40.530777+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.jolpi.ca/ergast/f1/2024/drivers.json?limit=2",
+      "inputs": {
+        "season": "2024"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:41.635681+00:00",
+      "status": 200,
+      "response_sha256": "d0f0e6950983734723054d259ef01357ecae4c903ddb4b723dc722023ff9fb9e",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"MRData\":{\"xmlns\":\"\",\"series\":\"f1\",\"url\":\"https://api.jolpi.ca/ergast/f1/2024/drivers.json\",\"limit\":\"2\",\"offset\":\"0\",\"total\":\"25\",\"DriverTable\":{\"season\":\"2024\",\"Drivers\":[{\"driverId\":\"albon\",\"perman"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.jolpi.ca/ergast/f1/2024/drivers/albon/results.json?limit=2",
+      "inputs": {},
+      "selection": {
+        "value": "albon",
+        "source_step": 0,
+        "source_url": "https://api.jolpi.ca/ergast/f1/2024/drivers.json?limit=2",
+        "source_response_path": [
+          "MRData",
+          "DriverTable",
+          "Drivers",
+          0,
+          "driverId"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:43.424661+00:00",
+      "status": 200,
+      "response_sha256": "ce3ca1367d71180502b64baf130e4c60d0f6d5f7ae4ad72a4536aff8ca3df127",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"MRData\":{\"xmlns\":\"\",\"series\":\"f1\",\"url\":\"https://api.jolpi.ca/ergast/f1/2024/drivers/albon/results.json\",\"limit\":\"2\",\"offset\":\"0\",\"total\":\"24\",\"RaceTable\":{\"season\":\"2024\",\"driverId\":\"albon\",\"Races\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.jolpi.ca/ergast/f1/2024/drivers/albon/results.json?limit=2",
+  "finished_utc": "2026-10-08T17:10:44.146530+00:00",
+  "sha256": "c609ff58a6c8d9ba5ec3eb5500632bd292b05af8bc806cc2c1dc225c0f81d03a",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

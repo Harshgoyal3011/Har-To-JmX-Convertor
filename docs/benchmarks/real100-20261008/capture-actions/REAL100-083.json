@@ -1,0 +1,80 @@
+{
+  "id": "api-final-001",
+  "application": "MusicBrainz",
+  "domain": "Public reference and business research",
+  "workflow": "Search composer and inspect selected artist recordings",
+  "steps": [
+    {
+      "path": "/ws/2/artist/?query=artist:Beethoven&fmt=json&limit=2",
+      "inputs": {
+        "query": "artist:Beethoven"
+      }
+    },
+    {
+      "path": "/ws/2/artist/{selected}?inc=recordings&fmt=json",
+      "select": {
+        "path": [
+          "artists",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://musicbrainz.org/doc/MusicBrainz_API",
+  "started_utc": "2026-10-08T17:18:02.708959+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://musicbrainz.org/ws/2/artist/?query=artist:Beethoven&fmt=json&limit=2",
+      "inputs": {
+        "query": "artist:Beethoven"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:03.816238+00:00",
+      "status": 200,
+      "response_sha256": "007cfe08cb16c990944fd50b351085ddd0b25fd1a47feec5d5cd833a7f65d052",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"created\":\"2026-10-08T17:16:38.673Z\",\"count\":49,\"offset\":0,\"artists\":[{\"id\":\"1f9df192-a621-4f54-8850-2c5373b7eac9\",\"type\":\"Person\",\"type-id\":\"b6e035f4-3ce9-331c-97df-83397230b0df\",\"score\":100,\"gender"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://musicbrainz.org/ws/2/artist/1f9df192-a621-4f54-8850-2c5373b7eac9?inc=recordings&fmt=json",
+      "inputs": {},
+      "selection": {
+        "value": "1f9df192-a621-4f54-8850-2c5373b7eac9",
+        "source_step": 0,
+        "source_url": "https://musicbrainz.org/ws/2/artist/?query=artist:Beethoven&fmt=json&limit=2",
+        "source_response_path": [
+          "artists",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "1f9df192-a621-4f54-8850-2c5373b7eac9",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:05.637411+00:00",
+      "status": 200,
+      "response_sha256": "f99ae37a3f8fb669c71397a9a2420e19c64de18e9e42ff72a1f24da01992bd54",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"life-span\":{\"ended\":true,\"begin\":\"1770-12-17\",\"end\":\"1827-03-26\"},\"name\":\"Ludwig van Beethoven\",\"recordings\":[{\"video\":false,\"disambiguation\":\"\",\"id\":\"59293841-0fc0-4d07-8cc2-d3fb8d2fe6c0\",\"length\":"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://musicbrainz.org/ws/2/artist/1f9df192-a621-4f54-8850-2c5373b7eac9?inc=recordings&fmt=json",
+  "finished_utc": "2026-10-08T17:18:06.270893+00:00",
+  "sha256": "813109a89db1102e6afb2b223f86b6513c2ef3da6f977604d39c97cd8accaa30",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

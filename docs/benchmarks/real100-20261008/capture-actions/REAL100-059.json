@@ -1,0 +1,78 @@
+{
+  "application": "MBTA",
+  "domain": "Transit journey planning",
+  "workflow": "Select transit route and retrieve its stops",
+  "steps": [
+    {
+      "path": "/routes?filter[type]=0,1&fields[route]=long_name",
+      "inputs": {
+        "filter[type]": "0,1"
+      }
+    },
+    {
+      "path": "/stops?filter[route]={selected}&page[limit]=3",
+      "select": {
+        "path": [
+          "data",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-038-mbta",
+  "permission_url": "https://www.mbta.com/developers/v3-api",
+  "started_utc": "2026-10-08T17:10:07.764881+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api-v3.mbta.com/routes?filter[type]=0,1&fields[route]=long_name",
+      "inputs": {
+        "filter[type]": "0,1"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:08.873526+00:00",
+      "status": 200,
+      "response_sha256": "67cc5a61c8168b66e549c28e88613f2a58936f94d82d339213fd66e856d7ff57",
+      "response_content_type": "application/vnd.api+json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"attributes\":{\"long_name\":\"Red Line\"},\"id\":\"Red\",\"links\":{\"self\":\"/routes/Red\"},\"relationships\":{\"agency\":{\"data\":{\"id\":\"1\",\"type\":\"agency\"}},\"line\":{\"data\":{\"id\":\"line-Red\",\"type\":\"line\"}}}"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api-v3.mbta.com/stops?filter[route]=Red&page[limit]=3",
+      "inputs": {},
+      "selection": {
+        "value": "Red",
+        "source_step": 0,
+        "source_url": "https://api-v3.mbta.com/routes?filter[type]=0,1&fields[route]=long_name",
+        "source_response_path": [
+          "data",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:10.962146+00:00",
+      "status": 200,
+      "response_sha256": "e8e001aa869d370d68254d8bdbc0a67ed1ea990fdc792edeb8332bb596d804bd",
+      "response_content_type": "application/vnd.api+json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"attributes\":{\"address\":\"Alewife Brook Pkwy and Cambridge Park Dr, Cambridge, MA 02140\",\"at_street\":null,\"description\":null,\"latitude\":42.39583,\"location_type\":1,\"longitude\":-71.141287,\"muni"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api-v3.mbta.com/stops?filter[route]=Red&page[limit]=3",
+  "finished_utc": "2026-10-08T17:10:11.309932+00:00",
+  "sha256": "27309ed97b0e79bbdbe9e655e8b9ebca2cd4b4099df9352d4edd3b93e8f66b7b",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

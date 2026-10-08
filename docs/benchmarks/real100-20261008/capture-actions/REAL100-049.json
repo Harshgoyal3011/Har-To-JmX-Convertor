@@ -1,0 +1,76 @@
+{
+  "application": "Aviation Weather",
+  "domain": "Flight operations",
+  "workflow": "Retrieve airport weather and cross-check selected airport TAF",
+  "steps": [
+    {
+      "path": "/api/data/metar?ids=KJFK&format=json",
+      "inputs": {
+        "ids": "KJFK"
+      }
+    },
+    {
+      "path": "/api/data/taf?ids={selected}&format=json",
+      "select": {
+        "path": [
+          0,
+          "icaoId"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-023-aviation-weather",
+  "permission_url": "https://aviationweather.gov/data/api/",
+  "started_utc": "2026-10-08T17:09:07.950398+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://aviationweather.gov/api/data/metar?ids=KJFK&format=json",
+      "inputs": {
+        "ids": "KJFK"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:09.054384+00:00",
+      "status": 200,
+      "response_sha256": "c0019e2ca70dbf72a6402a56299a9b16cab5806c71624e60aacecdeee44c8953",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "[{\"icaoId\":\"KJFK\",\"receiptTime\":\"2026-10-08T16:54:08.893Z\",\"obsTime\":1791478260,\"reportTime\":\"2026-10-08T17:00:00.000Z\",\"temp\":23.3,\"dewp\":10,\"wdir\":270,\"wspd\":13,\"wgst\":21,\"visib\":\"10+\",\"altim\":1011."
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://aviationweather.gov/api/data/taf?ids=KJFK&format=json",
+      "inputs": {},
+      "selection": {
+        "value": "KJFK",
+        "source_step": 0,
+        "source_url": "https://aviationweather.gov/api/data/metar?ids=KJFK&format=json",
+        "source_response_path": [
+          0,
+          "icaoId"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:13.794363+00:00",
+      "status": 200,
+      "response_sha256": "664815db5673df43297ef7a07f0a38179f0fa9b9658264c883307bd6684f95b2",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "[{\"icaoId\":\"KJFK\",\"dbPopTime\":\"2026-10-08T15:42:27.985Z\",\"bulletinTime\":\"2026-10-08T15:42:00.000Z\",\"issueTime\":\"2026-10-08T15:42:00.000Z\",\"validTimeFrom\":1791475200,\"validTimeTo\":1791568800,\"rawTAF\":\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://aviationweather.gov/api/data/taf?ids=KJFK&format=json",
+  "finished_utc": "2026-10-08T17:09:16.177044+00:00",
+  "sha256": "9cbf6d9627a96a70d56ba984baf9d6dbbeef4da83480d33539526a5247c42e8d",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

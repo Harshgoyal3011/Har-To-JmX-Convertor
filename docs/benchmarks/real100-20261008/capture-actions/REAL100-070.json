@@ -1,0 +1,71 @@
+{
+  "application": "CKAN Data.gov.uk",
+  "domain": "Publisher registry",
+  "workflow": "List publishers and inspect selected publisher dataset inventory",
+  "steps": [
+    {
+      "path": "/api/3/action/organization_list?limit=2"
+    },
+    {
+      "path": "/api/3/action/organization_show?id={selected}&include_datasets=true",
+      "select": {
+        "path": [
+          "result",
+          0
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-051-ckan-data-gov-uk",
+  "permission_url": "https://data.gov.uk/",
+  "started_utc": "2026-10-08T17:10:59.038983+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://ckan.publishing.service.gov.uk/api/3/action/organization_list?limit=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:11:00.145283+00:00",
+      "status": 200,
+      "response_sha256": "60d1865007786ece890808e29ce6ae367065c18f9f7c343e06b8144d323c89be",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"help\": \"https://ckan.publishing.service.gov.uk/api/3/action/help_show?name=organization_list\", \"success\": true, \"result\": [\"aberdeen-city-council\", \"active-travel-england\"]}"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://ckan.publishing.service.gov.uk/api/3/action/organization_show?id=aberdeen-city-council&include_datasets=true",
+      "inputs": {},
+      "selection": {
+        "value": "aberdeen-city-council",
+        "source_step": 0,
+        "source_url": "https://ckan.publishing.service.gov.uk/api/3/action/organization_list?limit=2",
+        "source_response_path": [
+          "result",
+          0
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:11:01.885102+00:00",
+      "status": 200,
+      "response_sha256": "b443221becfdb75d0986a42537f2be510173db1f24349f4e2912d4b22e3f9cb6",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"help\": \"https://ckan.publishing.service.gov.uk/api/3/action/help_show?name=organization_show\", \"success\": true, \"result\": {\"approval_status\": \"pending\", \"category\": \"local-council\", \"contact-email\":"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://ckan.publishing.service.gov.uk/api/3/action/organization_show?id=aberdeen-city-council&include_datasets=true",
+  "finished_utc": "2026-10-08T17:11:02.268458+00:00",
+  "sha256": "d3ff56f82535f6672d712a739d69fb152664e5f92e956d9e4cedb09c6fa6d6f3",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "application": "Datamuse",
+  "domain": "Search vocabulary enrichment",
+  "workflow": "Find engineering terms and inspect selected word associations",
+  "steps": [
+    {
+      "path": "/words?ml=engineering&max=3",
+      "inputs": {
+        "ml": "engineering"
+      }
+    },
+    {
+      "path": "/words?rel_syn={selected}&max=3",
+      "select": {
+        "path": [
+          0,
+          "word"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-056-datamuse",
+  "permission_url": "https://www.datamuse.com/api/",
+  "started_utc": "2026-10-08T17:11:17.286765+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.datamuse.com/words?ml=engineering&max=3",
+      "inputs": {
+        "ml": "engineering"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:11:18.388724+00:00",
+      "status": 200,
+      "response_sha256": "66bd0cc7a8ff684ce5bed02c60ceff8cca18280855c0d052e5ecd3c78e38baa9",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"word\":\"technology\",\"score\":40035042,\"tags\":[\"syn\",\"n\",\"results_type:primary_rel\"]},{\"word\":\"applied science\",\"score\":40027454,\"tags\":[\"syn\",\"n\",\"prop\"]},{\"word\":\"engine room\",\"score\":39927952,\"tags"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.datamuse.com/words?rel_syn=technology&max=3",
+      "inputs": {},
+      "selection": {
+        "value": "technology",
+        "source_step": 0,
+        "source_url": "https://api.datamuse.com/words?ml=engineering&max=3",
+        "source_response_path": [
+          0,
+          "word"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:11:20.003868+00:00",
+      "status": 200,
+      "response_sha256": "9611b616a1e34d8a1f840524079975ce949ca88a064a2db8cebc85856148a244",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"word\":\"engineering\",\"score\":11042},{\"word\":\"applied science\",\"score\":3012},{\"word\":\"engineering science\",\"score\":10}]"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.datamuse.com/words?rel_syn=technology&max=3",
+  "finished_utc": "2026-10-08T17:11:20.414712+00:00",
+  "sha256": "19d685707ec6aeff8d3eadd2cf09806b9acc14fd8ff4119145f9e594851c1c7a",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "id": "candidate-[REDACTED:6f0309fea1db]-platform",
+  "application": "Nautobot",
+  "workflow": "Create platform and inspect saved independent configuration",
+  "permission_url": "https://demo.[REDACTED:6f0309fea1db].com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:6f0309fea1db]"
+    },
+    {
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Sign in')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_name",
+      "value": "REAL100 Platform"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_description",
+      "value": "Fictional performance sandbox configuration"
+    },
+    {
+      "op": "click",
+      "selector": "button[name='_create']"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "completion_assertion": "REAL100 Platform",
+  "started_utc": "2026-10-08T16:29:24.510807+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:29:24.804628+00:00",
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T16:29:27.533018+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:29:27.533051+00:00",
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "element_evidence": {
+        "name": "username",
+        "id": "id_username",
+        "type": "text",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/login/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T16:29:27.590424+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:29:27.590437+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:6f0309fea1db]",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "id_[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:6f0309fea1db]",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/login/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T16:29:27.613299+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:29:27.613315+00:00",
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Sign in')",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "completed_utc": "2026-10-08T16:29:29.360161+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:29:29.360178+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "completed_utc": "2026-10-08T16:29:33.374726+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:29:33.374760+00:00",
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "completed_utc": "2026-10-08T16:29:34.325577+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:29:34.325600+00:00",
+      "op": "fill",
+      "selector": "#id_name",
+      "value": "REAL100 Platform",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "element_evidence": {
+        "name": "name",
+        "id": "id_name",
+        "type": "text",
+        "value": "REAL100 Platform",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "completed_utc": "2026-10-08T16:29:34.598950+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:29:34.598977+00:00",
+      "op": "fill",
+      "selector": "#id_description",
+      "value": "Fictional performance sandbox configuration",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "element_evidence": {
+        "name": "description",
+        "id": "id_description",
+        "type": "text",
+        "value": "Fictional performance sandbox configuration",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "completed_utc": "2026-10-08T16:29:34.647390+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:29:34.647421+00:00",
+      "op": "click",
+      "selector": "button[name='_create']",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/add/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/d7eba2a1-d75e-45ed-a1dc-cb7db1ac96b5/",
+      "completed_utc": "2026-10-08T16:29:35.725054+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:29:35.725076+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/d7eba2a1-d75e-45ed-a1dc-cb7db1ac96b5/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/dcim/platforms/d7eba2a1-d75e-45ed-a1dc-cb7db1ac96b5/",
+      "completed_utc": "2026-10-08T16:29:37.740159+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:29:40.699328+00:00",
+  "sha256": "70fba38974a4ce35f3812d8bb51e7cc236210aea5bccde364db67a93ad912320",
+  "request_count": 252,
+  "representation_types": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data; boundary=----WebKitFormBoundary5PLPFpFl6Oz2P9lJ",
+    "text/plain;charset=UTF-8"
+  ]
+}

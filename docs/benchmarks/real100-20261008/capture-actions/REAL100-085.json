@@ -1,0 +1,80 @@
+{
+  "id": "api-final-003",
+  "application": "Stack Exchange",
+  "domain": "Public reference and business research",
+  "workflow": "Search performance question and inspect selected answers",
+  "steps": [
+    {
+      "path": "/2.3/search?order=desc&sort=activity&intitle=performance&site=stackoverflow&pagesize=2",
+      "inputs": {
+        "intitle": "performance"
+      }
+    },
+    {
+      "path": "/2.3/questions/{selected}/answers?site=stackoverflow&pagesize=2",
+      "select": {
+        "path": [
+          "items",
+          0,
+          "question_id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://api.stackexchange.com/docs",
+  "started_utc": "2026-10-08T17:18:09.987518+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.stackexchange.com/2.3/search?order=desc&sort=activity&intitle=performance&site=stackoverflow&pagesize=2",
+      "inputs": {
+        "intitle": "performance"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:11.098270+00:00",
+      "status": 200,
+      "response_sha256": "24bda80dd6a169fa9a3ff25981af1cbe9bdf17faa5a977ff0c8e70c63e705467",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"items\":[{\"tags\":[\"best-practices\",\"haskell\",\"pattern-matching\",\"lazy-evaluation\"],\"owner\":{\"account_id\":387513,\"reputation\":121360,\"user_id\":745903,\"user_type\":\"registered\",\"accept_rate\":74,\"profile"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.stackexchange.com/2.3/questions/80008736/answers?site=stackoverflow&pagesize=2",
+      "inputs": {},
+      "selection": {
+        "value": 80008736,
+        "source_step": 0,
+        "source_url": "https://api.stackexchange.com/2.3/search?order=desc&sort=activity&intitle=performance&site=stackoverflow&pagesize=2",
+        "source_response_path": [
+          "items",
+          0,
+          "question_id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "80008736",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:12.851197+00:00",
+      "status": 200,
+      "response_sha256": "c961f6b30a3a711f383e9856a4233ab6df145bc95ee7a8a1722a07c604bda95f",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"items\":[],\"has_more\":false,\"quota_max\":300,\"quota_remaining\":297}"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.stackexchange.com/2.3/questions/80008736/answers?site=stackoverflow&pagesize=2",
+  "finished_utc": "2026-10-08T17:18:13.776400+00:00",
+  "sha256": "518a6f6d2e74d7ebb41f8819587cce89930d19cb09ac589253d5579c12f935f8",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

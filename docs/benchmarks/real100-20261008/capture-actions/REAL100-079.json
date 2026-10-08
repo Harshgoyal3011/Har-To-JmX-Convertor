@@ -1,0 +1,76 @@
+{
+  "id": "api-extra-010",
+  "application": "WoRMS",
+  "domain": "Marine specimen hierarchy",
+  "workflow": "Search genus and inspect selected taxon children",
+  "steps": [
+    {
+      "path": "/rest/AphiaRecordsByName/Abra?like=false&marine_only=true",
+      "inputs": {
+        "name": "Abra"
+      }
+    },
+    {
+      "path": "/rest/AphiaChildrenByAphiaID/{selected}?marine_only=true",
+      "select": {
+        "path": [
+          0,
+          "AphiaID"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://www.marinespecies.org/rest/",
+  "started_utc": "2026-10-08T17:10:44.214294+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.marinespecies.org/rest/AphiaRecordsByName/Abra?like=false&marine_only=true",
+      "inputs": {
+        "name": "Abra"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:45.316428+00:00",
+      "status": 200,
+      "response_sha256": "d4341954a91b97cd2964dc9da776a81b6ca540916398041ee6bab6fe37e4f5e4",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"AphiaID\":138474,\"url\":\"https:\\/\\/www.marinespecies.org\\/aphia.php?p=taxdetails&id=138474\",\"scientificname\":\"Abra\",\"authority\":\"Lamarck, 1818\",\"status\":\"accepted\",\"unacceptreason\":null,\"taxonRankID\""
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.marinespecies.org/rest/AphiaChildrenByAphiaID/138474?marine_only=true",
+      "inputs": {},
+      "selection": {
+        "value": 138474,
+        "source_step": 0,
+        "source_url": "https://www.marinespecies.org/rest/AphiaRecordsByName/Abra?like=false&marine_only=true",
+        "source_response_path": [
+          0,
+          "AphiaID"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:47.283708+00:00",
+      "status": 200,
+      "response_sha256": "408bb48df3b92d2cd54b2a1738c397e3d4f43882677861b9152553fd80a33a97",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"AphiaID\":1660648,\"url\":\"https:\\/\\/www.marinespecies.org\\/aphia.php?p=taxdetails&id=1660648\",\"scientificname\":\"Abra (Abra)\",\"authority\":\"Lamarck, 1818\",\"status\":\"unaccepted\",\"unacceptreason\":\"no acc"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://www.marinespecies.org/rest/AphiaChildrenByAphiaID/138474?marine_only=true",
+  "finished_utc": "2026-10-08T17:10:49.712332+00:00",
+  "sha256": "e1bb230759f5a4bfc4d3d4e5e762e9c61cae96050c992aede81bd92f0f862bda",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

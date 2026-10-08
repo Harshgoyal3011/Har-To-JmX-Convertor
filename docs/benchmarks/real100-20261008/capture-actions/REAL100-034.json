@@ -1,0 +1,78 @@
+{
+  "application": "UniProt",
+  "domain": "Biotechnology",
+  "workflow": "Search BRCA1 proteins and inspect selected accession",
+  "steps": [
+    {
+      "path": "/uniprotkb/search?query=gene:BRCA1&format=json&size=2",
+      "inputs": {
+        "query": "gene:BRCA1"
+      }
+    },
+    {
+      "path": "/uniprotkb/{selected}.json",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "primaryAccession"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-006-uniprot",
+  "permission_url": "https://www.uniprot.org/help/api_queries",
+  "started_utc": "2026-10-08T17:07:41.092061+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rest.uniprot.org/uniprotkb/search?query=gene:BRCA1&format=json&size=2",
+      "inputs": {
+        "query": "gene:BRCA1"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:07:42.196681+00:00",
+      "status": 200,
+      "response_sha256": "813d515a20f8917a1499f302b20806cabd9f88923e2c10fbdc840a166cefe3a4",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"results\":[{\"entryType\":\"UniProtKB reviewed (Swiss-Prot)\",\"primaryAccession\":\"P38398\",\"secondaryAccessions\":[\"E9PFZ0\",\"O15129\",\"Q1RMC1\",\"Q3LRJ0\",\"Q3LRJ6\",\"Q6IN79\",\"Q7KYU9\"],\"uniProtkbId\":\"BRCA1_HUMAN"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rest.uniprot.org/uniprotkb/P38398.json",
+      "inputs": {},
+      "selection": {
+        "value": "P38398",
+        "source_step": 0,
+        "source_url": "https://rest.uniprot.org/uniprotkb/search?query=gene:BRCA1&format=json&size=2",
+        "source_response_path": [
+          "results",
+          0,
+          "primaryAccession"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:07:44.433357+00:00",
+      "status": 200,
+      "response_sha256": "d2dd4fec6406c53f3624d834cf63b528a68c88c855a01d95a62e6e063a11ecbf",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"entryType\":\"UniProtKB reviewed (Swiss-Prot)\",\"primaryAccession\":\"P38398\",\"secondaryAccessions\":[\"E9PFZ0\",\"O15129\",\"Q1RMC1\",\"Q3LRJ0\",\"Q3LRJ6\",\"Q6IN79\",\"Q7KYU9\"],\"uniProtkbId\":\"BRCA1_HUMAN\",\"entryAudi"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://rest.uniprot.org/uniprotkb/P38398.json",
+  "finished_utc": "2026-10-08T17:07:44.895941+00:00",
+  "sha256": "eaa26788834f39a6622708dbd26ac2915b4d16d1f20a6716a72725f5ab7caff7",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

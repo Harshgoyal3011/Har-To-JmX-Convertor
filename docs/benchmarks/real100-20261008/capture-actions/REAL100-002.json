@@ -1,0 +1,223 @@
+{
+  "id": "candidate-[REDACTED:6f0309fea1db]-tenant",
+  "application": "Nautobot",
+  "workflow": "Create business tenant and inspect saved inventory owner",
+  "permission_url": "https://demo.[REDACTED:6f0309fea1db].com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:6f0309fea1db]"
+    },
+    {
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Sign in')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/tenancy/tenants/']:visible >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a[href$='/tenants/add/']:visible"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_name",
+      "value": "REAL100 Inventory Department"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_description",
+      "value": "Fictional performance benchmark department"
+    },
+    {
+      "op": "click",
+      "selector": "button[name='_create']"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Inventory Department",
+  "started_utc": "2026-10-08T11:58:36.197800+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T11:58:36.776929+00:00",
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T11:58:42.763626+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T11:58:42.763643+00:00",
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "element_evidence": {
+        "name": "username",
+        "id": "id_username",
+        "type": "text",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/login/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T11:58:42.825680+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T11:58:42.825698+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:6f0309fea1db]",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "id_[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:6f0309fea1db]",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/login/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T11:58:42.848152+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T11:58:42.848174+00:00",
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Sign in')",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "completed_utc": "2026-10-08T11:58:46.021875+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T11:58:46.021893+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "completed_utc": "2026-10-08T11:58:50.026530+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T11:58:50.026612+00:00",
+      "op": "click",
+      "selector": "a[href='/tenancy/tenants/']:visible >> nth=0",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/",
+      "completed_utc": "2026-10-08T11:58:50.627098+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T11:58:50.627111+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/",
+      "completed_utc": "2026-10-08T11:58:52.628707+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T11:58:52.628735+00:00",
+      "op": "click",
+      "selector": "a[href$='/tenants/add/']:visible",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+      "completed_utc": "2026-10-08T11:58:53.147933+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T11:58:53.147956+00:00",
+      "op": "fill",
+      "selector": "#id_name",
+      "value": "REAL100 Inventory Department",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+      "element_evidence": {
+        "name": "name",
+        "id": "id_name",
+        "type": "text",
+        "value": "REAL100 Inventory Department",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+      "completed_utc": "2026-10-08T11:58:53.267653+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T11:58:53.267665+00:00",
+      "op": "fill",
+      "selector": "#id_description",
+      "value": "Fictional performance benchmark department",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+      "element_evidence": {
+        "name": "description",
+        "id": "id_description",
+        "type": "text",
+        "value": "Fictional performance benchmark department",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+      "completed_utc": "2026-10-08T11:58:53.282164+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T11:58:53.282176+00:00",
+      "op": "click",
+      "selector": "button[name='_create']",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/add/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/40094f38-c740-44ae-b24d-07ebff6aaf70/",
+      "completed_utc": "2026-10-08T11:58:54.402793+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T11:58:54.402817+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/40094f38-c740-44ae-b24d-07ebff6aaf70/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/tenancy/tenants/40094f38-c740-44ae-b24d-07ebff6aaf70/",
+      "completed_utc": "2026-10-08T11:58:57.420988+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T11:58:59.958635+00:00",
+  "sha256": "203b3155cb226652d51530bd9f80cfcc05c2ec9a2f255b4a66248f4163851636",
+  "request_count": 328,
+  "representation_types": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data; boundary=----WebKitFormBoundaryYmvDY4h9C3WAFNUB",
+    "text/plain;charset=UTF-8"
+  ]
+}

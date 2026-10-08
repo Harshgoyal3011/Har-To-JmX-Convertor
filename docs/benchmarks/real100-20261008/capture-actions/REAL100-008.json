@@ -1,0 +1,247 @@
+{
+  "id": "candidate-sylius-customer",
+  "application": "Sylius",
+  "workflow": "Create commerce customer and inspect saved customer record",
+  "permission_url": "https://demo.sylius.com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://v2.demo.sylius.com/"
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Open admin panel')"
+    },
+    {
+      "op": "fill",
+      "selector": "#_username",
+      "value": "sylius@example.com"
+    },
+    {
+      "op": "fill",
+      "selector": "#_[REDACTED:5e884898da28]",
+      "value": "[REDACTED:dec503482204]"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Login')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/admin/customers/']"
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Create') >> nth=0"
+    },
+    {
+      "op": "fill",
+      "selector": "#sylius_admin_customer_firstName",
+      "value": "Benchmark"
+    },
+    {
+      "op": "fill",
+      "selector": "#sylius_admin_customer_lastName",
+      "value": "CommerceREAL100"
+    },
+    {
+      "op": "fill",
+      "selector": "#sylius_admin_customer_email",
+      "value": "commerce-real100@example.invalid"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Create')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "completion_assertion": "commerce-real100@example.invalid",
+  "started_utc": "2026-10-08T12:44:50.120125+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T12:44:50.527396+00:00",
+      "op": "goto",
+      "url": "https://v2.demo.sylius.com/",
+      "url_before": "about:blank",
+      "url_after": "https://v2.demo.sylius.com/en_US/",
+      "completed_utc": "2026-10-08T12:44:54.901554+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T12:44:54.901586+00:00",
+      "op": "click",
+      "selector": "a:has-text('Open admin panel')",
+      "url_before": "https://v2.demo.sylius.com/en_US/",
+      "url_after": "https://v2.demo.sylius.com/admin/login",
+      "completed_utc": "2026-10-08T12:44:55.826416+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T12:44:55.826438+00:00",
+      "op": "fill",
+      "selector": "#_username",
+      "value": "sylius@example.com",
+      "url_before": "https://v2.demo.sylius.com/admin/login",
+      "element_evidence": {
+        "name": "_username",
+        "id": "_username",
+        "type": "text",
+        "value": "sylius@example.com",
+        "formAction": "https://v2.demo.sylius.com/admin/login-check",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://v2.demo.sylius.com/admin/login",
+      "completed_utc": "2026-10-08T12:44:55.941613+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T12:44:55.941630+00:00",
+      "op": "fill",
+      "selector": "#_[REDACTED:5e884898da28]",
+      "value": "[REDACTED:dec503482204]",
+      "url_before": "https://v2.demo.sylius.com/admin/login",
+      "element_evidence": {
+        "name": "_[REDACTED:5e884898da28]",
+        "id": "_[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:dec503482204]",
+        "formAction": "https://v2.demo.sylius.com/admin/login-check",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://v2.demo.sylius.com/admin/login",
+      "completed_utc": "2026-10-08T12:44:56.056168+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T12:44:56.056187+00:00",
+      "op": "click",
+      "selector": "button:has-text('Login')",
+      "url_before": "https://v2.demo.sylius.com/admin/login",
+      "url_after": "https://v2.demo.sylius.com/admin/",
+      "completed_utc": "2026-10-08T12:44:57.441025+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T12:44:57.441046+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://v2.demo.sylius.com/admin/",
+      "url_after": "https://v2.demo.sylius.com/admin/",
+      "completed_utc": "2026-10-08T12:45:00.452838+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T12:45:00.452866+00:00",
+      "op": "click",
+      "selector": "a[href='/admin/customers/']",
+      "url_before": "https://v2.demo.sylius.com/admin/",
+      "url_after": "https://v2.demo.sylius.com/admin/customers/",
+      "completed_utc": "2026-10-08T12:45:01.079829+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T12:45:01.079854+00:00",
+      "op": "click",
+      "selector": "a:has-text('Create') >> nth=0",
+      "url_before": "https://v2.demo.sylius.com/admin/customers/",
+      "url_after": "https://v2.demo.sylius.com/admin/customers/new",
+      "completed_utc": "2026-10-08T12:45:01.764813+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T12:45:01.764832+00:00",
+      "op": "fill",
+      "selector": "#sylius_admin_customer_firstName",
+      "value": "Benchmark",
+      "url_before": "https://v2.demo.sylius.com/admin/customers/new",
+      "element_evidence": {
+        "name": "sylius_admin_customer[firstName]",
+        "id": "sylius_admin_customer_firstName",
+        "type": "text",
+        "value": "Benchmark",
+        "formAction": "https://v2.demo.sylius.com/admin/customers/new",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://v2.demo.sylius.com/admin/customers/new",
+      "completed_utc": "2026-10-08T12:45:01.887521+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T12:45:01.887534+00:00",
+      "op": "fill",
+      "selector": "#sylius_admin_customer_lastName",
+      "value": "CommerceREAL100",
+      "url_before": "https://v2.demo.sylius.com/admin/customers/new",
+      "element_evidence": {
+        "name": "sylius_admin_customer[lastName]",
+        "id": "sylius_admin_customer_lastName",
+        "type": "text",
+        "value": "CommerceREAL100",
+        "formAction": "https://v2.demo.sylius.com/admin/customers/new",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://v2.demo.sylius.com/admin/customers/new",
+      "completed_utc": "2026-10-08T12:45:01.911293+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T12:45:01.911305+00:00",
+      "op": "fill",
+      "selector": "#sylius_admin_customer_email",
+      "value": "commerce-real100@example.invalid",
+      "url_before": "https://v2.demo.sylius.com/admin/customers/new",
+      "element_evidence": {
+        "name": "sylius_admin_customer[email]",
+        "id": "sylius_admin_customer_email",
+        "type": "email",
+        "value": "commerce-real100@example.invalid",
+        "formAction": "https://v2.demo.sylius.com/admin/customers/new",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://v2.demo.sylius.com/admin/customers/new",
+      "completed_utc": "2026-10-08T12:45:01.928630+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T12:45:01.928643+00:00",
+      "op": "click",
+      "selector": "button:has-text('Create')",
+      "url_before": "https://v2.demo.sylius.com/admin/customers/new",
+      "url_after": "https://v2.demo.sylius.com/admin/customers/new",
+      "completed_utc": "2026-10-08T12:45:02.371876+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T12:45:02.371899+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://v2.demo.sylius.com/admin/customers/new",
+      "url_after": "https://v2.demo.sylius.com/admin/customers/3261/edit",
+      "completed_utc": "2026-10-08T12:45:04.383571+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T12:45:06.664343+00:00",
+  "sha256": "809608772f6b2cdc89fe0e5f44e1cb9917701b13acc33b71eacfe125eef67445",
+  "request_count": 106,
+  "representation_types": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data; boundary=----WebKitFormBoundaryNusitIpUwXDPBYqL",
+    "multipart/form-data; boundary=----WebKitFormBoundaryZo40YsLYZ7sqcTIK"
+  ]
+}

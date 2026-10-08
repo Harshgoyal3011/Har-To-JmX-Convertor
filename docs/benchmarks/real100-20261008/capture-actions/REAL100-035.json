@@ -1,0 +1,78 @@
+{
+  "application": "UniProt",
+  "domain": "Biotechnology taxonomy",
+  "workflow": "Search organism taxonomy and inspect selected taxon",
+  "steps": [
+    {
+      "path": "/taxonomy/search?query=human&format=json&size=2",
+      "inputs": {
+        "query": "human"
+      }
+    },
+    {
+      "path": "/taxonomy/{selected}.json",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "taxonId"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-007-uniprot",
+  "permission_url": "https://www.uniprot.org/help/api_queries",
+  "started_utc": "2026-10-08T17:07:45.105057+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rest.uniprot.org/taxonomy/search?query=human&format=json&size=2",
+      "inputs": {
+        "query": "human"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:07:46.214008+00:00",
+      "status": 200,
+      "response_sha256": "868c30894e23511b4b6f78e09b6aaa12741308669c39ac19e5360ece70412f64",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"results\":[{\"scientificName\":\"Homo sapiens\",\"commonName\":\"Human\",\"taxonId\":9606,\"mnemonic\":\"HUMAN\",\"parent\":{\"scientificName\":\"Homo\",\"taxonId\":9605},\"rank\":\"species\",\"hidden\":true,\"active\":true,\"othe"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rest.uniprot.org/taxonomy/9606.json",
+      "inputs": {},
+      "selection": {
+        "value": 9606,
+        "source_step": 0,
+        "source_url": "https://rest.uniprot.org/taxonomy/search?query=human&format=json&size=2",
+        "source_response_path": [
+          "results",
+          0,
+          "taxonId"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:07:48.146240+00:00",
+      "status": 200,
+      "response_sha256": "cae20b2393c33b865e72a5546834f2d5d6e97929ecb7773eaa604d9fbd631fe1",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"scientificName\":\"Homo sapiens\",\"commonName\":\"Human\",\"taxonId\":9606,\"mnemonic\":\"HUMAN\",\"parent\":{\"scientificName\":\"Homo\",\"taxonId\":9605},\"rank\":\"species\",\"hidden\":true,\"active\":true,\"otherNames\":[\"Ho"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://rest.uniprot.org/taxonomy/9606.json",
+  "finished_utc": "2026-10-08T17:07:48.434036+00:00",
+  "sha256": "9ce7b28a4b389e4d91ab4c01e7cd051d3c74ecaa26a3ddf9cdc40395889ab1a2",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

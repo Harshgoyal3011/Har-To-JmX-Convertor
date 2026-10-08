@@ -1,0 +1,184 @@
+{
+  "id": "candidate-vikunja-project",
+  "application": "Vikunja",
+  "workflow": "Create project and inspect saved project board",
+  "permission_url": "https://try.vikunja.io/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://try.vikunja.io/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('LOGIN')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/projects']"
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/projects/new']"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name='projectTitle']",
+      "value": "REAL100 Release Approval"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('ERSTELLEN')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Release Approval",
+  "started_utc": "2026-10-08T11:59:00.130923+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T11:59:00.366490+00:00",
+      "op": "goto",
+      "url": "https://try.vikunja.io/",
+      "url_before": "about:blank",
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T11:59:02.569591+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T11:59:02.569613+00:00",
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://try.vikunja.io/login",
+      "element_evidence": {
+        "name": "username",
+        "id": "username",
+        "type": "text",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://try.vikunja.io/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T11:59:02.879027+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T11:59:02.879043+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://try.vikunja.io/login",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://try.vikunja.io/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T11:59:02.905747+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T11:59:02.905812+00:00",
+      "op": "click",
+      "selector": "button:has-text('LOGIN')",
+      "url_before": "https://try.vikunja.io/login",
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T11:59:03.125992+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T11:59:03.126006+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://try.vikunja.io/login",
+      "url_after": "https://try.vikunja.io/",
+      "completed_utc": "2026-10-08T11:59:07.135065+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T11:59:07.135096+00:00",
+      "op": "click",
+      "selector": "a[href='/projects']",
+      "url_before": "https://try.vikunja.io/",
+      "url_after": "https://try.vikunja.io/",
+      "completed_utc": "2026-10-08T11:59:07.183563+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T11:59:07.183576+00:00",
+      "op": "click",
+      "selector": "a[href='/projects/new']",
+      "url_before": "https://try.vikunja.io/",
+      "url_after": "https://try.vikunja.io/projects",
+      "completed_utc": "2026-10-08T11:59:07.538324+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T11:59:07.538343+00:00",
+      "op": "fill",
+      "selector": "input[name='projectTitle']",
+      "value": "REAL100 Release Approval",
+      "url_before": "https://try.vikunja.io/projects",
+      "element_evidence": {
+        "name": "projectTitle",
+        "id": "v-18",
+        "type": "text",
+        "value": "REAL100 Release Approval",
+        "formAction": null,
+        "formMethod": null,
+        "selectedText": null
+      },
+      "url_after": "https://try.vikunja.io/projects/new",
+      "completed_utc": "2026-10-08T11:59:07.791758+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T11:59:07.791773+00:00",
+      "op": "click",
+      "selector": "button:has-text('ERSTELLEN')",
+      "url_before": "https://try.vikunja.io/projects/new",
+      "url_after": "https://try.vikunja.io/projects/new",
+      "completed_utc": "2026-10-08T11:59:07.835609+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T11:59:07.835630+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://try.vikunja.io/projects/new",
+      "url_after": "https://try.vikunja.io/projects/265/1809",
+      "completed_utc": "2026-10-08T11:59:10.838450+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T11:59:13.073132+00:00",
+  "sha256": "2ed1b5a57a6277526c85f3dc338971adf7d1b608e7f1506829d3900970ec81b9",
+  "request_count": 176,
+  "representation_types": [
+    "application/json",
+    "text/plain;charset=UTF-8"
+  ]
+}

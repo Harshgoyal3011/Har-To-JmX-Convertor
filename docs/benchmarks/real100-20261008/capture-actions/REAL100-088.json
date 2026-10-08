@@ -1,0 +1,82 @@
+{
+  "id": "api-final-006",
+  "application": "Zenodo",
+  "domain": "Public reference and business research",
+  "workflow": "Search climate datasets and inspect selected research deposition",
+  "steps": [
+    {
+      "path": "/api/records?q=climate&size=2",
+      "inputs": {
+        "q": "climate"
+      }
+    },
+    {
+      "path": "/api/records/{selected}",
+      "select": {
+        "path": [
+          "hits",
+          "hits",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://developers.zenodo.org/",
+  "started_utc": "2026-10-08T17:18:22.638295+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://zenodo.org/api/records?q=climate&size=2",
+      "inputs": {
+        "q": "climate"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:23.748259+00:00",
+      "status": 200,
+      "response_sha256": "a40ad52158033bd135b227bd242b65e0d91d1c5632459aa610aff0028c6c1ae1",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"hits\": {\"hits\": [{\"created\": \"2026-10-01T07:34:37.349326+00:00\", \"modified\": \"2026-10-01T07:34:37.597454+00:00\", \"id\": 23077368, \"conceptrecid\": \"23077367\", \"doi\": \"10.5281/zenodo.23077368\", \"concep"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://zenodo.org/api/records/23077368",
+      "inputs": {},
+      "selection": {
+        "value": 23077368,
+        "source_step": 0,
+        "source_url": "https://zenodo.org/api/records?q=climate&size=2",
+        "source_response_path": [
+          "hits",
+          "hits",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "23077368",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:26.662312+00:00",
+      "status": 200,
+      "response_sha256": "057025382ae6df2b761dbf496cdb3e01fea02feb96351664615bb11fef74c3eb",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"created\": \"2026-10-01T07:34:37.349326+00:00\", \"modified\": \"2026-10-01T07:34:37.597454+00:00\", \"id\": 23077368, \"conceptrecid\": \"23077367\", \"doi\": \"10.5281/zenodo.23077368\", \"conceptdoi\": \"10.5281/zen"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://zenodo.org/api/records/23077368",
+  "finished_utc": "2026-10-08T17:18:27.162932+00:00",
+  "sha256": "3486a872ec18af94266fe19ef3141c957dfb834e91b1a9cbcd6e512d2c2fc781",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

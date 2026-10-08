@@ -1,0 +1,78 @@
+{
+  "id": "api-extra-011",
+  "application": "ITIS",
+  "domain": "Species hierarchy",
+  "workflow": "Search common name and inspect selected taxonomic hierarchy",
+  "steps": [
+    {
+      "path": "/ITISWebService/jsonservice/searchByCommonName?srchKey=white%20oak",
+      "inputs": {
+        "srchKey": "white oak"
+      }
+    },
+    {
+      "path": "/ITISWebService/jsonservice/getFullHierarchyFromTSN?tsn={selected}",
+      "select": {
+        "path": [
+          "commonNames",
+          0,
+          "tsn"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://www.itis.gov/ws_description.html",
+  "started_utc": "2026-10-08T17:10:50.015822+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.itis.gov/ITISWebService/jsonservice/searchByCommonName?srchKey=white%20oak",
+      "inputs": {
+        "srchKey": "white oak"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:51.131104+00:00",
+      "status": 200,
+      "response_sha256": "37845fda3a6725125e65d9d7cea2bd3e212054ea456ce29c7a5b55f5b2e8bea3",
+      "response_content_type": "text/json;charset=ISO-8859-1",
+      "response_excerpt": "{\"class\":\"gov.usgs.itis.itis_service.data.SvcCommonNameList\",\"commonNames\":[{\"class\":\"gov.usgs.itis.itis_service.data.SvcCommonName\",\"commonName\":\"white oak borer\",\"language\":\"English\",\"tsn\":\"702782\"}"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.itis.gov/ITISWebService/jsonservice/getFullHierarchyFromTSN?tsn=702782",
+      "inputs": {},
+      "selection": {
+        "value": "702782",
+        "source_step": 0,
+        "source_url": "https://www.itis.gov/ITISWebService/jsonservice/searchByCommonName?srchKey=white%20oak",
+        "source_response_path": [
+          "commonNames",
+          0,
+          "tsn"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:54.006007+00:00",
+      "status": 200,
+      "response_sha256": "28d344503d8d7aa8885a8c1beb71e11fca7608e1eb38d3fb20cb3b29cf469fb5",
+      "response_content_type": "text/json;charset=ISO-8859-1",
+      "response_excerpt": "{\"author\":\"\",\"class\":\"gov.usgs.itis.itis_service.data.SvcHierarchyRecordList\",\"hierarchyList\":[{\"author\":null,\"class\":\"gov.usgs.itis.itis_service.data.SvcHierarchyRecord\",\"parentName\":\"\",\"parentTsn\":\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://www.itis.gov/ITISWebService/jsonservice/getFullHierarchyFromTSN?tsn=702782",
+  "finished_utc": "2026-10-08T17:10:54.632258+00:00",
+  "sha256": "81f97572cbd7488556ca2a4f0ea849058723ec0600e3f58662fb70bbb5dfafd3",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

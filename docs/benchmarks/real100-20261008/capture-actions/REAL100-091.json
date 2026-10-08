@@ -1,0 +1,82 @@
+{
+  "id": "api-final-009",
+  "application": "Open Government Canada",
+  "domain": "Public reference and business research",
+  "workflow": "Search population datasets and inspect selected data package",
+  "steps": [
+    {
+      "path": "/data/api/3/action/package_search?q=population&rows=2",
+      "inputs": {
+        "q": "population"
+      }
+    },
+    {
+      "path": "/data/api/3/action/package_show?id={selected}",
+      "select": {
+        "path": [
+          "result",
+          "results",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://open.canada.ca/en/access-our-application-programming-interface-api",
+  "started_utc": "2026-10-08T17:18:34.477957+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://open.canada.ca/data/api/3/action/package_search?q=population&rows=2",
+      "inputs": {
+        "q": "population"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:35.591919+00:00",
+      "status": 200,
+      "response_sha256": "2d4668ffc6bbbdfe30bf6e1e2c698a0c71ecf810fd51bd870dc89fe095e72a16",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"help\": \"https://open.canada.ca/data/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 5960, \"facets\": {}, \"facet_ranges\": {\"portal_release_date\": {\"counts\": [\"1926-10"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://open.canada.ca/data/api/3/action/package_show?id=46615d41-2be3-46ff-85ca-57e7fa940c87",
+      "inputs": {},
+      "selection": {
+        "value": "46615d41-2be3-46ff-85ca-57e7fa940c87",
+        "source_step": 0,
+        "source_url": "https://open.canada.ca/data/api/3/action/package_search?q=population&rows=2",
+        "source_response_path": [
+          "result",
+          "results",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "46615d41-2be3-46ff-85ca-57e7fa940c87",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:37.774699+00:00",
+      "status": 200,
+      "response_sha256": "a3cce32fb0806f67b045826f8f41d66114b084871bd24f2d8ce799773c7d29ef",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"help\": \"https://open.canada.ca/data/api/3/action/help_show?name=package_show\", \"success\": true, \"result\": {\"association_type\": [], \"audience\": [], \"author\": null, \"author_email\": \"infostats@statcan."
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://open.canada.ca/data/api/3/action/package_show?id=46615d41-2be3-46ff-85ca-57e7fa940c87",
+  "finished_utc": "2026-10-08T17:18:38.218133+00:00",
+  "sha256": "d60d921bf008ed120bf26c0eaf515edfa5e5da3c66c631d55b544010695982ba",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "application": "Socrata Chicago",
+  "domain": "Public operations analytics",
+  "workflow": "Filter public incident records and inspect selected incident",
+  "steps": [
+    {
+      "path": "/resource/ijzp-q8t2.json?$limit=2&$where=year=2024",
+      "inputs": {
+        "$where": "year=2024"
+      }
+    },
+    {
+      "path": "/resource/ijzp-q8t2.json?id={selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-054-socrata-chicago",
+  "permission_url": "https://dev.socrata.com/",
+  "started_utc": "2026-10-08T17:11:09.106045+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data.cityofchicago.org/resource/ijzp-q8t2.json?$limit=2&$where=year=2024",
+      "inputs": {
+        "$where": "year=2024"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:11:10.216882+00:00",
+      "status": 200,
+      "response_sha256": "6fea434d4f0a19ddbfceba129dfd6ce61dc969d9f515e091a8a1ccbb960930a9",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "[{\"id\":\"13773031\",\"case_number\":\"JJ178592\",\"date\":\"2024-02-20T00:00:00.000\",\"block\":\"069XX S VERNON AVE\",\"iucr\":\"1153\",\"primary_type\":\"DECEPTIVE PRACTICE\",\"description\":\"FINANCIAL IDENTITY THEFT OVER "
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data.cityofchicago.org/resource/ijzp-q8t2.json?id=13773031",
+      "inputs": {},
+      "selection": {
+        "value": "13773031",
+        "source_step": 0,
+        "source_url": "https://data.cityofchicago.org/resource/ijzp-q8t2.json?$limit=2&$where=year=2024",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:11:12.439304+00:00",
+      "status": 200,
+      "response_sha256": "efeefa05a02cc2a73b11645d8ca395d83772e05f10f4677879d986d3f2a4438b",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "[{\"id\":\"13773031\",\"case_number\":\"JJ178592\",\"date\":\"2024-02-20T00:00:00.000\",\"block\":\"069XX S VERNON AVE\",\"iucr\":\"1153\",\"primary_type\":\"DECEPTIVE PRACTICE\",\"description\":\"FINANCIAL IDENTITY THEFT OVER "
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://data.cityofchicago.org/resource/ijzp-q8t2.json?id=13773031",
+  "finished_utc": "2026-10-08T17:11:13.002849+00:00",
+  "sha256": "7440b37a6e9430b4ea1fa7dc3ada8a256568dc2430553c68db7f8fba0bc1e7eb",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

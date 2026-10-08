@@ -1,0 +1,86 @@
+{
+  "id": "api-reserve-006",
+  "application": "Nobel Prize",
+  "domain": "Public catalog business research",
+  "workflow": "Inspect award catalog and selected award recipient",
+  "steps": [
+    {
+      "path": "/2.1/nobelPrizes?nobelPrizeYear=2024&nobelPrizeCategory=phy&limit=1",
+      "inputs": {
+        "nobelPrizeYear": "2024",
+        "nobelPrizeCategory": "phy"
+      }
+    },
+    {
+      "path": "/2.1/laureate/{selected}",
+      "select": {
+        "path": [
+          "nobelPrizes",
+          0,
+          "laureates",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://www.nobelprize.org/about/developer-zone-2/",
+  "started_utc": "2026-10-08T17:21:10.614281+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.nobelprize.org/2.1/nobelPrizes?nobelPrizeYear=2024&nobelPrizeCategory=phy&limit=1",
+      "inputs": {
+        "nobelPrizeYear": "2024",
+        "nobelPrizeCategory": "phy"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:21:11.720049+00:00",
+      "status": 200,
+      "response_sha256": "87f471e232d4c973ab9f257b8ba1aadea9b5a4d3a0ca0ba3d1a6fd1c3e174901",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"nobelPrizes\":[{\"awardYear\":\"2024\",\"category\":{\"en\":\"Physics\",\"no\":\"Fysikk\",\"se\":\"Fysik\"},\"categoryFullName\":{\"en\":\"The Nobel Prize in Physics\",\"no\":\"Nobelprisen i fysikk\",\"se\":\"Nobelpriset i fysik\"}"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.nobelprize.org/2.1/laureate/1037",
+      "inputs": {},
+      "selection": {
+        "value": "1037",
+        "source_step": 0,
+        "source_url": "https://api.nobelprize.org/2.1/nobelPrizes?nobelPrizeYear=2024&nobelPrizeCategory=phy&limit=1",
+        "source_response_path": [
+          "nobelPrizes",
+          0,
+          "laureates",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "1037",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:21:13.470492+00:00",
+      "status": 200,
+      "response_sha256": "ef38f6c1611be9ac4c12de2cea8d5c789032bc4f3d1c6e9a699724b88f6d6263",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\":\"1037\",\"knownName\":{\"en\":\"John J. Hopfield\",\"se\":\"John J. Hopfield\"},\"givenName\":{\"en\":\"John\",\"se\":\"John\"},\"familyName\":{\"en\":\"Hopfield\",\"se\":\"Hopfield\"},\"fullName\":{\"en\":\"John J. Hopfield\",\"se"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.nobelprize.org/2.1/laureate/1037",
+  "finished_utc": "2026-10-08T17:21:14.681176+00:00",
+  "sha256": "aa6f70f67c84df997eee5502d42888f5e818726399b2f0cc2cb659ccdcbbd323",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

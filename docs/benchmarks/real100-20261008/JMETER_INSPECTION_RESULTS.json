@@ -1,0 +1,1226 @@
+[
+  {
+    "id": "REAL100-001",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-001:extractor:1",
+    "matched": true,
+    "resolved": "[REDACTED:5d5892ef1272]",
+    "success": true
+  },
+  {
+    "id": "REAL100-001:extractor:8",
+    "matched": true,
+    "resolved": "topics",
+    "success": true
+  },
+  {
+    "id": "REAL100-002",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-002:extractor:0",
+    "matched": true,
+    "resolved": "[REDACTED:4db6e6e982de]",
+    "success": true
+  },
+  {
+    "id": "REAL100-002:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:a18d96f76292]",
+    "success": true
+  },
+  {
+    "id": "REAL100-002:extractor:6",
+    "matched": true,
+    "resolved": "[REDACTED:3e5c4f5830cf]",
+    "success": true
+  },
+  {
+    "id": "REAL100-002:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-003",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-004",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-004:extractor:2",
+    "matched": true,
+    "resolved": "[REDACTED:2a97516c354b]",
+    "success": true
+  },
+  {
+    "id": "REAL100-004:extractor:3",
+    "matched": true,
+    "resolved": "[REDACTED:76e1b8a099b9]",
+    "success": true
+  },
+  {
+    "id": "REAL100-004:extractor:4",
+    "matched": true,
+    "resolved": "53767363",
+    "success": true
+  },
+  {
+    "id": "REAL100-004:extractor:7",
+    "matched": true,
+    "resolved": "7c47e484",
+    "success": true
+  },
+  {
+    "id": "REAL100-005",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-005:extractor:0",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-005:extractor:3",
+    "matched": true,
+    "resolved": "no",
+    "success": true
+  },
+  {
+    "id": "REAL100-005:extractor:5",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-005:extractor:6",
+    "matched": true,
+    "resolved": "[REDACTED:b0abbb151028]",
+    "success": true
+  },
+  {
+    "id": "REAL100-005:extractor:7",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-005:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-006",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-006:extractor:1",
+    "matched": true,
+    "resolved": "[REDACTED:44759316835e]",
+    "success": true
+  },
+  {
+    "id": "REAL100-006:extractor:2",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-006:extractor:3",
+    "matched": true,
+    "resolved": "0.0",
+    "success": true
+  },
+  {
+    "id": "REAL100-006:extractor:4",
+    "matched": true,
+    "resolved": "'10/08/2026',",
+    "success": true
+  },
+  {
+    "id": "REAL100-006:extractor:5",
+    "matched": true,
+    "resolved": "0.0",
+    "success": true
+  },
+  {
+    "id": "REAL100-006:extractor:6",
+    "matched": true,
+    "resolved": "[REDACTED:e853fc9750a3]",
+    "success": true
+  },
+  {
+    "id": "REAL100-007",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:4",
+    "matched": true,
+    "resolved": "11ab6e9d585b",
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:5",
+    "matched": true,
+    "resolved": "11ab6e9d585b",
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:6",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:10",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:12",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:14",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:16",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:18",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:20",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:22",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-007:extractor:24",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-008",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-008:extractor:0",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-008:extractor:2",
+    "matched": true,
+    "resolved": "[REDACTED:f29255dee3ab]",
+    "success": true
+  },
+  {
+    "id": "REAL100-008:extractor:3",
+    "matched": true,
+    "resolved": "[REDACTED:b6f0231c2b66]",
+    "success": true
+  },
+  {
+    "id": "REAL100-008:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:6665861d0961]",
+    "success": true
+  },
+  {
+    "id": "REAL100-009",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-009:extractor:0",
+    "matched": true,
+    "resolved": "[REDACTED:63a2ed404934]",
+    "success": true
+  },
+  {
+    "id": "REAL100-009:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:eba9883c5ec6]",
+    "success": true
+  },
+  {
+    "id": "REAL100-009:extractor:7",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-010",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-010:extractor:0",
+    "matched": true,
+    "resolved": "[REDACTED:45b7864c6a0d]",
+    "success": true
+  },
+  {
+    "id": "REAL100-010:extractor:5",
+    "matched": true,
+    "resolved": "Fictional benchmark inventory configuration",
+    "success": true
+  },
+  {
+    "id": "REAL100-010:extractor:6",
+    "matched": true,
+    "resolved": "[REDACTED:cd7f227d8cdc]",
+    "success": true
+  },
+  {
+    "id": "REAL100-010:extractor:7",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-011",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-011:extractor:0",
+    "matched": true,
+    "resolved": "[REDACTED:961153d2fc1b]",
+    "success": true
+  },
+  {
+    "id": "REAL100-011:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:f3643a15a881]",
+    "success": true
+  },
+  {
+    "id": "REAL100-011:extractor:7",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-012",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-012:extractor:0",
+    "matched": true,
+    "resolved": "[REDACTED:0ba3b3eb2df9]",
+    "success": true
+  },
+  {
+    "id": "REAL100-012:extractor:5",
+    "matched": true,
+    "resolved": "Fictional performance sandbox configuration",
+    "success": true
+  },
+  {
+    "id": "REAL100-012:extractor:6",
+    "matched": true,
+    "resolved": "[REDACTED:cc7cae81eb73]",
+    "success": true
+  },
+  {
+    "id": "REAL100-012:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-013",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-013:extractor:0",
+    "matched": true,
+    "resolved": "[REDACTED:31362610884d]",
+    "success": true
+  },
+  {
+    "id": "REAL100-013:extractor:5",
+    "matched": true,
+    "resolved": "Fictional performance sandbox configuration",
+    "success": true
+  },
+  {
+    "id": "REAL100-013:extractor:6",
+    "matched": true,
+    "resolved": "[REDACTED:08e02744b31f]",
+    "success": true
+  },
+  {
+    "id": "REAL100-013:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:4",
+    "matched": true,
+    "resolved": "11ab6e9d585b",
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:5",
+    "matched": true,
+    "resolved": "11ab6e9d585b",
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:6",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:10",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:12",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:14",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:16",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:18",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:20",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:22",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:24",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-014:extractor:26",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:4",
+    "matched": true,
+    "resolved": "11ab6e9d585b",
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:5",
+    "matched": true,
+    "resolved": "11ab6e9d585b",
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:6",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:8",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:10",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:12",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:14",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:16",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:18",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:20",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-015:extractor:22",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-016",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-017",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-018",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-019",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-020",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-021",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-022",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-023",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-023:extractor:0",
+    "matched": true,
+    "resolved": "2026-10-08 18:54:50",
+    "success": true
+  },
+  {
+    "id": "REAL100-024",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-025",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-026",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-026:extractor:0",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-027",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-027:extractor:0",
+    "matched": false,
+    "success": true
+  },
+  {
+    "id": "REAL100-028",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-028:extractor:1",
+    "matched": true,
+    "resolved": "4.2.2",
+    "success": true
+  },
+  {
+    "id": "REAL100-028:extractor:2",
+    "matched": true,
+    "resolved": "dashboard.php",
+    "success": true
+  },
+  {
+    "id": "REAL100-028:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:3d2394e3e798]",
+    "success": true
+  },
+  {
+    "id": "REAL100-029",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-029:extractor:1",
+    "matched": true,
+    "resolved": "4.2.2",
+    "success": true
+  },
+  {
+    "id": "REAL100-029:extractor:2",
+    "matched": true,
+    "resolved": "dashboard.php",
+    "success": true
+  },
+  {
+    "id": "REAL100-029:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:8fce67ef1ba0]",
+    "success": true
+  },
+  {
+    "id": "REAL100-029:extractor:7",
+    "matched": true,
+    "resolved": "addAnnouncement",
+    "success": true
+  },
+  {
+    "id": "REAL100-030",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-030:extractor:1",
+    "matched": true,
+    "resolved": "4.2.2",
+    "success": true
+  },
+  {
+    "id": "REAL100-030:extractor:2",
+    "matched": true,
+    "resolved": "dashboard.php",
+    "success": true
+  },
+  {
+    "id": "REAL100-030:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:f63ef918cef8]",
+    "success": true
+  },
+  {
+    "id": "REAL100-031",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-031:extractor:1",
+    "matched": true,
+    "resolved": "4.2.2",
+    "success": true
+  },
+  {
+    "id": "REAL100-031:extractor:2",
+    "matched": true,
+    "resolved": "dashboard.php",
+    "success": true
+  },
+  {
+    "id": "REAL100-031:extractor:5",
+    "matched": true,
+    "resolved": "[REDACTED:e38d107704aa]",
+    "success": true
+  },
+  {
+    "id": "REAL100-031:extractor:7",
+    "matched": true,
+    "resolved": "addAccessory",
+    "success": true
+  },
+  {
+    "id": "REAL100-032",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-033",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-034",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-035",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-036",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-037",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-038",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-039",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-040",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-041",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-042",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-043",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-044",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-045",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-046",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-047",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-048",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-049",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-050",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-051",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-052",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-053",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-054",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-055",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-056",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-057",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-058",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-059",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-060",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-061",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-062",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-063",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-064",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-065",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-066",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-067",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-068",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-069",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-070",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-071",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-072",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-073",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-074",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-075",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-076",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-077",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-078",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-079",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-080",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-081",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-082",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-083",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-084",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-085",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-086",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-087",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-088",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-089",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-090",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-091",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-092",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-093",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-094",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-095",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-096",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-097",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-098",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-099",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-100",
+    "loaded": true,
+    "success": true
+  },
+  {
+    "id": "REAL100-001:extractor:4",
+    "resolved": [
+      "assign",
+      "h5pactivity",
+      "forum",
+      "forum"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-001:extractor:5",
+    "resolved": [
+      "assign",
+      "h5pactivity",
+      "forum",
+      "forum"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-001:extractor:6",
+    "resolved": [
+      "assign",
+      "h5pactivity",
+      "forum",
+      "forum"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-001:extractor:7",
+    "resolved": [
+      "11",
+      "demo spiel",
+      "News forum",
+      "News forum"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-003:extractor:0",
+    "resolved": [
+      "[REDACTED:56005b895af6]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-003:extractor:2",
+    "resolved": [
+      "[REDACTED:3e032bff9dbb]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-003:extractor:3",
+    "resolved": [
+      265,
+      1,
+      1809,
+      1810,
+      1811,
+      1812
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-003:extractor:4",
+    "resolved": [
+      265,
+      1,
+      1809,
+      1810,
+      1811,
+      1812
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-016:extractor:0",
+    "resolved": [
+      "[REDACTED:ecb977da123e]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-016:extractor:2",
+    "resolved": [
+      "[REDACTED:15a03255bf30]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-016:extractor:3",
+    "resolved": [
+      3348,
+      1
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-017:extractor:0",
+    "resolved": [
+      "[REDACTED:c0e3829cc7a0]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-017:extractor:2",
+    "resolved": [
+      "[REDACTED:793e8c7d20f3]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-018:extractor:0",
+    "resolved": [
+      "[REDACTED:1769e5402216]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-018:extractor:2",
+    "resolved": [
+      "[REDACTED:3503484615b7]"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-026:extractor:3",
+    "resolved": [
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#abe9a4",
+      "#abe9a4",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8",
+      "#7cbae8"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-026:extractor:4",
+    "resolved": [
+      "15",
+      "15",
+      "15",
+      "15",
+      "15",
+      "15",
+      "15",
+      "15",
+      "15",
+      "15",
+      "15"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-036:extractor:0",
+    "resolved": [
+      "ENSG00000012048"
+    ],
+    "success": true
+  },
+  {
+    "id": "REAL100-058:extractor:0",
+    "success": false,
+    "error": "com.jayway.jsonpath.InvalidPathException: Use bracket notion ['my prop'] if your property contains blank characters. position: 3"
+  }
+]

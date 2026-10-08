@@ -1,0 +1,82 @@
+{
+  "id": "api-final-008",
+  "application": "Research Organization Registry",
+  "domain": "Public reference and business research",
+  "workflow": "Search institution and inspect selected organization record",
+  "steps": [
+    {
+      "path": "/v2/organizations?query=University%20of%20Oxford",
+      "inputs": {
+        "query": "University of Oxford"
+      }
+    },
+    {
+      "path": "/v2/organizations/{selected}",
+      "select": {
+        "path": [
+          "items",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA",
+        "encoding": "path_preserve_slash",
+        "value_transform": "last_path_segment"
+      }
+    }
+  ],
+  "permission_url": "https://ror.readme.io/docs/rest-api",
+  "started_utc": "2026-10-08T17:18:30.812059+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.ror.org/v2/organizations?query=University%20of%20Oxford",
+      "inputs": {
+        "query": "University of Oxford"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:31.912932+00:00",
+      "status": 200,
+      "response_sha256": "39542627cc2c0b378b88f286903f05ef46bd766cabe96926d1c7c2f87fac97d5",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"number_of_results\":35529,\"time_taken\":41,\"items\":[{\"admin\":{\"created\":{\"date\":\"2018-11-14\",\"schema_version\":\"1.0\"},\"last_modified\":{\"date\":\"2026-09-22\",\"schema_version\":\"2.1\"}},\"domains\":[\"ox.ac.uk\""
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.ror.org/v2/organizations/052gg0110",
+      "inputs": {},
+      "selection": {
+        "value": "https://ror.org/052gg0110",
+        "source_step": 0,
+        "source_url": "https://api.ror.org/v2/organizations?query=University%20of%20Oxford",
+        "source_response_path": [
+          "items",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "last_path_segment",
+        "consumer_spelling": "052gg0110",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:33.929088+00:00",
+      "status": 200,
+      "response_sha256": "5119228bc6cece0b2afb124c97bc08ade8d4c0593d474fdd610a8ffa91186f20",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"admin\":{\"created\":{\"date\":\"2018-11-14\",\"schema_version\":\"1.0\"},\"last_modified\":{\"date\":\"2026-09-22\",\"schema_version\":\"2.1\"}},\"domains\":[\"ox.ac.uk\"],\"established\":1096,\"external_ids\":[{\"all\":[\"501100"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.ror.org/v2/organizations/052gg0110",
+  "finished_utc": "2026-10-08T17:18:34.226974+00:00",
+  "sha256": "7d0b7924e896e208edacd8c40a15415019491c310e0bef3116aa5558888b46d4",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

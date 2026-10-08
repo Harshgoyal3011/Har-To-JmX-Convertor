@@ -1,0 +1,71 @@
+{
+  "application": "CoinGecko",
+  "domain": "Financial reference",
+  "workflow": "List asset catalog and inspect selected asset",
+  "steps": [
+    {
+      "path": "/api/v3/coins/list"
+    },
+    {
+      "path": "/api/v3/coins/{selected}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-025-coingecko",
+  "permission_url": "https://docs.coingecko.com/reference/introduction",
+  "started_utc": "2026-10-08T17:09:19.541206+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coingecko.com/api/v3/coins/list",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:20.649019+00:00",
+      "status": 200,
+      "response_sha256": "961ba183cf36506c40395cf419c14726ef4831ef3179d13aed7195691df5b541",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "[{\"id\":\"_\",\"symbol\":\"gib\",\"name\":\"༼ つ ◕_◕ ༽つ\"},{\"id\":\"000-capital\",\"symbol\":\"000\",\"name\":\"000 Capital\"},{\"id\":\"01111010011110000110001001110100-token\",\"symbol\":\"01111010011110000110001001110100\",\"name"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coingecko.com/api/v3/coins/_?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false",
+      "inputs": {},
+      "selection": {
+        "value": "_",
+        "source_step": 0,
+        "source_url": "https://api.coingecko.com/api/v3/coins/list",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:22.447930+00:00",
+      "status": 200,
+      "response_sha256": "95104e83218f0d73013c5b33a7c5eadb4d7bf16a65a35fcdd6a1a43f3be2ed97",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"id\":\"_\",\"symbol\":\"gib\",\"name\":\"༼ つ ◕_◕ ༽つ\",\"web_slug\":\"gib-4\",\"asset_platform_id\":\"hedera-hashgraph\",\"platforms\":{\"hedera-hashgraph\":\"0x00000000000000000000000000000000007872cb\"},\"detail_platforms\":"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.coingecko.com/api/v3/coins/_?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false",
+  "finished_utc": "2026-10-08T17:09:23.034989+00:00",
+  "sha256": "59c9b5fbfc1850ad2ca17320879f26934102a2690c96ada0a79513aa817611ad",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

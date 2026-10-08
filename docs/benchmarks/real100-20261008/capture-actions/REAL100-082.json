@@ -1,0 +1,76 @@
+{
+  "id": "api-extra-013",
+  "application": "Postcodes.io",
+  "domain": "Address autocomplete",
+  "workflow": "Autocomplete postcode and inspect selected postcode",
+  "steps": [
+    {
+      "path": "/postcodes/SW1A/autocomplete",
+      "inputs": {
+        "prefix": "SW1A"
+      }
+    },
+    {
+      "path": "/postcodes/{selected}",
+      "select": {
+        "path": [
+          "result",
+          0
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://postcodes.io/docs/api/",
+  "started_utc": "2026-10-08T17:10:58.617137+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.postcodes.io/postcodes/SW1A/autocomplete",
+      "inputs": {
+        "prefix": "SW1A"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:59.732832+00:00",
+      "status": 200,
+      "response_sha256": "630ce5e4f1d824deb8dddcb412d3edb33c2282b3ed89deaaabd9103fd678fb08",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"status\":200,\"result\":[\"SW1A 0AA\",\"SW1A 0PW\",\"SW1A 0RS\",\"SW1A 1AA\",\"SW1A 1AB\",\"SW1A 1AG\",\"SW1A 1AH\",\"SW1A 1BA\",\"SW1A 1BB\",\"SW1A 1BD\"]}"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.postcodes.io/postcodes/SW1A%200AA",
+      "inputs": {},
+      "selection": {
+        "value": "SW1A 0AA",
+        "source_step": 0,
+        "source_url": "https://api.postcodes.io/postcodes/SW1A/autocomplete",
+        "source_response_path": [
+          "result",
+          0
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:11:01.380463+00:00",
+      "status": 200,
+      "response_sha256": "105b069201bbe13eacd1e9d9c82c8942b53054f9bf86c92c6fe61f1a400069bd",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"status\":200,\"result\":{\"postcode\":\"SW1A 0AA\",\"quality\":1,\"eastings\":530268,\"northings\":179545,\"country\":\"England\",\"nhs_ha\":\"London\",\"longitude\":-0.124638,\"latitude\":51.499842,\"european_electoral_regi"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.postcodes.io/postcodes/SW1A%200AA",
+  "finished_utc": "2026-10-08T17:11:01.873494+00:00",
+  "sha256": "3ec1552194878d6b6589844e26e4c2e442a8889061f7bcbf8e5e23bf14a36c6f",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

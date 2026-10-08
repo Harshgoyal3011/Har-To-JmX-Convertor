@@ -1,0 +1,73 @@
+{
+  "application": "DataCite",
+  "domain": "Research repository management",
+  "workflow": "List repositories and inspect selected repository record",
+  "steps": [
+    {
+      "path": "/repositories?page[size]=2"
+    },
+    {
+      "path": "/repositories/{selected}",
+      "select": {
+        "path": [
+          "data",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-004-datacite",
+  "permission_url": "https://support.datacite.org/docs/api",
+  "started_utc": "2026-10-08T17:07:35.828427+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.datacite.org/repositories?page[size]=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:07:36.943269+00:00",
+      "status": 200,
+      "response_sha256": "555b92784370ed6a30ca348c5a3aaddf83c5fc62614819b52c1433f8357f05a5",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"id\":\"rhtq.rjxpkl\",\"type\":\"repositories\",\"attributes\":{\"name\":\"\\\"Developmental Psychology: Iranian Psychologists - روانشناسی تحولی: روانشناسان ایرانی \\\"\",\"symbol\":\"RHTQ.RJXPKL\",\"re3data\":nul"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.datacite.org/repositories/rhtq.rjxpkl",
+      "inputs": {},
+      "selection": {
+        "value": "rhtq.rjxpkl",
+        "source_step": 0,
+        "source_url": "https://api.datacite.org/repositories?page[size]=2",
+        "source_response_path": [
+          "data",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:07:38.695349+00:00",
+      "status": 200,
+      "response_sha256": "810468b5a11fd708dc1d9b223a88818ce84762018c132d149f10ecfd72106d9a",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"data\":{\"id\":\"rhtq.rjxpkl\",\"type\":\"repositories\",\"attributes\":{\"name\":\"\\\"Developmental Psychology: Iranian Psychologists - روانشناسی تحولی: روانشناسان ایرانی \\\"\",\"symbol\":\"RHTQ.RJXPKL\",\"re3data\":null"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.datacite.org/repositories/rhtq.rjxpkl",
+  "finished_utc": "2026-10-08T17:07:39.006442+00:00",
+  "sha256": "2ac7f618935f0f15266da0225f09959077375a92e4807ca45ec5d9be59d87ecc",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

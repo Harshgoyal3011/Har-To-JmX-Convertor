@@ -1,0 +1,247 @@
+{
+  "id": "candidate-moodle-course",
+  "application": "Moodle",
+  "workflow": "Create a training course and verify saved course",
+  "permission_url": "https://sandbox.moodledemo.net/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://sandbox.moodledemo.net/"
+    },
+    {
+      "op": "click",
+      "selector": "a[href$='/login/index.php'] >> nth=0"
+    },
+    {
+      "op": "fill",
+      "selector": "#username",
+      "value": "admin"
+    },
+    {
+      "op": "fill",
+      "selector": "#[REDACTED:5e884898da28]",
+      "value": "[REDACTED:f1aa125d9a1d]"
+    },
+    {
+      "op": "click",
+      "selector": "#loginbtn"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Site administration') >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a[href$='#linkcourses']"
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Add a new course')"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_fullname",
+      "value": "REAL100 Performance Engineering Fundamentals"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_shortname",
+      "value": "REAL100-PE-20261008"
+    },
+    {
+      "op": "click",
+      "selector": "input[name='saveanddisplay']"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Performance Engineering Fundamentals",
+  "started_utc": "2026-10-08T11:35:42.933600+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T11:35:43.591213+00:00",
+      "op": "goto",
+      "url": "https://sandbox.moodledemo.net/",
+      "url_before": "about:blank",
+      "url_after": "https://sandbox.moodledemo.net/",
+      "completed_utc": "2026-10-08T11:35:45.686848+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T11:35:45.686865+00:00",
+      "op": "click",
+      "selector": "a[href$='/login/index.php'] >> nth=0",
+      "url_before": "https://sandbox.moodledemo.net/",
+      "url_after": "https://sandbox.moodledemo.net/login/index.php",
+      "completed_utc": "2026-10-08T11:35:46.293047+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T11:35:46.293067+00:00",
+      "op": "fill",
+      "selector": "#username",
+      "value": "admin",
+      "url_before": "https://sandbox.moodledemo.net/login/index.php",
+      "element_evidence": {
+        "name": "username",
+        "id": "username",
+        "type": "text",
+        "value": "admin",
+        "formAction": "https://sandbox.moodledemo.net/login/index.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://sandbox.moodledemo.net/login/index.php",
+      "completed_utc": "2026-10-08T11:35:46.705857+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T11:35:46.705887+00:00",
+      "op": "fill",
+      "selector": "#[REDACTED:5e884898da28]",
+      "value": "[REDACTED:f1aa125d9a1d]",
+      "url_before": "https://sandbox.moodledemo.net/login/index.php",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:f1aa125d9a1d]",
+        "formAction": "https://sandbox.moodledemo.net/login/index.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://sandbox.moodledemo.net/login/index.php",
+      "completed_utc": "2026-10-08T11:35:46.743906+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T11:35:46.743936+00:00",
+      "op": "click",
+      "selector": "#loginbtn",
+      "url_before": "https://sandbox.moodledemo.net/login/index.php",
+      "url_after": "https://sandbox.moodledemo.net/my/",
+      "completed_utc": "2026-10-08T11:35:48.215449+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T11:35:48.215487+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://sandbox.moodledemo.net/my/",
+      "url_after": "https://sandbox.moodledemo.net/my/",
+      "completed_utc": "2026-10-08T11:35:51.215666+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T11:35:51.215679+00:00",
+      "op": "click",
+      "selector": "a:has-text('Site administration') >> nth=0",
+      "url_before": "https://sandbox.moodledemo.net/my/",
+      "url_after": "https://sandbox.moodledemo.net/admin/search.php",
+      "completed_utc": "2026-10-08T11:35:51.799539+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T11:35:51.799561+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://sandbox.moodledemo.net/admin/search.php",
+      "url_after": "https://sandbox.moodledemo.net/admin/search.php",
+      "completed_utc": "2026-10-08T11:35:53.805711+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T11:35:53.805750+00:00",
+      "op": "click",
+      "selector": "a[href$='#linkcourses']",
+      "url_before": "https://sandbox.moodledemo.net/admin/search.php",
+      "url_after": "https://sandbox.moodledemo.net/admin/search.php#linkcourses",
+      "completed_utc": "2026-10-08T11:35:53.883518+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T11:35:53.883548+00:00",
+      "op": "click",
+      "selector": "a:has-text('Add a new course')",
+      "url_before": "https://sandbox.moodledemo.net/admin/search.php#linkcourses",
+      "url_after": "https://sandbox.moodledemo.net/course/edit.php?category=0",
+      "completed_utc": "2026-10-08T11:35:54.390972+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T11:35:54.390992+00:00",
+      "op": "fill",
+      "selector": "#id_fullname",
+      "value": "REAL100 Performance Engineering Fundamentals",
+      "url_before": "https://sandbox.moodledemo.net/course/edit.php?category=0",
+      "element_evidence": {
+        "name": "fullname",
+        "id": "id_fullname",
+        "type": "text",
+        "value": "REAL100 Performance Engineering Fundamentals",
+        "formAction": "https://sandbox.moodledemo.net/course/edit.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://sandbox.moodledemo.net/course/edit.php?category=0",
+      "completed_utc": "2026-10-08T11:35:54.784667+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T11:35:54.784679+00:00",
+      "op": "fill",
+      "selector": "#id_shortname",
+      "value": "REAL100-PE-20261008",
+      "url_before": "https://sandbox.moodledemo.net/course/edit.php?category=0",
+      "element_evidence": {
+        "name": "shortname",
+        "id": "id_shortname",
+        "type": "text",
+        "value": "REAL100-PE-20261008",
+        "formAction": "https://sandbox.moodledemo.net/course/edit.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://sandbox.moodledemo.net/course/edit.php?category=0",
+      "completed_utc": "2026-10-08T11:35:54.813683+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T11:35:54.813696+00:00",
+      "op": "click",
+      "selector": "input[name='saveanddisplay']",
+      "url_before": "https://sandbox.moodledemo.net/course/edit.php?category=0",
+      "url_after": "https://sandbox.moodledemo.net/course/view.php?id=5",
+      "completed_utc": "2026-10-08T11:35:55.833573+00:00"
+    },
+    {
+      "index": 13,
+      "started_utc": "2026-10-08T11:35:55.833590+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://sandbox.moodledemo.net/course/view.php?id=5",
+      "url_after": "https://sandbox.moodledemo.net/course/view.php?id=5",
+      "completed_utc": "2026-10-08T11:35:58.836510+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T11:36:01.946101+00:00",
+  "sha256": "35fa354d3ceeec831cc69d388e8548a25362268a41e292cac734fca7c05adca7",
+  "request_count": 646,
+  "representation_types": [
+    "application/json",
+    "application/x-www-form-urlencoded"
+  ]
+}

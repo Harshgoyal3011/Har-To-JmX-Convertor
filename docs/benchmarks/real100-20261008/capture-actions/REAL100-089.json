@@ -1,0 +1,74 @@
+{
+  "id": "api-final-007",
+  "application": "Figshare",
+  "domain": "Public reference and business research",
+  "workflow": "Browse research contributions and inspect selected article",
+  "steps": [
+    {
+      "path": "/v2/articles?page_size=2",
+      "inputs": {}
+    },
+    {
+      "path": "/v2/articles/{selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://docs.figshare.com/",
+  "started_utc": "2026-10-08T17:18:27.372599+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.figshare.com/v2/articles?page_size=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:28.480088+00:00",
+      "status": 200,
+      "response_sha256": "c289f3e60b05e8975a3501e8ed11b376c31c4948c7bd0d92689eabd8a8e483ac",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\": 34253814, \"title\": \"A concept mapping study evaluating the UK's first NHS generic fatigue clinic\", \"doi\": \"\", \"handle\": \"\", \"url\": \"https://api.figshare.com/v2/articles/34253814\", \"published_d"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.figshare.com/v2/articles/34253814",
+      "inputs": {},
+      "selection": {
+        "value": 34253814,
+        "source_step": 0,
+        "source_url": "https://api.figshare.com/v2/articles?page_size=2",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "34253814",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:30.216241+00:00",
+      "status": 200,
+      "response_sha256": "b28f2bfa677e82b3293a58c9e9e546b38b87bb0539d56b67e2908a44e149c321",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"files\": [{\"id\": 69800784, \"name\": \"5915D377-ED78-4E71-A511-9F7C21AE3227.pdf\", \"size\": 664520, \"is_link_only\": false, \"download_url\": \"https://ndownloader.figshare.com/files/69800784\", \"supplied_md5\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.figshare.com/v2/articles/34253814",
+  "finished_utc": "2026-10-08T17:18:30.591461+00:00",
+  "sha256": "b90b73454aebf1403df420cb3a6a7a14f4324b6ab1621ae52206bc6a9eb9bd2a",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "api-final-004",
+  "application": "GitLab public projects",
+  "domain": "Public reference and business research",
+  "workflow": "Search public CI projects and inspect selected project",
+  "steps": [
+    {
+      "path": "/api/v4/projects?search=gitlab-runner&per_page=2",
+      "inputs": {
+        "search": "gitlab-runner"
+      }
+    },
+    {
+      "path": "/api/v4/projects/{selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://docs.gitlab.com/api/projects/",
+  "started_utc": "2026-10-08T17:18:14.045542+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://gitlab.com/api/v4/projects?search=gitlab-runner&per_page=2",
+      "inputs": {
+        "search": "gitlab-runner"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:15.146346+00:00",
+      "status": 200,
+      "response_sha256": "bed9972f791dfa548a759aff0c64afc1ef32ba30051fad2ab66f3463bcde6c95",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\":87382684,\"description\":null,\"name\":\"GitLab Runner CI Process\",\"name_with_namespace\":\"Bhabatush Debnath Apu / GitLab Runner CI Process\",\"path\":\"gitlab-runner-ci-process\",\"path_with_namespace\":\"b"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://gitlab.com/api/v4/projects/87382684",
+      "inputs": {},
+      "selection": {
+        "value": 87382684,
+        "source_step": 0,
+        "source_url": "https://gitlab.com/api/v4/projects?search=gitlab-runner&per_page=2",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "87382684",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:17.630945+00:00",
+      "status": 200,
+      "response_sha256": "705e8d67cb24b31dec70d1a22441d0af3d47805bcbb3c8415294af516ad5bbdd",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":87382684,\"description\":null,\"name\":\"GitLab Runner CI Process\",\"name_with_namespace\":\"Bhabatush Debnath Apu / GitLab Runner CI Process\",\"path\":\"gitlab-runner-ci-process\",\"path_with_namespace\":\"bh"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://gitlab.com/api/v4/projects/87382684",
+  "finished_utc": "2026-10-08T17:18:18.277957+00:00",
+  "sha256": "49409c7ef87fe2a90c975a96f88bf93c67485b9d1081054bb87011e95bfeef61",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

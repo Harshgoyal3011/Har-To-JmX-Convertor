@@ -1,0 +1,78 @@
+{
+  "application": "RCSB PDB",
+  "domain": "Structural biology annotation",
+  "workflow": "Inspect ligand structure and select nonpolymer entity",
+  "steps": [
+    {
+      "path": "/rest/v1/core/entry/1A4W",
+      "inputs": {
+        "structure": "1A4W"
+      }
+    },
+    {
+      "path": "/rest/v1/core/nonpolymer_entity/1A4W/{selected}",
+      "select": {
+        "path": [
+          "rcsb_entry_container_identifiers",
+          "non_polymer_entity_ids",
+          0
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-011-rcsb-pdb",
+  "permission_url": "https://data.rcsb.org/",
+  "started_utc": "2026-10-08T17:08:16.780038+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/1A4W",
+      "inputs": {
+        "structure": "1A4W"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:17.891638+00:00",
+      "status": 200,
+      "response_sha256": "69b9bb1aad50349a967c8194fbd027c4ecd448ec6f8bd7e0004a8d39161763ad",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"audit_author\":[{\"name\":\"Matthews, J.H.\",\"pdbx_ordinal\":1},{\"name\":\"Krishnan, R.\",\"pdbx_ordinal\":2},{\"name\":\"Costanzo, M.J.\",\"pdbx_ordinal\":3},{\"name\":\"Maryanoff, B.E.\",\"pdbx_ordinal\":4},{\"name\":\"Tul"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/1A4W/4",
+      "inputs": {},
+      "selection": {
+        "value": "4",
+        "source_step": 0,
+        "source_url": "https://data.rcsb.org/rest/v1/core/entry/1A4W",
+        "source_response_path": [
+          "rcsb_entry_container_identifiers",
+          "non_polymer_entity_ids",
+          0
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:19.912155+00:00",
+      "status": 200,
+      "response_sha256": "e8951e1501526c59aee809aab34a613d4ea8a1c678427718abbd3968d540e761",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"pdbx_entity_nonpoly\":{\"comp_id\":\"NA\",\"entity_id\":\"4\",\"name\":\"SODIUM ION\"},\"rcsb_nonpolymer_entity\":{\"formula_weight\":0.023,\"pdbx_description\":\"SODIUM ION\",\"pdbx_number_of_molecules\":2},\"rcsb_nonpoly"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://data.rcsb.org/rest/v1/core/nonpolymer_entity/1A4W/4",
+  "finished_utc": "2026-10-08T17:08:20.275673+00:00",
+  "sha256": "7d8543007edca3e685caec0a7a2d9e2ae3e743edc63e7f72918ac4c126353eda",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

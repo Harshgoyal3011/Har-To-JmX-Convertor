@@ -1,0 +1,91 @@
+{
+  "application": "Coinbase Exchange",
+  "domain": "Market operations",
+  "workflow": "Inspect trading product and retrieve ticker and order book",
+  "steps": [
+    {
+      "path": "/products/BTC-USD",
+      "inputs": {
+        "product": "BTC-USD"
+      }
+    },
+    {
+      "path": "/products/{selected}/ticker",
+      "select": {
+        "path": [
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    },
+    {
+      "path": "/products/{selected}/book?level=1",
+      "reuse": true
+    }
+  ],
+  "id": "api-029-coinbase-exchange",
+  "permission_url": "https://docs.cdp.coinbase.com/exchange/reference/exchangerestapi_getproducts",
+  "started_utc": "2026-10-08T17:09:33.325951+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD",
+      "inputs": {
+        "product": "BTC-USD"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:34.432068+00:00",
+      "status": 200,
+      "response_sha256": "d2bfd4363396ca895bed3a49a2e3f265c7c043efbb50b04ccf87fd5df6197137",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"id\":\"BTC-USD\",\"base_currency\":\"BTC\",\"quote_currency\":\"USD\",\"quote_increment\":\"0.01\",\"base_increment\":\"0.00000001\",\"display_name\":\"BTC-USD\",\"min_market_funds\":\"1\",\"margin_enabled\":false,\"post_only\":f"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/ticker",
+      "inputs": {},
+      "selection": {
+        "value": "BTC-USD",
+        "source_step": 0,
+        "source_url": "https://api.exchange.coinbase.com/products/BTC-USD",
+        "source_response_path": [
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:35.987203+00:00",
+      "status": 200,
+      "response_sha256": "a963a86f287f8eb97e9df0fef88e9a23a2ef1a3d7da683ad4aea0a9ca3f9c648",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"ask\":\"80753.27\",\"bid\":\"80753.26\",\"volume\":\"7481.27933674\",\"trade_id\":1103877275,\"price\":\"80741.99\",\"size\":\"0.03989579\",\"time\":\"2026-10-08T17:09:33.204300884Z\",\"rfq_volume\":\"127.381094\"}"
+    },
+    {
+      "index": 2,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/book?level=1",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:37.181817+00:00",
+      "status": 200,
+      "response_sha256": "809201c1a56fa2099aa59814de7034ebd0f7700ce81730b645efc46dde0a03b0",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"bids\":[[\"80755.45\",\"0.09906451\",1]],\"asks\":[[\"80757.76\",\"0.0173\",1]],\"sequence\":137442210828,\"auction_mode\":false,\"auction\":null,\"time\":\"2026-10-08T17:09:36.693723400Z\"}"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.exchange.coinbase.com/products/BTC-USD/book?level=1",
+  "finished_utc": "2026-10-08T17:09:38.218963+00:00",
+  "sha256": "58850f83ac085d3c6124aca7361b6d6c7afd9d08c7634c8fae551874c4951899",
+  "request_count": 3,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

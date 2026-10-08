@@ -1,0 +1,80 @@
+{
+  "id": "api-reserve-001",
+  "application": "MusicBrainz",
+  "domain": "Public catalog business research",
+  "workflow": "Search music release and inspect selected track listing",
+  "steps": [
+    {
+      "path": "/ws/2/release/?query=release:Symphony&fmt=json&limit=2",
+      "inputs": {
+        "query": "release:Symphony"
+      }
+    },
+    {
+      "path": "/ws/2/release/{selected}?inc=recordings&fmt=json",
+      "select": {
+        "path": [
+          "releases",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://musicbrainz.org/doc/MusicBrainz_API",
+  "started_utc": "2026-10-08T17:20:53.318390+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://musicbrainz.org/ws/2/release/?query=release:Symphony&fmt=json&limit=2",
+      "inputs": {
+        "query": "release:Symphony"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:20:54.426249+00:00",
+      "status": 200,
+      "response_sha256": "95c304844496af767f239637e1f3007cdddb369c97a22f33630bfc1da3150a8c",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"created\":\"2026-10-08T17:20:53.817Z\",\"count\":13199,\"offset\":0,\"releases\":[{\"id\":\"6f3c1c28-1ad9-45a3-83f7-b5916f52d327\",\"score\":100,\"status-id\":\"4e304316-386d-3409-af2e-78857eec5cfe\",\"artist-credit-id"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://musicbrainz.org/ws/2/release/6f3c1c28-1ad9-45a3-83f7-b5916f52d327?inc=recordings&fmt=json",
+      "inputs": {},
+      "selection": {
+        "value": "6f3c1c28-1ad9-45a3-83f7-b5916f52d327",
+        "source_step": 0,
+        "source_url": "https://musicbrainz.org/ws/2/release/?query=release:Symphony&fmt=json&limit=2",
+        "source_response_path": [
+          "releases",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "6f3c1c28-1ad9-45a3-83f7-b5916f52d327",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:20:56.203754+00:00",
+      "status": 200,
+      "response_sha256": "59889e095f717e26390c28dc7fc1f857d211c64cb3ca67ee875ceb2fb6c2c17d",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"title\":\"Symphony\",\"disambiguation\":\"\",\"media\":[{\"title\":\"\",\"position\":1,\"track-count\":7,\"track-offset\":0,\"id\":\"518c49d7-817a-3d8b-bbd9-2447440156d6\",\"format-id\":\"9712d52a-4509-3d4b-a1a2-67c88c643e31"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://musicbrainz.org/ws/2/release/6f3c1c28-1ad9-45a3-83f7-b5916f52d327?inc=recordings&fmt=json",
+  "finished_utc": "2026-10-08T17:20:56.599433+00:00",
+  "sha256": "dbdd6cdf5d781620fcd6bafcc791b9c81dc2485a3f4e347fce9d4b0b7202f40e",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

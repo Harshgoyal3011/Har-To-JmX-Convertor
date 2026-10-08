@@ -1,0 +1,78 @@
+{
+  "application": "OpenF1",
+  "domain": "Race telemetry operations",
+  "workflow": "Select race session and retrieve participating drivers",
+  "steps": [
+    {
+      "path": "/v1/sessions?year=2024&country_name=United%20Kingdom",
+      "inputs": {
+        "year": "2024",
+        "country_name": "United Kingdom"
+      }
+    },
+    {
+      "path": "/v1/drivers?session_key={selected}",
+      "select": {
+        "path": [
+          0,
+          "session_key"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-048-openf1",
+  "permission_url": "https://openf1.org/",
+  "started_utc": "2026-10-08T17:10:48.114103+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.openf1.org/v1/sessions?year=2024&country_name=United%20Kingdom",
+      "inputs": {
+        "year": "2024",
+        "country_name": "United Kingdom"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:49.215605+00:00",
+      "status": 200,
+      "response_sha256": "6ad5afb1e098e456fd349b4e387fb9ceca6903f92d2bb7445d43a30ea8776232",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"session_key\":9551,\"session_type\":\"[REDACTED:d3857b12b4ce]\",\"session_name\":\"[REDACTED:d2797e05647f]\",\"date_start\":\"2024-07-05T11:30:00+00:00\",\"date_end\":\"2024-07-05T12:30:00+00:00\",\"meeting_key\":1240,\"circuit_key\":2,\"circuit_s"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.openf1.org/v1/drivers?session_key=9551",
+      "inputs": {},
+      "selection": {
+        "value": 9551,
+        "source_step": 0,
+        "source_url": "https://api.openf1.org/v1/sessions?year=2024&country_name=United%20Kingdom",
+        "source_response_path": [
+          0,
+          "session_key"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:50.985606+00:00",
+      "status": 200,
+      "response_sha256": "1c46240a64f64d6e4d1c06d7482f6bbd90e4c0d6a06dbc4c8d087a12fdd30888",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"meeting_key\":1240,\"session_key\":9551,\"driver_number\":1,\"broadcast_name\":\"M VERSTAPPEN\",\"full_name\":\"Max VERSTAPPEN\",\"name_acronym\":\"VER\",\"team_name\":\"Red Bull Racing\",\"team_colour\":\"3671C6\",\"first_"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.openf1.org/v1/drivers?session_key=9551",
+  "finished_utc": "2026-10-08T17:10:51.284185+00:00",
+  "sha256": "9fbd336b8910abae6d849d6200832ea4109c85baf68b5fd4555730e7b49ab9c7",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

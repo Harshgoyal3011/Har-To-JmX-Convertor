@@ -1,0 +1,82 @@
+{
+  "id": "api-final-010",
+  "application": "Europeana",
+  "domain": "Public reference and business research",
+  "workflow": "Search paintings and inspect selected cultural collection record",
+  "steps": [
+    {
+      "path": "/record/v2/search.json?wskey=apidemo&query=painting&rows=2",
+      "inputs": {
+        "query": "painting"
+      }
+    },
+    {
+      "path": "/record/v2/{selected}.json?wskey=apidemo",
+      "select": {
+        "path": [
+          "items",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA",
+        "value_transform": "strip_leading_slash",
+        "encoding": "path_preserve_slash"
+      }
+    }
+  ],
+  "permission_url": "https://pro.europeana.eu/page/search",
+  "started_utc": "2026-10-08T17:18:38.577198+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.europeana.eu/record/v2/search.json?wskey=apidemo&query=painting&rows=2",
+      "inputs": {
+        "query": "painting"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:39.693637+00:00",
+      "status": 200,
+      "response_sha256": "b613f28982dfef9f6c5d20661346b1d90a623a4e72b401a2e09287a6da6460bd",
+      "response_content_type": "application/json;charset=UTF-8",
+      "response_excerpt": "{\"apikey\":\"apidemo\",\"success\":true,\"requestNumber\":999,\"itemsCount\":2,\"totalResults\":487717,\"items\":[{\"completeness\":10,\"country\":[\"Sweden\"],\"dataProvider\":[\"Museum of Ethnography\"],\"dcCreator\":[\"Munu"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.europeana.eu/record/v2/91619/SMVK_EM_objekt_1059045.json?wskey=apidemo",
+      "inputs": {},
+      "selection": {
+        "value": "/91619/SMVK_EM_objekt_1059045",
+        "source_step": 0,
+        "source_url": "https://api.europeana.eu/record/v2/search.json?wskey=apidemo&query=painting&rows=2",
+        "source_response_path": [
+          "items",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "strip_leading_slash",
+        "consumer_spelling": "91619/SMVK_EM_objekt_1059045",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:41.376424+00:00",
+      "status": 200,
+      "response_sha256": "003b6c2f7275c1dcc460c930801cb30a9fa169a3697f7c83de247677e89abf0a",
+      "response_content_type": "application/json;charset=UTF-8",
+      "response_excerpt": "{\"apikey\":\"apidemo\",\"success\":true,\"statsDuration\":169,\"requestNumber\":999,\"object\":{\"about\":\"/91619/SMVK_EM_objekt_1059045\",\"aggregations\":[{\"about\":\"/aggregation/provider/91619/SMVK_EM_objekt_105904"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.europeana.eu/record/v2/91619/SMVK_EM_objekt_1059045.json?wskey=apidemo",
+  "finished_utc": "2026-10-08T17:18:41.908367+00:00",
+  "sha256": "1cf64fd3f06e325b76ae85eb20f49890a10704bb1a63368740dd37acff9a033b",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

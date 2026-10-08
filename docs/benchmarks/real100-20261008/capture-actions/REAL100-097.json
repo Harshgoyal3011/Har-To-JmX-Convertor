@@ -1,0 +1,78 @@
+{
+  "id": "api-reserve-003",
+  "application": "GitLab public projects",
+  "domain": "Public catalog business research",
+  "workflow": "Search public CI project and inspect repository branch catalog",
+  "steps": [
+    {
+      "path": "/api/v4/projects?search=gitlab-runner&per_page=3&order_by=star_count&sort=desc",
+      "inputs": {
+        "search": "gitlab-runner"
+      }
+    },
+    {
+      "path": "/api/v4/projects/{selected}/repository/branches?per_page=2",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://docs.gitlab.com/api/projects/",
+  "started_utc": "2026-10-08T17:20:58.849511+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://gitlab.com/api/v4/projects?search=gitlab-runner&per_page=3&order_by=star_count&sort=desc",
+      "inputs": {
+        "search": "gitlab-runner"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:20:59.955104+00:00",
+      "status": 200,
+      "response_sha256": "e42c59e625135e41ec9af96d7836ddd5b90fca9fbb825fb9054d3c7bf94d9865",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\":250833,\"description\":\"GitLab Runner is the open source project that is used to run your CI/CD jobs and send the results back to GitLab\",\"name\":\"gitlab-runner\",\"name_with_namespace\":\"GitLab.org "
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://gitlab.com/api/v4/projects/250833/repository/branches?per_page=2",
+      "inputs": {},
+      "selection": {
+        "value": 250833,
+        "source_step": 0,
+        "source_url": "https://gitlab.com/api/v4/projects?search=gitlab-runner&per_page=3&order_by=star_count&sort=desc",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "250833",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:21:02.743286+00:00",
+      "status": 200,
+      "response_sha256": "502c2c4e55c1da6473198015f82dd7dc2b8d16f07250485ded432a51df63d9f1",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"name\":\"0-0-stable\",\"commit\":{\"id\":\"f23a72db4bcc895f3340f3ba4a7e9aeef33a6a76\",\"short_id\":\"f23a72db\",\"created_at\":\"2023-09-24T15:51:37.000+03:00\",\"parent_ids\":[\"88e0edfac4f5836d2d0e1bb22cd3e40694d77a"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://gitlab.com/api/v4/projects/250833/repository/branches?per_page=2",
+  "finished_utc": "2026-10-08T17:21:03.421738+00:00",
+  "sha256": "8fc097077a1fd668e886eb9511807b356473f89d9f00c1e1240141a139808735",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

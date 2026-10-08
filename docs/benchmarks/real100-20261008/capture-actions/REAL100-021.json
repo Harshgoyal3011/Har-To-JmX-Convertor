@@ -1,0 +1,235 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create product and inspect saved independent inventory configuration",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/products"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Warehouse Supplies"
+    },
+    {
+      "op": "fill",
+      "selector": "#min_stock_amount",
+      "value": "5"
+    },
+    {
+      "op": "select",
+      "selector": "#location_id",
+      "value": "3"
+    },
+    {
+      "op": "select",
+      "selector": "#qu_id_stock",
+      "value": "3"
+    },
+    {
+      "op": "fill",
+      "selector": "#default_best_before_days",
+      "value": "365"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Save & return to products')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "id": "candidate-grocy-product",
+  "completion_assertion": "REAL100 Warehouse Supplies",
+  "started_utc": "2026-10-08T16:54:20.686901+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:54:21.058969+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:54:23.319183+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:54:23.319207+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/products",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/products",
+      "completed_utc": "2026-10-08T16:54:23.846153+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:54:23.846177+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/products",
+      "url_after": "https://demo.grocy.info/products",
+      "completed_utc": "2026-10-08T16:54:25.855744+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:54:25.855776+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/products",
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:26.196124+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:54:26.196138+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/product/new",
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.210553+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:54:28.210595+00:00",
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Warehouse Supplies",
+      "url_before": "https://demo.grocy.info/product/new",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Warehouse Supplies",
+        "formAction": "https://demo.grocy.info/product/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.285431+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:54:28.285444+00:00",
+      "op": "fill",
+      "selector": "#min_stock_amount",
+      "value": "5",
+      "url_before": "https://demo.grocy.info/product/new",
+      "element_evidence": {
+        "name": "min_stock_amount",
+        "id": "min_stock_amount",
+        "type": "number",
+        "value": "5",
+        "formAction": "https://demo.grocy.info/product/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.309816+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:54:28.309828+00:00",
+      "op": "select",
+      "selector": "#location_id",
+      "value": "3",
+      "url_before": "https://demo.grocy.info/product/new",
+      "element_evidence": {
+        "name": "location_id",
+        "id": "location_id",
+        "type": "select-one",
+        "value": "3",
+        "formAction": "https://demo.grocy.info/product/new",
+        "formMethod": "get",
+        "selectedText": [
+          "Pantry"
+        ]
+      },
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.331338+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:54:28.331350+00:00",
+      "op": "select",
+      "selector": "#qu_id_stock",
+      "value": "3",
+      "url_before": "https://demo.grocy.info/product/new",
+      "element_evidence": {
+        "name": "qu_id_stock",
+        "id": "qu_id_stock",
+        "type": "select-one",
+        "value": "3",
+        "formAction": "https://demo.grocy.info/product/new",
+        "formMethod": "get",
+        "selectedText": [
+          "Pack"
+        ]
+      },
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.350917+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:54:28.350928+00:00",
+      "op": "fill",
+      "selector": "#default_best_before_days",
+      "value": "365",
+      "url_before": "https://demo.grocy.info/product/new",
+      "element_evidence": {
+        "name": "default_best_before_days",
+        "id": "default_best_before_days",
+        "type": "number",
+        "value": "365",
+        "formAction": "https://demo.grocy.info/product/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.378910+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T16:54:28.378922+00:00",
+      "op": "click",
+      "selector": "button:has-text('Save & return to products')",
+      "url_before": "https://demo.grocy.info/product/new",
+      "url_after": "https://demo.grocy.info/product/new",
+      "completed_utc": "2026-10-08T16:54:28.434214+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T16:54:28.434230+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.grocy.info/product/new",
+      "url_after": "https://demo.grocy.info/products?product=33",
+      "completed_utc": "2026-10-08T16:54:31.434480+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:54:33.718161+00:00",
+  "sha256": "02ebbeeda49eccaaae7484f9f0a44faae6724cae1ae5d00943d5f450da842468",
+  "request_count": 252,
+  "representation_types": [
+    "application/json"
+  ]
+}

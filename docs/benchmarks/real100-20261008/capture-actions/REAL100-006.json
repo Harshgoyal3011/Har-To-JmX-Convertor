@@ -1,0 +1,207 @@
+{
+  "id": "candidate-frontaccounting-customer",
+  "application": "FrontAccounting",
+  "workflow": "Create accounting customer and verify saved financial owner",
+  "permission_url": "https://demo.frontaccounting.eu/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.frontaccounting.eu/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=user_name_entry_field]",
+      "value": "demouser"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:5e884898da28]"
+    },
+    {
+      "op": "click",
+      "selector": "input[type=submit]"
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Add and Manage Customers')"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=CustName]",
+      "value": "REAL100 Accounting Customer"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=cust_ref]",
+      "value": "REAL100ACCT"
+    },
+    {
+      "op": "fill",
+      "selector": "textarea[name=address]",
+      "value": "Fictional Demo Address"
+    },
+    {
+      "op": "click",
+      "selector": "#submit"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Accounting Customer",
+  "started_utc": "2026-10-08T12:40:48.474015+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T12:40:48.741201+00:00",
+      "op": "goto",
+      "url": "https://demo.frontaccounting.eu/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.frontaccounting.eu/",
+      "completed_utc": "2026-10-08T12:40:51.215801+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T12:40:51.215821+00:00",
+      "op": "fill",
+      "selector": "input[name=user_name_entry_field]",
+      "value": "demouser",
+      "url_before": "https://demo.frontaccounting.eu/",
+      "element_evidence": {
+        "name": "user_name_entry_field",
+        "id": "",
+        "type": "text",
+        "value": "demouser",
+        "formAction": "https://demo.frontaccounting.eu/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.frontaccounting.eu/",
+      "completed_utc": "2026-10-08T12:40:51.267223+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T12:40:51.267238+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:5e884898da28]",
+      "url_before": "https://demo.frontaccounting.eu/",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:5e884898da28]",
+        "formAction": "https://demo.frontaccounting.eu/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.frontaccounting.eu/",
+      "completed_utc": "2026-10-08T12:40:51.284858+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T12:40:51.284871+00:00",
+      "op": "click",
+      "selector": "input[type=submit]",
+      "url_before": "https://demo.frontaccounting.eu/",
+      "url_after": "https://demo.frontaccounting.eu/",
+      "completed_utc": "2026-10-08T12:40:51.975488+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T12:40:51.975516+00:00",
+      "op": "click",
+      "selector": "a:has-text('Add and Manage Customers')",
+      "url_before": "https://demo.frontaccounting.eu/",
+      "url_after": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "completed_utc": "2026-10-08T12:40:52.609439+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T12:40:52.609482+00:00",
+      "op": "fill",
+      "selector": "input[name=CustName]",
+      "value": "REAL100 Accounting Customer",
+      "url_before": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "element_evidence": {
+        "name": "CustName",
+        "id": "",
+        "type": "text",
+        "value": "REAL100 Accounting Customer",
+        "formAction": "https://demo.frontaccounting.eu/sales/manage/customers.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "completed_utc": "2026-10-08T12:40:52.953973+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T12:40:52.953985+00:00",
+      "op": "fill",
+      "selector": "input[name=cust_ref]",
+      "value": "REAL100ACCT",
+      "url_before": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "element_evidence": {
+        "name": "cust_ref",
+        "id": "",
+        "type": "text",
+        "value": "REAL100ACCT",
+        "formAction": "https://demo.frontaccounting.eu/sales/manage/customers.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "completed_utc": "2026-10-08T12:40:52.984123+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T12:40:52.984162+00:00",
+      "op": "fill",
+      "selector": "textarea[name=address]",
+      "value": "Fictional Demo Address",
+      "url_before": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "element_evidence": {
+        "name": "address",
+        "id": "",
+        "type": "textarea",
+        "value": "Fictional Demo Address",
+        "formAction": "https://demo.frontaccounting.eu/sales/manage/customers.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "completed_utc": "2026-10-08T12:40:53.010208+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T12:40:53.010219+00:00",
+      "op": "click",
+      "selector": "#submit",
+      "url_before": "https://demo.frontaccounting.eu/sales/manage/customers.php?",
+      "url_after": "https://demo.frontaccounting.eu/sales/manage/customers.php",
+      "completed_utc": "2026-10-08T12:40:53.325647+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T12:40:53.325663+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.frontaccounting.eu/sales/manage/customers.php",
+      "url_after": "https://demo.frontaccounting.eu/sales/manage/customers.php",
+      "completed_utc": "2026-10-08T12:40:56.341100+00:00"
+    }
+  ],
+  "status": "CAPTURE_LIMITED",
+  "error": "Locator.wait_for: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"REAL100 Accounting Customer\").first to be visible\n",
+  "finished_utc": "2026-10-08T12:41:10.588871+00:00",
+  "sha256": "71737ea0aa38ee52dd8ccd21761c3b7cb0fcf994267c28e6f0181689cf3ecb49",
+  "request_count": 54,
+  "representation_types": [
+    "application/x-www-form-urlencoded",
+    "multipart/form-data; boundary=----WebKitFormBoundarykidbniRm4GE7MBER"
+  ]
+}

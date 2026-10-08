@@ -1,0 +1,3278 @@
+{
+  "scalar_checks": 362,
+  "numeric_to_string": 8,
+  "boolean_to_string": 0,
+  "type_failures": 8,
+  "jsonpath_failures": 4,
+  "jsonpath_exercised": 19,
+  "states": {
+    "numeric_JSON": "OBSERVED",
+    "SOAP": "NOT EXERCISED",
+    "GraphQL_request": "NOT EXERCISED",
+    "multipart_files": "NOT EXERCISED",
+    "dotted_JSON_keys": "NOT EXERCISED",
+    "nested_JSON": "OBSERVED"
+  },
+  "checks": [
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 230,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 230,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 230,
+      "location": "request.body[0][\"args\"][\"limit\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 231,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 231,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 270,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 270,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 270,
+      "location": "request.body[0][\"args\"][\"timesortfrom\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 270,
+      "location": "request.body[0][\"args\"][\"timesortto\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 270,
+      "location": "request.body[0][\"args\"][\"aftereventid\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 270,
+      "location": "request.body[0][\"args\"][\"limitnum\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 370,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 370,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 471,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 471,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[0][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[0][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[0][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[1][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[1][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[1][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[1][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[1][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[2][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[2][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[2][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[2][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[2][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[3][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[3][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[3][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[3][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[3][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[4][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[4][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[4][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[4][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[4][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[5][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[5][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[5][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[5][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[5][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[6][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[6][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[6][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[6][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[6][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[7][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[7][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[7][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[7][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[7][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[8][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[8][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[8][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[8][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[8][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[9][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[9][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[9][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[9][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[9][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[10][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[10][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[10][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[10][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[10][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[11][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[11][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[11][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[11][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[11][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[12][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[12][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[12][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[12][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[12][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[13][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[13][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[13][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[13][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[13][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[14][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[14][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[14][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[14][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 505,
+      "location": "request.body[14][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 637,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 637,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 640,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 640,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 640,
+      "location": "request.body[0][\"args\"][\"courseid\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[0][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[0][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[0][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[0][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[0][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[1][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[1][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[1][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[1][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[1][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[2][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[2][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[2][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[2][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[2][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[3][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[3][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[3][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[3][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[3][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[4][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[4][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[4][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[4][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[4][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[5][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[5][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[5][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[5][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[5][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[6][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[6][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[6][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[6][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[6][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[7][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[7][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[7][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[7][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[7][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[8][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[8][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[8][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[8][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[8][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[9][\"index\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[9][\"methodname\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[9][\"args\"][\"stringid\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[9][\"args\"][\"component\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-001",
+      "request_index": 644,
+      "location": "request.body[9][\"args\"][\"lang\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 39,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 39,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 39,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 107,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 107,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 107,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 180,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 180,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 180,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 252,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 252,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 252,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 317,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 317,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "request_index": 317,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-003",
+      "request_index": 64,
+      "location": "request.body[\"username\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-003",
+      "request_index": 64,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-003",
+      "request_index": 64,
+      "location": "request.body[\"long_token\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-004",
+      "request_index": 25,
+      "location": "request.body[\"type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-004",
+      "request_index": 25,
+      "location": "request.body[\"title\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 70,
+      "location": "request.body[\"email\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 70,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 70,
+      "location": "request.body[\"remember\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"contact_name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"email\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"phone\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"confirm_[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"currency_id\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"id\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"slug\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"label\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"model_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"placement\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"string_answer\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"is_required\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"in_use\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"order\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"company_id\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"default_answer\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][0][\"value\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"id\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"slug\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"label\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"model_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"placement\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"date_answer\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"is_required\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"in_use\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"order\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"company_id\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"default_answer\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"customFields\"][1][\"value\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "request_index": 119,
+      "location": "request.body[\"enable_portal\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 39,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 39,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 39,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 107,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 107,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 107,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 176,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 176,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 176,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 243,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 243,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "request_index": 243,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 39,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 39,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 39,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 107,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 107,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 107,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 175,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 175,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 175,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 245,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 245,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "request_index": 245,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 39,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 39,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 39,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 107,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 107,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 107,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 176,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 176,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 176,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 243,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 243,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "request_index": 243,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 39,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 39,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 39,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 106,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 106,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 106,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 174,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 174,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 174,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 245,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 245,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "request_index": 245,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 39,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 39,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 39,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 105,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 105,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 105,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 175,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 175,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 175,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 243,
+      "location": "request.body[\"jwt\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 243,
+      "location": "request.body[\"application_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "request_index": 243,
+      "location": "request.body[\"url\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 70,
+      "location": "request.body[\"email\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 70,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 70,
+      "location": "request.body[\"remember\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 121,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 121,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 121,
+      "location": "request.body[\"price\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 121,
+      "location": "request.body[\"unit_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "request_index": 121,
+      "location": "request.body[\"tax_per_item\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 70,
+      "location": "request.body[\"email\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 70,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 70,
+      "location": "request.body[\"remember\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 108,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 108,
+      "location": "request.body[\"identifier\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 108,
+      "location": "request.body[\"default_rate\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "request_index": 108,
+      "location": "request.body[\"budget_minutes\"]",
+      "original_type": "int",
+      "emitted_type": "int",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-016",
+      "request_index": 64,
+      "location": "request.body[\"username\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-016",
+      "request_index": 64,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-016",
+      "request_index": 64,
+      "location": "request.body[\"long_token\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-017",
+      "request_index": 65,
+      "location": "request.body[\"username\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-017",
+      "request_index": 65,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-017",
+      "request_index": 65,
+      "location": "request.body[\"long_token\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-018",
+      "request_index": 64,
+      "location": "request.body[\"username\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-018",
+      "request_index": 64,
+      "location": "request.body[\"[REDACTED:5e884898da28]\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-018",
+      "request_index": 64,
+      "location": "request.body[\"long_token\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "request_index": 166,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "request_index": 166,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "request_index": 166,
+      "location": "request.body[\"category_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "request_index": 166,
+      "location": "request.body[\"assigned_to_user_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "request_index": 166,
+      "location": "request.body[\"due_date\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-020",
+      "request_index": 158,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-020",
+      "request_index": 158,
+      "location": "request.body[\"active\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-020",
+      "request_index": 158,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-020",
+      "request_index": 158,
+      "location": "request.body[\"is_freezer\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"active\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"location_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_consume_location_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"shopping_location_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"min_stock_amount\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"treat_opened_as_out_of_stock\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"due_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_best_before_days\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_best_before_days_after_open\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_best_before_days_after_freezing\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_best_before_days_after_thawing\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"product_group_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"qu_id_stock\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"qu_id_purchase\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"qu_id_consume\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"qu_id_price\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"calories\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"quick_consume_amount\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"quick_open_amount\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_stock_label_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"default_purchase_price_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"move_on_open\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"cumulate_min_stock_amount_of_sub_products\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"should_not_be_frozen\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"enable_tare_weight_handling\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"not_check_stock_fulfillment_for_recipes\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"auto_reprint_stock_label\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"disable_open\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"hide_on_stock_overview\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"no_own_stock\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "request_index": 191,
+      "location": "request.body[\"parent_product_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-022",
+      "request_index": 158,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-022",
+      "request_index": 158,
+      "location": "request.body[\"active\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-022",
+      "request_index": 158,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"active\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"period_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"period_days\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"period_config\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"period_interval\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"assignment_type\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"product_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"track_date_only\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"rollover\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"consume_product_on_execution\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"start_date\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 170,
+      "location": "request.body[\"assignment_config\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "request_index": 171,
+      "location": "request.body[\"chore_id\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-024",
+      "request_index": 159,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-024",
+      "request_index": 159,
+      "location": "request.body[\"active\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-024",
+      "request_index": 159,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-024",
+      "request_index": 159,
+      "location": "request.body[\"used_in\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-024",
+      "request_index": 159,
+      "location": "request.body[\"charge_interval_days\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-025",
+      "request_index": 174,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-025",
+      "request_index": 174,
+      "location": "request.body[\"name_plural\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-025",
+      "request_index": 174,
+      "location": "request.body[\"active\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-025",
+      "request_index": 174,
+      "location": "request.body[\"description\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "request_index": 114,
+      "location": "request.body[\"id\"]",
+      "original_type": "int",
+      "emitted_type": "str",
+      "value_preserved": false,
+      "type_preserved": false
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "request_index": 114,
+      "location": "request.body[\"isShownOnReservation\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "request_index": 114,
+      "location": "request.body[\"isAutoAddEnabled\"]",
+      "original_type": "bool",
+      "emitted_type": "bool",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "request_index": 114,
+      "location": "request.body[\"name\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "request_index": 114,
+      "location": "request.body[\"browserTimezone\"]",
+      "original_type": "str",
+      "emitted_type": "str",
+      "value_preserved": true,
+      "type_preserved": true
+    }
+  ],
+  "invalid_jsonpath_syntax": 1,
+  "wrong_jsonpath_selected_values": 3
+}

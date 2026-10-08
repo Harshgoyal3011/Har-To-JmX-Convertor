@@ -1,0 +1,74 @@
+{
+  "id": "api-extra-005",
+  "application": "openFDA",
+  "domain": "Food safety",
+  "workflow": "Search food enforcement and inspect selected recall",
+  "steps": [
+    {
+      "path": "/food/enforcement.json?limit=2",
+      "inputs": {}
+    },
+    {
+      "path": "/food/enforcement.json?search=recall_number:{selected}&limit=1",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "recall_number"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://open.fda.gov/apis/",
+  "started_utc": "2026-10-08T17:10:26.797944+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.fda.gov/food/enforcement.json?limit=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:27.908812+00:00",
+      "status": 200,
+      "response_sha256": "6fe284e9589f8bd09cff8432a030fa7fa87e1da2c497cbde1b3e9150cc055012",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\n  \"meta\": {\n    \"disclaimer\": \"Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalida"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:F-0276-2017&limit=1",
+      "inputs": {},
+      "selection": {
+        "value": "F-0276-2017",
+        "source_step": 0,
+        "source_url": "https://api.fda.gov/food/enforcement.json?limit=2",
+        "source_response_path": [
+          "results",
+          0,
+          "recall_number"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:30.270758+00:00",
+      "status": 200,
+      "response_sha256": "072f733ddb517fce7f7770cc319989c34b0c597767064dbe42e2a81eaeae539a",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\n  \"meta\": {\n    \"disclaimer\": \"Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalida"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.fda.gov/food/enforcement.json?search=recall_number:F-0276-2017&limit=1",
+  "finished_utc": "2026-10-08T17:10:30.742366+00:00",
+  "sha256": "a5a8ec7537617853c6d0e0c66c832ba7417278f0a34602012d06740db1cfde2d",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

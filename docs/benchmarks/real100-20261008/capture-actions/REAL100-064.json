@@ -1,0 +1,93 @@
+{
+  "application": "Chess.com",
+  "domain": "Tournament analysis",
+  "workflow": "Inspect player and select monthly game archive",
+  "steps": [
+    {
+      "path": "/pub/player/hikaru",
+      "inputs": {
+        "player": "hikaru"
+      }
+    },
+    {
+      "path": "/pub/player/hikaru/games/archives"
+    },
+    {
+      "path": "{selected}",
+      "select": {
+        "path": [
+          "archives",
+          0
+        ],
+        "kind": "EXISTING_DATA",
+        "absolute": true
+      }
+    }
+  ],
+  "id": "api-044-chess-com",
+  "permission_url": "https://www.chess.com/news/view/published-data-api",
+  "started_utc": "2026-10-08T17:10:31.728660+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.chess.com/pub/player/hikaru",
+      "inputs": {
+        "player": "hikaru"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:32.857667+00:00",
+      "status": 200,
+      "response_sha256": "8f8c244565091ee27b0a250d2405d9a1ce5e1cb1a26c2806dd51be95a5b2baf0",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"avatar\":\"https://images.chesscomfiles.com/uploads/v1/user/15448422.88c010c1.200x200o.3c5619f5441e.png\",\"player_id\":15448422,\"@id\":\"https://api.chess.com/pub/player/hikaru\",\"url\":\"https://www.chess.c"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.chess.com/pub/player/hikaru/games/archives",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:34.522876+00:00",
+      "status": 200,
+      "response_sha256": "8c69be6c7b313ce8df8cf8185b0310a9c52346701a727563a74befb68c18132b",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"archives\":[\"https://api.chess.com/pub/player/hikaru/games/2014/01\",\"https://api.chess.com/pub/player/hikaru/games/2014/02\",\"https://api.chess.com/pub/player/hikaru/games/2014/03\",\"https://api.chess."
+    },
+    {
+      "index": 2,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.chess.com/pub/player/hikaru/games/2014/01",
+      "inputs": {},
+      "selection": {
+        "value": "https://api.chess.com/pub/player/hikaru/games/2014/01",
+        "source_step": 1,
+        "source_url": "https://api.chess.com/pub/player/hikaru/games/archives",
+        "source_response_path": [
+          "archives",
+          0
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:36.075298+00:00",
+      "status": 200,
+      "response_sha256": "218ac088039680ee7c788c30855e5dccf4df3842787c928b8a8dc22fa661a1bb",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"games\":[{\"url\":\"https://www.chess.com/game/live/692667823\",\"pgn\":\"[Event \\\"Live Chess\\\"]\\n[Site \\\"Chess.com\\\"]\\n[Date \\\"2014.01.06\\\"]\\n[Round \\\"-\\\"]\\n[White \\\"Hikaru\\\"]\\n[Black \\\"Godswill\\\"]\\n[Resul"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.chess.com/pub/player/hikaru/games/2014/01",
+  "finished_utc": "2026-10-08T17:10:36.757455+00:00",
+  "sha256": "3e5bbde84699024c50c292485591a737350e2b786c66fe58124728c88c4514b5",
+  "request_count": 3,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

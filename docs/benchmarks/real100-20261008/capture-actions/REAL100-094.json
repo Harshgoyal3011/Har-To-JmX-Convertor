@@ -1,0 +1,92 @@
+{
+  "id": "api-final-012",
+  "application": "Wikidata",
+  "domain": "Public reference and business research",
+  "workflow": "Read author entity and follow published birthplace relationship",
+  "steps": [
+    {
+      "path": "/wiki/Special:EntityData/Q42.json",
+      "inputs": {
+        "entity": "Q42"
+      }
+    },
+    {
+      "path": "/wiki/Special:EntityData/{selected}.json",
+      "select": {
+        "path": [
+          "entities",
+          "Q42",
+          "claims",
+          "P19",
+          0,
+          "mainsnak",
+          "datavalue",
+          "value",
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://www.wikidata.org/wiki/Wikidata:Data_access",
+  "started_utc": "2026-10-08T17:18:45.658162+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q42.json",
+      "inputs": {
+        "entity": "Q42"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:46.759457+00:00",
+      "status": 200,
+      "response_sha256": "bd89a8cbc1036015ec0fbe182bc7b8385d56433c53ceb425ac6ebe5c66da109a",
+      "response_content_type": "application/json; charset=UTF-8",
+      "response_excerpt": "{\"entities\":{\"Q42\":{\"pageid\":138,\"ns\":0,\"title\":\"Q42\",\"lastrevid\":2554224066,\"modified\":\"2026-10-06T23:51:57Z\",\"type\":\"item\",\"id\":\"Q42\",\"labels\":{\"ar\":{\"language\":\"ar\",\"value\":\"\\u062f\\u0648\\u063a\\u064"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q350.json",
+      "inputs": {},
+      "selection": {
+        "value": "Q350",
+        "source_step": 0,
+        "source_url": "https://www.wikidata.org/wiki/Special:EntityData/Q42.json",
+        "source_response_path": [
+          "entities",
+          "Q42",
+          "claims",
+          "P19",
+          0,
+          "mainsnak",
+          "datavalue",
+          "value",
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "Q350",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:50.125430+00:00",
+      "status": 200,
+      "response_sha256": "64f69fb81601ba820a2a391882b21dabc8181824df9dccf98b8f7179ce6ba910",
+      "response_content_type": "application/json; charset=UTF-8",
+      "response_excerpt": "{\"entities\":{\"Q350\":{\"pageid\":546,\"ns\":0,\"title\":\"Q350\",\"lastrevid\":2529925321,\"modified\":\"2026-08-11T07:20:40Z\",\"type\":\"item\",\"id\":\"Q350\",\"labels\":{\"en\":{\"language\":\"en\",\"value\":\"Cambridge\"},\"fr\":{\"l"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://www.wikidata.org/wiki/Special:EntityData/Q350.json",
+  "finished_utc": "2026-10-08T17:18:51.282795+00:00",
+  "sha256": "7fd2eef5c565872736f557d6213299ec662795e4f4247de482496aacbb824e22",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

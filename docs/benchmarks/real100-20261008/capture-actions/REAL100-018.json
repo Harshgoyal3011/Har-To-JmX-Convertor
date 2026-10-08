@@ -1,0 +1,184 @@
+{
+  "id": "candidate-vikunja-team",
+  "application": "Vikunja",
+  "workflow": "Create project team and inspect saved owner",
+  "permission_url": "https://try.vikunja.io/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://try.vikunja.io/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('LOGIN')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/teams']"
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/teams/new']"
+    },
+    {
+      "op": "fill",
+      "selector": "#teamName",
+      "value": "REAL100 Release Committee"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('ERSTELLEN')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "completion_assertion": "REAL100 Release Committee",
+  "started_utc": "2026-10-08T16:52:21.457064+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:52:21.787445+00:00",
+      "op": "goto",
+      "url": "https://try.vikunja.io/",
+      "url_before": "about:blank",
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T16:52:23.573007+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:52:23.573040+00:00",
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://try.vikunja.io/login",
+      "element_evidence": {
+        "name": "username",
+        "id": "username",
+        "type": "text",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://try.vikunja.io/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T16:52:23.906164+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:52:23.906194+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://try.vikunja.io/login",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://try.vikunja.io/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T16:52:23.938622+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:52:23.938644+00:00",
+      "op": "click",
+      "selector": "button:has-text('LOGIN')",
+      "url_before": "https://try.vikunja.io/login",
+      "url_after": "https://try.vikunja.io/login",
+      "completed_utc": "2026-10-08T16:52:24.134426+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:52:24.134449+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://try.vikunja.io/login",
+      "url_after": "https://try.vikunja.io/",
+      "completed_utc": "2026-10-08T16:52:28.142190+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:52:28.142223+00:00",
+      "op": "click",
+      "selector": "a[href='/teams']",
+      "url_before": "https://try.vikunja.io/",
+      "url_after": "https://try.vikunja.io/",
+      "completed_utc": "2026-10-08T16:52:28.194780+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:52:28.194796+00:00",
+      "op": "click",
+      "selector": "a[href='/teams/new']",
+      "url_before": "https://try.vikunja.io/",
+      "url_after": "https://try.vikunja.io/teams",
+      "completed_utc": "2026-10-08T16:52:28.592229+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:52:28.592266+00:00",
+      "op": "fill",
+      "selector": "#teamName",
+      "value": "REAL100 Release Committee",
+      "url_before": "https://try.vikunja.io/teams",
+      "element_evidence": {
+        "name": "",
+        "id": "teamName",
+        "type": "text",
+        "value": "REAL100 Release Committee",
+        "formAction": null,
+        "formMethod": null,
+        "selectedText": null
+      },
+      "url_after": "https://try.vikunja.io/teams/new",
+      "completed_utc": "2026-10-08T16:52:28.858595+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:52:28.858618+00:00",
+      "op": "click",
+      "selector": "button:has-text('ERSTELLEN')",
+      "url_before": "https://try.vikunja.io/teams/new",
+      "url_after": "https://try.vikunja.io/teams/new",
+      "completed_utc": "2026-10-08T16:52:28.928653+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:52:28.928685+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://try.vikunja.io/teams/new",
+      "url_after": "https://try.vikunja.io/teams/20/edit",
+      "completed_utc": "2026-10-08T16:52:30.940633+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:52:33.450671+00:00",
+  "sha256": "5286c5d89e11cd129276dd98d91881fbda32564ef58d336a31a3699e79eda133",
+  "request_count": 170,
+  "representation_types": [
+    "application/json",
+    "text/plain;charset=UTF-8"
+  ]
+}

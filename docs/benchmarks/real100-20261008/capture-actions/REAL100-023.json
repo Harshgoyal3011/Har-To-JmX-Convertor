@@ -1,0 +1,187 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create chore and inspect saved independent inventory configuration",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/chores"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Warehouse Safety Review"
+    },
+    {
+      "op": "select",
+      "selector": "#period_type",
+      "value": "daily"
+    },
+    {
+      "op": "select",
+      "selector": "#assignment_type",
+      "value": "no-assignment"
+    },
+    {
+      "op": "click",
+      "selector": "#save-chore-button"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "id": "candidate-grocy-chore",
+  "completion_assertion": "REAL100 Warehouse Safety Review",
+  "started_utc": "2026-10-08T16:54:46.470111+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:54:46.846600+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:54:49.253481+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:54:49.253505+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/chores",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/chores",
+      "completed_utc": "2026-10-08T16:54:49.777673+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:54:49.777693+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/chores",
+      "url_after": "https://demo.grocy.info/chores",
+      "completed_utc": "2026-10-08T16:54:51.784439+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:54:51.784469+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/chores",
+      "url_after": "https://demo.grocy.info/chore/new",
+      "completed_utc": "2026-10-08T16:54:52.225089+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:54:52.225111+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/chore/new",
+      "url_after": "https://demo.grocy.info/chore/new",
+      "completed_utc": "2026-10-08T16:54:54.233029+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:54:54.233068+00:00",
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Warehouse Safety Review",
+      "url_before": "https://demo.grocy.info/chore/new",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Warehouse Safety Review",
+        "formAction": "https://demo.grocy.info/chore/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/chore/new",
+      "completed_utc": "2026-10-08T16:54:54.352604+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:54:54.352627+00:00",
+      "op": "select",
+      "selector": "#period_type",
+      "value": "daily",
+      "url_before": "https://demo.grocy.info/chore/new",
+      "element_evidence": {
+        "name": "period_type",
+        "id": "period_type",
+        "type": "select-one",
+        "value": "daily",
+        "formAction": "https://demo.grocy.info/chore/new",
+        "formMethod": "get",
+        "selectedText": [
+          "Daily"
+        ]
+      },
+      "url_after": "https://demo.grocy.info/chore/new",
+      "completed_utc": "2026-10-08T16:54:54.380284+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:54:54.380311+00:00",
+      "op": "select",
+      "selector": "#assignment_type",
+      "value": "no-assignment",
+      "url_before": "https://demo.grocy.info/chore/new",
+      "element_evidence": {
+        "name": "assignment_type",
+        "id": "assignment_type",
+        "type": "select-one",
+        "value": "no-assignment",
+        "formAction": "https://demo.grocy.info/chore/new",
+        "formMethod": "get",
+        "selectedText": [
+          "No assignment"
+        ]
+      },
+      "url_after": "https://demo.grocy.info/chore/new",
+      "completed_utc": "2026-10-08T16:54:54.400347+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:54:54.400361+00:00",
+      "op": "click",
+      "selector": "#save-chore-button",
+      "url_before": "https://demo.grocy.info/chore/new",
+      "url_after": "https://demo.grocy.info/chore/new",
+      "completed_utc": "2026-10-08T16:54:54.462672+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:54:54.462696+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.grocy.info/chore/new",
+      "url_after": "https://demo.grocy.info/chores",
+      "completed_utc": "2026-10-08T16:54:57.468458+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:54:59.905091+00:00",
+  "sha256": "fccd35208fb06c4c3a0a41dc9e6e6b107e21c51d8679ed092eefe1f8881c520a",
+  "request_count": 226,
+  "representation_types": [
+    "application/json"
+  ]
+}

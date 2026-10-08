@@ -1,0 +1,158 @@
+{
+  "one_vu": true,
+  "iterations": 2,
+  "workflows": 20,
+  "destination": "Deterministic loopback receiver serving original captured responses; no external business replay",
+  "results": [
+    {
+      "benchmark_id": "REAL100-001",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 188,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 116,
+      "failed_samples": 6
+    },
+    {
+      "benchmark_id": "REAL100-003",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 32,
+      "failed_samples": 4
+    },
+    {
+      "benchmark_id": "REAL100-004",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 40,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-005",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 54,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-006",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 18,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 42,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-008",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 38,
+      "failed_samples": 4
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 52,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 34,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-026",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 28,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 28,
+      "failed_samples": 4
+    },
+    {
+      "benchmark_id": "REAL100-032",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-034",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-036",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-043",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-047",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-058",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-064",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 12,
+      "failed_samples": 0
+    },
+    {
+      "benchmark_id": "REAL100-085",
+      "exit_code": 0,
+      "completed": true,
+      "samples": 8,
+      "failed_samples": 0
+    }
+  ],
+  "limits": "Transport and captured-response smoke only. Destination and Set-Cookie scope rewritten for loopback; no fresh business-state issuance, live auth success, or load claim. Runtime failures remain evidence, not repaired.",
+  "received_requests": 620,
+  "sample_count": 738,
+  "failed_samples_including_transaction_parents": 18,
+  "failure_interpretation": {
+    "Nautobot": "Captured third-party automatic redirect chain cannot be faithfully identified by the loopback mapping; not proof of new converter auth/redirect failure.",
+    "Vikunja": "Captured WebSocket upgrade is not supported by the deterministic HTTP receiver; local timeout is not a converter correlation defect.",
+    "Sylius": "Captured intermediate component request already returned HTTP 422; final customer save succeeded. Status assertion on intermediate capture is not business replay proof.",
+    "Booked group": "Local response/parser IllegalArgumentException needs inspection; not assigned to converter without isolation."
+  }
+}

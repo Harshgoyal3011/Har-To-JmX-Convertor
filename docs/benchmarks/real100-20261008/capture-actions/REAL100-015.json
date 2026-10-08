@@ -1,0 +1,268 @@
+{
+  "id": "candidate-invoiceshelf-project",
+  "application": "InvoiceShelf",
+  "workflow": "Create billing project with budget and verify saved project",
+  "permission_url": "https://demo.invoiceshelf.com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.invoiceshelf.com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[type=email]",
+      "value": "demo@invoiceshelf.com"
+    },
+    {
+      "op": "fill",
+      "selector": "input[type=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Login')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/admin/modules/tasks-projects/projects']"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "text=New Project >> nth=0"
+    },
+    {
+      "op": "fill",
+      "selector": "input[id$='4-0-0-control']",
+      "value": "REAL100 Billable Rollout"
+    },
+    {
+      "op": "fill",
+      "selector": "input[id$='4-1-0-control']",
+      "value": "R100BILL"
+    },
+    {
+      "op": "fill",
+      "selector": "input[id$='4-4-0-control']",
+      "value": "150"
+    },
+    {
+      "op": "fill",
+      "selector": "input[id$='4-5-0-control']",
+      "value": "20"
+    },
+    {
+      "op": "click",
+      "selector": "button:text-is('Save')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Billable Rollout",
+  "started_utc": "2026-10-08T16:34:06.964081+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:34:07.189290+00:00",
+      "op": "goto",
+      "url": "https://demo.invoiceshelf.com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:34:08.999182+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:34:08.999234+00:00",
+      "op": "fill",
+      "selector": "input[type=email]",
+      "value": "demo@invoiceshelf.com",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "element_evidence": {
+        "name": "email",
+        "id": "field-v-0-0-control",
+        "type": "email",
+        "value": "demo@invoiceshelf.com",
+        "formAction": "https://demo.invoiceshelf.com/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:34:09.239595+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:34:09.239619+00:00",
+      "op": "fill",
+      "selector": "input[type=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "field-v-1-0-control",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://demo.invoiceshelf.com/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:34:09.261995+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:34:09.262027+00:00",
+      "op": "click",
+      "selector": "button:has-text('Login')",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:34:09.331811+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:34:09.331842+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "url_after": "https://demo.invoiceshelf.com/admin/dashboard",
+      "completed_utc": "2026-10-08T16:34:13.346487+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:34:13.346529+00:00",
+      "op": "click",
+      "selector": "a[href='/admin/modules/tasks-projects/projects']",
+      "url_before": "https://demo.invoiceshelf.com/admin/dashboard",
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:13.428385+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:34:13.428416+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.430062+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:34:15.430087+00:00",
+      "op": "click",
+      "selector": "text=New Project >> nth=0",
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.493888+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:34:15.493903+00:00",
+      "op": "fill",
+      "selector": "input[id$='4-0-0-control']",
+      "value": "REAL100 Billable Rollout",
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "element_evidence": {
+        "name": "",
+        "id": "field-v-3-4-0-0-control",
+        "type": "text",
+        "value": "REAL100 Billable Rollout",
+        "formAction": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.585297+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:34:15.585317+00:00",
+      "op": "fill",
+      "selector": "input[id$='4-1-0-control']",
+      "value": "R100BILL",
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "element_evidence": {
+        "name": "",
+        "id": "field-v-3-4-1-0-control",
+        "type": "text",
+        "value": "R100BILL",
+        "formAction": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.642925+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T16:34:15.642941+00:00",
+      "op": "fill",
+      "selector": "input[id$='4-4-0-control']",
+      "value": "150",
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "element_evidence": {
+        "name": "",
+        "id": "field-v-3-4-4-0-control",
+        "type": "number",
+        "value": "150",
+        "formAction": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.677986+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T16:34:15.678001+00:00",
+      "op": "fill",
+      "selector": "input[id$='4-5-0-control']",
+      "value": "20",
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "element_evidence": {
+        "name": "",
+        "id": "field-v-3-4-5-0-control",
+        "type": "number",
+        "value": "20",
+        "formAction": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.718211+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T16:34:15.718308+00:00",
+      "op": "click",
+      "selector": "button:text-is('Save')",
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:15.788277+00:00"
+    },
+    {
+      "index": 13,
+      "started_utc": "2026-10-08T16:34:15.788307+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "url_after": "https://demo.invoiceshelf.com/admin/modules/tasks-projects/projects",
+      "completed_utc": "2026-10-08T16:34:18.789037+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:34:21.173431+00:00",
+  "sha256": "5c419ef59f12f484a22d7d86a657d68802e667c3485ef9258083241195c2cc5c",
+  "request_count": 110,
+  "representation_types": [
+    "application/json"
+  ]
+}

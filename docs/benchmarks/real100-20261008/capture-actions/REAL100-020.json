@@ -1,0 +1,165 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create stock storage location and verify saved owner",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/locations"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "frame": "/location/new",
+      "selector": "#name",
+      "value": "REAL100 Overflow Warehouse"
+    },
+    {
+      "op": "fill",
+      "frame": "/location/new",
+      "selector": "#description",
+      "value": "Fictional inventory storage location"
+    },
+    {
+      "op": "click",
+      "frame": "/location/new",
+      "selector": "#save-location-button"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "id": "candidate-grocy-location",
+  "completion_assertion": "REAL100 Overflow Warehouse",
+  "started_utc": "2026-10-08T16:52:47.384456+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:52:47.665967+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:52:52.343051+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:52:52.343085+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/locations",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:52.849887+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:52:52.849918+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/locations",
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:54.852608+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:52:54.852625+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/locations",
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:54.935761+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:52:54.935778+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/locations",
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:56.951112+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:52:56.951142+00:00",
+      "op": "fill",
+      "frame": "/location/new",
+      "selector": "#name",
+      "value": "REAL100 Overflow Warehouse",
+      "url_before": "https://demo.grocy.info/locations",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Overflow Warehouse",
+        "formAction": "https://demo.grocy.info/location/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:57.037804+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:52:57.037841+00:00",
+      "op": "fill",
+      "frame": "/location/new",
+      "selector": "#description",
+      "value": "Fictional inventory storage location",
+      "url_before": "https://demo.grocy.info/locations",
+      "element_evidence": {
+        "name": "description",
+        "id": "description",
+        "type": "textarea",
+        "value": "Fictional inventory storage location",
+        "formAction": "https://demo.grocy.info/location/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:57.064872+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:52:57.064885+00:00",
+      "op": "click",
+      "frame": "/location/new",
+      "selector": "#save-location-button",
+      "url_before": "https://demo.grocy.info/locations",
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:57.201418+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:52:57.201457+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/locations",
+      "url_after": "https://demo.grocy.info/locations",
+      "completed_utc": "2026-10-08T16:52:59.219794+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:53:01.697424+00:00",
+  "sha256": "835a276bf1581ade5e95695a8fa4cb3f3a717b33668450fef7e8ce03fba85323",
+  "request_count": 213,
+  "representation_types": [
+    "application/json"
+  ]
+}

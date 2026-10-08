@@ -1,0 +1,72 @@
+{
+  "id": "api-extra-008",
+  "application": "Coinbase Exchange",
+  "domain": "Currency registry",
+  "workflow": "Inspect supported currencies and selected currency details",
+  "steps": [
+    {
+      "path": "/currencies",
+      "inputs": {}
+    },
+    {
+      "path": "/currencies/{selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://docs.cdp.coinbase.com/exchange/reference/exchangerestapi_getproducts",
+  "started_utc": "2026-10-08T17:10:36.523997+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.exchange.coinbase.com/currencies",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:37.635829+00:00",
+      "status": 200,
+      "response_sha256": "d41a2005fa6d9a4aebc1e2c4a703069dbc4011d1741a812e642b5a3e35e85556",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "[{\"id\":\"00\",\"name\":\"00 Token\",\"min_size\":\"0.00000001\",\"status\":\"online\",\"message\":\"\",\"max_precision\":\"0.00000001\",\"convertible_to\":[],\"details\":{\"type\":\"crypto\",\"symbol\":null,\"network_confirmations\":1"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.exchange.coinbase.com/currencies/00",
+      "inputs": {},
+      "selection": {
+        "value": "00",
+        "source_step": 0,
+        "source_url": "https://api.exchange.coinbase.com/currencies",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:39.084899+00:00",
+      "status": 200,
+      "response_sha256": "ed6e59e838b22ab3d35728aec3d34aeb8f012770ba100e4805e752e76e3a5592",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"id\":\"00\",\"name\":\"00 Token\",\"min_size\":\"0.00000001\",\"status\":\"online\",\"message\":\"\",\"max_precision\":\"0.00000001\",\"convertible_to\":[],\"details\":{\"type\":\"crypto\",\"symbol\":null,\"network_confirmations\":14"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.exchange.coinbase.com/currencies/00",
+  "finished_utc": "2026-10-08T17:10:40.083018+00:00",
+  "sha256": "77e641463d9b2dfcca31b4384f7d3d6e183bc659453c2ab75029ecff761feadf",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

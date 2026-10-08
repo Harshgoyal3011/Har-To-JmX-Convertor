@@ -1,0 +1,136 @@
+{
+  "id": "candidate-elab-experiment-v6",
+  "application": "eLabFTW",
+  "workflow": "Create laboratory experiment and inspect issued notebook ID",
+  "permission_url": "https://demo.elabftw.net/login.php",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.elabftw.net/"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Login as Admin') >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    },
+    {
+      "op": "click",
+      "selector": "#createNewDropdown"
+    },
+    {
+      "op": "click",
+      "selector": "#navbar-create-dropdown [data-type=experiments]"
+    },
+    {
+      "op": "fill",
+      "selector": "#createNewFormTitle",
+      "value": "REAL100 plasmid engineering protocol"
+    },
+    {
+      "op": "click",
+      "selector": "#createNoTplBtn"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 plasmid engineering protocol",
+  "started_utc": "2026-10-08T12:04:43.884902+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T12:04:44.301343+00:00",
+      "op": "goto",
+      "url": "https://demo.elabftw.net/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.elabftw.net/login.php",
+      "completed_utc": "2026-10-08T12:04:47.508262+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T12:04:47.508281+00:00",
+      "op": "click",
+      "selector": "button:has-text('Login as Admin') >> nth=0",
+      "url_before": "https://demo.elabftw.net/login.php",
+      "url_after": "https://demo.elabftw.net/dashboard.php",
+      "completed_utc": "2026-10-08T12:04:48.541610+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T12:04:48.541632+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.elabftw.net/dashboard.php",
+      "url_after": "https://demo.elabftw.net/dashboard.php",
+      "completed_utc": "2026-10-08T12:04:51.548188+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T12:04:51.548212+00:00",
+      "op": "click",
+      "selector": "#createNewDropdown",
+      "url_before": "https://demo.elabftw.net/dashboard.php",
+      "url_after": "https://demo.elabftw.net/dashboard.php",
+      "completed_utc": "2026-10-08T12:04:51.622988+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T12:04:51.623022+00:00",
+      "op": "click",
+      "selector": "#navbar-create-dropdown [data-type=experiments]",
+      "url_before": "https://demo.elabftw.net/dashboard.php",
+      "url_after": "https://demo.elabftw.net/dashboard.php",
+      "completed_utc": "2026-10-08T12:04:51.725547+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T12:04:51.725582+00:00",
+      "op": "fill",
+      "selector": "#createNewFormTitle",
+      "value": "REAL100 plasmid engineering protocol",
+      "url_before": "https://demo.elabftw.net/dashboard.php",
+      "element_evidence": {
+        "name": "title",
+        "id": "createNewFormTitle",
+        "type": "text",
+        "value": "REAL100 plasmid engineering protocol",
+        "formAction": "https://demo.elabftw.net/dashboard.php",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.elabftw.net/dashboard.php",
+      "completed_utc": "2026-10-08T12:04:51.932490+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T12:04:51.932511+00:00",
+      "op": "click",
+      "selector": "#createNoTplBtn",
+      "url_before": "https://demo.elabftw.net/dashboard.php",
+      "url_after": "https://demo.elabftw.net/dashboard.php",
+      "completed_utc": "2026-10-08T12:04:52.351713+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T12:04:52.351732+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.elabftw.net/dashboard.php",
+      "url_after": "https://demo.elabftw.net/experiments.php?mode=edit&id=28",
+      "completed_utc": "2026-10-08T12:04:55.357125+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T12:04:58.299078+00:00",
+  "sha256": "22edd38c2d7ff240e4ae069d51464e98a851127a3eafe4888d992ecd7aa155da",
+  "request_count": 56,
+  "representation_types": [
+    "application/json",
+    "application/x-www-form-urlencoded"
+  ]
+}

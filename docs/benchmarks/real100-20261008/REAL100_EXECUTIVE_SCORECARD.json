@@ -1,0 +1,58 @@
+{
+  "convert_success": 100,
+  "meaningful_inputs_confirmed": 241,
+  "parameter_recall_confirmed": 0.7302904564315352,
+  "parameter_precision": null,
+  "parameter_precision_lower_bound": 0.6178571428571429,
+  "unnecessary_csv_columns": null,
+  "confirmed_retained_runtime_dependencies": 618,
+  "correlation_recall_confirmed": 0.44983818770226536,
+  "correlation_precision_assessed_only": 0.9615384615384616,
+  "materialization_capture_resolution": 0.7068273092369478,
+  "false_correlations_confirmed": 4,
+  "dead_extractors": 6,
+  "undefined_variables": 0,
+  "query_body_crossings": 0,
+  "lost_queries": 0,
+  "json_type_failures": 8,
+  "invalid_jsonpath_syntax": 1,
+  "wrong_jsonpath_selected_values": 3,
+  "replay_ready_proven": 0,
+  "manual_repair_workflows": 56,
+  "ready_with_review": 40,
+  "capture_limited": 4,
+  "top_five_root_causes": [
+    {
+      "cause": "parameter discovery",
+      "workflows": 43
+    },
+    {
+      "cause": "extractor generation",
+      "workflows": 17
+    },
+    {
+      "cause": "materialization",
+      "workflows": 12
+    },
+    {
+      "cause": "JSON/type serialization",
+      "workflows": 4
+    },
+    {
+      "cause": "lifecycle classification",
+      "workflows": 1
+    }
+  ],
+  "new_defects": "No independently isolated new source root cause proven; manifestations of known defects observed.",
+  "next_fix_recommendation": "Occurrence-scoped semantic ownership and approved exact producer/consumer binding, while keeping discovery/lifecycle policy thresholds frozen. Complete P2-4B evidence scope, then isolate downstream binding; do not repair by increasing correlations.",
+  "benchmark_completion": "100-capture execution complete; exhaustive ground truth, full parameter precision, fresh runtime materialization and live replay readiness remain unassessed. Do not call the entire requested benchmark fully validated.",
+  "supplemental_created_runtime_csv_ownership_failures": 5,
+  "source_based_csv_protocol_leakage_examples": [
+    "Moodle JSON-RPC methodname selectors",
+    "Moodle translation stringid selectors",
+    "Ensembl content-type query negotiation",
+    "Booked login submit marker",
+    "Nautobot embedded third-party portalId and session-rejection diagnostic fields"
+  ],
+  "input_collapse_proven_examples": "Moodle newsitems owner takes created course ID=5; separate zero/one-valued slots show shared column ownership and require scoped review."
+}

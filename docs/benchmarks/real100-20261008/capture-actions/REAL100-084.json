@@ -1,0 +1,80 @@
+{
+  "id": "api-final-002",
+  "application": "Nobel Prize",
+  "domain": "Public reference and business research",
+  "workflow": "Search laureate catalog and inspect selected award history",
+  "steps": [
+    {
+      "path": "/2.1/laureates?limit=2&name=Marie",
+      "inputs": {
+        "name": "Marie"
+      }
+    },
+    {
+      "path": "/2.1/laureate/{selected}",
+      "select": {
+        "path": [
+          "laureates",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://www.nobelprize.org/about/developer-zone-2/",
+  "started_utc": "2026-10-08T17:18:06.525628+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.nobelprize.org/2.1/laureates?limit=2&name=Marie",
+      "inputs": {
+        "name": "Marie"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:07.635439+00:00",
+      "status": 200,
+      "response_sha256": "862afeffb8820d1225618329874fb0eb8beaf590d1159b4abf244acda424320b",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"laureates\":[{\"id\":\"475\",\"knownName\":{\"en\":\"Auguste Beernaert\",\"se\":\"Auguste Beernaert\"},\"givenName\":{\"en\":\"Auguste\",\"se\":\"Auguste\"},\"familyName\":{\"en\":\"Beernaert\",\"se\":\"Beernaert\"},\"fullName\":{\"en\":"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.nobelprize.org/2.1/laureate/475",
+      "inputs": {},
+      "selection": {
+        "value": "475",
+        "source_step": 0,
+        "source_url": "https://api.nobelprize.org/2.1/laureates?limit=2&name=Marie",
+        "source_response_path": [
+          "laureates",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "475",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:09.080289+00:00",
+      "status": 200,
+      "response_sha256": "16aba00ebbc1f1eea16224ec917d44d42020abc93d8341170560dfcc6388cb50",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\":\"475\",\"knownName\":{\"en\":\"Auguste Beernaert\",\"se\":\"Auguste Beernaert\"},\"givenName\":{\"en\":\"Auguste\",\"se\":\"Auguste\"},\"familyName\":{\"en\":\"Beernaert\",\"se\":\"Beernaert\"},\"fullName\":{\"en\":\"Auguste Mari"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.nobelprize.org/2.1/laureate/475",
+  "finished_utc": "2026-10-08T17:18:09.763918+00:00",
+  "sha256": "771225918c510fc34f22ddeda59523864dff50d420260712e0f6b218b4c744d5",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

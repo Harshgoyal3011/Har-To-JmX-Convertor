@@ -1,0 +1,3908 @@
+{
+  "status": "FROZEN_100_ADMISSION_AUDIT",
+  "protected_inputs": 202,
+  "admitted": 100,
+  "audits": [
+    {
+      "benchmark_id": "REAL100-001",
+      "capture": "candidate-moodle-course",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Course creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-002",
+      "capture": "candidate-[REDACTED:6f0309fea1db]-tenant",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Business tenant creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-003",
+      "capture": "candidate-vikunja-project",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Project creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-004",
+      "capture": "candidate-elab-experiment-v6",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Experiment creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-005",
+      "capture": "candidate-openemr-patient-v3",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Patient registration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-006",
+      "capture": "candidate-frontaccounting-customer",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Financial customer creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "capture": "candidate-invoiceshelf-customer-v2",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Billing customer creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-008",
+      "capture": "candidate-sylius-customer",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Commerce customer creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-009",
+      "capture": "candidate-[REDACTED:6f0309fea1db]-tenantgroup",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Tenant group creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-010",
+      "capture": "candidate-[REDACTED:6f0309fea1db]-manufacturer",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Hardware manufacturer creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-011",
+      "capture": "candidate-[REDACTED:6f0309fea1db]-devicerole",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Device-role configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-012",
+      "capture": "candidate-[REDACTED:6f0309fea1db]-namespace",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "IP address namespace creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-013",
+      "capture": "candidate-[REDACTED:6f0309fea1db]-platform",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Network operating-platform configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-014",
+      "capture": "candidate-invoiceshelf-item",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Priced service catalog item creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-015",
+      "capture": "candidate-invoiceshelf-project",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Billable project budget creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-016",
+      "capture": "candidate-vikunja-task",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Task creation in selected project",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-017",
+      "capture": "candidate-vikunja-label",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Task label creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-018",
+      "capture": "candidate-vikunja-team",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Team ownership creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-019",
+      "capture": "candidate-grocy-task",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Assigned inventory task creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-020",
+      "capture": "candidate-grocy-location",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Storage location creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-021",
+      "capture": "candidate-grocy-product",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Stock product configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-022",
+      "capture": "candidate-grocy-shop",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Purchasing supplier configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "capture": "candidate-grocy-chore",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Recurring warehouse chore configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-024",
+      "capture": "candidate-grocy-battery",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Equipment battery configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-025",
+      "capture": "candidate-grocy-quantityunit",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Stock receipt unit configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-026",
+      "capture": "candidate-easyappointments-service",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Appointment service pricing configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-027",
+      "capture": "candidate-easyappointments-category",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Appointment service category creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-028",
+      "capture": "candidate-booked-group",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Reservation ownership group creation",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-029",
+      "capture": "candidate-booked-announcement",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Reservation dashboard notice configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-030",
+      "capture": "candidate-booked-schedule",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Resource reservation schedule configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "benchmark_id": "REAL100-031",
+      "capture": "candidate-booked-accessory-v2",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Reservable presentation accessory stock configuration",
+      "within_application_sequence_policy": "Exclude static assets, then review operation/object paths and business objective; shared authentication prefix is not a distinct journey."
+    },
+    {
+      "capture": "api-002-open-library",
+      "admitted": false,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": false,
+        "business_domain_new": false,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      }
+    },
+    {
+      "benchmark_id": "REAL100-032",
+      "capture": "api-003-datacite",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search DOI research records and inspect selected publication"
+    },
+    {
+      "benchmark_id": "REAL100-033",
+      "capture": "api-004-datacite",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "List repositories and inspect selected repository record"
+    },
+    {
+      "benchmark_id": "REAL100-034",
+      "capture": "api-006-uniprot",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search BRCA1 proteins and inspect selected accession"
+    },
+    {
+      "benchmark_id": "REAL100-035",
+      "capture": "api-007-uniprot",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search organism taxonomy and inspect selected taxon"
+    },
+    {
+      "benchmark_id": "REAL100-036",
+      "capture": "api-008-ensembl",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Resolve BRCA1 symbol and inspect selected gene sequence"
+    },
+    {
+      "benchmark_id": "REAL100-037",
+      "capture": "api-009-ensembl",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Find genetic variant and inspect selected variant phenotype"
+    },
+    {
+      "benchmark_id": "REAL100-038",
+      "capture": "api-010-rcsb-pdb",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect hemoglobin structure and select polymer entity"
+    },
+    {
+      "benchmark_id": "REAL100-039",
+      "capture": "api-011-rcsb-pdb",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect ligand structure and select nonpolymer entity"
+    },
+    {
+      "capture": "api-012-ncbi-eutils",
+      "admitted": false,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": false,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      }
+    },
+    {
+      "capture": "api-013-ncbi-eutils",
+      "admitted": false,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": false,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      }
+    },
+    {
+      "benchmark_id": "REAL100-040",
+      "capture": "api-014-openfda",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search drug label and retrieve selected label record"
+    },
+    {
+      "benchmark_id": "REAL100-041",
+      "capture": "api-015-openfda",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search recall enforcement and inspect selected recall"
+    },
+    {
+      "benchmark_id": "REAL100-042",
+      "capture": "api-016-inaturalist",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search oak taxonomy and inspect selected species"
+    },
+    {
+      "benchmark_id": "REAL100-043",
+      "capture": "api-017-inaturalist",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search observations and inspect selected public sighting"
+    },
+    {
+      "benchmark_id": "REAL100-044",
+      "capture": "api-018-idigbio",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search biological specimens and inspect selected museum record"
+    },
+    {
+      "benchmark_id": "REAL100-045",
+      "capture": "api-019-itis",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Find scientific species and inspect selected taxonomic record"
+    },
+    {
+      "benchmark_id": "REAL100-046",
+      "capture": "api-020-worms",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Find marine species and inspect accepted taxonomy record"
+    },
+    {
+      "benchmark_id": "REAL100-047",
+      "capture": "api-021-noaa-weather",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Resolve work-site forecast grid and retrieve forecast"
+    },
+    {
+      "benchmark_id": "REAL100-048",
+      "capture": "api-022-noaa-weather",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select weather observation station and retrieve latest observation"
+    },
+    {
+      "benchmark_id": "REAL100-049",
+      "capture": "api-023-aviation-weather",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Retrieve airport weather and cross-check selected airport TAF"
+    },
+    {
+      "benchmark_id": "REAL100-050",
+      "capture": "api-025-coingecko",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "List asset catalog and inspect selected asset"
+    },
+    {
+      "benchmark_id": "REAL100-051",
+      "capture": "api-026-coingecko",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "List market exchanges and inspect selected exchange"
+    },
+    {
+      "benchmark_id": "REAL100-052",
+      "capture": "api-027-coinpaprika",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect Bitcoin asset and retrieve selected ticker"
+    },
+    {
+      "benchmark_id": "REAL100-053",
+      "capture": "api-028-coinpaprika",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "List exchanges and inspect selected marketplace"
+    },
+    {
+      "benchmark_id": "REAL100-054",
+      "capture": "api-029-coinbase-exchange",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect trading product and retrieve ticker and order book"
+    },
+    {
+      "benchmark_id": "REAL100-055",
+      "capture": "api-030-kraken",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select tradable asset and inspect its exchange pair catalog"
+    },
+    {
+      "benchmark_id": "REAL100-056",
+      "capture": "api-031-binance",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect trading symbol and retrieve book ticker"
+    },
+    {
+      "capture": "api-032-nasa-jpl-ssd",
+      "admitted": false,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": false,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      }
+    },
+    {
+      "benchmark_id": "REAL100-057",
+      "capture": "api-036-postcodes-io",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Resolve postcode and inspect selected postcode district"
+    },
+    {
+      "benchmark_id": "REAL100-058",
+      "capture": "api-037-zippopotam-us",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Resolve postal code and cross-check selected locality"
+    },
+    {
+      "benchmark_id": "REAL100-059",
+      "capture": "api-038-mbta",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select transit route and retrieve its stops"
+    },
+    {
+      "benchmark_id": "REAL100-060",
+      "capture": "api-039-mbta",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search transit alerts and inspect selected disruption"
+    },
+    {
+      "benchmark_id": "REAL100-061",
+      "capture": "api-040-transport-opendata-ch",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Find station and retrieve selected station board"
+    },
+    {
+      "benchmark_id": "REAL100-062",
+      "capture": "api-041-digitraffic-finland",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select rail station and retrieve live train arrivals"
+    },
+    {
+      "benchmark_id": "REAL100-063",
+      "capture": "api-043-open-nutrition-usda",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search food catalog and inspect selected nutrition record"
+    },
+    {
+      "benchmark_id": "REAL100-064",
+      "capture": "api-044-chess-com",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect player and select monthly game archive"
+    },
+    {
+      "benchmark_id": "REAL100-065",
+      "capture": "api-045-lichess",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect player and retrieve current public performance summary"
+    },
+    {
+      "benchmark_id": "REAL100-066",
+      "capture": "api-046-ergast-jolpica",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select season driver and inspect race result history"
+    },
+    {
+      "benchmark_id": "REAL100-067",
+      "capture": "api-047-ergast-jolpica",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select championship circuit and inspect selected venue"
+    },
+    {
+      "benchmark_id": "REAL100-068",
+      "capture": "api-048-openf1",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select race session and retrieve participating drivers"
+    },
+    {
+      "benchmark_id": "REAL100-069",
+      "capture": "api-050-ckan-data-gov-uk",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search health dataset and inspect selected metadata"
+    },
+    {
+      "benchmark_id": "REAL100-070",
+      "capture": "api-051-ckan-data-gov-uk",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "List publishers and inspect selected publisher dataset inventory"
+    },
+    {
+      "benchmark_id": "REAL100-071",
+      "capture": "api-052-wikimedia",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search subject and inspect selected article with revisions"
+    },
+    {
+      "benchmark_id": "REAL100-072",
+      "capture": "api-054-socrata-chicago",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Filter public incident records and inspect selected incident"
+    },
+    {
+      "benchmark_id": "REAL100-073",
+      "capture": "api-056-datamuse",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Find engineering terms and inspect selected word associations"
+    },
+    {
+      "benchmark_id": "REAL100-074",
+      "capture": "api-057-open-trivia-database",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select question category and retrieve assessment questions"
+    },
+    {
+      "capture": "api-extra-003",
+      "admitted": false,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": false,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      }
+    },
+    {
+      "benchmark_id": "REAL100-075",
+      "capture": "api-extra-004",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search medical device recalls and inspect selected recall"
+    },
+    {
+      "benchmark_id": "REAL100-076",
+      "capture": "api-extra-005",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search food enforcement and inspect selected recall"
+    },
+    {
+      "benchmark_id": "REAL100-077",
+      "capture": "api-extra-006",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Select route stop and inspect scheduled arrivals"
+    },
+    {
+      "benchmark_id": "REAL100-078",
+      "capture": "api-extra-008",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect supported currencies and selected currency details"
+    },
+    {
+      "capture": "api-extra-009",
+      "admitted": false,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": false,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      }
+    },
+    {
+      "benchmark_id": "REAL100-079",
+      "capture": "api-extra-010",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search genus and inspect selected taxon children"
+    },
+    {
+      "benchmark_id": "REAL100-080",
+      "capture": "api-extra-011",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search common name and inspect selected taxonomic hierarchy"
+    },
+    {
+      "benchmark_id": "REAL100-081",
+      "capture": "api-extra-012",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search public projects and inspect selected conservation project"
+    },
+    {
+      "benchmark_id": "REAL100-082",
+      "capture": "api-extra-013",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Autocomplete postcode and inspect selected postcode"
+    },
+    {
+      "benchmark_id": "REAL100-083",
+      "capture": "api-final-001",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search composer and inspect selected artist recordings"
+    },
+    {
+      "benchmark_id": "REAL100-084",
+      "capture": "api-final-002",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search laureate catalog and inspect selected award history"
+    },
+    {
+      "benchmark_id": "REAL100-085",
+      "capture": "api-final-003",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search performance question and inspect selected answers"
+    },
+    {
+      "benchmark_id": "REAL100-086",
+      "capture": "api-final-004",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search public CI projects and inspect selected project"
+    },
+    {
+      "benchmark_id": "REAL100-087",
+      "capture": "api-final-005",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search astronomy texts and inspect selected archival metadata"
+    },
+    {
+      "benchmark_id": "REAL100-088",
+      "capture": "api-final-006",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search climate datasets and inspect selected research deposition"
+    },
+    {
+      "benchmark_id": "REAL100-089",
+      "capture": "api-final-007",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Browse research contributions and inspect selected article"
+    },
+    {
+      "benchmark_id": "REAL100-090",
+      "capture": "api-final-008",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search institution and inspect selected organization record"
+    },
+    {
+      "benchmark_id": "REAL100-091",
+      "capture": "api-final-009",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search population datasets and inspect selected data package"
+    },
+    {
+      "benchmark_id": "REAL100-092",
+      "capture": "api-final-010",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search paintings and inspect selected cultural collection record"
+    },
+    {
+      "benchmark_id": "REAL100-093",
+      "capture": "api-final-011",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search trading-card catalog and inspect selected card"
+    },
+    {
+      "benchmark_id": "REAL100-094",
+      "capture": "api-final-012",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Read author entity and follow published birthplace relationship"
+    },
+    {
+      "benchmark_id": "REAL100-095",
+      "capture": "api-final-013",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect published vulnerability and follow official alias"
+    },
+    {
+      "benchmark_id": "REAL100-096",
+      "capture": "api-reserve-001",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search music release and inspect selected track listing"
+    },
+    {
+      "benchmark_id": "REAL100-097",
+      "capture": "api-reserve-003",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Search public CI project and inspect repository branch catalog"
+    },
+    {
+      "benchmark_id": "REAL100-098",
+      "capture": "api-reserve-004",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Browse research communities and inspect selected community governance"
+    },
+    {
+      "benchmark_id": "REAL100-099",
+      "capture": "api-reserve-005",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Browse research collections and inspect selected collection contributions"
+    },
+    {
+      "benchmark_id": "REAL100-100",
+      "capture": "api-reserve-006",
+      "admitted": true,
+      "checks": {
+        "har_sha_new": true,
+        "additional_capture_sha_new": true,
+        "application_new": true,
+        "business_host_new": true,
+        "business_domain_new": true,
+        "all_documented_steps_captured": true,
+        "all_documented_steps_successful": true,
+        "new_workflow_objective": true,
+        "historical_sequence_new": true,
+        "new_corpus_sequence_new": true
+      },
+      "within_application_distinct_journey": "Inspect award catalog and selected award recipient"
+    }
+  ],
+  "attempts": [
+    {
+      "id": "api-001-open-library",
+      "application": "Open Library",
+      "workflow": "Search title, select work and inspect edition catalog",
+      "status": "CAPTURE_LIMITED",
+      "error": "Returned URL must stay on approved public API origin",
+      "sha256": "fc7a6c4b946c96acf69c769d05bf3520a296033d9a45f5fcb8fae9cb8b2e999f",
+      "request_count": 1
+    },
+    {
+      "id": "api-002-open-library",
+      "application": "Open Library",
+      "workflow": "Search author, select author and inspect authored works",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "4f095db8459025c266e15daefd7e52b021cbc005275a27b1179568e7700e6b24",
+      "request_count": 3
+    },
+    {
+      "id": "api-003-datacite",
+      "application": "DataCite",
+      "workflow": "Search DOI research records and inspect selected publication",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "8cd836682387a5bacc93efb76bf23b11b9945d1d30a1d848f0717cccd11c0286",
+      "request_count": 2
+    },
+    {
+      "id": "api-004-datacite",
+      "application": "DataCite",
+      "workflow": "List repositories and inspect selected repository record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "2ac7f618935f0f15266da0225f09959077375a92e4807ca45ec5d9be59d87ecc",
+      "request_count": 2
+    },
+    {
+      "id": "api-005-orcid",
+      "application": "ORCID",
+      "workflow": "Find researcher and inspect selected public record",
+      "status": "CAPTURE_LIMITED",
+      "error": "Expecting value: line 1 column 1 (char 0)",
+      "sha256": "880c3dd4d846fa6069913a25683188312ec48c253c6162e167148d9e61779546",
+      "request_count": 1
+    },
+    {
+      "id": "api-006-uniprot",
+      "application": "UniProt",
+      "workflow": "Search BRCA1 proteins and inspect selected accession",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "eaa26788834f39a6622708dbd26ac2915b4d16d1f20a6716a72725f5ab7caff7",
+      "request_count": 2
+    },
+    {
+      "id": "api-007-uniprot",
+      "application": "UniProt",
+      "workflow": "Search organism taxonomy and inspect selected taxon",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "9ce7b28a4b389e4d91ab4c01e7cd051d3c74ecaa26a3ddf9cdc40395889ab1a2",
+      "request_count": 2
+    },
+    {
+      "id": "api-008-ensembl",
+      "application": "Ensembl",
+      "workflow": "Resolve BRCA1 symbol and inspect selected gene sequence",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "cfad6c8fde9f9f31abe4e8f281503762fee5b4fc7fdcf24edddb300622834a31",
+      "request_count": 2
+    },
+    {
+      "id": "api-009-ensembl",
+      "application": "Ensembl",
+      "workflow": "Find genetic variant and inspect selected variant phenotype",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "af399757b40a54cb3f6250bf1e935cad30de4f194c4ca1e9d47cc699e5c52f70",
+      "request_count": 2
+    },
+    {
+      "id": "api-010-rcsb-pdb",
+      "application": "RCSB PDB",
+      "workflow": "Inspect hemoglobin structure and select polymer entity",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "54a0b6bfcfc07a37be0fd50c0e0f3ce8ca0ea178cdd74c7eea4c15d2dcc6420d",
+      "request_count": 2
+    },
+    {
+      "id": "api-011-rcsb-pdb",
+      "application": "RCSB PDB",
+      "workflow": "Inspect ligand structure and select nonpolymer entity",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "7d8543007edca3e685caec0a7a2d9e2ae3e743edc63e7f72918ac4c126353eda",
+      "request_count": 2
+    },
+    {
+      "id": "api-012-ncbi-eutils",
+      "application": "NCBI EUtils",
+      "workflow": "Search PubMed and retrieve selected publication summary",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "4bf1647b0b0046260f38ee33ec29004587f18bc5546ab4f4e00613fe2d825975",
+      "request_count": 2
+    },
+    {
+      "id": "api-013-ncbi-eutils",
+      "application": "NCBI EUtils",
+      "workflow": "Search gene catalog and retrieve selected gene summary",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "246a103edd4b2d7be8a509460ae3b4f360a60319ef555f50a1e770ef2a2e6bdf",
+      "request_count": 2
+    },
+    {
+      "id": "api-014-openfda",
+      "application": "openFDA",
+      "workflow": "Search drug label and retrieve selected label record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "aa6958c0883d99c0bc05ee84c818ab2bda69a822025ca113fe264d439535e4cf",
+      "request_count": 2
+    },
+    {
+      "id": "api-015-openfda",
+      "application": "openFDA",
+      "workflow": "Search recall enforcement and inspect selected recall",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "0eea923fa132b79a4dd4eabe30a6b50302f05f8bfa8f3ea5bc2a82a0b1affbfd",
+      "request_count": 2
+    },
+    {
+      "id": "api-016-inaturalist",
+      "application": "iNaturalist",
+      "workflow": "Search oak taxonomy and inspect selected species",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "b2b0a8c05cdb006154fc51a1a37aec75ba5187b625fa220cddcaf95110bf8a28",
+      "request_count": 2
+    },
+    {
+      "id": "api-017-inaturalist",
+      "application": "iNaturalist",
+      "workflow": "Search observations and inspect selected public sighting",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "d1bcda29b37fa4a1d033d7cb9fd5e126f145b90c495da5c53b271bdfd3690b13",
+      "request_count": 2
+    },
+    {
+      "id": "api-018-idigbio",
+      "application": "iDigBio",
+      "workflow": "Search biological specimens and inspect selected museum record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "c16818895c9b5461f80825695e75aff5fdb5a2647cf2a8a792624fe892aedb94",
+      "request_count": 2
+    },
+    {
+      "id": "api-019-itis",
+      "application": "ITIS",
+      "workflow": "Find scientific species and inspect selected taxonomic record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "15a7bd2a2e51dfd88033e6752ac5786e97595b7dde9fe81f039d3f717168ebee",
+      "request_count": 2
+    },
+    {
+      "id": "api-020-worms",
+      "application": "WoRMS",
+      "workflow": "Find marine species and inspect accepted taxonomy record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "064a866bc881a0cbfd8f66e908bd8c08ce131145fd23ac660cbacbf59fc0cf1c",
+      "request_count": 3
+    },
+    {
+      "id": "api-021-noaa-weather",
+      "application": "NOAA Weather",
+      "workflow": "Resolve work-site forecast grid and retrieve forecast",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "1e315e4922bd5922d2d9e613832532257fc7b5b06fc3610e6e4731fd3920f2e3",
+      "request_count": 2
+    },
+    {
+      "id": "api-022-noaa-weather",
+      "application": "NOAA Weather",
+      "workflow": "Select weather observation station and retrieve latest observation",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "7b56f01968c0d8d3cb0ee90e0ed3c119e8b9140b0ca96af8c25913f25c8d6e92",
+      "request_count": 2
+    },
+    {
+      "id": "api-023-aviation-weather",
+      "application": "Aviation Weather",
+      "workflow": "Retrieve airport weather and cross-check selected airport TAF",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "9cbf6d9627a96a70d56ba984baf9d6dbbeef4da83480d33539526a5247c42e8d",
+      "request_count": 2
+    },
+    {
+      "id": "api-024-environment-agency-flood-monitoring",
+      "application": "Environment Agency Flood Monitoring",
+      "workflow": "Search river stations and inspect selected measurement station",
+      "status": "CAPTURE_LIMITED",
+      "error": "list index out of range",
+      "sha256": "ced1c655d8402c905031b6a5504dbc28157006cff2144a90c851fd2b6ea1dfee",
+      "request_count": 1
+    },
+    {
+      "id": "api-025-coingecko",
+      "application": "CoinGecko",
+      "workflow": "List asset catalog and inspect selected asset",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "59c9b5fbfc1850ad2ca17320879f26934102a2690c96ada0a79513aa817611ad",
+      "request_count": 2
+    },
+    {
+      "id": "api-026-coingecko",
+      "application": "CoinGecko",
+      "workflow": "List market exchanges and inspect selected exchange",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "db8709a4ce37edc9d0d3c134b765e5f0061a91fac89cab48526213a4b5658c92",
+      "request_count": 2
+    },
+    {
+      "id": "api-027-coinpaprika",
+      "application": "CoinPaprika",
+      "workflow": "Inspect Bitcoin asset and retrieve selected ticker",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "1966f6819b89499097ae7fcd72bc351ca8d16feaafe4c08abc3b1a1c56f9d4a5",
+      "request_count": 2
+    },
+    {
+      "id": "api-028-coinpaprika",
+      "application": "CoinPaprika",
+      "workflow": "List exchanges and inspect selected marketplace",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "202e7a3076c8a9adb330ac2e966bf70d30c7b1f97829ed0d992aedcad625ac97",
+      "request_count": 2
+    },
+    {
+      "id": "api-029-coinbase-exchange",
+      "application": "Coinbase Exchange",
+      "workflow": "Inspect trading product and retrieve ticker and order book",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "58850f83ac085d3c6124aca7361b6d6c7afd9d08c7634c8fae551874c4951899",
+      "request_count": 3
+    },
+    {
+      "id": "api-030-kraken",
+      "application": "Kraken",
+      "workflow": "Select tradable asset and inspect its exchange pair catalog",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "e05ea9e1cc21399375df94a66a595524bb40dffb276bba6adfd173a6a7bdb757",
+      "request_count": 3
+    },
+    {
+      "id": "api-031-binance",
+      "application": "Binance",
+      "workflow": "Inspect trading symbol and retrieve book ticker",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "1f2dbdfc8cddb4e8c18af14e707750ac2280ca12aa61a0261e6ca1fb349cf182",
+      "request_count": 2
+    },
+    {
+      "id": "api-032-nasa-jpl-ssd",
+      "application": "NASA JPL SSD",
+      "workflow": "Resolve small body and retrieve orbital-element record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "1273d5cccf6d0e0be1cbf326ca2225b7dce1034a4e81a6b65491fec4a191ebe7",
+      "request_count": 2
+    },
+    {
+      "id": "api-033-launch-library",
+      "application": "Launch Library",
+      "workflow": "Browse launches and inspect selected launch event",
+      "status": "CAPTURE_LIMITED",
+      "error": "Expecting value: line 5 column 1 (char 4)",
+      "sha256": "481e4ace38f34b241a15f6e6ce629e304632178ecbdbc038dc4925324269f69f",
+      "request_count": 15
+    },
+    {
+      "id": "api-034-launch-library",
+      "application": "Launch Library",
+      "workflow": "Browse astronaut catalog and inspect selected astronaut",
+      "status": "CAPTURE_LIMITED",
+      "error": "Expecting value: line 5 column 1 (char 4)",
+      "sha256": "66c67d2c63c4a778713daf6132abc115cd53d1e39800388d499477570956b5d1",
+      "request_count": 15
+    },
+    {
+      "id": "api-035-rest-countries",
+      "application": "REST Countries",
+      "workflow": "Find destination country and inspect selected country code",
+      "status": "CAPTURE_LIMITED",
+      "error": "API error acknowledgement, not completed",
+      "sha256": "d1ec2b114e6fd09f126c8563a66d858db90ffbecb05f7f4e41587724b415f989",
+      "request_count": 2
+    },
+    {
+      "id": "api-036-postcodes-io",
+      "application": "Postcodes.io",
+      "workflow": "Resolve postcode and inspect selected postcode district",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "a91130c75e36f7f5d827183c0618d39c09a3b20f229bac15cfdba83451713adf",
+      "request_count": 2
+    },
+    {
+      "id": "api-037-zippopotam-us",
+      "application": "Zippopotam.us",
+      "workflow": "Resolve postal code and cross-check selected locality",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "dbf2b2e93cab79d823d6755d780eb742a01d8c0cf7f4d693c0f57263486315ee",
+      "request_count": 2
+    },
+    {
+      "id": "api-038-mbta",
+      "application": "MBTA",
+      "workflow": "Select transit route and retrieve its stops",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "27309ed97b0e79bbdbe9e655e8b9ebca2cd4b4099df9352d4edd3b93e8f66b7b",
+      "request_count": 2
+    },
+    {
+      "id": "api-039-mbta",
+      "application": "MBTA",
+      "workflow": "Search transit alerts and inspect selected disruption",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "ef3b6797bc5c3b22e65a8525d21e5c3f7ef002724dc8d41080c00e2b613ffb48",
+      "request_count": 2
+    },
+    {
+      "id": "api-040-transport-opendata-ch",
+      "application": "Transport.opendata.ch",
+      "workflow": "Find station and retrieve selected station board",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "1016aaa8c8ab42862378ea687609088d53204f1970d9b74850714e5763278a21",
+      "request_count": 2
+    },
+    {
+      "id": "api-041-digitraffic-finland",
+      "application": "Digitraffic Finland",
+      "workflow": "Select rail station and retrieve live train arrivals",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "cde2b995baaa1ec6f348211b011334fe90b29f1fa8c2e35fd0d3c28a54d6779a",
+      "request_count": 2
+    },
+    {
+      "id": "api-042-open-transit-onebusaway",
+      "application": "Open Transit OneBusAway",
+      "workflow": "List agencies and inspect selected agency stops",
+      "status": "CAPTURE_LIMITED",
+      "error": "HTTP 404; denied/unavailable/rate control, no bypass",
+      "sha256": "ada6cb86d5809d77a2721f5c8e8b16e65b58fd1e7077eef1faf88f02b5e9e1eb",
+      "request_count": 2
+    },
+    {
+      "id": "api-043-open-nutrition-usda",
+      "application": "Open Nutrition USDA",
+      "workflow": "Search food catalog and inspect selected nutrition record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "789a3860bf7230254b0390009207a1722f499083f86bbc035105ab0e1f6f1700",
+      "request_count": 2
+    },
+    {
+      "id": "api-044-chess-com",
+      "application": "Chess.com",
+      "workflow": "Inspect player and select monthly game archive",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "3e5bbde84699024c50c292485591a737350e2b786c66fe58124728c88c4514b5",
+      "request_count": 3
+    },
+    {
+      "id": "api-045-lichess",
+      "application": "Lichess",
+      "workflow": "Inspect player and retrieve current public performance summary",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "e150b62e3abd4172d9188af94d12af8307d38163c253f8c3241de661c20e06f2",
+      "request_count": 2
+    },
+    {
+      "id": "api-046-ergast-jolpica",
+      "application": "Ergast Jolpica",
+      "workflow": "Select season driver and inspect race result history",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "c609ff58a6c8d9ba5ec3eb5500632bd292b05af8bc806cc2c1dc225c0f81d03a",
+      "request_count": 2
+    },
+    {
+      "id": "api-047-ergast-jolpica",
+      "application": "Ergast Jolpica",
+      "workflow": "Select championship circuit and inspect selected venue",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "ff8663c5540511b0619bcdafc61578f909786d4d824411ff80d932a8519735fe",
+      "request_count": 2
+    },
+    {
+      "id": "api-048-openf1",
+      "application": "OpenF1",
+      "workflow": "Select race session and retrieve participating drivers",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "9fbd336b8910abae6d849d6200832ea4109c85baf68b5fd4555730e7b49ab9c7",
+      "request_count": 2
+    },
+    {
+      "id": "api-049-football-data-org",
+      "application": "Football Data.org",
+      "workflow": "Select public competition and inspect teams",
+      "status": "CAPTURE_LIMITED",
+      "error": "HTTP 403; denied/unavailable/rate control, no bypass",
+      "sha256": "3a2314c65398c2a5a57a5b0ed55717ed1d41aa2a9b2d95e53b1b6bcf91e87e58",
+      "request_count": 2
+    },
+    {
+      "id": "api-050-ckan-data-gov-uk",
+      "application": "CKAN Data.gov.uk",
+      "workflow": "Search health dataset and inspect selected metadata",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "b1eb396c1c57cab5ea7d39e68eff2d76d4df94a83c38ab11e917844fadb7bbe8",
+      "request_count": 2
+    },
+    {
+      "id": "api-051-ckan-data-gov-uk",
+      "application": "CKAN Data.gov.uk",
+      "workflow": "List publishers and inspect selected publisher dataset inventory",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "d3ff56f82535f6672d712a739d69fb152664e5f92e956d9e4cedb09c6fa6d6f3",
+      "request_count": 2
+    },
+    {
+      "id": "api-052-wikimedia",
+      "application": "Wikimedia",
+      "workflow": "Search subject and inspect selected article with revisions",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "038c44f535ffa352408a685898288895ddba47a75cf245fb960c50a23768c51f",
+      "request_count": 2
+    },
+    {
+      "id": "api-053-wikimedia",
+      "application": "Wikimedia",
+      "workflow": "Browse business-process category and inspect selected knowledge item",
+      "status": "CAPTURE_LIMITED",
+      "error": "list index out of range",
+      "sha256": "0dc28c798a0071563419236cd3c2655e0741afc9c4017e5dc336c82c32a1de0c",
+      "request_count": 1
+    },
+    {
+      "id": "api-054-socrata-chicago",
+      "application": "Socrata Chicago",
+      "workflow": "Filter public incident records and inspect selected incident",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "7440b37a6e9430b4ea1fa7dc3ada8a256568dc2430553c68db7f8fba0bc1e7eb",
+      "request_count": 2
+    },
+    {
+      "id": "api-055-us-census",
+      "application": "US Census",
+      "workflow": "Inspect state population and retrieve selected state county population",
+      "status": "CAPTURE_LIMITED",
+      "error": "Expecting value: line 1 column 1 (char 0)",
+      "sha256": "0aadf353b1de768ea35d1450e53f23e56751f4a7ace2b47d3fea0669c24ff7fe",
+      "request_count": 11
+    },
+    {
+      "id": "api-056-datamuse",
+      "application": "Datamuse",
+      "workflow": "Find engineering terms and inspect selected word associations",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "19d685707ec6aeff8d3eadd2cf09806b9acc14fd8ff4119145f9e594851c1c7a",
+      "request_count": 2
+    },
+    {
+      "id": "api-057-open-trivia-database",
+      "application": "Open Trivia Database",
+      "workflow": "Select question category and retrieve assessment questions",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "30074fa4a59c614101dae8b94c39f7de60291bd288f98fda0da29a06ee053fb2",
+      "request_count": 2
+    },
+    {
+      "id": "api-058-open-trivia-database",
+      "application": "Open Trivia Database",
+      "workflow": "Issue question-session token and consume it in question request",
+      "status": "CAPTURE_LIMITED",
+      "error": "HTTP 429; denied/unavailable/rate control, no bypass",
+      "sha256": "a32374a95ec7a722d549254242138e0a20a23efbf934859744395ceef9027945",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-001",
+      "application": "UniProt",
+      "workflow": "Search protein knowledge annotation and inspect selected keyword",
+      "status": "CAPTURE_LIMITED",
+      "error": "'keywordId'",
+      "sha256": "1a7cb5b52b3f178030cbe30e61c88b7bbcf208e37d5d6ecaf91111ded0af9a23",
+      "request_count": 1
+    },
+    {
+      "id": "api-extra-002",
+      "application": "Ensembl",
+      "workflow": "Inspect species catalog and retrieve selected species assembly",
+      "status": "CAPTURE_LIMITED",
+      "error": "HTTP 500; denied/unavailable/rate control, no bypass",
+      "sha256": "47f509e1da9bb32ae2edc009d9e0f36aef073cb4bd98bcad9f9b3d1b8439f0a5",
+      "request_count": 16
+    },
+    {
+      "id": "api-extra-003",
+      "application": "NCBI EUtils",
+      "workflow": "Search nucleotide catalog and inspect selected sequence summary",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "fe331d71d463b60046e8c6e6acc811ebda62bcd2393c9fbbe8097ecaebd79c84",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-004",
+      "application": "openFDA",
+      "workflow": "Search medical device recalls and inspect selected recall",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "51fefb2d276e9b07605b8eebc56c554da4200dca638035313a90233dbf0b5d3c",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-005",
+      "application": "openFDA",
+      "workflow": "Search food enforcement and inspect selected recall",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "a5a8ec7537617853c6d0e0c66c832ba7417278f0a34602012d06740db1cfde2d",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-006",
+      "application": "MBTA",
+      "workflow": "Select route stop and inspect scheduled arrivals",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "681a08a3434e17cdc96adc3dec410dac700c8c8dbbe1b13ec2523a31389b6eda",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-007",
+      "application": "REST Countries",
+      "workflow": "List regional destinations and inspect selected country",
+      "status": "CAPTURE_LIMITED",
+      "error": "API error acknowledgement, not completed",
+      "sha256": "00627d2ee84e82d91ca3e0b1e5702fc95897ffb7c8993f93426732016a60d389",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-008",
+      "application": "Coinbase Exchange",
+      "workflow": "Inspect supported currencies and selected currency details",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "77e641463d9b2dfcca31b4384f7d3d6e183bc659453c2ab75029ecff761feadf",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-009",
+      "application": "NASA JPL SSD",
+      "workflow": "Search close approaches and inspect selected orbital body",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "0ecebdd4a36d946530cd3165ecc11edae23c683a6b4420fe82aedbb9b9f2ee94",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-010",
+      "application": "WoRMS",
+      "workflow": "Search genus and inspect selected taxon children",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "e1bb230759f5a4bfc4d3d4e5e762e9c61cae96050c992aede81bd92f0f862bda",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-011",
+      "application": "ITIS",
+      "workflow": "Search common name and inspect selected taxonomic hierarchy",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "81f97572cbd7488556ca2a4f0ea849058723ec0600e3f58662fb70bbb5dfafd3",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-012",
+      "application": "iNaturalist",
+      "workflow": "Search public projects and inspect selected conservation project",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "58c19266c7911f1af0077790a2b5479826c4796f0d376016a2c10c8c096a540c",
+      "request_count": 2
+    },
+    {
+      "id": "api-extra-013",
+      "application": "Postcodes.io",
+      "workflow": "Autocomplete postcode and inspect selected postcode",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "3ec1552194878d6b6589844e26e4c2e442a8889061f7bcbf8e5e23bf14a36c6f",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-001",
+      "application": "MusicBrainz",
+      "workflow": "Search composer and inspect selected artist recordings",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "813109a89db1102e6afb2b223f86b6513c2ef3da6f977604d39c97cd8accaa30",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-002",
+      "application": "Nobel Prize",
+      "workflow": "Search laureate catalog and inspect selected award history",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "771225918c510fc34f22ddeda59523864dff50d420260712e0f6b218b4c744d5",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-003",
+      "application": "Stack Exchange",
+      "workflow": "Search performance question and inspect selected answers",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "518a6f6d2e74d7ebb41f8819587cce89930d19cb09ac589253d5579c12f935f8",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-004",
+      "application": "GitLab public projects",
+      "workflow": "Search public CI projects and inspect selected project",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "49409c7ef87fe2a90c975a96f88bf93c67485b9d1081054bb87011e95bfeef61",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-005",
+      "application": "Internet Archive",
+      "workflow": "Search astronomy texts and inspect selected archival metadata",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "9d6dc786244ca7021817f48de6dd753aa3f77a769a825fd13125b8fafffa0b51",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-006",
+      "application": "Zenodo",
+      "workflow": "Search climate datasets and inspect selected research deposition",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "3486a872ec18af94266fe19ef3141c957dfb834e91b1a9cbcd6e512d2c2fc781",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-007",
+      "application": "Figshare",
+      "workflow": "Browse research contributions and inspect selected article",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "b90b73454aebf1403df420cb3a6a7a14f4324b6ab1621ae52206bc6a9eb9bd2a",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-008",
+      "application": "Research Organization Registry",
+      "workflow": "Search institution and inspect selected organization record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "7d0b7924e896e208edacd8c40a15415019491c310e0bef3116aa5558888b46d4",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-009",
+      "application": "Open Government Canada",
+      "workflow": "Search population datasets and inspect selected data package",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "d60d921bf008ed120bf26c0eaf515edfa5e5da3c66c631d55b544010695982ba",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-010",
+      "application": "Europeana",
+      "workflow": "Search paintings and inspect selected cultural collection record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "1cf64fd3f06e325b76ae85eb20f49890a10704bb1a63368740dd37acff9a033b",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-011",
+      "application": "Scryfall",
+      "workflow": "Search trading-card catalog and inspect selected card",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "252fb391cf5bd770529d406599abba8e4cb896ad5fd516fe7198e87c49c9edca",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-012",
+      "application": "Wikidata",
+      "workflow": "Read author entity and follow published birthplace relationship",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "7fd2eef5c565872736f557d6213299ec662795e4f4247de482496aacbb824e22",
+      "request_count": 2
+    },
+    {
+      "id": "api-final-013",
+      "application": "OSV vulnerability database",
+      "workflow": "Inspect published vulnerability and follow official alias",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "05ee5e5677a101e6c7720dc59af97e6d9c46a81f7811b1817515971578d0d8b5",
+      "request_count": 2
+    },
+    {
+      "id": "api-reserve-001",
+      "application": "MusicBrainz",
+      "workflow": "Search music release and inspect selected track listing",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "dbdd6cdf5d781620fcd6bafcc791b9c81dc2485a3f4e347fce9d4b0b7202f40e",
+      "request_count": 2
+    },
+    {
+      "id": "api-reserve-002",
+      "application": "MusicBrainz",
+      "workflow": "Search publishing label and inspect selected label releases",
+      "status": "CAPTURE_LIMITED",
+      "error": "HTTP 503; denied/unavailable/rate control, no bypass",
+      "sha256": "1c166fbef4d792fdf7ee25dd15cb17dd3cf1ca30c1910915239d641d6e4d963b",
+      "request_count": 1
+    },
+    {
+      "id": "api-reserve-003",
+      "application": "GitLab public projects",
+      "workflow": "Search public CI project and inspect repository branch catalog",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "8fc097077a1fd668e886eb9511807b356473f89d9f00c1e1240141a139808735",
+      "request_count": 2
+    },
+    {
+      "id": "api-reserve-004",
+      "application": "Zenodo",
+      "workflow": "Browse research communities and inspect selected community governance",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "a57f50f08dd1a315ccde89f28498cae9f0c2149a4c471024a011d1fd5427dc0a",
+      "request_count": 2
+    },
+    {
+      "id": "api-reserve-005",
+      "application": "Figshare",
+      "workflow": "Browse research collections and inspect selected collection contributions",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "b263df5407cbf9614f65da02ef0237f155db683a4b8013b24925f44f735fe7f4",
+      "request_count": 2
+    },
+    {
+      "id": "api-reserve-006",
+      "application": "Nobel Prize",
+      "workflow": "Inspect award catalog and selected award recipient",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "aa6f70f67c84df997eee5502d42888f5e818726399b2f0cc2cb659ccdcbbd323",
+      "request_count": 2
+    },
+    {
+      "id": "api-retry-open-library-works",
+      "application": "Open Library",
+      "workflow": "Search title, select work and inspect edition catalog",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "d8a45df05595956cc00c64f4f1d601328d62693fe947145fa9fe417cfca3a665",
+      "request_count": 3
+    },
+    {
+      "id": "candidate-booked-accessory",
+      "application": "Booked Scheduler",
+      "workflow": "Create independent accessory configuration and inspect saved result",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.fill: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"#editQuantity\")\n    - locator resolved to <input min=\"0\" type=\"number\" id=\"editQuantity\" disabled=\"disabled\" class=\"form-control\" name=\"accessoryQuantityAvailable\"/>\n    - fill(\"4\")\n  - attempting fill action\n    2 × waiting for element to be visible, enabled and editable\n      - element is not enabled\n    - retrying fill action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and editable\n      - element is not enabled\n    - retrying fill action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and editable\n       - element is not enabled\n     - retrying fill action\n       - waiting 500ms\n",
+      "sha256": "4eb286e6f582272ae131c8ccaa39b1aa4d99a8589fca6955eb0f8ab151e55936",
+      "request_count": 101
+    },
+    {
+      "id": "candidate-booked-accessory-v2",
+      "application": "Booked Scheduler",
+      "workflow": "Create independent accessory configuration and inspect saved result",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "9af9c3b28194dee0881adeefe443c2dac8d64cd68ecd1c3a2aabb69352dfff66",
+      "request_count": 135
+    },
+    {
+      "id": "candidate-booked-announcement",
+      "application": "Booked Scheduler",
+      "workflow": "Create independent announcement configuration and inspect saved result",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "b4667e9dcd673ebd176ce3720e227e3ba36dc5bf9f51c4f9ea2e748937228350",
+      "request_count": 143
+    },
+    {
+      "id": "candidate-booked-group",
+      "application": "Booked Scheduler",
+      "workflow": "Create independent group configuration and inspect saved result",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "6f9874daf20552eaab8ab4f957df4373c97600ea8180b36ad295cd60bd174ce1",
+      "request_count": 158
+    },
+    {
+      "id": "candidate-booked-schedule",
+      "application": "Booked Scheduler",
+      "workflow": "Create independent schedule configuration and inspect saved result",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "60a8210a88f0e2e6ba229ff0752b38a4b380f23b58e897ee4104e9fd9d9601d5",
+      "request_count": 145
+    },
+    {
+      "id": "candidate-easyappointments-category",
+      "application": "EasyAppointments",
+      "workflow": "Create appointment service category and inspect saved catalog",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "5e36310890d31a16c1fcb440702d50c37ffe62679c9415fd773035638b0ad72c",
+      "request_count": 163
+    },
+    {
+      "id": "candidate-easyappointments-customer",
+      "application": "EasyAppointments",
+      "workflow": "Create customer, select saved customer and update details",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.fill: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"#first-name\")\n    - locator resolved to <input disabled type=\"text\" id=\"first-name\" maxlength=\"100\" class=\"required form-control\"/>\n    - fill(\"Benchmark\")\n  - attempting fill action\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and editable\n       - element is not visible\n     - retrying fill action\n       - waiting 500ms\n",
+      "sha256": "b9838a41345b4f47f4ff17003ac5ec6d7220d805b7c2418a07c49ffbc024bf47",
+      "request_count": 164
+    },
+    {
+      "id": "candidate-easyappointments-customer-v2",
+      "application": "EasyAppointments",
+      "workflow": "Create customer, select saved customer and update details",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"#edit-customer\")\n    - locator resolved to <button id=\"edit-customer\" class=\"btn btn-outline-secondary\">…</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    22 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "sha256": "a03864369b932f83a11f3c35a8ed18495d5ce2f92e2c917c1493eaf6dc122807",
+      "request_count": 161
+    },
+    {
+      "id": "candidate-easyappointments-service",
+      "application": "EasyAppointments",
+      "workflow": "Create scheduled service with price and duration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "7ebce571cdea9b4184793b063d87081ef99a6f027b975fca906e876d04270688",
+      "request_count": 165
+    },
+    {
+      "id": "candidate-elab-experiment",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"button:has-text('Create'):visible\").first\n",
+      "sha256": "ed83adfb4ba9cded94be1c1fb1919fa5570d077ab5c1162a66cad1550f1631eb",
+      "request_count": 24
+    },
+    {
+      "id": "candidate-elab-experiment-v2",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"button:has-text('Create'):visible\").first\n",
+      "sha256": "3384c3748715b9103ef0c42b38c6fb3bb9e4961e5c86332d019914917a327c47",
+      "request_count": 24
+    },
+    {
+      "id": "candidate-elab-experiment-v3",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.fill: Error: Element is not an <input>, <textarea>, <select> or [contenteditable] and does not have a role allowing [aria-readonly]\nCall log:\n  - waiting for locator(\"#createNewDropdown\")\n    - locator resolved to <button type=\"button\" aria-label=\"新建...\" class=\"btn nav-link\" aria-haspopup=\"true\" aria-expanded=\"true\" id=\"createNewDropdown\" data-toggle=\"dropdown\">…</button>\n    - fill(\"REAL100 plasmid engineering protocol\")\n  - attempting fill action\n    - waiting for element to be visible, enabled and editable\n",
+      "sha256": "b77d3c291c3bf36dbcf80310e027ac9222df16ed8356147dee7d8b4c6aa18a9d",
+      "request_count": 24
+    },
+    {
+      "id": "candidate-elab-experiment-v4",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.fill: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"#createNewFormTitle\")\n    - locator resolved to <input type=\"text\" name=\"title\" class=\"form-control\" id=\"createNewFormTitle\" placeholder=\"请输入一个描述性的标题...\"/>\n    - fill(\"REAL100 plasmid engineering protocol\")\n  - attempting fill action\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and editable\n      - element is not visible\n    - retrying fill action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and editable\n       - element is not visible\n     - retrying fill action\n       - waiting 500ms\n",
+      "sha256": "567a1beae3e4dd94ce781069ee428c74f9c28ebba607a3a346376dc9ca064c1e",
+      "request_count": 24
+    },
+    {
+      "id": "candidate-elab-experiment-v5",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"button[data-target='#createNewModal']:visible\").first\n",
+      "sha256": "787fbea517264215bffdc8b5955f426c24fd9f2d221ef4a64b665296bd14d156",
+      "request_count": 24
+    },
+    {
+      "id": "candidate-elab-experiment-v6",
+      "application": "eLabFTW",
+      "workflow": "Create laboratory experiment and inspect issued notebook ID",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "22edd38c2d7ff240e4ae069d51464e98a851127a3eafe4888d992ecd7aa155da",
+      "request_count": 56
+    },
+    {
+      "id": "candidate-frontaccounting-customer",
+      "application": "FrontAccounting",
+      "workflow": "Create accounting customer and verify saved financial owner",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.wait_for: Timeout 12000ms exceeded.\nCall log:\n  - waiting for get_by_text(\"REAL100 Accounting Customer\").first to be visible\n",
+      "sha256": "71737ea0aa38ee52dd8ccd21761c3b7cb0fcf994267c28e6f0181689cf3ecb49",
+      "request_count": 54
+    },
+    {
+      "id": "candidate-grocy-battery",
+      "application": "Grocy",
+      "workflow": "Create battery and inspect saved independent inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "2460d0363aca9d4527a03b1dedfaab0ef78db198dd1e816bdd1bccb2715e0d30",
+      "request_count": 214
+    },
+    {
+      "id": "candidate-grocy-chore",
+      "application": "Grocy",
+      "workflow": "Create chore and inspect saved independent inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "fccd35208fb06c4c3a0a41dc9e6e6b107e21c51d8679ed092eefe1f8881c520a",
+      "request_count": 226
+    },
+    {
+      "id": "candidate-grocy-location",
+      "application": "Grocy",
+      "workflow": "Create stock storage location and verify saved owner",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "835a276bf1581ade5e95695a8fa4cb3f3a717b33668450fef7e8ce03fba85323",
+      "request_count": 213
+    },
+    {
+      "id": "candidate-grocy-product",
+      "application": "Grocy",
+      "workflow": "Create product and inspect saved independent inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "02ebbeeda49eccaaae7484f9f0a44faae6724cae1ae5d00943d5f450da842468",
+      "request_count": 252
+    },
+    {
+      "id": "candidate-grocy-purchase",
+      "application": "Grocy",
+      "workflow": "Select stock product, purchase two units, verify receipt",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.set_checked: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"#datetimepicker-shortcut\")\n    - locator resolved to <input value=\"1\" tabindex=\"-1\" type=\"checkbox\" id=\"datetimepicker-shortcut\" name=\"datetimepicker-shortcut\" class=\"form-check-input custom-control-input\" data-datetimepicker-shortcut-value=\"2999-12-31\"/>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <a class=\"nav-link discrete-link\" href=\"https://demo.grocy.info/calendar\">…</a> from <nav id=\"mainNav\" class=\"navbar navbar-expand-lg navbar-light fixed-top\">…</nav> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - <a class=\"nav-link discrete-link\" href=\"https://demo.grocy.info/calendar\">…</a> from <nav id=\"mainNav\" class=\"navbar navbar-expand-lg navbar-light fixed-top\">…</nav> subtree intercepts pointer events\n  2 × retrying click action\n      - waiti",
+      "sha256": "11e2e5ec1692dca5f4c1159f14364b2e47f6d61f76f7350479776c40f1631f38",
+      "request_count": 132
+    },
+    {
+      "id": "candidate-grocy-quantityunit",
+      "application": "Grocy",
+      "workflow": "Create quantityunit and inspect saved independent inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "0ac6199555f14084dfb9767578d9a581c63a6acf5abe4751074386ad7535e018",
+      "request_count": 229
+    },
+    {
+      "id": "candidate-grocy-shop",
+      "application": "Grocy",
+      "workflow": "Create shop and inspect saved independent inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "fdb83d0ca59b896a2ecef0940164ea4769f2e540c085900ea488019942c9c390",
+      "request_count": 213
+    },
+    {
+      "id": "candidate-grocy-task",
+      "application": "Grocy",
+      "workflow": "Create assigned inventory task and verify saved task",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "6bd42818a7225a769e0ce6ef6dca7140c5ab13464beceaf0d6f105ad044ab6e0",
+      "request_count": 223
+    },
+    {
+      "id": "candidate-invoiceshelf-customer",
+      "application": "InvoiceShelf",
+      "workflow": "Create billing customer and verify independent saved owner",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Error: strict mode violation: locator(\"a[href='/admin/customers']\") resolved to 2 elements:\n    1) <a href=\"/admin/customers\" class=\"text-chrome-muted hover:bg-chrome-hover hover:text-chrome-fg gap-3 px-2.5 h-9 relative flex items-center text-sm font-medium transition-colors rounded-lg group\">…</a> aka get_by_role(\"link\", name=\"Customers\", exact=True)\n    2) <a href=\"/admin/customers\" class=\"text-sm rounded-md text-muted hover:text-heading focus-visible:outline-2\">…</a> aka get_by_role(\"link\", name=\"8 customers\")\n\nCall log:\n  - waiting for locator(\"a[href='/admin/customers']\")\n",
+      "sha256": "fca35fd6243e949a73310744d7f8a28cc181c710da6a03ce24c46a2c82f2868e",
+      "request_count": 97
+    },
+    {
+      "id": "candidate-invoiceshelf-customer-v2",
+      "application": "InvoiceShelf",
+      "workflow": "Create billing customer and verify independent saved owner",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "027b17b9bf925ddd8d5f525e09cbda7aee31543173c54f1c4ee757add0217c0d",
+      "request_count": 125
+    },
+    {
+      "id": "candidate-invoiceshelf-item",
+      "application": "InvoiceShelf",
+      "workflow": "Create priced catalog item and verify saved item",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "844c3e9161113db91bff32a6d568d619699c11c0d55cf595db778f23afcc047b",
+      "request_count": 126
+    },
+    {
+      "id": "candidate-invoiceshelf-project",
+      "application": "InvoiceShelf",
+      "workflow": "Create billing project with budget and verify saved project",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "5c419ef59f12f484a22d7d86a657d68802e667c3485ef9258083241195c2cc5c",
+      "request_count": 110
+    },
+    {
+      "id": "candidate-moodle-course",
+      "application": "Moodle",
+      "workflow": "Create a training course and verify saved course",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "35fa354d3ceeec831cc69d388e8548a25362268a41e292cac734fca7c05adca7",
+      "request_count": 646
+    },
+    {
+      "id": "candidate-[REDACTED:6f0309fea1db]-devicerole",
+      "application": "Nautobot",
+      "workflow": "Create devicerole and inspect saved independent configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "db6ac25e23ab68c020450879bdf5025ad43f9b0edb7fe1711e4c217e290f8b59",
+      "request_count": 253
+    },
+    {
+      "id": "candidate-[REDACTED:6f0309fea1db]-manufacturer",
+      "application": "Nautobot",
+      "workflow": "Create manufacturer and inspect saved inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "f2945162d1c019e1ea744e42d1a1b2af47568e94c8db160a140299b34da9da8a",
+      "request_count": 256
+    },
+    {
+      "id": "candidate-[REDACTED:6f0309fea1db]-namespace",
+      "application": "Nautobot",
+      "workflow": "Create namespace and inspect saved independent configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "ee7c0aaf51691282cc681d722634aedb982c07f856c5910359485a1368bf6585",
+      "request_count": 255
+    },
+    {
+      "id": "candidate-[REDACTED:6f0309fea1db]-platform",
+      "application": "Nautobot",
+      "workflow": "Create platform and inspect saved independent configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "70fba38974a4ce35f3812d8bb51e7cc236210aea5bccde364db67a93ad912320",
+      "request_count": 252
+    },
+    {
+      "id": "candidate-[REDACTED:6f0309fea1db]-tenant",
+      "application": "Nautobot",
+      "workflow": "Create business tenant and inspect saved inventory owner",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "203b3155cb226652d51530bd9f80cfcc05c2ec9a2f255b4a66248f4163851636",
+      "request_count": 328
+    },
+    {
+      "id": "candidate-[REDACTED:6f0309fea1db]-tenantgroup",
+      "application": "Nautobot",
+      "workflow": "Create tenantgroup and inspect saved inventory configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "45e543a363073eca9b505bbcd868edf731912de473dfea49bc05a0a203f6199f",
+      "request_count": 253
+    },
+    {
+      "id": "candidate-openemr-patient",
+      "application": "[REDACTED:30d54e94315a]",
+      "workflow": "Register fictional patient and inspect saved demographics",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "3b87dfbca50c970c5de27937be47f86c5b90b03cb1fbe374644f6b1ebf954d43",
+      "request_count": 104
+    },
+    {
+      "id": "candidate-openemr-patient-v2",
+      "application": "[REDACTED:30d54e94315a]",
+      "workflow": "Register fictional patient and inspect saved demographics",
+      "status": "CAPTURE_LIMITED",
+      "error": "",
+      "sha256": "4a7c2dad05142d5804ca2cf7a7dbcc9a385c9164dc85d7002fcaf48586f6fdda",
+      "request_count": 105
+    },
+    {
+      "id": "candidate-openemr-patient-v3",
+      "application": "[REDACTED:30d54e94315a]",
+      "workflow": "Register fictional patient and inspect saved demographics",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "db8d924497c949df6f3661524fb81bacc3d800582545c59207993f558ce70981",
+      "request_count": 137
+    },
+    {
+      "id": "candidate-sylius-customer",
+      "application": "Sylius",
+      "workflow": "Create commerce customer and inspect saved customer record",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "809608772f6b2cdc89fe0e5f44e1cb9917701b13acc33b71eacfe125eef67445",
+      "request_count": 106
+    },
+    {
+      "id": "candidate-vikunja-label",
+      "application": "Vikunja",
+      "workflow": "Create task label and inspect saved configuration",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "10868a831ca64795263efadc27454735cbcf14ff6197b60f914bed1a6a2df658",
+      "request_count": 151
+    },
+    {
+      "id": "candidate-vikunja-project",
+      "application": "Vikunja",
+      "workflow": "Create project and inspect saved project board",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "2ed1b5a57a6277526c85f3dc338971adf7d1b608e7f1506829d3900970ec81b9",
+      "request_count": 176
+    },
+    {
+      "id": "candidate-vikunja-task",
+      "application": "Vikunja",
+      "workflow": "Select inbox project, create task and inspect task detail",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "a6da0e27ee355cb5e49c8d62a0adc9acc7d69215721d1899fd9c2bb6634c79ea",
+      "request_count": 191
+    },
+    {
+      "id": "candidate-vikunja-team",
+      "application": "Vikunja",
+      "workflow": "Create project team and inspect saved owner",
+      "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+      "error": null,
+      "sha256": "5286c5d89e11cd129276dd98d91881fbda32564ef58d336a31a3699e79eda133",
+      "request_count": 170
+    },
+    {
+      "id": "inspect-bahmni",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "6410403f5532eaa4c5d13f070e8f2815bf865def7b59e7b23d6660ea2a93a9c0",
+      "request_count": 12
+    },
+    {
+      "id": "inspect-bahmni-auth",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Error: strict mode violation: locator(\"button[type=submit]\") resolved to 2 elements:\n    1) <button type=\"submit\" class=\"confirm\">Login</button> aka get_by_role(\"button\", name=\"Login\")\n    2) <button type=\"submit\" class=\"confirm\">Submit</button> aka get_by_text(\"Submit\")\n\nCall log:\n  - waiting for locator(\"button[type=submit]\")\n",
+      "sha256": "be223b9f2573ee9eb7b50c9db96da2068e79ae63e5705f1549a720800cbe634a",
+      "request_count": 92
+    },
+    {
+      "id": "inspect-bahmni-auth-v2",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "ef27bb59978519ded7a7e549ec67f5bfe7d9cdfcf3ec1c844f2973ea3d17ec1d",
+      "request_count": 104
+    },
+    {
+      "id": "inspect-bahmni-home",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "CAPTURE_LIMITED",
+      "error": "'value'",
+      "sha256": "d691254bfbc6e48b2fed0ad8f1c30715a672037e352383428c375b8283a22ee8",
+      "request_count": 104
+    },
+    {
+      "id": "inspect-bahmni-home-v2",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "bbd88238fcadf366fa0d95c004b959d384aab291beafa5bfbf41218423f37ccb",
+      "request_count": 118
+    },
+    {
+      "id": "inspect-bahmni-login",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "21597b2cbe70680a5e70391663b4a93f1879458e566061e102434a191addbbbe",
+      "request_count": 92
+    },
+    {
+      "id": "inspect-bahmni-registration-form",
+      "application": "Bahmni",
+      "workflow": "Inspect official connected hospital sandbox",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a:has-text('Registration')\").first\n    - locator resolved to <a class=\"disabled\">…</a>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "sha256": "de6b71a9c6bedec6e05a48fc020548fc04ce1c7da7b0e5b6708c0a5faef5de92",
+      "request_count": 118
+    },
+    {
+      "id": "inspect-booked",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "0a47143e362cb51311529041d5c15845640b27ba0a4e59e4c3c001e44d7f6d6d",
+      "request_count": 68
+    },
+    {
+      "id": "inspect-booked-accessory-form",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href='/Web/admin/manage_accessories.php']\")\n",
+      "sha256": "6dae56509f27cf96f9245e3d5d82b20cbe5be856bc180bda02c533394dc8d624",
+      "request_count": 70
+    },
+    {
+      "id": "inspect-booked-accessory-form-v2",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "3c0ec9c7449d294bdaa3d9997676d4244d8fc323cd3bdf0ac5e9f7e062d33c55",
+      "request_count": 103
+    },
+    {
+      "id": "inspect-booked-accessory-new",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d22aa2edac6a001c18454efb3a7d1ba9d10685611ab947c754c43134649f3f94",
+      "request_count": 101
+    },
+    {
+      "id": "inspect-booked-announcement-form",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href='/Web/admin/manage_announcements.php']\")\n",
+      "sha256": "c1ec8ced1bf63fbfc8cf754339331e0a4a592749196de1895f696a9e343a1fda",
+      "request_count": 68
+    },
+    {
+      "id": "inspect-booked-announcement-form-v2",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "ed1ae37afbf4de20dea40e41a33641f8b30b9204be805031aea052d915327d80",
+      "request_count": 104
+    },
+    {
+      "id": "inspect-booked-announcement-new",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "03faf7a2fe1cf20cd8e2ff276ef351f077481564f1bb30d9ffc6204786a5f3d9",
+      "request_count": 105
+    },
+    {
+      "id": "inspect-booked-group-form",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href='/Web/admin/groups']\")\n",
+      "sha256": "b2dac0e33607207a09d695c3f93a98d6f5c7b4b715cef75305b92e8f33a0e38d",
+      "request_count": 68
+    },
+    {
+      "id": "inspect-booked-group-form-v2",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e30d1a0e7dc0c3b46f929eabf10c453477ecc3e68edb895f948836748794a97f",
+      "request_count": 114
+    },
+    {
+      "id": "inspect-booked-group-new",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "f7c68deb0c1c1df5c5c6e85f782ac768fe1ce86abc7f2201c39797897cabec6a",
+      "request_count": 112
+    },
+    {
+      "id": "inspect-booked-reservation",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d51683a22f0c7e9d5ee882d66a2061e562d0f7c1c1917f4167392075df1e7dfd",
+      "request_count": 106
+    },
+    {
+      "id": "inspect-booked-resource-admin",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "adf5dcc5b343395f91a6c8d0f15b105f51af0eb884d66ad0f5b7cdd34c3a5674",
+      "request_count": 70
+    },
+    {
+      "id": "inspect-booked-resource-form",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href='/Web/admin/resources']\")\n",
+      "sha256": "7c0e888f4a748fdb60dd7c9023b29229e400be09c051a2b2055d7c0e07252f5b",
+      "request_count": 68
+    },
+    {
+      "id": "inspect-booked-resource-form-v2",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "66d3b64c743cc87ce39b6011f229f6b1213b1d6390508fe110a156b1334f3629",
+      "request_count": 104
+    },
+    {
+      "id": "inspect-booked-resource-new",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"button:has-text('ADD RESOURCE')\")\n",
+      "sha256": "ec57f70d1a750b4bbfb7ae4a1e72182fd9dcab768acd79226c1fcaff7ba25155",
+      "request_count": 106
+    },
+    {
+      "id": "inspect-booked-resources",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e7eb0e62339dbeea229a8fe57a85d4290942e2f74c0265ef2cec1a4e224e0b49",
+      "request_count": 68
+    },
+    {
+      "id": "inspect-booked-schedule-form",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href='/Web/admin/manage_schedules.php']\")\n",
+      "sha256": "4e7731ea51b6488b55508a8dbbed61b0963e6254423850a6b7040bc8dbac80b1",
+      "request_count": 68
+    },
+    {
+      "id": "inspect-booked-schedule-form-v2",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "dded38b43c4b4dd6c7fec308bf7a5694d675c0b272c13cf610868c85634f664d",
+      "request_count": 105
+    },
+    {
+      "id": "inspect-booked-schedule-new",
+      "application": "Booked Scheduler",
+      "workflow": "Inspect resource reservation administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "da7b71b382ee4aee358ebf94152bd6d57690ec1c4f3cf06f94acae8de2e277b5",
+      "request_count": 105
+    },
+    {
+      "id": "inspect-easyappointments",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "1b376f9c2dc7a61d1ca35080bf8fd83a774ea2ecd7315130c8820054f5fe8b93",
+      "request_count": 64
+    },
+    {
+      "id": "inspect-easyappointments-admin",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e088a347debabc74fa741db73aba345caacfcb52a3ce862274f8db7e863640c1",
+      "request_count": 120
+    },
+    {
+      "id": "inspect-easyappointments-category-form",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"#add-category\")\n",
+      "sha256": "db25d9c3546dba2f92469f3d53a70c76aa4a0f1252cc9c826e0c316afedc4e0c",
+      "request_count": 160
+    },
+    {
+      "id": "inspect-easyappointments-category-form-v2",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "fc43fa5d4ad60ddc7ebaf5a4a12a8a5ed8eae26bc29fc9446edf4e6831232873",
+      "request_count": 160
+    },
+    {
+      "id": "inspect-easyappointments-customer",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d171b60d19468972a926cd896ff2b325104e428feb0d9fa92415bf17e83efbc2",
+      "request_count": 159
+    },
+    {
+      "id": "inspect-easyappointments-service",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "432d2c7335dca5754926b750016e922c138da2e326753f1c4798fb4336587073",
+      "request_count": 121
+    },
+    {
+      "id": "inspect-easyappointments-service-form",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d99fd90a683b1e3300b030bb8ae71092c9c3fda6516f61a8abc8c67e86f890f8",
+      "request_count": 163
+    },
+    {
+      "id": "inspect-easyappointments-services-menu",
+      "application": "EasyAppointments",
+      "workflow": "Inspect appointment scheduling demo controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "da2f663573c2dff4a041fa7b6241b72f24e232621bd3542e2dbb17dd256190c6",
+      "request_count": 121
+    },
+    {
+      "id": "inspect-egroupware",
+      "application": "EGroupware",
+      "workflow": "Inspect business collaboration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "7a22e57ef2b01dd9a14f2a8154cafeb4e00bfe9e1e49034772ed6042b13b737d",
+      "request_count": 151
+    },
+    {
+      "id": "inspect-elab",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "2b255c6906da6a01c94ee487dfe0df730ae26868c5bab408b4b053567c885890",
+      "request_count": 24
+    },
+    {
+      "id": "inspect-elab-2",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"button:has-text('Create')\").first\n    - locator resolved to <button data-type=\"\" type=\"submit\" id=\"createNoTplBtn\" data-cy=\"create-entity\" data-action=\"create-entity\" class=\"btn btn-secondary mt-1\">Create without template</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "sha256": "ba7f1946f32921ac1e0651014a78ffd70468c432b95ef7067a83104eadaf0811",
+      "request_count": 24
+    },
+    {
+      "id": "inspect-elab-2-3",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "9785935d12e32f7bdb84bbbacb880c685f21c5478f820300413cd69a3126c851",
+      "request_count": 25
+    },
+    {
+      "id": "inspect-elab-button-attributes",
+      "application": "eLabFTW",
+      "workflow": "Inspect laboratory notebook demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "a07d34e1f0302adca82c71c160c10b4be3c7a9a4186e432e34d96194bcb46b8e",
+      "request_count": 24
+    },
+    {
+      "id": "inspect-frontaccounting",
+      "application": "FrontAccounting",
+      "workflow": "Inspect accounting and order-management training demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "c730e196df3eb4deb6e3d8b2d923975fcfa64ccb01fa10ba91161ebb16f23a2a",
+      "request_count": 26
+    },
+    {
+      "id": "inspect-frontaccounting-customer",
+      "application": "FrontAccounting",
+      "workflow": "Inspect accounting and order-management training demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "862a1bcf63f8b6688cb6f84fffe7d09d1e5a82ee49c90e784f4e0cb9b23c9021",
+      "request_count": 40
+    },
+    {
+      "id": "inspect-frontaccounting-supplier",
+      "application": "FrontAccounting",
+      "workflow": "Inspect supplier management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "fe86977ff52c037cf445b0ce8cd793810fcd4b2dadf76a9c1c201354b13565a2",
+      "request_count": 60
+    },
+    {
+      "id": "inspect-grocy",
+      "application": "Grocy",
+      "workflow": "Inspect purchase and stock management controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "9b3d1b689ef1884dad891b9f8a1790abbfc72a7cdbc6048a9d1100bcb763f39d",
+      "request_count": 126
+    },
+    {
+      "id": "inspect-grocy-2",
+      "application": "Grocy",
+      "workflow": "Inspect purchase and stock management controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "24f677f9e60d3b0b140a4c8e962766ddd71ad3cb728e29de8c9e4404ccb3c4d8",
+      "request_count": 126
+    },
+    {
+      "id": "inspect-grocy-2-3",
+      "application": "Grocy",
+      "workflow": "Inspect purchase and stock management controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "5c770326201682e74f962f0e2a076914f0c83cd7954d3611cdc4788c0532ae2f",
+      "request_count": 133
+    },
+    {
+      "id": "inspect-grocy-battery",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d13d1f85060d53b4d7d59ed5ba129efcd9785156b9389989816739dee65fb15d",
+      "request_count": 117
+    },
+    {
+      "id": "inspect-grocy-battery-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "06f6d523c4fd9204980ce1931de8c55cf4a0b0798f7e31caa153bd65726c3d5a",
+      "request_count": 159
+    },
+    {
+      "id": "inspect-grocy-chore",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "5765867f16641c50b2663e5517b53375f9797431c630320c1bcd3009d3c334b8",
+      "request_count": 117
+    },
+    {
+      "id": "inspect-grocy-chore-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d1d138184c0cdaa98739902e4a4105914ee50a4ef336bf2c80bda57a177c30c2",
+      "request_count": 170
+    },
+    {
+      "id": "inspect-grocy-location",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e0c0e3dd4aabae21b0dae78ef5f97b1a30758493dbd537c4f8adaed1cd38893b",
+      "request_count": 117
+    },
+    {
+      "id": "inspect-grocy-location-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "f8db7ec9c8b56f72630e1c08c10baab4b50c99342dbff3386273f7e05ee641a2",
+      "request_count": 158
+    },
+    {
+      "id": "inspect-grocy-product",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d22b64f50f18b2fa4bdd6931926022d34cd9418a6aabb747f0e1b1a7ba65310d",
+      "request_count": 123
+    },
+    {
+      "id": "inspect-grocy-product-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "17010f4adc5b06c1fe4ac7b4ac6ed915cce8b74830b9d1009fda23076d858efa",
+      "request_count": 191
+    },
+    {
+      "id": "inspect-grocy-quantityunit",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "98eefb49ba57c69778f0fb58fb3410a626ad2d8805efc5cba90d4781aa1b3bb2",
+      "request_count": 117
+    },
+    {
+      "id": "inspect-grocy-quantityunit-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d046801021163c06e42e632d2e2e74e7f40d44cc5da880d366d0a67af5038348",
+      "request_count": 174
+    },
+    {
+      "id": "inspect-grocy-shop",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e326325552ff8b6d9d5418a096cced4b115c01fcc5e72d46e6e117adda6941d0",
+      "request_count": 117
+    },
+    {
+      "id": "inspect-grocy-shop-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "539830142ae5f50c01bd72db34a2f33fa06de52cb478300b844d69f044cf2d75",
+      "request_count": 158
+    },
+    {
+      "id": "inspect-grocy-task",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e1c207ae5404fa3c05126d6e3c1c52ee3f1f8edb33d725acf9aff71f014df1bd",
+      "request_count": 119
+    },
+    {
+      "id": "inspect-grocy-task-new",
+      "application": "Grocy",
+      "workflow": "Inspect native master-data creation",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "10c788515fb2146f1eaeb8268f305636698ec6ea6a16e2c7c4f0b45a2de1e75b",
+      "request_count": 166
+    },
+    {
+      "id": "inspect-invoiceplane",
+      "application": "InvoicePlane",
+      "workflow": "Inspect public demo login",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e5eef19f09e566deaf645abd0719760e6fe9ae2c8c11770833fe7356e9c7ea31",
+      "request_count": 8
+    },
+    {
+      "id": "inspect-invoiceplane-2",
+      "application": "InvoicePlane",
+      "workflow": "Inspect public demo login",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "defae6e3b2f7ac71ecd3b2704bf97c0ae9335e9baa9a9ccda227188ee651382f",
+      "request_count": 14
+    },
+    {
+      "id": "inspect-invoiceshelf",
+      "application": "InvoiceShelf",
+      "workflow": "Inspect billing and customer management demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "b43f4bfbb182eaa05c394f61e532835b1e104d0b0c95da71f0ddad72aa32339f",
+      "request_count": 99
+    },
+    {
+      "id": "inspect-invoiceshelf-customer",
+      "application": "InvoiceShelf",
+      "workflow": "Inspect billing and customer management demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d538585ccc9bf6d296b07c3add74c4c71742dd88f41c28767824a316329d3668",
+      "request_count": 116
+    },
+    {
+      "id": "inspect-invoiceshelf-expense",
+      "application": "InvoiceShelf",
+      "workflow": "Inspect expense entry",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "4be2e691b72f120e63dcac69c71568848a8f4fa8207ae1e7d12cdab6387e1e7f",
+      "request_count": 134
+    },
+    {
+      "id": "inspect-invoiceshelf-item",
+      "application": "InvoiceShelf",
+      "workflow": "Inspect billing and customer management demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "213e1c28addb7a134b890416317dc8ae0a5d139170f454c8ad90c7703adcca03",
+      "request_count": 121
+    },
+    {
+      "id": "inspect-invoiceshelf-project",
+      "application": "InvoiceShelf",
+      "workflow": "Inspect billing and customer management demo",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "13fad827de86fc1de0ecb6d1b09376a83de77b2364829ad035f40483d979da2c",
+      "request_count": 108
+    },
+    {
+      "id": "inspect-moodle",
+      "application": "Moodle",
+      "workflow": "Inspect course administration controls",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Error: strict mode violation: locator(\"a[href$='/login/index.php']\") resolved to 2 elements:\n    1) <a href=\"https://sandbox.moodledemo.net/login/index.php\">Log in</a> aka get_by_role(\"link\", name=\"Log in\", exact=True)\n    2) <a href=\"https://sandbox.moodledemo.net/login/index.php\">Log in</a> aka locator(\"#page-footer\").get_by_text(\"Log in\")\n\nCall log:\n  - waiting for locator(\"a[href$='/login/index.php']\")\n",
+      "sha256": "4d8b73a9905e967b9d8c6f1efdef38730b9be5cd477dcf1409bc5f686ded35f0",
+      "request_count": 48
+    },
+    {
+      "id": "inspect-moodle-2",
+      "application": "Moodle",
+      "workflow": "Inspect course administration controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "65e597edf059bdd088f2ca2574d00bd6f2046aae71ce329f48966773ecd77b54",
+      "request_count": 242
+    },
+    {
+      "id": "inspect-moodle-2-3",
+      "application": "Moodle",
+      "workflow": "Inspect course administration controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "fcf4b1123b4880f2f9f668bf6d56e8d252d334c6932057ed682c7bd7f2ccfea2",
+      "request_count": 335
+    },
+    {
+      "id": "inspect-moodle-2-3-4",
+      "application": "Moodle",
+      "workflow": "Inspect course administration controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "812cf14295de2e905b83a07062d7fba5b174d258c153a1957e1b7f2213134190",
+      "request_count": 338
+    },
+    {
+      "id": "inspect-moodle-course-form",
+      "application": "Moodle",
+      "workflow": "Inspect course administration controls",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "322c18e9d7a21376b4fcbd6ec2829875525de3cc099c8bb6d06a425954743a61",
+      "request_count": 526
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d0e0688d08e4169a61fddfd2bd9d2516d68b4fc99fbc9068d3d0ad6bbd8d268b",
+      "request_count": 116
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-devicerole",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "96e0de554e6f5bc0cb72db02658bc34f2fdd93585bebf48940fa62922260c0d3",
+      "request_count": 185
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-manufacturer",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "0dac1624b694938866c0982bada3ce701fe470e5535c56f77f3ebfc6b509e23a",
+      "request_count": 185
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-namespace",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "76fc84824cf2db4d45bd5878d27ca73ebee1e3c5f1c8b12d10ce999b97aa8d4b",
+      "request_count": 185
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-platform",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "dda5bf2fbf87ac0c5b494dfa3cd91e2ccc945b7c125c932b3e1f418709a74e45",
+      "request_count": 185
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-tenant",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "CAPTURE_LIMITED",
+      "error": "Locator.click: Timeout 12000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href='/tenancy/tenants/']\").first\n    - locator resolved to <a data-item-weight=\"100\" class=\"nb-sidenav-link\" href=\"/tenancy/tenants/\">↵                                                …</a>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    23 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n",
+      "sha256": "521c0135025ce68e1220e0e884926aa7b448487ec9de5e5d0d828af7ebbf3457",
+      "request_count": 116
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-tenant-add",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "17ebc144a8bc4c6526956d94114d33c9c4a03d2024a68e896828101d3af1499b",
+      "request_count": 261
+    },
+    {
+      "id": "inspect-[REDACTED:6f0309fea1db]-tenantgroup",
+      "application": "Nautobot",
+      "workflow": "Inspect network inventory administration",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "ae425e8b95031b24c9206c7ee40c810ba1c7ecbe11752380af92d59c79ba520d",
+      "request_count": 185
+    },
+    {
+      "id": "inspect-nextcloud",
+      "application": "Nextcloud",
+      "workflow": "Inspect disposable file collaboration sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "8a2da2663b256275e33c35c52159edc217e244e14e2f74a655c6066e5f35d145",
+      "request_count": 93
+    },
+    {
+      "id": "inspect-openemr",
+      "application": "[REDACTED:30d54e94315a]",
+      "workflow": "Inspect healthcare practice management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "eacb39f5ed01bfea59710c577037a5fb331be41e85e042d064bbea598d956524",
+      "request_count": 74
+    },
+    {
+      "id": "inspect-openemr-new",
+      "application": "[REDACTED:30d54e94315a]",
+      "workflow": "Inspect healthcare practice management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "433e13a28b2381321cce0c01f6dc9b98a9aa0c3b97de2668bf9031b397dba00b",
+      "request_count": 92
+    },
+    {
+      "id": "inspect-openemr-patient",
+      "application": "[REDACTED:30d54e94315a]",
+      "workflow": "Inspect healthcare practice management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "94bdc2e763ca77a55b7dc533becc5e16193e7434c4679a9540d6ad74f23ca0b2",
+      "request_count": 74
+    },
+    {
+      "id": "inspect-rei3",
+      "application": "REI3",
+      "workflow": "Inspect modular business application sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "396a5e9dcf3f881eeebe733cbca62526d84188d320b0c0f43dcf6dd235a65846",
+      "request_count": 61
+    },
+    {
+      "id": "inspect-sylius",
+      "application": "Sylius",
+      "workflow": "Inspect official storefront and administration sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "86fb8525ed4a1aeeff421dda30bbc259212be9bf0cf39f6f30793879f9e90010",
+      "request_count": 34
+    },
+    {
+      "id": "inspect-sylius-admin",
+      "application": "Sylius",
+      "workflow": "Inspect official storefront and administration sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "7859918b154fcee165a42bf1f1278b650474c711059bc7787014e76e220069d5",
+      "request_count": 47
+    },
+    {
+      "id": "inspect-sylius-admin-login",
+      "application": "Sylius",
+      "workflow": "Inspect official storefront and administration sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "d5850821595a19324faec3510aecf0772efddbdd3a3890eae235fc7c0cd1a642",
+      "request_count": 62
+    },
+    {
+      "id": "inspect-sylius-customer-form",
+      "application": "Sylius",
+      "workflow": "Inspect official storefront and administration sandbox",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "87ba6ffd7334d22781b12ebeef9d20e197e6570efab4769d5e5cceb3558f0f21",
+      "request_count": 87
+    },
+    {
+      "id": "inspect-vikunja",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "0f42bd58d1c4365a6b4306a8d98b05258da2762c2ece8085aa4359e0ddaaeb1c",
+      "request_count": 120
+    },
+    {
+      "id": "inspect-vikunja-label",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "dd8f5b5f7b3d9429be1788dcd047d841326b5ccbb5e3d815c19ec32fa5ab369a",
+      "request_count": 127
+    },
+    {
+      "id": "inspect-vikunja-label-new",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "80ea7a57a9238a05042edf14443a4ebc25b7179320dcca6a8ed7945294fc80d0",
+      "request_count": 133
+    },
+    {
+      "id": "inspect-vikunja-project",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "077d81987790622cf169e541152100abc79ca35c7cfd92aca70982397b3cb12d",
+      "request_count": 126
+    },
+    {
+      "id": "inspect-vikunja-project-new",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "acf1871c4ad63df322a0479a085e467e649e49ee06d7c05a5cbd5fdbe70bda65",
+      "request_count": 137
+    },
+    {
+      "id": "inspect-vikunja-team",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "aaa0226ae632f0ddbcf21d6537739baf2c69251ed6c63b4490a3c91d5dfc3760",
+      "request_count": 131
+    },
+    {
+      "id": "inspect-vikunja-team-new",
+      "application": "Vikunja",
+      "workflow": "Inspect project and task management",
+      "status": "INSPECTION_ONLY",
+      "error": null,
+      "sha256": "e0d667be4b3f7d6c41cd4fe7fe6f38bd025fdb00e9f597789aae9eea1125689f",
+      "request_count": 136
+    }
+  ],
+  "accepted_count": 100,
+  "applications": 55,
+  "excluded_near_duplicates": 6,
+  "corpus_is_frozen": true
+}

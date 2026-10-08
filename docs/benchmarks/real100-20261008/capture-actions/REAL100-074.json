@@ -1,0 +1,73 @@
+{
+  "application": "Open Trivia Database",
+  "domain": "Training assessment content",
+  "workflow": "Select question category and retrieve assessment questions",
+  "steps": [
+    {
+      "path": "/api_category.php"
+    },
+    {
+      "path": "/api.php?amount=3&category={selected}&type=multiple",
+      "select": {
+        "path": [
+          "trivia_categories",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-057-open-trivia-database",
+  "permission_url": "https://opentdb.com/api_config.php",
+  "started_utc": "2026-10-08T17:11:20.634992+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://opentdb.com/api_category.php",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:11:21.746350+00:00",
+      "status": 200,
+      "response_sha256": "438b18f5adb7f7c5292a538e1d33ddd3d96c0cf807edecd7cb49b31e346355ef",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"trivia_categories\":[{\"id\":9,\"name\":\"General Knowledge\"},{\"id\":10,\"name\":\"Entertainment: Books\"},{\"id\":11,\"name\":\"Entertainment: Film\"},{\"id\":12,\"name\":\"Entertainment: Music\"},{\"id\":13,\"name\":\"Entert"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://opentdb.com/api.php?amount=3&category=9&type=multiple",
+      "inputs": {},
+      "selection": {
+        "value": 9,
+        "source_step": 0,
+        "source_url": "https://opentdb.com/api_category.php",
+        "source_response_path": [
+          "trivia_categories",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:11:24.144747+00:00",
+      "status": 200,
+      "response_sha256": "928d71c5f2effa1068fcc98cd360394c82065dfdb5cb33f8c1fc892e81c89657",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"response_code\":0,\"results\":[{\"type\":\"multiple\",\"difficulty\":\"medium\",\"category\":\"General Knowledge\",\"question\":\"Where did the pineapple plant originate?\",\"correct_answer\":\"South America\",\"incorrect_"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://opentdb.com/api.php?amount=3&category=9&type=multiple",
+  "finished_utc": "2026-10-08T17:11:24.576660+00:00",
+  "sha256": "30074fa4a59c614101dae8b94c39f7de60291bd288f98fda0da29a06ee053fb2",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

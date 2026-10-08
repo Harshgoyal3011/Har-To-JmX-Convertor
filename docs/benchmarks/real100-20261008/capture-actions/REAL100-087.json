@@ -1,0 +1,82 @@
+{
+  "id": "api-final-005",
+  "application": "Internet Archive",
+  "domain": "Public reference and business research",
+  "workflow": "Search astronomy texts and inspect selected archival metadata",
+  "steps": [
+    {
+      "path": "/advancedsearch.php?q=title%3Aastronomy+AND+mediatype%3Atexts&output=json&rows=2",
+      "inputs": {
+        "q": "title:astronomy AND mediatype:texts"
+      }
+    },
+    {
+      "path": "/metadata/{selected}",
+      "select": {
+        "path": [
+          "response",
+          "docs",
+          0,
+          "identifier"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://archive.org/developers/",
+  "started_utc": "2026-10-08T17:18:18.496144+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://archive.org/advancedsearch.php?q=title%3Aastronomy+AND+mediatype%3Atexts&output=json&rows=2",
+      "inputs": {
+        "q": "title:astronomy AND mediatype:texts"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:19.597433+00:00",
+      "status": 200,
+      "response_sha256": "ce4c616919245aceaf83e82ea7f3d9f3351ce8d2aab60dc7d88dc932f33d57c4",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"responseHeader\":{\"status\":0,\"QTime\":22,\"params\":{\"query\":\"title:astronomy AND mediatype:texts\",\"qin\":\"title:astronomy AND mediatype:texts\",\"fields\":\"_default_\",\"wt\":\"json\",\"rows\":2,\"start\":0}},\"resp"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://archive.org/metadata/romanceofastrono0000flor",
+      "inputs": {},
+      "selection": {
+        "value": "romanceofastrono0000flor",
+        "source_step": 0,
+        "source_url": "https://archive.org/advancedsearch.php?q=title%3Aastronomy+AND+mediatype%3Atexts&output=json&rows=2",
+        "source_response_path": [
+          "response",
+          "docs",
+          0,
+          "identifier"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "romanceofastrono0000flor",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:21.612026+00:00",
+      "status": 200,
+      "response_sha256": "eb22e5ac774b9944d1280a4af7f18b000ada74a985a49d876208249986c653b3",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"alternate_locations\":{\"servers\":[{\"server\":\"dn710800.ca.archive.org\",\"dir\":\"/0/items/romanceofastrono0000flor\"}],\"workable\":[{\"server\":\"dn710800.ca.archive.org\",\"dir\":\"/0/items/romanceofastrono0000f"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://archive.org/metadata/romanceofastrono0000flor",
+  "finished_utc": "2026-10-08T17:18:22.369999+00:00",
+  "sha256": "9d6dc786244ca7021817f48de6dd753aa3f77a769a825fd13125b8fafffa0b51",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

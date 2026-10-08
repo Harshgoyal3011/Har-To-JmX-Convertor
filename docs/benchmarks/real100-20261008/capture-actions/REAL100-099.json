@@ -1,0 +1,74 @@
+{
+  "id": "api-reserve-005",
+  "application": "Figshare",
+  "domain": "Public catalog business research",
+  "workflow": "Browse research collections and inspect selected collection contributions",
+  "steps": [
+    {
+      "path": "/v2/collections?page_size=2",
+      "inputs": {}
+    },
+    {
+      "path": "/v2/collections/{selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://docs.figshare.com/",
+  "started_utc": "2026-10-08T17:21:07.201273+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.figshare.com/v2/collections?page_size=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:21:08.302581+00:00",
+      "status": 200,
+      "response_sha256": "c8e8b7094b028e98b6b715c2915c9e9f37b9b34de4329d35766bb729672c1216",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\": 8762184, \"title\": \"Penetrant-Triggered Responsiveness in Carboxylate\\nPolymer of Intrinsic Microporosity\", \"doi\": \"10.1021/acsmacrolett.6c00475\", \"handle\": \"\", \"url\": \"https://api.figshare.com"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.figshare.com/v2/collections/8762184",
+      "inputs": {},
+      "selection": {
+        "value": 8762184,
+        "source_step": 0,
+        "source_url": "https://api.figshare.com/v2/collections?page_size=2",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "8762184",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:21:10.066634+00:00",
+      "status": 200,
+      "response_sha256": "f81ebed556b780174268b48090e586dce560fa6bf401715cb747282e23307215",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"version\": 1, \"resource_id\": \"10.1021/acsmacrolett.6c00475\", \"resource_doi\": \"10.1021/acsmacrolett.6c00475\", \"resource_title\": \"Penetrant-Triggered Responsiveness in Carboxylate\\nPolymer of Intrinsic"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.figshare.com/v2/collections/8762184",
+  "finished_utc": "2026-10-08T17:21:10.397091+00:00",
+  "sha256": "b263df5407cbf9614f65da02ef0237f155db683a4b8013b24925f44f735fe7f4",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

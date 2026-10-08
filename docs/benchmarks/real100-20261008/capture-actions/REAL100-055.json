@@ -1,0 +1,91 @@
+{
+  "application": "Kraken",
+  "domain": "Currency reference",
+  "workflow": "Select tradable asset and inspect its exchange pair catalog",
+  "steps": [
+    {
+      "path": "/0/public/Assets?asset=XBT,USD",
+      "inputs": {
+        "asset": "XBT,USD"
+      }
+    },
+    {
+      "path": "/0/public/AssetPairs?pair=XBTUSD"
+    },
+    {
+      "path": "/0/public/Ticker?pair={selected}",
+      "select": {
+        "path": [
+          "result"
+        ],
+        "key": 0,
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-030-kraken",
+  "permission_url": "https://docs.kraken.com/api/docs/rest-api/get-asset-info/",
+  "started_utc": "2026-10-08T17:09:38.503501+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.kraken.com/0/public/Assets?asset=XBT,USD",
+      "inputs": {
+        "asset": "XBT,USD"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:39.606253+00:00",
+      "status": 200,
+      "response_sha256": "9c8d24137590e3aafc670180242d0d162e3e8fd101fe6e43d8266d36fd81dc4f",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"error\":[],\"result\":{\"XXBT\":{\"aclass\":\"currency\",\"altname\":\"XBT\",\"decimals\":10,\"display_decimals\":5,\"collateral_value\":0.99,\"status\":\"enabled\",\"margin_rate\":\"0.01\"},\"ZUSD\":{\"aclass\":\"currency\",\"altna"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.kraken.com/0/public/AssetPairs?pair=XBTUSD",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:41.226589+00:00",
+      "status": 200,
+      "response_sha256": "ecc462dcb22d055e06984afd9a592ec9edac609d8d2173525e3172710d784c35",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"error\":[],\"result\":{\"XXBTZUSD\":{\"altname\":\"XBTUSD\",\"wsname\":\"XBT/USD\",\"aclass_base\":\"currency\",\"base\":\"XXBT\",\"aclass_quote\":\"currency\",\"quote\":\"ZUSD\",\"lot\":\"unit\",\"cost_decimals\":5,\"pair_decimals\":1"
+    },
+    {
+      "index": 2,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.kraken.com/0/public/Ticker?pair=XXBTZUSD",
+      "inputs": {},
+      "selection": {
+        "value": "XXBTZUSD",
+        "source_step": 1,
+        "source_url": "https://api.kraken.com/0/public/AssetPairs?pair=XBTUSD",
+        "source_response_path": [
+          "result"
+        ],
+        "selected_dict_key_index": 0,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:42.576914+00:00",
+      "status": 200,
+      "response_sha256": "9004fb95438d214934694c8be8ebc160d35a746f9ac44414c8663f99a3768bbf",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"error\":[],\"result\":{\"XXBTZUSD\":{\"a\":[\"80766.50000\",\"2\",\"2.000\"],\"b\":[\"80766.40000\",\"1\",\"1.000\"],\"c\":[\"80766.50000\",\"0.00012674\"],\"v\":[\"3034.72118173\",\"3535.97328668\"],\"p\":[\"82089.48381\",\"82257.59850"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.kraken.com/0/public/Ticker?pair=XXBTZUSD",
+  "finished_utc": "2026-10-08T17:09:42.918587+00:00",
+  "sha256": "e05ea9e1cc21399375df94a66a595524bb40dffb276bba6adfd173a6a7bdb757",
+  "request_count": 3,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

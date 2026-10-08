@@ -1,0 +1,79 @@
+{
+  "application": "DataCite",
+  "domain": "Research publications",
+  "workflow": "Search DOI research records and inspect selected publication",
+  "steps": [
+    {
+      "path": "/dois?query=engineering&page[size]=2",
+      "inputs": {
+        "query": "engineering"
+      }
+    },
+    {
+      "path": "/dois/{selected}",
+      "select": {
+        "path": [
+          "data",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA",
+        "encoding": "path_preserve_slash"
+      }
+    }
+  ],
+  "id": "api-003-datacite",
+  "permission_url": "https://support.datacite.org/docs/api",
+  "started_utc": "2026-10-08T17:07:32.221569+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.datacite.org/dois?query=engineering&page[size]=2",
+      "inputs": {
+        "query": "engineering"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:07:33.332060+00:00",
+      "status": 200,
+      "response_sha256": "16fbf118489af1aad7eeefabbcb27a383f108ba449d975be9e63a22869ddd88c",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"id\":\"10.5281/zenodo.19373285\",\"type\":\"dois\",\"attributes\":{\"doi\":\"10.5281/zenodo.19373285\",\"identifiers\":[],\"creators\":[{\"nameType\":\"Personal\",\"familyName\":\"Joshua Duran\",\"name\":\"Joshua Dura"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.datacite.org/dois/10.5281/zenodo.19373285",
+      "inputs": {},
+      "selection": {
+        "value": "10.5281/zenodo.19373285",
+        "source_step": 0,
+        "source_url": "https://api.datacite.org/dois?query=engineering&page[size]=2",
+        "source_response_path": [
+          "data",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:07:35.280704+00:00",
+      "status": 200,
+      "response_sha256": "fc6c71e8033dbd64b46c92fbe3a64197271aa901a5fa23d172313eb174aa7a73",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"data\":{\"id\":\"10.5281/zenodo.19373285\",\"type\":\"dois\",\"attributes\":{\"doi\":\"10.5281/zenodo.19373285\",\"prefix\":\"10.5281\",\"suffix\":\"zenodo.19373285\",\"identifiers\":[],\"alternateIdentifiers\":[],\"creators\":"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.datacite.org/dois/10.5281/zenodo.19373285",
+  "finished_utc": "2026-10-08T17:07:35.613100+00:00",
+  "sha256": "8cd836682387a5bacc93efb76bf23b11b9945d1d30a1d848f0717cccd11c0286",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

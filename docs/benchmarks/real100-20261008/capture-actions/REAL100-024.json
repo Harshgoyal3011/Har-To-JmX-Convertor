@@ -1,0 +1,217 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create battery and inspect saved independent inventory configuration",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/batteries"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Scanner Battery",
+      "frame": "/battery/new"
+    },
+    {
+      "op": "fill",
+      "selector": "#description",
+      "value": "Fictional warehouse equipment battery",
+      "frame": "/battery/new"
+    },
+    {
+      "op": "fill",
+      "selector": "#used_in",
+      "value": "Barcode scanner",
+      "frame": "/battery/new"
+    },
+    {
+      "op": "fill",
+      "selector": "#charge_interval_days",
+      "value": "14",
+      "frame": "/battery/new"
+    },
+    {
+      "op": "click",
+      "selector": "#save-battery-button",
+      "frame": "/battery/new"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "id": "candidate-grocy-battery",
+  "completion_assertion": "REAL100 Scanner Battery",
+  "started_utc": "2026-10-08T16:54:59.968838+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:55:00.224320+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:55:02.679426+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:55:02.679447+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/batteries",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:03.231538+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:55:03.231632+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/batteries",
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:05.246300+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:55:05.246332+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/batteries",
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:05.356049+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:55:05.356087+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/batteries",
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:07.365929+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:55:07.365955+00:00",
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Scanner Battery",
+      "frame": "/battery/new",
+      "url_before": "https://demo.grocy.info/batteries",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Scanner Battery",
+        "formAction": "https://demo.grocy.info/battery/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:07.473836+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:55:07.473857+00:00",
+      "op": "fill",
+      "selector": "#description",
+      "value": "Fictional warehouse equipment battery",
+      "frame": "/battery/new",
+      "url_before": "https://demo.grocy.info/batteries",
+      "element_evidence": {
+        "name": "description",
+        "id": "description",
+        "type": "text",
+        "value": "Fictional warehouse equipment battery",
+        "formAction": "https://demo.grocy.info/battery/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:07.496924+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:55:07.496941+00:00",
+      "op": "fill",
+      "selector": "#used_in",
+      "value": "Barcode scanner",
+      "frame": "/battery/new",
+      "url_before": "https://demo.grocy.info/batteries",
+      "element_evidence": {
+        "name": "used_in",
+        "id": "used_in",
+        "type": "text",
+        "value": "Barcode scanner",
+        "formAction": "https://demo.grocy.info/battery/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:07.521314+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:55:07.521333+00:00",
+      "op": "fill",
+      "selector": "#charge_interval_days",
+      "value": "14",
+      "frame": "/battery/new",
+      "url_before": "https://demo.grocy.info/batteries",
+      "element_evidence": {
+        "name": "charge_interval_days",
+        "id": "charge_interval_days",
+        "type": "number",
+        "value": "14",
+        "formAction": "https://demo.grocy.info/battery/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:07.546366+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:55:07.546383+00:00",
+      "op": "click",
+      "selector": "#save-battery-button",
+      "frame": "/battery/new",
+      "url_before": "https://demo.grocy.info/batteries",
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:07.665769+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T16:55:07.665806+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.grocy.info/batteries",
+      "url_after": "https://demo.grocy.info/batteries",
+      "completed_utc": "2026-10-08T16:55:10.680085+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:55:13.100711+00:00",
+  "sha256": "2460d0363aca9d4527a03b1dedfaab0ef78db198dd1e816bdd1bccb2715e0d30",
+  "request_count": 214,
+  "representation_types": [
+    "application/json"
+  ]
+}

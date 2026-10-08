@@ -1,0 +1,71 @@
+{
+  "application": "Digitraffic Finland",
+  "domain": "Rail operations",
+  "workflow": "Select rail station and retrieve live train arrivals",
+  "steps": [
+    {
+      "path": "/api/v1/metadata/stations"
+    },
+    {
+      "path": "/api/v1/live-trains/station/{selected}?arrived_trains=2&arriving_trains=2&departed_trains=0&departing_trains=0",
+      "select": {
+        "path": [
+          0,
+          "stationShortCode"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-041-digitraffic-finland",
+  "permission_url": "https://www.digitraffic.fi/en/railway-traffic/",
+  "started_utc": "2026-10-08T17:10:19.013363+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rata.digitraffic.fi/api/v1/metadata/stations",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:20.121632+00:00",
+      "status": 200,
+      "response_sha256": "aa5448ce8f51c523c9e92b38d8126f4e02352bee31909e36a7afd10f5b24fa62",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"countryCode\":\"FI\",\"latitude\":64.551817,\"longitude\":25.012066,\"passengerTraffic\":false,\"stationName\":\"Ahonpää\",\"stationShortCode\":\"AHO\",\"stationUICCode\":1343,\"type\":\"STATION\"},{\"countryCode\":\"FI\",\"l"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rata.digitraffic.fi/api/v1/live-trains/station/AHO?arrived_trains=2&arriving_trains=2&departed_trains=0&departing_trains=0",
+      "inputs": {},
+      "selection": {
+        "value": "AHO",
+        "source_step": 0,
+        "source_url": "https://rata.digitraffic.fi/api/v1/metadata/stations",
+        "source_response_path": [
+          0,
+          "stationShortCode"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:21.925782+00:00",
+      "status": 200,
+      "response_sha256": "cbad90dec7d359eedcf3aee1cd38abb50a065e4eaee0f99e790eef545e1428ac",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"commuterLineID\":\"\",\"runningCurrently\":false,\"cancelled\":false,\"version\":293816032459,\"timetableType\":\"REGULAR\",\"timetableAcceptanceDate\":\"2026-07-02T05:55:40.000Z\",\"departureDate\":\"2026-10-07\",\"tra"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://rata.digitraffic.fi/api/v1/live-trains/station/AHO?arrived_trains=2&arriving_trains=2&departed_trains=0&departing_trains=0",
+  "finished_utc": "2026-10-08T17:10:22.601590+00:00",
+  "sha256": "cde2b995baaa1ec6f348211b011334fe90b29f1fa8c2e35fd0d3c28a54d6779a",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

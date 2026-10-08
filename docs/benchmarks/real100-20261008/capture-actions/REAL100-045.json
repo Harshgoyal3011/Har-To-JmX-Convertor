@@ -1,0 +1,78 @@
+{
+  "application": "ITIS",
+  "domain": "Taxonomy registry",
+  "workflow": "Find scientific species and inspect selected taxonomic record",
+  "steps": [
+    {
+      "path": "/ITISWebService/jsonservice/searchByScientificName?srchKey=Quercus%20alba",
+      "inputs": {
+        "srchKey": "Quercus alba"
+      }
+    },
+    {
+      "path": "/ITISWebService/jsonservice/getFullRecordFromTSN?tsn={selected}",
+      "select": {
+        "path": [
+          "scientificNames",
+          0,
+          "tsn"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-019-itis",
+  "permission_url": "https://www.itis.gov/ws_description.html",
+  "started_utc": "2026-10-08T17:08:51.063625+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.itis.gov/ITISWebService/jsonservice/searchByScientificName?srchKey=Quercus%20alba",
+      "inputs": {
+        "srchKey": "Quercus alba"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:52.166017+00:00",
+      "status": 200,
+      "response_sha256": "86f5cde7bd3fdf91e5704749c3007a548faf42faf27b5fee2b544d5d30f4797a",
+      "response_content_type": "text/json;charset=ISO-8859-1",
+      "response_excerpt": "{\"class\":\"gov.usgs.itis.itis_service.data.SvcScientificNameList\",\"scientificNames\":[{\"author\":\"L.\",\"class\":\"gov.usgs.itis.itis_service.data.SvcScientificName\",\"combinedName\":\"Quercus alba\",\"kingdom\":\""
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://www.itis.gov/ITISWebService/jsonservice/getFullRecordFromTSN?tsn=19290",
+      "inputs": {},
+      "selection": {
+        "value": "19290",
+        "source_step": 0,
+        "source_url": "https://www.itis.gov/ITISWebService/jsonservice/searchByScientificName?srchKey=Quercus%20alba",
+        "source_response_path": [
+          "scientificNames",
+          0,
+          "tsn"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:55.701114+00:00",
+      "status": 200,
+      "response_sha256": "5e586b492173421f2d062d9b6572f214b36f2a8870e12db7e6e07e1461402ce0",
+      "response_content_type": "text/json;charset=ISO-8859-1",
+      "response_excerpt": "{\"acceptedNameList\":{\"acceptedNames\":[null],\"class\":\"gov.usgs.itis.itis_service.data.SvcAcceptedNameList\",\"tsn\":\"19290\"},\"class\":\"gov.usgs.itis.itis_service.data.SvcFullRecord\",\"commentList\":{\"class\":"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://www.itis.gov/ITISWebService/jsonservice/getFullRecordFromTSN?tsn=19290",
+  "finished_utc": "2026-10-08T17:08:56.172087+00:00",
+  "sha256": "15a7bd2a2e51dfd88033e6752ac5786e97595b7dde9fe81f039d3f717168ebee",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

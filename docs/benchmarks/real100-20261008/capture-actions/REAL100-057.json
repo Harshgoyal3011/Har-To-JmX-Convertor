@@ -1,0 +1,76 @@
+{
+  "application": "Postcodes.io",
+  "domain": "Address verification",
+  "workflow": "Resolve postcode and inspect selected postcode district",
+  "steps": [
+    {
+      "path": "/postcodes/SW1A1AA",
+      "inputs": {
+        "postcode": "SW1A1AA"
+      }
+    },
+    {
+      "path": "/outcodes/{selected}",
+      "select": {
+        "path": [
+          "result",
+          "outcode"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-036-postcodes-io",
+  "permission_url": "https://postcodes.io/docs/api/",
+  "started_utc": "2026-10-08T17:10:00.997196+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.postcodes.io/postcodes/SW1A1AA",
+      "inputs": {
+        "postcode": "SW1A1AA"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:02.108437+00:00",
+      "status": 200,
+      "response_sha256": "3ad831bedfb23e4f8d1ebd61c945dd4c9c321fad8f76e07d2b36793fb0e5eef5",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"status\":200,\"result\":{\"postcode\":\"SW1A 1AA\",\"quality\":1,\"eastings\":529090,\"northings\":179645,\"country\":\"England\",\"nhs_ha\":\"London\",\"longitude\":-0.141563,\"latitude\":51.50101,\"european_electoral_regio"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.postcodes.io/outcodes/SW1A",
+      "inputs": {},
+      "selection": {
+        "value": "SW1A",
+        "source_step": 0,
+        "source_url": "https://api.postcodes.io/postcodes/SW1A1AA",
+        "source_response_path": [
+          "result",
+          "outcode"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:03.664122+00:00",
+      "status": 200,
+      "response_sha256": "db0fbcbd7ab560cc01fc61b400cbcf8f2d0e5493cfc1fa47d1e94fa52cffe38f",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"status\":200,\"result\":{\"outcode\":\"SW1A\",\"longitude\":-0.13223425517241374,\"latitude\":51.50455391034481,\"northings\":180056,\"eastings\":529727,\"admin_district\":[\"Wandsworth\",\"Westminster\"],\"parish\":[\"Wan"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.postcodes.io/outcodes/SW1A",
+  "finished_utc": "2026-10-08T17:10:04.050003+00:00",
+  "sha256": "a91130c75e36f7f5d827183c0618d39c09a3b20f229bac15cfdba83451713adf",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

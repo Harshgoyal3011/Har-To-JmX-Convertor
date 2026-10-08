@@ -1,0 +1,78 @@
+{
+  "application": "Zippopotam.us",
+  "domain": "Shipping address lookup",
+  "workflow": "Resolve postal code and cross-check selected locality",
+  "steps": [
+    {
+      "path": "/us/90210",
+      "inputs": {
+        "postal_code": "90210"
+      }
+    },
+    {
+      "path": "/us/CA/{selected}",
+      "select": {
+        "path": [
+          "places",
+          0,
+          "place name"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-037-zippopotam-us",
+  "permission_url": "https://www.zippopotam.us/",
+  "started_utc": "2026-10-08T17:10:04.320368+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.zippopotam.us/us/90210",
+      "inputs": {
+        "postal_code": "90210"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:05.424430+00:00",
+      "status": 200,
+      "response_sha256": "5674d6e91541b3961a505cc8030663357748bde2ef6c86257b6fb413b3709c44",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"country\": \"United States\", \"country abbreviation\": \"US\", \"post code\": \"90210\", \"places\": [{\"place name\": \"Beverly Hills\", \"longitude\": \"-118.4065\", \"latitude\": \"34.0901\", \"state\": \"California\", \"sta"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.zippopotam.us/us/CA/Beverly%20Hills",
+      "inputs": {},
+      "selection": {
+        "value": "Beverly Hills",
+        "source_step": 0,
+        "source_url": "https://api.zippopotam.us/us/90210",
+        "source_response_path": [
+          "places",
+          0,
+          "place name"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:07.058485+00:00",
+      "status": 200,
+      "response_sha256": "0f7434ab22a459125ffa1db67af81b69fefc7ae65c0a5c9e6ada170f148fe9e4",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"country\": \"United States\", \"country abbreviation\": \"US\", \"state\": \"California\", \"state abbreviation\": \"CA\", \"place name\": \"Beverly Hills\", \"places\": [{\"place name\": \"Beverly Hills\", \"longitude\": \"-1"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.zippopotam.us/us/CA/Beverly%20Hills",
+  "finished_utc": "2026-10-08T17:10:07.539361+00:00",
+  "sha256": "dbf2b2e93cab79d823d6755d780eb742a01d8c0cf7f4d693c0f57263486315ee",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

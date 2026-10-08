@@ -1,0 +1,82 @@
+{
+  "application": "Ergast Jolpica",
+  "domain": "Race venue planning",
+  "workflow": "Select championship circuit and inspect selected venue",
+  "steps": [
+    {
+      "path": "/ergast/f1/2024/circuits.json?limit=2",
+      "inputs": {
+        "season": "2024"
+      }
+    },
+    {
+      "path": "/ergast/f1/circuits/{selected}.json",
+      "select": {
+        "path": [
+          "MRData",
+          "CircuitTable",
+          "Circuits",
+          0,
+          "circuitId"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-047-ergast-jolpica",
+  "permission_url": "https://api.jolpi.ca/ergast/",
+  "started_utc": "2026-10-08T17:10:44.423999+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.jolpi.ca/ergast/f1/2024/circuits.json?limit=2",
+      "inputs": {
+        "season": "2024"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:45.526007+00:00",
+      "status": 200,
+      "response_sha256": "46a2f630aa4e8665b4b3bb1605c32c41449f0bfb3de6db50344125d17fa88982",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"MRData\":{\"xmlns\":\"\",\"series\":\"f1\",\"url\":\"https://api.jolpi.ca/ergast/f1/2024/circuits.json\",\"limit\":\"2\",\"offset\":\"0\",\"total\":\"24\",\"CircuitTable\":{\"season\":\"2024\",\"Circuits\":[{\"circuitId\":\"albert_par"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.jolpi.ca/ergast/f1/circuits/albert_park.json",
+      "inputs": {},
+      "selection": {
+        "value": "albert_park",
+        "source_step": 0,
+        "source_url": "https://api.jolpi.ca/ergast/f1/2024/circuits.json?limit=2",
+        "source_response_path": [
+          "MRData",
+          "CircuitTable",
+          "Circuits",
+          0,
+          "circuitId"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:47.301458+00:00",
+      "status": 200,
+      "response_sha256": "6cb8daf0bcae0c0bdd89476bb553b8d9dfae95197d91e14d7c2f8a730e1674bf",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"MRData\":{\"xmlns\":\"\",\"series\":\"f1\",\"url\":\"https://api.jolpi.ca/ergast/f1/circuits/albert_park.json\",\"limit\":\"30\",\"offset\":\"0\",\"total\":\"1\",\"CircuitTable\":{\"circuitId\":\"albert_park\",\"Circuits\":[{\"circu"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.jolpi.ca/ergast/f1/circuits/albert_park.json",
+  "finished_utc": "2026-10-08T17:10:47.889559+00:00",
+  "sha256": "ff8663c5540511b0619bcdafc61578f909786d4d824411ff80d932a8519735fe",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

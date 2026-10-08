@@ -1,0 +1,73 @@
+{
+  "application": "MBTA",
+  "domain": "Transit service operations",
+  "workflow": "Search transit alerts and inspect selected disruption",
+  "steps": [
+    {
+      "path": "/alerts?page[limit]=2"
+    },
+    {
+      "path": "/alerts/{selected}",
+      "select": {
+        "path": [
+          "data",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-039-mbta",
+  "permission_url": "https://www.mbta.com/developers/v3-api",
+  "started_utc": "2026-10-08T17:10:11.692048+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api-v3.mbta.com/alerts?page[limit]=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:12.799134+00:00",
+      "status": 200,
+      "response_sha256": "65f338662f95a0b12dce0f1026f9c1eb0fe24d12d4ed1c5d51db02f9e42485e2",
+      "response_content_type": "application/vnd.api+json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"attributes\":{\"active_period\":[{\"end\":\"2026-11-08T13:30:00-05:00\",\"start\":\"2026-11-08T07:30:00-05:00\"}],\"banner\":null,\"cause\":\"SPECIAL_EVENT\",\"closed_timestamp\":null,\"created_at\":\"2026-09-30"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api-v3.mbta.com/alerts/1035880",
+      "inputs": {},
+      "selection": {
+        "value": "1035880",
+        "source_step": 0,
+        "source_url": "https://api-v3.mbta.com/alerts?page[limit]=2",
+        "source_response_path": [
+          "data",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:14.848228+00:00",
+      "status": 200,
+      "response_sha256": "a86804c254c3f846cc7ba190d235e1bf508db487bf663831ec531b8b91e3ff19",
+      "response_content_type": "application/vnd.api+json; charset=utf-8",
+      "response_excerpt": "{\"data\":{\"attributes\":{\"active_period\":[{\"end\":\"2026-11-08T13:30:00-05:00\",\"start\":\"2026-11-08T07:30:00-05:00\"}],\"banner\":null,\"cause\":\"SPECIAL_EVENT\",\"closed_timestamp\":null,\"created_at\":\"2026-09-30T"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api-v3.mbta.com/alerts/1035880",
+  "finished_utc": "2026-10-08T17:10:15.190552+00:00",
+  "sha256": "ef3b6797bc5c3b22e65a8525d21e5c3f7ef002724dc8d41080c00e2b613ffb48",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

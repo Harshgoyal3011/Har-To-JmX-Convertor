@@ -1,0 +1,244 @@
+{
+  "id": "candidate-invoiceshelf-item",
+  "application": "InvoiceShelf",
+  "workflow": "Create priced catalog item and verify saved item",
+  "permission_url": "https://demo.invoiceshelf.com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.invoiceshelf.com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[type=email]",
+      "value": "demo@invoiceshelf.com"
+    },
+    {
+      "op": "fill",
+      "selector": "input[type=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Login')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/admin/items'] >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "text=Add Item >> nth=0"
+    },
+    {
+      "op": "fill",
+      "selector": "input[id$='1-0-0-control']",
+      "value": "REAL100 Consulting Hour"
+    },
+    {
+      "op": "fill",
+      "selector": "input[id$='1-1-0-control']",
+      "value": "125.50"
+    },
+    {
+      "op": "fill",
+      "selector": "textarea[name=description]",
+      "value": "Fictional business service catalog item"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Save Item')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Consulting Hour",
+  "started_utc": "2026-10-08T16:33:50.581589+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:33:51.315977+00:00",
+      "op": "goto",
+      "url": "https://demo.invoiceshelf.com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:33:53.067311+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:33:53.067338+00:00",
+      "op": "fill",
+      "selector": "input[type=email]",
+      "value": "demo@invoiceshelf.com",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "element_evidence": {
+        "name": "email",
+        "id": "field-v-0-0-control",
+        "type": "email",
+        "value": "demo@invoiceshelf.com",
+        "formAction": "https://demo.invoiceshelf.com/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:33:53.288348+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:33:53.288373+00:00",
+      "op": "fill",
+      "selector": "input[type=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "field-v-1-0-control",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://demo.invoiceshelf.com/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:33:53.313126+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:33:53.313144+00:00",
+      "op": "click",
+      "selector": "button:has-text('Login')",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T16:33:53.394494+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:33:53.394519+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "url_after": "https://demo.invoiceshelf.com/admin/dashboard",
+      "completed_utc": "2026-10-08T16:33:57.395917+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:33:57.395956+00:00",
+      "op": "click",
+      "selector": "a[href='/admin/items'] >> nth=0",
+      "url_before": "https://demo.invoiceshelf.com/admin/dashboard",
+      "url_after": "https://demo.invoiceshelf.com/admin/dashboard",
+      "completed_utc": "2026-10-08T16:33:57.436499+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:33:57.436530+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.invoiceshelf.com/admin/dashboard",
+      "url_after": "https://demo.invoiceshelf.com/admin/items",
+      "completed_utc": "2026-10-08T16:33:59.449052+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:33:59.449096+00:00",
+      "op": "click",
+      "selector": "text=Add Item >> nth=0",
+      "url_before": "https://demo.invoiceshelf.com/admin/items",
+      "url_after": "https://demo.invoiceshelf.com/admin/items",
+      "completed_utc": "2026-10-08T16:33:59.754621+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:33:59.754639+00:00",
+      "op": "fill",
+      "selector": "input[id$='1-0-0-control']",
+      "value": "REAL100 Consulting Hour",
+      "url_before": "https://demo.invoiceshelf.com/admin/items",
+      "element_evidence": {
+        "name": "",
+        "id": "field-v-4-1-0-0-control",
+        "type": "text",
+        "value": "REAL100 Consulting Hour",
+        "formAction": "https://demo.invoiceshelf.com/admin/items/submit",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/items/create",
+      "completed_utc": "2026-10-08T16:34:01.406552+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:34:01.406576+00:00",
+      "op": "fill",
+      "selector": "input[id$='1-1-0-control']",
+      "value": "125.50",
+      "url_before": "https://demo.invoiceshelf.com/admin/items/create",
+      "element_evidence": {
+        "name": "",
+        "id": "field-v-4-1-1-0-control",
+        "type": "tel",
+        "value": "$ 125.50",
+        "formAction": "https://demo.invoiceshelf.com/admin/items/submit",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/items/create",
+      "completed_utc": "2026-10-08T16:34:01.442312+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T16:34:01.442325+00:00",
+      "op": "fill",
+      "selector": "textarea[name=description]",
+      "value": "Fictional business service catalog item",
+      "url_before": "https://demo.invoiceshelf.com/admin/items/create",
+      "element_evidence": {
+        "name": "description",
+        "id": "field-v-4-1-3-0-control",
+        "type": "textarea",
+        "value": "Fictional business service catalog item",
+        "formAction": "https://demo.invoiceshelf.com/admin/items/submit",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/items/create",
+      "completed_utc": "2026-10-08T16:34:01.478378+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T16:34:01.478403+00:00",
+      "op": "click",
+      "selector": "button:has-text('Save Item')",
+      "url_before": "https://demo.invoiceshelf.com/admin/items/create",
+      "url_after": "https://demo.invoiceshelf.com/admin/items/create",
+      "completed_utc": "2026-10-08T16:34:01.545918+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T16:34:01.545937+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.invoiceshelf.com/admin/items/create",
+      "url_after": "https://demo.invoiceshelf.com/admin/items",
+      "completed_utc": "2026-10-08T16:34:04.548329+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:34:06.919829+00:00",
+  "sha256": "844c3e9161113db91bff32a6d568d619699c11c0d55cf595db778f23afcc047b",
+  "request_count": 126,
+  "representation_types": [
+    "application/json"
+  ]
+}

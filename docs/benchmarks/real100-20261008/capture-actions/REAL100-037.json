@@ -1,0 +1,74 @@
+{
+  "application": "Ensembl",
+  "domain": "Genomics variation",
+  "workflow": "Find genetic variant and inspect selected variant phenotype",
+  "steps": [
+    {
+      "path": "/variation/human/rs699?content-type=application/json",
+      "inputs": {
+        "variant": "rs699"
+      }
+    },
+    {
+      "path": "/variation/human/{selected}?phenotypes=1&content-type=application/json",
+      "select": {
+        "path": [
+          "name"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-009-ensembl",
+  "permission_url": "https://rest.ensembl.org/",
+  "started_utc": "2026-10-08T17:07:56.001591+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rest.ensembl.org/variation/human/rs699?content-type=application/json",
+      "inputs": {
+        "variant": "rs699"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:07:57.110449+00:00",
+      "status": 200,
+      "response_sha256": "6af8f61163596597bd55b8e25a13c9f0256743cedac62419ede131e0d0e9519a",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"clinical_significance\":[\"benign\"],\"minor_allele\":null,\"name\":\"rs699\",\"most_severe_consequence\":\"missense_variant\",\"MAF\":null,\"source\":\"Variants (including SNPs and indels) imported from dbSNP\",\"evid"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://rest.ensembl.org/variation/human/rs699?phenotypes=1&content-type=application/json",
+      "inputs": {},
+      "selection": {
+        "value": "rs699",
+        "source_step": 0,
+        "source_url": "https://rest.ensembl.org/variation/human/rs699?content-type=application/json",
+        "source_response_path": [
+          "name"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:09.455752+00:00",
+      "status": 200,
+      "response_sha256": "e6cadd66be314d361080ba8948c7d7a33b397503dd8ebf99238b5cee1e37b1a5",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"ambiguity\":\"R\",\"synonyms\":[\"rs61617185\",\"rs17856353\",\"rs386606420\",\"rs3182295\",\"rs4714\",\"NM_001382817.1:c.803T>C\",\"NM_001384479.1:c.776T>C\",\"NM_000029.3:c.803T>C\",\"NP_001369746.2:p.Met259Thr\",\"NM_00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://rest.ensembl.org/variation/human/rs699?phenotypes=1&content-type=application/json",
+  "finished_utc": "2026-10-08T17:08:12.729418+00:00",
+  "sha256": "af399757b40a54cb3f6250bf1e935cad30de4f194c4ca1e9d47cc699e5c52f70",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

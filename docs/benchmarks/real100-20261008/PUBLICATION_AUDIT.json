@@ -1,0 +1,150 @@
+{
+  "published_report_count": 27,
+  "published_action_records": 100,
+  "redacted_session_or_credential_values": 604,
+  "policy": "Captured credentials, CSRF/auth tokens and cookie/session values replaced with stable hash markers; raw HAR/browser HTML/screenshots/wire header dumps are local only.",
+  "raw_har_local_only": {
+    "count": 100,
+    "bytes": 356881465,
+    "sha256_manifest": "REAL100_CORPUS_MANIFEST.json"
+  },
+  "report_hashes": {
+    "REAL100_CORPUS_MANIFEST.json": {
+      "original_sha256": "05907a9d485a2354bd3af7e5a1d7199b9c87658e476511df4b15708005bf4191",
+      "published_sha256": "7b4bf84d3fc64f365eac5c1ec3ed513835321064dcca67892c412e2fbbc851cb"
+    },
+    "REAL100_DUPLICATE_AUDIT.json": {
+      "original_sha256": "84b4ec35cdf81d902b981c7a5afb730f0d4384a21520b05890387ce143fca5c4",
+      "published_sha256": "a88003b43bff5479f0facf20261da55474482c5421c0876345e738e807ab9f9f"
+    },
+    "REAL100_GROUND_TRUTH_INPUTS.csv": {
+      "original_sha256": "fb2292ff3c19395473cc241b2c1a4be9e1ee91e4ca710e11c63b5267ca4521ec",
+      "published_sha256": "30e48de5ef26069f1c3a1a77aae55dfdfceb8c38a8d0fbe9dd93ac7d5e1bb85e"
+    },
+    "REAL100_GROUND_TRUTH_RUNTIME.csv": {
+      "original_sha256": "2263a714a44392ba58407d7a37cc2786e7f5d48ade6615a9fa1b1436c6ffa1b7",
+      "published_sha256": "586582e170ef0938ac854db432aa7a1dfc931c0264ab99743b3fe51e14c41d7d"
+    },
+    "REAL100_PARAMETERIZATION_SCORECARD.json": {
+      "original_sha256": "b9fb28887df3ae23275a9ed9c9d8c43845969dd7745e029715e0774ba63175a3",
+      "published_sha256": "47d0abeb4efbc9ccb6c1e6eb44df012f590f184c7b09577bbe6095d576ac1415"
+    },
+    "REAL100_CORRELATION_SCORECARD.json": {
+      "original_sha256": "6b492a92d5d6eafe1d4d594a4cbce10be7136062356375507929c4a8ece1996f",
+      "published_sha256": "5b4a5cc728b6f24acb9500605dbd01b4f1cd70d650d0d9e77f1db5b69c6feb71"
+    },
+    "REAL100_MATERIALIZATION_AUDIT.json": {
+      "original_sha256": "c0af57799f25091bc11444f8bc920251bc33f01e1f56d84cd36b5457ba7abd5b",
+      "published_sha256": "2353853e931fe8c59c881cd7fc78d06e98a5e516efd258a0eaf63f76c926af42"
+    },
+    "REAL100_REQUEST_FIDELITY.json": {
+      "original_sha256": "1c7703ef3aea1d81769f5652f17ac02c932a7366c9d0cd2becd849a29116bbbb",
+      "published_sha256": "7b55c12cb5c48092bd7bd8df53a545ff089d41dca7212930b4fdbcbc0a7b4517"
+    },
+    "REAL100_JSON_REPRESENTATION.json": {
+      "original_sha256": "863f66222895da5d2f3de2d5463a3b1f4f43cf57fa428c12788ba245d469de63",
+      "published_sha256": "521173eb925a315a682492627700eaf29d552ddb9e045a415b8f105b830ad15c"
+    },
+    "REAL100_REPLAY_READINESS.csv": {
+      "original_sha256": "a3369d915544f2479f311d01ed1c3a06254fa9c78faf56058467baded638b793",
+      "published_sha256": "a880fa26de4aae14713cc265bb361ee9541c9219c0dd77698d33954594f0b2a0"
+    },
+    "REAL100_FAILURE_INVENTORY.csv": {
+      "original_sha256": "5ae547db0627d51b7ae7c05392384c3e84daee8c4ca8ee4ca84f40fe82b6ae57",
+      "published_sha256": "12bc956e1f968a6ddc6c60d693fe10d99070ddbe8181c3dcc0a7f1cdd36ac964"
+    },
+    "REAL100_ROOT_CAUSE_ANALYSIS.json": {
+      "original_sha256": "d150c53bbc1e465b5931a47f2db234347a8308c9e8228afc532378ec99ff4e81",
+      "published_sha256": "b341b1103c3dc86db79a9edd661eef7b944b18091c41cbdc50c5dcb30334aa03"
+    },
+    "REAL100_FINAL_JMX_AUDIT.json": {
+      "original_sha256": "bac189ab560d765de63ae4816085a6925195944fc7a3d3db59230ef162be7caa",
+      "published_sha256": "bfe7ff74fff46777d779879e87d932a7df49535259e573bfe4d47615eed304e5"
+    },
+    "REAL100_REGRESSION_REPORT.json": {
+      "original_sha256": "b783fad7a0f5033dda84fa3b4df552bd398142d1edcbe3219f9478f54e280086",
+      "published_sha256": "27e7f11374ed63132892320dcae35956d539a2b5fffbb64a5c4d574c1e52307a"
+    },
+    "REAL100_EXECUTIVE_REPORT.md": {
+      "original_sha256": "626388a70d1da85d40e62b3d42759b8995a7e937a33ff5c364fa73903a63a52b",
+      "published_sha256": "626388a70d1da85d40e62b3d42759b8995a7e937a33ff5c364fa73903a63a52b"
+    },
+    "REAL100_EXECUTIVE_SCORECARD.json": {
+      "original_sha256": "33ea2fd8325c1d8077090bb3d05485e48009019edc45df0c506e23952769917b",
+      "published_sha256": "19db4e9d1f583479ba36047f11b46123e80bda6809aee18a6496804a7dbb00c5"
+    },
+    "CREATED_RUNTIME_CSV_OWNERSHIP_EXAMPLES.json": {
+      "original_sha256": "ab4adc64095d0550d6c14f08437bfa14b95b9cd43b9e35ab3993919fb49c05fe",
+      "published_sha256": "b89b841139be8c1311e70181802411446780f1bbb1552c1606eaca2e8189038a"
+    },
+    "NATURAL_OCCURRENCE_COLLISION_AUDIT.json": {
+      "original_sha256": "3803058156350115977bda5193c1bade4d3420dd850766ba798bbf7ea6442cb6",
+      "published_sha256": "6391259e07bdf9d67f3ff890c74832aad6d49a16954c60342ab73381389018f7"
+    },
+    "SOURCE_HASH_REPORT.json": {
+      "original_sha256": "32e6eebcbce547ee0954e437442f73f884079e297fc69a2abd35c3b22c106992",
+      "published_sha256": "cd65ea47615e798be6dd59a0ca79ff31b036bc06828c7e6721be640c0791f649"
+    },
+    "ENGINE_FREEZE.json": {
+      "original_sha256": "a43f528ea41e859158791fdbf540a004b891d65032200c8c18ad925ef3989d18",
+      "published_sha256": "171025edaebb834125abacb25996bb8ba1ae2f940da577d0f5696d3d06611c26"
+    },
+    "GROUND_TRUTH_LABEL_REVIEW.json": {
+      "original_sha256": "b54e959e754a09d2071044b6f10cc60c86a6b9691754de07041fc829c6cfdc92",
+      "published_sha256": "de79cdf26e4f8ac87a2d3663e2d0d7377b5d6f04414383c2ad982283066274bd"
+    },
+    "WIRE_SMOKE_EXECUTION.json": {
+      "original_sha256": "a5c98be83e1ab9da1d6bbb5268684b412ce622b63e8a1499b07cefa92a46205b",
+      "published_sha256": "d517bee53aa80bec44b2fad3adfb299cf8f6c87ac51b8ea64726db6e078ded71"
+    },
+    "JMETER_INSPECTION_RESULTS.json": {
+      "original_sha256": "7ccde03e63750ccacd8a8eba97c82a1fc7857b8745086e17e7b3c7a80db411d7",
+      "published_sha256": "a2534a47c6d110c6749d6c12f63f5c1427efef9f1dc956770c4200bd185a7c4a"
+    },
+    "BASELINE_CONVERSION_RESULTS.json": {
+      "original_sha256": "ac3a22d8ea2d4b93dd7ec35d3b8b9fe71177a9b884f53a9735dd90234b306322",
+      "published_sha256": "8e4f92a95a42ccc3264b1156a8c6c2c384f461ae677d1b2536f6b00ac7715e0f"
+    },
+    "REGRESSION_CONVERSION_RESULTS.json": {
+      "original_sha256": "740ec3e19d8d0706c8cd783914e1bf4b054ea15e24213b09dfadac6bfbee7a10",
+      "published_sha256": "15df620d9a2caebf024c8279c707c64fe2f52d6ed9c15bf644afd6a7fb032241"
+    },
+    "DELIVERABLE_HASH_REPORT.json": {
+      "original_sha256": "4a02b5a71577428c3ea6f86cac91d7c0d9beeb64e19005991aa73fc3e64c747d",
+      "published_sha256": "f3ff5c7d5725da4ad4fbc26bdb8559dd935220238693a5df13b2d0d07d0af2fb"
+    },
+    "full-pytest.xml": {
+      "original_sha256": "2884bd1dc7336352113a46b5f89ddb06e1a0e0af2eb69be6e1535cab31b74380",
+      "published_sha256": "c18c0966c0cf4bc20772cbca9d624f5b0721b2d9112fc34e21b17383dcacd9c2"
+    }
+  },
+  "redaction_or_format_changed_files": [
+    "REAL100_CORPUS_MANIFEST.json",
+    "REAL100_DUPLICATE_AUDIT.json",
+    "REAL100_GROUND_TRUTH_INPUTS.csv",
+    "REAL100_GROUND_TRUTH_RUNTIME.csv",
+    "REAL100_PARAMETERIZATION_SCORECARD.json",
+    "REAL100_CORRELATION_SCORECARD.json",
+    "REAL100_MATERIALIZATION_AUDIT.json",
+    "REAL100_REQUEST_FIDELITY.json",
+    "REAL100_JSON_REPRESENTATION.json",
+    "REAL100_REPLAY_READINESS.csv",
+    "REAL100_FAILURE_INVENTORY.csv",
+    "REAL100_ROOT_CAUSE_ANALYSIS.json",
+    "REAL100_FINAL_JMX_AUDIT.json",
+    "REAL100_REGRESSION_REPORT.json",
+    "REAL100_EXECUTIVE_SCORECARD.json",
+    "CREATED_RUNTIME_CSV_OWNERSHIP_EXAMPLES.json",
+    "NATURAL_OCCURRENCE_COLLISION_AUDIT.json",
+    "SOURCE_HASH_REPORT.json",
+    "ENGINE_FREEZE.json",
+    "GROUND_TRUTH_LABEL_REVIEW.json",
+    "WIRE_SMOKE_EXECUTION.json",
+    "JMETER_INSPECTION_RESULTS.json",
+    "BASELINE_CONVERSION_RESULTS.json",
+    "REGRESSION_CONVERSION_RESULTS.json",
+    "DELIVERABLE_HASH_REPORT.json",
+    "full-pytest.xml"
+  ],
+  "reproducibility": "Reports retain original evidence hashes and indexed locations. Redacted published files cannot replace original raw data for runtime replay. Scripts are archived in their original workspace-layout context; raw corpora/dependencies are not bundled."
+}

@@ -1,0 +1,78 @@
+{
+  "application": "openFDA",
+  "domain": "Drug safety",
+  "workflow": "Search recall enforcement and inspect selected recall",
+  "steps": [
+    {
+      "path": "/drug/enforcement.json?search=classification:%22Class+I%22&limit=2",
+      "inputs": {
+        "search": "classification:\"Class I\""
+      }
+    },
+    {
+      "path": "/drug/enforcement.json?search=recall_number:{selected}&limit=1",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "recall_number"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-015-openfda",
+  "permission_url": "https://open.fda.gov/apis/",
+  "started_utc": "2026-10-08T17:08:32.294046+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.fda.gov/drug/enforcement.json?search=classification:%22Class+I%22&limit=2",
+      "inputs": {
+        "search": "classification:\"Class I\""
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:33.408402+00:00",
+      "status": 200,
+      "response_sha256": "56c773aa94863f49174a59d672738a175290102614b34c3bde4e75aaa799c915",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\n  \"meta\": {\n    \"disclaimer\": \"Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalida"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:D-1178-2018&limit=1",
+      "inputs": {},
+      "selection": {
+        "value": "D-1178-2018",
+        "source_step": 0,
+        "source_url": "https://api.fda.gov/drug/enforcement.json?search=classification:%22Class+I%22&limit=2",
+        "source_response_path": [
+          "results",
+          0,
+          "recall_number"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:36.639002+00:00",
+      "status": 200,
+      "response_sha256": "559892deb486cc00d5bcfaeb01637ad11d3929ddc1fec63a8aa901aecad7bc9c",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\n  \"meta\": {\n    \"disclaimer\": \"Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalida"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:D-1178-2018&limit=1",
+  "finished_utc": "2026-10-08T17:08:37.096241+00:00",
+  "sha256": "0eea923fa132b79a4dd4eabe30a6b50302f05f8bfa8f3ea5bc2a82a0b1affbfd",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

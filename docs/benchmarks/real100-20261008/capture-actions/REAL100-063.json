@@ -1,0 +1,78 @@
+{
+  "application": "Open Nutrition USDA",
+  "domain": "Food reference",
+  "workflow": "Search food catalog and inspect selected nutrition record",
+  "steps": [
+    {
+      "path": "/fdc/v1/foods/search?api_key=DEMO_KEY&query=apple&pageSize=2",
+      "inputs": {
+        "query": "apple"
+      }
+    },
+    {
+      "path": "/fdc/v1/food/{selected}?api_key=DEMO_KEY",
+      "select": {
+        "path": [
+          "foods",
+          0,
+          "fdcId"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-043-open-nutrition-usda",
+  "permission_url": "https://fdc.nal.usda.gov/api-guide.html",
+  "started_utc": "2026-10-08T17:10:26.641510+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query=apple&pageSize=2",
+      "inputs": {
+        "query": "apple"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:27.754651+00:00",
+      "status": 200,
+      "response_sha256": "411dbd1b6b3a4546694d347e70b7dd6cfac6512d2b3ff15e3015f025529784aa",
+      "response_content_type": "application/json;charset=UTF-8",
+      "response_excerpt": "{\"totalHits\":25775,\"currentPage\":1,\"totalPages\":12888,\"pageList\":[1,2,3,4,5,6,7,8,9,10],\"foodSearchCriteria\":{\"query\":\"apple\",\"generalSearchInput\":\"apple\",\"pageNumber\":1,\"numberOfResultsPerPage\":50,\"p"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.nal.usda.gov/fdc/v1/food/454004?api_key=DEMO_KEY",
+      "inputs": {},
+      "selection": {
+        "value": 454004,
+        "source_step": 0,
+        "source_url": "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query=apple&pageSize=2",
+        "source_response_path": [
+          "foods",
+          0,
+          "fdcId"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:30.868104+00:00",
+      "status": 200,
+      "response_sha256": "aa9b3c0f850bfb73a653d382f25ce82997f72a45c37758b978d23fed8e075364",
+      "response_content_type": "application/json;charset=UTF-8",
+      "response_excerpt": "{\"discontinuedDate\":\"\",\"foodComponents\":[],\"foodAttributes\":[],\"foodPortions\":[],\"fdcId\":454004,\"description\":\"APPLE\",\"publicationDate\":\"4/1/2019\",\"foodNutrients\":[{\"type\":\"FoodNutrient\",\"nutrient\":{\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.nal.usda.gov/fdc/v1/food/454004?api_key=DEMO_KEY",
+  "finished_utc": "2026-10-08T17:10:31.466537+00:00",
+  "sha256": "789a3860bf7230254b0390009207a1722f499083f86bbc035105ab0e1f6f1700",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,101 @@
+benchmark_id,application,workflow,readiness,reason
+REAL100-001,Moodle,Course creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-002,Nautobot,Business tenant creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-003,Vikunja,Project creation,CAPTURE_LIMITED,Source capture lacks outbound body
+REAL100-004,eLabFTW,Experiment creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-005,[REDACTED:30d54e94315a],Patient registration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-006,FrontAccounting,Financial customer creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-007,InvoiceShelf,Billing customer creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-008,Sylius,Commerce customer creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-009,Nautobot,Tenant group creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-010,Nautobot,Hardware manufacturer creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-011,Nautobot,Device-role configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-012,Nautobot,IP address namespace creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-013,Nautobot,Network operating-platform configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-014,InvoiceShelf,Priced service catalog item creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-015,InvoiceShelf,Billable project budget creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-016,Vikunja,Task creation in selected project,CAPTURE_LIMITED,Source capture lacks outbound body
+REAL100-017,Vikunja,Task label creation,CAPTURE_LIMITED,Source capture lacks outbound body
+REAL100-018,Vikunja,Team ownership creation,CAPTURE_LIMITED,Source capture lacks outbound body
+REAL100-019,Grocy,Assigned inventory task creation,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-020,Grocy,Storage location creation,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-021,Grocy,Stock product configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-022,Grocy,Purchasing supplier configuration,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-023,Grocy,Recurring warehouse chore configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-024,Grocy,Equipment battery configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-025,Grocy,Stock receipt unit configuration,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-026,EasyAppointments,Appointment service pricing configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-027,EasyAppointments,Appointment service category creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-028,Booked Scheduler,Reservation ownership group creation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-029,Booked Scheduler,Reservation dashboard notice configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-030,Booked Scheduler,Resource reservation schedule configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-031,Booked Scheduler,Reservable presentation accessory stock configuration,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-032,DataCite,Search DOI research records and inspect selected publication,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-033,DataCite,List repositories and inspect selected repository record,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-034,UniProt,Search BRCA1 proteins and inspect selected accession,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-035,UniProt,Search organism taxonomy and inspect selected taxon,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-036,Ensembl,Resolve BRCA1 symbol and inspect selected gene sequence,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-037,Ensembl,Find genetic variant and inspect selected variant phenotype,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-038,RCSB PDB,Inspect hemoglobin structure and select polymer entity,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-039,RCSB PDB,Inspect ligand structure and select nonpolymer entity,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-040,openFDA,Search drug label and retrieve selected label record,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-041,openFDA,Search recall enforcement and inspect selected recall,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-042,iNaturalist,Search oak taxonomy and inspect selected species,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-043,iNaturalist,Search observations and inspect selected public sighting,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-044,iDigBio,Search biological specimens and inspect selected museum record,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-045,ITIS,Find scientific species and inspect selected taxonomic record,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-046,WoRMS,Find marine species and inspect accepted taxonomy record,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-047,NOAA Weather,Resolve work-site forecast grid and retrieve forecast,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-048,NOAA Weather,Select weather observation station and retrieve latest observation,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-049,Aviation Weather,Retrieve airport weather and cross-check selected airport TAF,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-050,CoinGecko,List asset catalog and inspect selected asset,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-051,CoinGecko,List market exchanges and inspect selected exchange,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-052,CoinPaprika,Inspect Bitcoin asset and retrieve selected ticker,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-053,CoinPaprika,List exchanges and inspect selected marketplace,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-054,Coinbase Exchange,Inspect trading product and retrieve ticker and order book,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-055,Kraken,Select tradable asset and inspect its exchange pair catalog,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-056,Binance,Inspect trading symbol and retrieve book ticker,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-057,Postcodes.io,Resolve postcode and inspect selected postcode district,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-058,Zippopotam.us,Resolve postal code and cross-check selected locality,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-059,MBTA,Select transit route and retrieve its stops,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-060,MBTA,Search transit alerts and inspect selected disruption,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-061,Transport.opendata.ch,Find station and retrieve selected station board,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-062,Digitraffic Finland,Select rail station and retrieve live train arrivals,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-063,Open Nutrition USDA,Search food catalog and inspect selected nutrition record,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-064,Chess.com,Inspect player and select monthly game archive,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-065,Lichess,Inspect player and retrieve current public performance summary,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-066,Ergast Jolpica,Select season driver and inspect race result history,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-067,Ergast Jolpica,Select championship circuit and inspect selected venue,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-068,OpenF1,Select race session and retrieve participating drivers,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-069,CKAN Data.gov.uk,Search health dataset and inspect selected metadata,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-070,CKAN Data.gov.uk,List publishers and inspect selected publisher dataset inventory,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-071,Wikimedia,Search subject and inspect selected article with revisions,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-072,Socrata Chicago,Filter public incident records and inspect selected incident,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-073,Datamuse,Find engineering terms and inspect selected word associations,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-074,Open Trivia Database,Select question category and retrieve assessment questions,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-075,openFDA,Search medical device recalls and inspect selected recall,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-076,openFDA,Search food enforcement and inspect selected recall,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-077,MBTA,Select route stop and inspect scheduled arrivals,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-078,Coinbase Exchange,Inspect supported currencies and selected currency details,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-079,WoRMS,Search genus and inspect selected taxon children,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-080,ITIS,Search common name and inspect selected taxonomic hierarchy,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-081,iNaturalist,Search public projects and inspect selected conservation project,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-082,Postcodes.io,Autocomplete postcode and inspect selected postcode,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-083,MusicBrainz,Search composer and inspect selected artist recordings,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-084,Nobel Prize,Search laureate catalog and inspect selected award history,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-085,Stack Exchange,Search performance question and inspect selected answers,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-086,GitLab public projects,Search public CI projects and inspect selected project,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-087,Internet Archive,Search astronomy texts and inspect selected archival metadata,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-088,Zenodo,Search climate datasets and inspect selected research deposition,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-089,Figshare,Browse research contributions and inspect selected article,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-090,Research Organization Registry,Search institution and inspect selected organization record,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-091,Open Government Canada,Search population datasets and inspect selected data package,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-092,Europeana,Search paintings and inspect selected cultural collection record,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect
+REAL100-093,Scryfall,Search trading-card catalog and inspect selected card,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-094,Wikidata,Read author entity and follow published birthplace relationship,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-095,OSV vulnerability database,Inspect published vulnerability and follow official alias,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-096,MusicBrainz,Search music release and inspect selected track listing,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-097,GitLab public projects,Search public CI project and inspect repository branch catalog,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-098,Zenodo,Browse research communities and inspect selected community governance,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-099,Figshare,Browse research collections and inspect selected collection contributions,READY_WITH_REVIEW,Static and local checks do not prove fresh business-state or independent live VU replay
+REAL100-100,Nobel Prize,Inspect award catalog and selected award recipient,MANUAL_REPAIR_REQUIRED,Measured final request/input/runtime defect

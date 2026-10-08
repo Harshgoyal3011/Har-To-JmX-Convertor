@@ -1,0 +1,71 @@
+{
+  "application": "CoinPaprika",
+  "domain": "Exchange analysis",
+  "workflow": "List exchanges and inspect selected marketplace",
+  "steps": [
+    {
+      "path": "/v1/exchanges"
+    },
+    {
+      "path": "/v1/exchanges/{selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-028-coinpaprika",
+  "permission_url": "https://api.coinpaprika.com/",
+  "started_utc": "2026-10-08T17:09:29.893508+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coinpaprika.com/v1/exchanges",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:31.008073+00:00",
+      "status": 200,
+      "response_sha256": "2c6ca33f566eed59e5ed492eaf9c8e08931bc3180860f1edf0167e517e719ed0",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"id\":\"binance\",\"name\":\"Binance\",\"type\":[\"cex\",\"spot\"],\"description\":\"CEO Changpeng Zhao had previously founded Fusion Systems in 2005 in Shanghai; the company built high-frequency trading systems fo"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coinpaprika.com/v1/exchanges/binance",
+      "inputs": {},
+      "selection": {
+        "value": "binance",
+        "source_step": 0,
+        "source_url": "https://api.coinpaprika.com/v1/exchanges",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:32.681540+00:00",
+      "status": 200,
+      "response_sha256": "eefc83899d8b8f8313b6208a4f2d69124676ee8a9c710b21bd5477d89a38526f",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":\"binance\",\"name\":\"Binance\",\"type\":[\"cex\",\"spot\"],\"description\":\"CEO Changpeng Zhao had previously founded Fusion Systems in 2005 in Shanghai; the company built high-frequency trading systems for"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.coinpaprika.com/v1/exchanges/binance",
+  "finished_utc": "2026-10-08T17:09:33.075604+00:00",
+  "sha256": "202e7a3076c8a9adb330ac2e966bf70d30c7b1f97829ed0d992aedcad625ac97",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "api-extra-006",
+  "application": "MBTA",
+  "domain": "Transit scheduling",
+  "workflow": "Select route stop and inspect scheduled arrivals",
+  "steps": [
+    {
+      "path": "/stops?filter[route]=Red&page[limit]=2",
+      "inputs": {
+        "filter[route]": "Red"
+      }
+    },
+    {
+      "path": "/schedules?filter[stop]={selected}&page[limit]=2",
+      "select": {
+        "path": [
+          "data",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://www.mbta.com/developers/v3-api",
+  "started_utc": "2026-10-08T17:10:30.996957+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api-v3.mbta.com/stops?filter[route]=Red&page[limit]=2",
+      "inputs": {
+        "filter[route]": "Red"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:32.105592+00:00",
+      "status": 200,
+      "response_sha256": "8ee69016b90a25a742756fd998029b9f9b0d0cf881e02b5819ca7edaabce8589",
+      "response_content_type": "application/vnd.api+json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"attributes\":{\"address\":\"Alewife Brook Pkwy and Cambridge Park Dr, Cambridge, MA 02140\",\"at_street\":null,\"description\":null,\"latitude\":42.39583,\"location_type\":1,\"longitude\":-71.141287,\"muni"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api-v3.mbta.com/schedules?filter[stop]=place-alfcl&page[limit]=2",
+      "inputs": {},
+      "selection": {
+        "value": "place-alfcl",
+        "source_step": 0,
+        "source_url": "https://api-v3.mbta.com/stops?filter[route]=Red&page[limit]=2",
+        "source_response_path": [
+          "data",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:34.153575+00:00",
+      "status": 200,
+      "response_sha256": "37211089b65682104dc4a6ed936006aa5a65bafb2095ef4e1989721143f3fd98",
+      "response_content_type": "application/vnd.api+json; charset=utf-8",
+      "response_excerpt": "{\"data\":[{\"attributes\":{\"arrival_time\":\"2026-10-08T21:14:00-04:00\",\"departure_time\":null,\"direction_id\":1,\"drop_off_type\":0,\"pickup_type\":1,\"stop_headsign\":null,\"stop_sequence\":62,\"timepoint\":false},\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api-v3.mbta.com/schedules?filter[stop]=place-alfcl&page[limit]=2",
+  "finished_utc": "2026-10-08T17:10:34.549079+00:00",
+  "sha256": "681a08a3434e17cdc96adc3dec410dac700c8c8dbbe1b13ec2523a31389b6eda",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

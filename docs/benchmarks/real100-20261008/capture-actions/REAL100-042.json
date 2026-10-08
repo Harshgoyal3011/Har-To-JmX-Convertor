@@ -1,0 +1,78 @@
+{
+  "application": "iNaturalist",
+  "domain": "Ecology catalog",
+  "workflow": "Search oak taxonomy and inspect selected species",
+  "steps": [
+    {
+      "path": "/v1/taxa?q=oak&per_page=2",
+      "inputs": {
+        "q": "oak"
+      }
+    },
+    {
+      "path": "/v1/taxa/{selected}",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-016-inaturalist",
+  "permission_url": "https://api.inaturalist.org/v1/docs/",
+  "started_utc": "2026-10-08T17:08:37.364266+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.inaturalist.org/v1/taxa?q=oak&per_page=2",
+      "inputs": {
+        "q": "oak"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:38.472538+00:00",
+      "status": 200,
+      "response_sha256": "828270b97c15d30a39230849e8802de11bd72ffedce6022a2f3c7c62912fd613",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"total_results\":974,\"page\":1,\"per_page\":2,\"results\":[{\"id\":47853,\"rank\":\"order\",\"rank_level\":40,\"iconic_taxon_id\":47126,\"ancestor_ids\":[48460,47126,211194,47125,47124,47853],\"is_active\":true,\"name\":\""
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.inaturalist.org/v1/taxa/47853",
+      "inputs": {},
+      "selection": {
+        "value": 47853,
+        "source_step": 0,
+        "source_url": "https://api.inaturalist.org/v1/taxa?q=oak&per_page=2",
+        "source_response_path": [
+          "results",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:40.438505+00:00",
+      "status": 200,
+      "response_sha256": "a294f18ac12ab87a423aa20575c8446b58daac547175de635543b58ae2ed5dca",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"total_results\":1,\"page\":1,\"per_page\":30,\"results\":[{\"id\":47853,\"rank\":\"order\",\"rank_level\":40,\"iconic_taxon_id\":47126,\"ancestor_ids\":[48460,47126,211194,47125,47124],\"is_active\":true,\"name\":\"Fagales"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.inaturalist.org/v1/taxa/47853",
+  "finished_utc": "2026-10-08T17:08:40.992734+00:00",
+  "sha256": "b2b0a8c05cdb006154fc51a1a37aec75ba5187b625fa220cddcaf95110bf8a28",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

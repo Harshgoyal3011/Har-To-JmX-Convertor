@@ -1,0 +1,78 @@
+{
+  "application": "RCSB PDB",
+  "domain": "Structural biology",
+  "workflow": "Inspect hemoglobin structure and select polymer entity",
+  "steps": [
+    {
+      "path": "/rest/v1/core/entry/4HHB",
+      "inputs": {
+        "structure": "4HHB"
+      }
+    },
+    {
+      "path": "/rest/v1/core/polymer_entity/4HHB/{selected}",
+      "select": {
+        "path": [
+          "rcsb_entry_container_identifiers",
+          "polymer_entity_ids",
+          0
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-010-rcsb-pdb",
+  "permission_url": "https://data.rcsb.org/",
+  "started_utc": "2026-10-08T17:08:13.015590+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data.rcsb.org/rest/v1/core/entry/4HHB",
+      "inputs": {
+        "structure": "4HHB"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:14.125381+00:00",
+      "status": 200,
+      "response_sha256": "a95a79421b90211667e08cc21555acb6e2c384fe882bb7c9b174eadb4e9fdb1a",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"audit_author\":[{\"name\":\"Fermi, G.\",\"pdbx_ordinal\":1},{\"name\":\"Perutz, M.F.\",\"pdbx_ordinal\":2}],\"cell\":{\"Z_PDB\":4,\"angle_alpha\":90.0,\"angle_beta\":99.34,\"angle_gamma\":90.0,\"length_a\":63.15,\"length_b\":"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data.rcsb.org/rest/v1/core/polymer_entity/4HHB/1",
+      "inputs": {},
+      "selection": {
+        "value": "[REDACTED:6b86b273ff34]",
+        "source_step": 0,
+        "source_url": "https://data.rcsb.org/rest/v1/core/entry/4HHB",
+        "source_response_path": [
+          "rcsb_entry_container_identifiers",
+          "polymer_entity_ids",
+          0
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:16.149050+00:00",
+      "status": 200,
+      "response_sha256": "e7bdca3d1a542f13dec01918b88fe8a1958508f631ccffdcbad23430236877ea",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"entity_poly\":{\"nstd_linkage\":\"no\",\"nstd_monomer\":\"no\",\"pdbx_seq_one_letter_code\":\"VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAE"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://data.rcsb.org/rest/v1/core/polymer_entity/4HHB/1",
+  "finished_utc": "2026-10-08T17:08:16.552635+00:00",
+  "sha256": "54a0b6bfcfc07a37be0fd50c0e0f3ce8ca0ea178cdd74c7eea4c15d2dcc6420d",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "id": "candidate-invoiceshelf-customer-v2",
+  "application": "InvoiceShelf",
+  "workflow": "Create billing customer and verify independent saved owner",
+  "permission_url": "https://demo.invoiceshelf.com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.invoiceshelf.com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[type=email]",
+      "value": "demo@invoiceshelf.com"
+    },
+    {
+      "op": "fill",
+      "selector": "input[type=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Login')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a[href='/admin/customers'] >> nth=0"
+    },
+    {
+      "op": "click",
+      "selector": "text=New Customer >> nth=0"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=name] >> nth=0",
+      "value": "REAL100 Billing Customer"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=email]",
+      "value": "billing-real100@example.invalid"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=phone] >> nth=0",
+      "value": "0000000101"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Save Customer')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Billing Customer",
+  "started_utc": "2026-10-08T12:42:27.818111+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T12:42:28.198406+00:00",
+      "op": "goto",
+      "url": "https://demo.invoiceshelf.com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T12:42:30.573440+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T12:42:30.573468+00:00",
+      "op": "fill",
+      "selector": "input[type=email]",
+      "value": "demo@invoiceshelf.com",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "element_evidence": {
+        "name": "email",
+        "id": "field-v-0-0-control",
+        "type": "email",
+        "value": "demo@invoiceshelf.com",
+        "formAction": "https://demo.invoiceshelf.com/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T12:42:30.872133+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T12:42:30.872147+00:00",
+      "op": "fill",
+      "selector": "input[type=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "field-v-1-0-control",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://demo.invoiceshelf.com/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T12:42:30.901534+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T12:42:30.901552+00:00",
+      "op": "click",
+      "selector": "button:has-text('Login')",
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "url_after": "https://demo.invoiceshelf.com/login",
+      "completed_utc": "2026-10-08T12:42:30.964627+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T12:42:30.964645+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.invoiceshelf.com/login",
+      "url_after": "https://demo.invoiceshelf.com/admin/dashboard",
+      "completed_utc": "2026-10-08T12:42:34.974201+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T12:42:34.974231+00:00",
+      "op": "click",
+      "selector": "a[href='/admin/customers'] >> nth=0",
+      "url_before": "https://demo.invoiceshelf.com/admin/dashboard",
+      "url_after": "https://demo.invoiceshelf.com/admin/dashboard",
+      "completed_utc": "2026-10-08T12:42:35.005040+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T12:42:35.005053+00:00",
+      "op": "click",
+      "selector": "text=New Customer >> nth=0",
+      "url_before": "https://demo.invoiceshelf.com/admin/dashboard",
+      "url_after": "https://demo.invoiceshelf.com/admin/customers",
+      "completed_utc": "2026-10-08T12:42:37.304553+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T12:42:37.304571+00:00",
+      "op": "fill",
+      "selector": "input[name=name] >> nth=0",
+      "value": "REAL100 Billing Customer",
+      "url_before": "https://demo.invoiceshelf.com/admin/customers",
+      "element_evidence": {
+        "name": "name",
+        "id": "field-v-4-1-0-0-control",
+        "type": "text",
+        "value": "REAL100 Billing Customer",
+        "formAction": "https://demo.invoiceshelf.com/admin/customers/create",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/customers/create",
+      "completed_utc": "2026-10-08T12:42:39.972045+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T12:42:39.972058+00:00",
+      "op": "fill",
+      "selector": "input[name=email]",
+      "value": "billing-real100@example.invalid",
+      "url_before": "https://demo.invoiceshelf.com/admin/customers/create",
+      "element_evidence": {
+        "name": "email",
+        "id": "field-v-4-1-2-0-control",
+        "type": "text",
+        "value": "billing-real100@example.invalid",
+        "formAction": "https://demo.invoiceshelf.com/admin/customers/create",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/customers/create",
+      "completed_utc": "2026-10-08T12:42:40.000392+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T12:42:40.000416+00:00",
+      "op": "fill",
+      "selector": "input[name=phone] >> nth=0",
+      "value": "0000000101",
+      "url_before": "https://demo.invoiceshelf.com/admin/customers/create",
+      "element_evidence": {
+        "name": "phone",
+        "id": "field-v-4-1-3-0-control",
+        "type": "text",
+        "value": "0000000101",
+        "formAction": "https://demo.invoiceshelf.com/admin/customers/create",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.invoiceshelf.com/admin/customers/create",
+      "completed_utc": "2026-10-08T12:42:40.023340+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T12:42:40.023352+00:00",
+      "op": "click",
+      "selector": "button:has-text('Save Customer')",
+      "url_before": "https://demo.invoiceshelf.com/admin/customers/create",
+      "url_after": "https://demo.invoiceshelf.com/admin/customers/create",
+      "completed_utc": "2026-10-08T12:42:40.077663+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T12:42:40.077701+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.invoiceshelf.com/admin/customers/create",
+      "url_after": "https://demo.invoiceshelf.com/admin/customers/9/view",
+      "completed_utc": "2026-10-08T12:42:43.091084+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T12:42:45.363745+00:00",
+  "sha256": "027b17b9bf925ddd8d5f525e09cbda7aee31543173c54f1c4ee757add0217c0d",
+  "request_count": 125,
+  "representation_types": [
+    "application/json"
+  ]
+}

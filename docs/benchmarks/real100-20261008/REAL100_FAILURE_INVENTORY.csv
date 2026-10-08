@@ -1,0 +1,162 @@
+benchmark_id,category,request_index,reason,already_known,blocking
+REAL100-001,JSON/type serialization,270,"request.body[0][""args""][""aftereventid""]: int becomes str",True,True
+REAL100-001,JSON/type serialization,640,"request.body[0][""args""][""courseid""]: int becomes str",True,True
+REAL100-001,lifecycle classification,230,Explicit selected existing catalog identity was correlated as runtime.,True,True
+REAL100-001,materialization,230,Accepted modname lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-001,lifecycle classification,230,Explicit selected existing catalog identity was correlated as runtime.,True,True
+REAL100-001,extractor generation,230,Accepted modname2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-001,lifecycle classification,230,Explicit selected existing catalog identity was correlated as runtime.,True,True
+REAL100-001,extractor generation,230,Accepted modname3 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-001,lifecycle classification,230,Explicit selected existing catalog identity was correlated as runtime.,True,True
+REAL100-001,materialization,230,Accepted name lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-001,extractor generation,375,Accepted saveanddisplay lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-002,extractor generation,250,Accepted tenants lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-003,materialization,64,Accepted token lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-003,extractor generation,126,Accepted viewId lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-004,materialization,3,Accepted v lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-004,materialization,35,Accepted v2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-004,materialization,,Dead extractor v: no final request reference.,True,True
+REAL100-004,materialization,,Dead extractor v2: no final request reference.,True,True
+REAL100-005,parameter discovery,10,Meaningful input group REAL100-005:action:1:authUser lacks correct final CSV binding at request.form[2].authUser.,True,True
+REAL100-005,extractor generation,[REDACTED:5feceb66ffc8],Accepted site lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-005,extractor generation,[REDACTED:6b86b273ff34],Accepted t lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-005,extractor generation,10,Accepted token_main lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-005,extractor generation,36,Accepted func lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-005,extractor generation,36,Accepted module lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-006,parameter discovery,40,Meaningful input group REAL100-006:action:6:cust_ref lacks correct final CSV binding at request.multipart[3].cust_ref.,True,True
+REAL100-006,extractor generation,8,Accepted if_modified_since lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-006,extractor generation,26,Accepted credit_limit lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-006,extractor generation,26,Accepted if_modified_since2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-006,extractor generation,26,Accepted submit lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,JSON/type serialization,119,"request.body[""customFields""][0][""id""]: int becomes str",True,True
+REAL100-007,JSON/type serialization,119,"request.body[""customFields""][0][""company_id""]: int becomes str",True,True
+REAL100-007,JSON/type serialization,119,"request.body[""customFields""][1][""id""]: int becomes str",True,True
+REAL100-007,JSON/type serialization,119,"request.body[""customFields""][1][""company_id""]: int becomes str",True,True
+REAL100-007,extractor generation,[REDACTED:6b86b273ff34],Accepted v2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,46,Accepted XSRF_TOKEN3 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,69,Accepted XSRF_TOKEN4 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,70,Accepted XSRF_TOKEN5 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,83,Accepted XSRF_TOKEN6 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,85,Accepted XSRF_TOKEN7 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,89,Accepted XSRF_TOKEN8 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,99,Accepted XSRF_TOKEN9 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,105,Accepted XSRF_TOKEN10 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,115,Accepted XSRF_TOKEN11 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-007,extractor generation,119,Accepted XSRF_TOKEN12 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-008,extractor generation,[REDACTED:5feceb66ffc8],Accepted id lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-009,extractor generation,178,Accepted tenant_groups lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-010,parameter discovery,181,Meaningful input group REAL100-010:action:7:description lacks correct final CSV binding at request.multipart[2].description.,True,True
+REAL100-010,extractor generation,181,Accepted manufacturers lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-011,extractor generation,178,Accepted roles lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-012,parameter discovery,178,Meaningful input group REAL100-012:action:7:description lacks correct final CSV binding at request.multipart[2].description.,True,True
+REAL100-012,extractor generation,178,Accepted namespaces lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-013,parameter discovery,180,Meaningful input group REAL100-013:action:7:description lacks correct final CSV binding at request.multipart[6].description.,True,True
+REAL100-013,extractor generation,180,Accepted platforms lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,JSON/type serialization,121,"request.body[""price""]: int becomes str",True,True
+REAL100-014,extractor generation,[REDACTED:6b86b273ff34],Accepted v2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,69,Accepted XSRF_TOKEN3 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,70,Accepted XSRF_TOKEN4 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,83,Accepted XSRF_TOKEN5 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,85,Accepted XSRF_TOKEN6 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,89,Accepted XSRF_TOKEN7 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,96,Accepted XSRF_TOKEN8 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,105,Accepted XSRF_TOKEN9 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,108,Accepted XSRF_TOKEN10 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,118,Accepted XSRF_TOKEN11 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,119,Accepted XSRF_TOKEN12 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-014,extractor generation,121,Accepted XSRF_TOKEN13 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,parameter discovery,108,"Meaningful input group REAL100-015:action:9:field-v-3-4-1-0-control lacks correct final CSV binding at request.body[""identifier""].",True,True
+REAL100-015,parameter discovery,108,"Meaningful input group REAL100-015:action:10:field-v-3-4-4-0-control lacks correct final CSV binding at request.body[""default_rate""].",True,True
+REAL100-015,parameter discovery,108,"Meaningful input group REAL100-015:action:11:field-v-3-4-5-0-control lacks correct final CSV binding at request.body[""budget_minutes""].",True,True
+REAL100-015,extractor generation,[REDACTED:6b86b273ff34],Accepted v2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,69,Accepted XSRF_TOKEN3 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,70,Accepted XSRF_TOKEN4 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,83,Accepted XSRF_TOKEN5 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,85,Accepted XSRF_TOKEN6 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,89,Accepted XSRF_TOKEN7 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,99,Accepted XSRF_TOKEN8 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,103,Accepted XSRF_TOKEN9 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,105,Accepted XSRF_TOKEN10 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-015,extractor generation,108,Accepted XSRF_TOKEN11 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-016,materialization,64,Accepted token lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-016,materialization,90,Accepted token2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-016,materialization,127,Accepted taskId lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-017,materialization,65,Accepted token lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-018,materialization,64,Accepted token lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-018,materialization,90,Accepted token2 lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-021,parameter discovery,191,"Meaningful input group REAL100-021:action:8:qu_id_stock lacks correct final CSV binding at request.body[""qu_id_stock""].",True,True
+REAL100-021,parameter discovery,191,"Meaningful input group REAL100-021:action:9:default_best_before_days lacks correct final CSV binding at request.body[""default_best_before_days""].",True,True
+REAL100-023,parameter discovery,170,"Meaningful input group REAL100-023:action:6:period_type lacks correct final CSV binding at request.body[""period_type""].",True,True
+REAL100-023,parameter discovery,170,"Meaningful input group REAL100-023:action:7:assignment_type lacks correct final CSV binding at request.body[""assignment_type""].",True,True
+REAL100-024,parameter discovery,159,"Meaningful input group REAL100-024:action:7:used_in lacks correct final CSV binding at request.body[""used_in""].",True,True
+REAL100-024,parameter discovery,159,"Meaningful input group REAL100-024:action:8:charge_interval_days lacks correct final CSV binding at request.body[""charge_interval_days""].",True,True
+REAL100-026,extractor generation,[REDACTED:5feceb66ffc8],Accepted csrf_cookie lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-026,materialization,116,Accepted color lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-026,materialization,116,Accepted customerId lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-027,extractor generation,[REDACTED:5feceb66ffc8],Accepted csrf_cookie lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-028,JSON/type serialization,114,"request.body[""id""]: int becomes str",True,True
+REAL100-028,materialization,[REDACTED:d4735e3a265e],Accepted booked_version lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-029,parameter discovery,106,Meaningful input group REAL100-029:action:10:announcementText lacks correct final CSV binding at request.form[0].announcementText.,True,True
+REAL100-029,materialization,[REDACTED:d4735e3a265e],Accepted booked_version lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-029,materialization,,Dead extractor booked_version: no final request reference.,True,True
+REAL100-030,materialization,[REDACTED:d4735e3a265e],Accepted booked_version lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-030,materialization,,Dead extractor booked_version: no final request reference.,True,True
+REAL100-031,materialization,[REDACTED:d4735e3a265e],Accepted booked_version lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-031,materialization,,Dead extractor booked_version: no final request reference.,True,True
+REAL100-034,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-034:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.component:selected_response_identity.,True,True
+REAL100-036,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-036:api-action:0:symbol lacks correct final CSV binding at request.path.segment[4].,True,True
+REAL100-036,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-036:api-action:0:species lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-036,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-036:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-037,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-037:api-action:0:variant lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-037,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-037:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-039,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-039:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[6].,True,True
+REAL100-040,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-040:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].search.,True,True
+REAL100-044,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-044:api-action:0:rq lacks correct final CSV binding at request.query[0].rq.,True,True
+REAL100-045,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-045:api-action:0:srchKey lacks correct final CSV binding at request.query[0].srchKey.,True,True
+REAL100-045,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-045:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].tsn.,True,True
+REAL100-046,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-046:api-action:0:scientific_name lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-047,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-047:api-action:0:latitude lacks correct final CSV binding at request.path.component:latitude.,True,True
+REAL100-047,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-047:api-action:0:longitude lacks correct final CSV binding at request.path.component:longitude.,True,True
+REAL100-047,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-047:api-action:1:selected_response_identity lacks correct final CSV binding at request.url.response_selected.,True,True
+REAL100-048,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-048:api-action:0:state lacks correct final CSV binding at request.query[0].state.,True,True
+REAL100-048,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-048:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.response_selected_prefix.,True,True
+REAL100-049,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-049:api-action:0:ids lacks correct final CSV binding at request.query[0].ids.,True,True
+REAL100-049,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-049:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].ids.,True,True
+REAL100-055,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-055:api-action:0:asset lacks correct final CSV binding at request.query[0].asset.,True,True
+REAL100-055,parameter discovery,[REDACTED:d4735e3a265e],Meaningful input group REAL100-055:api-action:2:selected_response_identity lacks correct final CSV binding at request.query[0].pair.,True,True
+REAL100-056,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-056:api-action:0:symbol lacks correct final CSV binding at request.query[0].symbol.,True,True
+REAL100-056,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-056:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].symbol.,True,True
+REAL100-057,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-057:api-action:0:postcode lacks correct final CSV binding at request.path.segment[2].,True,True
+REAL100-057,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-057:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[2].,True,True
+REAL100-058,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-058:api-action:0:postal_code lacks correct final CSV binding at request.path.segment[2].,True,True
+REAL100-058,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-058:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-058,extractor generation,[REDACTED:5feceb66ffc8],Accepted state_abbreviation lacks complete resolving producer/extractor/consumer materialization.,True,True
+REAL100-058,materialization,,Dead extractor state_abbreviation: no final request reference.,True,True
+REAL100-059,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-059:api-action:0:filter[type] lacks correct final CSV binding at request.query[0].filter[type].,True,True
+REAL100-060,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-060:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[2].,True,True
+REAL100-062,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-062:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[5].,True,True
+REAL100-064,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-064:api-action:0:player lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-064,parameter discovery,[REDACTED:d4735e3a265e],Meaningful input group REAL100-064:api-action:2:selected_response_identity lacks correct final CSV binding at request.url.response_selected.,True,True
+REAL100-066,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-066:api-action:0:season lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-067,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-067:api-action:0:season lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-068,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-068:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].session_key.,True,True
+REAL100-071,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-071:api-action:0:srsearch lacks correct final CSV binding at request.query[2].srsearch.,True,True
+REAL100-071,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-071:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[2].pageids.,True,True
+REAL100-072,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-072:api-action:0:$where lacks correct final CSV binding at request.query[1].$where.,True,True
+REAL100-073,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-073:api-action:0:ml lacks correct final CSV binding at request.query[0].ml.,True,True
+REAL100-073,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-073:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].rel_syn.,True,True
+REAL100-077,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-077:api-action:0:filter[route] lacks correct final CSV binding at request.query[0].filter[route].,True,True
+REAL100-079,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-079:api-action:0:name lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-080,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-080:api-action:0:srchKey lacks correct final CSV binding at request.query[0].srchKey.,True,True
+REAL100-080,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-080:api-action:1:selected_response_identity lacks correct final CSV binding at request.query[0].tsn.,True,True
+REAL100-082,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-082:api-action:0:prefix lacks correct final CSV binding at request.path.segment[2].,True,True
+REAL100-082,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-082:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[2].,True,True
+REAL100-085,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-085:api-action:0:intitle lacks correct final CSV binding at request.query[2].intitle.,True,True
+REAL100-090,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-090:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.segment[3].,True,True
+REAL100-092,parameter discovery,[REDACTED:6b86b273ff34],Meaningful input group REAL100-092:api-action:1:selected_response_identity lacks correct final CSV binding at request.path.component:selected_response_identity.,True,True
+REAL100-100,parameter discovery,[REDACTED:5feceb66ffc8],Meaningful input group REAL100-100:api-action:0:nobelPrizeCategory lacks correct final CSV binding at request.query[1].nobelPrizeCategory.,True,True
+REAL100-001,occurrence ownership / runtime state bound to CSV,538,Create-course POST responds Location /course/view.php?id=5. Final course consumer uses newsitems CSV because that separate configuration input also equals 5.,True,True
+REAL100-004,occurrence ownership / runtime state bound to CSV,26,"Create-experiment POST responds Location /api/v2/experiments/28. Native edit consumer uses CSV id, so new experiment issuance is frozen as test data.",True,True
+REAL100-005,occurrence ownership / runtime state bound to CSV,105,Patient save response explicitly assigns window.location with set_pid=22. Demographics consumer uses CSV set_pid rather than its created-patient producer.,True,True
+REAL100-007,occurrence ownership / runtime state bound to CSV,123,"Customer save JSON data.id=9. Native customer stats URL uses CSV customers, retaining captured ID rather than new customer issuance.",True,True
+REAL100-023,occurrence ownership / runtime state bound to CSV,171,Chore save JSON created_object_id=7. Native calculate-next-assignments body uses CSV chore_id instead of the server-created value.,True,True

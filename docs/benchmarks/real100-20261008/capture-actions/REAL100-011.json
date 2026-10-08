@@ -1,0 +1,223 @@
+{
+  "id": "candidate-[REDACTED:6f0309fea1db]-devicerole",
+  "application": "Nautobot",
+  "workflow": "Create devicerole and inspect saved independent configuration",
+  "permission_url": "https://demo.[REDACTED:6f0309fea1db].com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:6f0309fea1db]"
+    },
+    {
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Sign in')"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_name",
+      "value": "REAL100 Devicerole"
+    },
+    {
+      "op": "fill",
+      "selector": "#id_description",
+      "value": "Fictional performance sandbox configuration"
+    },
+    {
+      "op": "select",
+      "selector": "#id_content_types",
+      "value": "3"
+    },
+    {
+      "op": "click",
+      "selector": "button[name='_create']"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "completion_assertion": "REAL100 Devicerole",
+  "started_utc": "2026-10-08T16:28:48.452876+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:28:49.242967+00:00",
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T16:28:55.419936+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:28:55.419951+00:00",
+      "op": "fill",
+      "selector": "input[name=username]",
+      "value": "[REDACTED:2a97516c354b]",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "element_evidence": {
+        "name": "username",
+        "id": "id_username",
+        "type": "text",
+        "value": "[REDACTED:2a97516c354b]",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/login/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T16:28:55.487726+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:28:55.487748+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:6f0309fea1db]",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "id_[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:6f0309fea1db]",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/login/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "completed_utc": "2026-10-08T16:28:55.514396+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:28:55.514418+00:00",
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Sign in')",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/login/?next=/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "completed_utc": "2026-10-08T16:28:57.504940+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:28:57.504960+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "completed_utc": "2026-10-08T16:29:01.511670+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:29:01.511695+00:00",
+      "op": "goto",
+      "url": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "completed_utc": "2026-10-08T16:29:02.396983+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:29:02.396996+00:00",
+      "op": "fill",
+      "selector": "#id_name",
+      "value": "REAL100 Devicerole",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "element_evidence": {
+        "name": "name",
+        "id": "id_name",
+        "type": "text",
+        "value": "REAL100 Devicerole",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "completed_utc": "2026-10-08T16:29:02.495771+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:29:02.495791+00:00",
+      "op": "fill",
+      "selector": "#id_description",
+      "value": "Fictional performance sandbox configuration",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "element_evidence": {
+        "name": "description",
+        "id": "id_description",
+        "type": "text",
+        "value": "Fictional performance sandbox configuration",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "completed_utc": "2026-10-08T16:29:02.528773+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:29:02.528791+00:00",
+      "op": "select",
+      "selector": "#id_content_types",
+      "value": "3",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "element_evidence": {
+        "name": "content_types",
+        "id": "id_content_types",
+        "type": "select-multiple",
+        "value": "3",
+        "formAction": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+        "formMethod": "post",
+        "selectedText": [
+          "DCIM | device"
+        ]
+      },
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "completed_utc": "2026-10-08T16:29:02.548628+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:29:02.548644+00:00",
+      "op": "click",
+      "selector": "button[name='_create']",
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/add/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/cfa07e78-2e65-4629-b970-f2dc8aaff2f5/",
+      "completed_utc": "2026-10-08T16:29:03.440350+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T16:29:03.440372+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/cfa07e78-2e65-4629-b970-f2dc8aaff2f5/",
+      "url_after": "https://demo.[REDACTED:6f0309fea1db].com/extras/roles/cfa07e78-2e65-4629-b970-f2dc8aaff2f5/",
+      "completed_utc": "2026-10-08T16:29:05.443579+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:29:08.404118+00:00",
+  "sha256": "db6ac25e23ab68c020450879bdf5025ad43f9b0edb7fe1711e4c217e290f8b59",
+  "request_count": 253,
+  "representation_types": [
+    "application/json",
+    "application/x-www-form-urlencoded",
+    "multipart/form-data; boundary=----WebKitFormBoundaryH1LXwxzcAcVATYan",
+    "text/plain;charset=UTF-8"
+  ]
+}

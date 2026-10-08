@@ -1,0 +1,165 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create shop and inspect saved independent inventory configuration",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/shoppinglocations"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Wholesale Supplier",
+      "frame": "/shoppinglocation/new"
+    },
+    {
+      "op": "fill",
+      "selector": "#description",
+      "value": "Fictional stock purchasing source",
+      "frame": "/shoppinglocation/new"
+    },
+    {
+      "op": "click",
+      "selector": "#save-shopping-location-button",
+      "frame": "/shoppinglocation/new"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "id": "candidate-grocy-shop",
+  "completion_assertion": "REAL100 Wholesale Supplier",
+  "started_utc": "2026-10-08T16:54:33.774564+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:54:34.011343+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:54:36.326614+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:54:36.326634+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/shoppinglocations",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:36.796211+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:54:36.796232+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:38.810708+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:54:38.810747+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:38.879146+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:54:38.879159+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:40.894813+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:54:40.894851+00:00",
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Wholesale Supplier",
+      "frame": "/shoppinglocation/new",
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Wholesale Supplier",
+        "formAction": "https://demo.grocy.info/shoppinglocation/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:40.963380+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:54:40.963394+00:00",
+      "op": "fill",
+      "selector": "#description",
+      "value": "Fictional stock purchasing source",
+      "frame": "/shoppinglocation/new",
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "element_evidence": {
+        "name": "description",
+        "id": "description",
+        "type": "textarea",
+        "value": "Fictional stock purchasing source",
+        "formAction": "https://demo.grocy.info/shoppinglocation/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:40.982669+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:54:40.982684+00:00",
+      "op": "click",
+      "selector": "#save-shopping-location-button",
+      "frame": "/shoppinglocation/new",
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:41.068947+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:54:41.068963+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.grocy.info/shoppinglocations",
+      "url_after": "https://demo.grocy.info/shoppinglocations",
+      "completed_utc": "2026-10-08T16:54:44.070144+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:54:46.413295+00:00",
+  "sha256": "fdb83d0ca59b896a2ecef0940164ea4769f2e540c085900ea488019942c9c390",
+  "request_count": 213,
+  "representation_types": [
+    "application/json"
+  ]
+}

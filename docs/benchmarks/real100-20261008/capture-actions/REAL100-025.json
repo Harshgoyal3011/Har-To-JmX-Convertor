@@ -1,0 +1,183 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create quantityunit and inspect saved independent inventory configuration",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/quantityunits"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Carton"
+    },
+    {
+      "op": "fill",
+      "selector": "#name_plural",
+      "value": "REAL100 Cartons"
+    },
+    {
+      "op": "fill",
+      "selector": "#description",
+      "value": "Fictional stock receipt unit"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Save & return to quantity units')"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "id": "candidate-grocy-quantityunit",
+  "completion_assertion": "REAL100 Carton",
+  "started_utc": "2026-10-08T16:55:13.151830+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:55:13.369209+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:55:15.678907+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:55:15.678928+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/quantityunits",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/quantityunits",
+      "completed_utc": "2026-10-08T16:55:16.186374+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:55:16.186391+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/quantityunits",
+      "url_after": "https://demo.grocy.info/quantityunits",
+      "completed_utc": "2026-10-08T16:55:18.189228+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:55:18.189263+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/quantityunits",
+      "url_after": "https://demo.grocy.info/quantityunit/new",
+      "completed_utc": "2026-10-08T16:55:18.615355+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:55:18.615389+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/quantityunit/new",
+      "url_after": "https://demo.grocy.info/quantityunit/new",
+      "completed_utc": "2026-10-08T16:55:20.629709+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:55:20.629740+00:00",
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Carton",
+      "url_before": "https://demo.grocy.info/quantityunit/new",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Carton",
+        "formAction": "https://demo.grocy.info/quantityunit/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/quantityunit/new",
+      "completed_utc": "2026-10-08T16:55:20.742560+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:55:20.742574+00:00",
+      "op": "fill",
+      "selector": "#name_plural",
+      "value": "REAL100 Cartons",
+      "url_before": "https://demo.grocy.info/quantityunit/new",
+      "element_evidence": {
+        "name": "name_plural",
+        "id": "name_plural",
+        "type": "text",
+        "value": "REAL100 Cartons",
+        "formAction": "https://demo.grocy.info/quantityunit/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/quantityunit/new",
+      "completed_utc": "2026-10-08T16:55:20.771223+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:55:20.771260+00:00",
+      "op": "fill",
+      "selector": "#description",
+      "value": "Fictional stock receipt unit",
+      "url_before": "https://demo.grocy.info/quantityunit/new",
+      "element_evidence": {
+        "name": "description",
+        "id": "description",
+        "type": "textarea",
+        "value": "Fictional stock receipt unit",
+        "formAction": "https://demo.grocy.info/quantityunit/new",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/quantityunit/new",
+      "completed_utc": "2026-10-08T16:55:20.806474+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:55:20.806490+00:00",
+      "op": "click",
+      "selector": "button:has-text('Save & return to quantity units')",
+      "url_before": "https://demo.grocy.info/quantityunit/new",
+      "url_after": "https://demo.grocy.info/quantityunit/new",
+      "completed_utc": "2026-10-08T16:55:20.872672+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:55:20.872696+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.grocy.info/quantityunit/new",
+      "url_after": "https://demo.grocy.info/quantityunits",
+      "completed_utc": "2026-10-08T16:55:23.876161+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:55:26.249460+00:00",
+  "sha256": "0ac6199555f14084dfb9767578d9a581c63a6acf5abe4751074386ad7535e018",
+  "request_count": 229,
+  "representation_types": [
+    "application/json"
+  ]
+}

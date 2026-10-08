@@ -1,0 +1,79 @@
+{
+  "application": "NOAA Weather",
+  "domain": "Station monitoring",
+  "workflow": "Select weather observation station and retrieve latest observation",
+  "steps": [
+    {
+      "path": "/stations?state=NY&limit=2",
+      "inputs": {
+        "state": "NY"
+      }
+    },
+    {
+      "path": "{selected}/observations/latest",
+      "select": {
+        "path": [
+          "features",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA",
+        "absolute": true
+      }
+    }
+  ],
+  "id": "api-022-noaa-weather",
+  "permission_url": "https://www.weather.gov/documentation/services-web-api",
+  "started_utc": "2026-10-08T17:09:04.411656+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.weather.gov/stations?state=NY&limit=2",
+      "inputs": {
+        "state": "NY"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:05.517472+00:00",
+      "status": 200,
+      "response_sha256": "5b1f1753e9d6eaf8b30823f7d80fa3eabd805fb922f5fbfbdda984d5f709decb",
+      "response_content_type": "application/geo+json",
+      "response_excerpt": "{\n    \"@context\": [\n        \"https://geojson.org/geojson-ld/geojson-context.jsonld\",\n        {\n            \"@version\": \"1.1\",\n            \"wx\": \"https://api.weather.gov/ontology#\",\n            \"s\": \"h"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.weather.gov/stations/0512W/observations/latest",
+      "inputs": {},
+      "selection": {
+        "value": "https://api.weather.gov/stations/0512W",
+        "source_step": 0,
+        "source_url": "https://api.weather.gov/stations?state=NY&limit=2",
+        "source_response_path": [
+          "features",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:07.220031+00:00",
+      "status": 200,
+      "response_sha256": "d081ae4a56a968574101177a6c605ea59a068d99841444f282777612ce371129",
+      "response_content_type": "application/geo+json",
+      "response_excerpt": "{\n    \"@context\": [\n        \"https://geojson.org/geojson-ld/geojson-context.jsonld\",\n        {\n            \"@version\": \"1.1\",\n            \"wx\": \"https://api.weather.gov/ontology#\",\n            \"s\": \"h"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.weather.gov/stations/0512W/observations/latest",
+  "finished_utc": "2026-10-08T17:09:07.686896+00:00",
+  "sha256": "7b56f01968c0d8d3cb0ee90e0ed3c119e8b9140b0ca96af8c25913f25c8d6e92",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "api-final-013",
+  "application": "OSV vulnerability database",
+  "domain": "Public reference and business research",
+  "workflow": "Inspect published vulnerability and follow official alias",
+  "steps": [
+    {
+      "path": "/v1/vulns/GHSA-jfh8-c2jp-5v3q",
+      "inputs": {
+        "vulnerability": "GHSA-jfh8-c2jp-5v3q"
+      }
+    },
+    {
+      "path": "/v1/vulns/{selected}",
+      "select": {
+        "path": [
+          "aliases",
+          0
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://google.github.io/osv.dev/api/",
+  "started_utc": "2026-10-08T17:18:51.490434+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.osv.dev/v1/vulns/GHSA-jfh8-c2jp-5v3q",
+      "inputs": {
+        "vulnerability": "GHSA-jfh8-c2jp-5v3q"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:18:52.597246+00:00",
+      "status": 200,
+      "response_sha256": "5394b272e4e727f1d0d96a2f42579d2226ffbed49c7d7dd2dbec213329398e79",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":\"GHSA-jfh8-c2jp-5v3q\",\"summary\":\"Remote code injection in Log4j\",\"details\":\"# Summary\\n\\nLog4j versions prior to 2.16.0 are subject to a remote code execution vulnerability via the ldap JNDI par"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.osv.dev/v1/vulns/CVE-2021-44228",
+      "inputs": {},
+      "selection": {
+        "value": "CVE-2021-44228",
+        "source_step": 0,
+        "source_url": "https://api.osv.dev/v1/vulns/GHSA-jfh8-c2jp-5v3q",
+        "source_response_path": [
+          "aliases",
+          0
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "CVE-2021-44228",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:18:54.290412+00:00",
+      "status": 200,
+      "response_sha256": "8b5dd3382415a4e98cdf8e51e2eb5533d8da8ef3cc2417221c1128a278aba488",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":\"CVE-2021-44228\",\"details\":\"Apache Log4j2 2.0-beta9 through 2.15.0 (excluding security releases 2.12.2, 2.12.3, and 2.3.1) JNDI features used in configuration, log messages, and parameters do no"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.osv.dev/v1/vulns/CVE-2021-44228",
+  "finished_utc": "2026-10-08T17:18:54.866030+00:00",
+  "sha256": "05ee5e5677a101e6c7720dc59af97e6d9c46a81f7811b1817515971578d0d8b5",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

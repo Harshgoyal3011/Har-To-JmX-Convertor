@@ -1,0 +1,74 @@
+{
+  "application": "CoinPaprika",
+  "domain": "Financial asset analysis",
+  "workflow": "Inspect Bitcoin asset and retrieve selected ticker",
+  "steps": [
+    {
+      "path": "/v1/coins/btc-bitcoin",
+      "inputs": {
+        "asset": "btc-bitcoin"
+      }
+    },
+    {
+      "path": "/v1/tickers/{selected}",
+      "select": {
+        "path": [
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-027-coinpaprika",
+  "permission_url": "https://api.coinpaprika.com/",
+  "started_utc": "2026-10-08T17:09:26.822112+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coinpaprika.com/v1/coins/btc-bitcoin",
+      "inputs": {
+        "asset": "btc-bitcoin"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:27.931761+00:00",
+      "status": 200,
+      "response_sha256": "5928cf1350ab14a46cbed9df0d3367188270b0fd2a162b5661faceb4ba35a2ec",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":\"btc-bitcoin\",\"name\":\"Bitcoin\",\"symbol\":\"BTC\",\"rank\":1,\"is_new\":false,\"is_active\":true,\"type\":\"coin\",\"logo\":\"https://static.coinpaprika.com/coin/btc-bitcoin/logo.png\",\"tags\":[{\"id\":\"segwit\",\"nam"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coinpaprika.com/v1/tickers/btc-bitcoin",
+      "inputs": {},
+      "selection": {
+        "value": "btc-bitcoin",
+        "source_step": 0,
+        "source_url": "https://api.coinpaprika.com/v1/coins/btc-bitcoin",
+        "source_response_path": [
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:29.361752+00:00",
+      "status": 200,
+      "response_sha256": "cdaa56756d694ccff46465f0123e68dfd8f91a3c9c6ed9cb2579b14a4868ead0",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":\"btc-bitcoin\",\"name\":\"Bitcoin\",\"symbol\":\"BTC\",\"rank\":1,\"total_supply\":20095347,\"max_supply\":21000000,\"beta_value\":1.03061,\"first_data_at\":\"2010-07-17T00:00:00Z\",\"last_updated\":\"2026-10-08T17:06:"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.coinpaprika.com/v1/tickers/btc-bitcoin",
+  "finished_utc": "2026-10-08T17:09:29.669044+00:00",
+  "sha256": "1966f6819b89499097ae7fcd72bc351ca8d16feaafe4c08abc3b1a1c56f9d4a5",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

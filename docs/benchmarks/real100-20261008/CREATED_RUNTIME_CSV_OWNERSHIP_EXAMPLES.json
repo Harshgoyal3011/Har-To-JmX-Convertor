@@ -1,0 +1,86 @@
+{
+  "workflows": 5,
+  "examples": [
+    {
+      "benchmark_id": "REAL100-001",
+      "producer_request_index": 512,
+      "producer_url": "https://sandbox.moodledemo.net/course/edit.php",
+      "producer_response_location_header": [
+        "https://sandbox.moodledemo.net/course/view.php?id=5"
+      ],
+      "producer_response_body_excerpt": "",
+      "consumer_request_index": 538,
+      "consumer_url": "https://sandbox.moodledemo.net/course/view.php?id=5",
+      "final_path": "/course/view.php?id=${__urlencode(${newsitems})}",
+      "final_body_arguments": [],
+      "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+      "explanation": "Create-course POST responds Location /course/view.php?id=5. Final course consumer uses newsitems CSV because that separate configuration input also equals 5.",
+      "known_defect": true,
+      "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+    },
+    {
+      "benchmark_id": "REAL100-004",
+      "producer_request_index": 25,
+      "producer_url": "https://demo.elabftw.net/api/v2/experiments",
+      "producer_response_location_header": [
+        "https://demo.elabftw.net/api/v2/experiments/28"
+      ],
+      "producer_response_body_excerpt": "",
+      "consumer_request_index": 26,
+      "consumer_url": "https://demo.elabftw.net/experiments.php?mode=edit&id=28",
+      "final_path": "/experiments.php?mode=edit&id=${__urlencode(${id})}",
+      "final_body_arguments": [],
+      "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+      "explanation": "Create-experiment POST responds Location /api/v2/experiments/28. Native edit consumer uses CSV id, so new experiment issuance is frozen as test data.",
+      "known_defect": true,
+      "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+    },
+    {
+      "benchmark_id": "REAL100-005",
+      "producer_request_index": 104,
+      "producer_url": "https://demo.openemr.io/openemr/interface/new/new_comprehensive_save.php",
+      "producer_response_location_header": [],
+      "producer_response_body_excerpt": "<html>\n<body>\n<script>\nwindow.location='/openemr/interface/patient_file/summary/demographics.php?set_pid=22&is_new=1';\n</script>\n\n</body>\n</html>\n",
+      "consumer_request_index": 105,
+      "consumer_url": "https://demo.openemr.io/openemr/interface/patient_file/summary/demographics.php?set_pid=22&is_new=1",
+      "final_path": "/openemr/interface/patient_file/summary/demographics.php?set_pid=${__urlencode(${set_pid})}&is_new=1",
+      "final_body_arguments": [],
+      "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+      "explanation": "Patient save response explicitly assigns window.location with set_pid=22. Demographics consumer uses CSV set_pid rather than its created-patient producer.",
+      "known_defect": true,
+      "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+    },
+    {
+      "benchmark_id": "REAL100-007",
+      "producer_request_index": 119,
+      "producer_url": "https://demo.invoiceshelf.com/api/v1/customers",
+      "producer_response_location_header": [],
+      "producer_response_body_excerpt": "{\"data\":{\"id\":9,\"name\":\"REAL100 Billing Customer\",\"email\":\"billing-real100@example.invalid\",\"phone\":\"0000000101\",\"contact_name\":null,\"company_name\":null,\"website\":null,\"enable_portal\":false,\"[REDACTED:5e884898da28]_added\":false,\"currency_id\":142,\"company_id\":1,\"facebook_id\":null,\"google_id\":null,\"github_id\":null,\"created_at\":\"2026-10-08T12:42:39.000000Z\",\"formatted_created_at\":\"2026\\/10\\/08\",\"updated_at\":\"2026-10-08T12:42:39.000000Z\",\"avatar\":0,\"due_amount\":0,\"base_due_amount\":0,\"invoice_due_amount\":0,\"base_invoice_due_amount\":0,\"available_credit\":0,\"base_available_credit\":0,\"account_balance\":0,\"base_account_balance\":0,\"prefix\":null,\"tax_id\":null,\"fields\":[{\"id\":1,\"custom_field_valuable_type\":\"App\\\\Models\\\\Customer\",\"custom_field_valuable_id\":9,\"type\":\"Input\",\"boolean_answer\":null,\"date_answer\":null,\"time_answer\":null,\"string_answer\":\"Dana Whitfield\",\"number_answer\":null,\"date_time_answer\":null,\"custom_field_id\":1,\"company_id\":1,\"default_answer\":\"Dana Whitfield\",\"default_formatted_answer\":\"Dana Whitf",
+      "consumer_request_index": 123,
+      "consumer_url": "https://demo.invoiceshelf.com/api/v1/customers/9/stats",
+      "final_path": "/api/v1/customers/${customers}/stats",
+      "final_body_arguments": [],
+      "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+      "explanation": "Customer save JSON data.id=9. Native customer stats URL uses CSV customers, retaining captured ID rather than new customer issuance.",
+      "known_defect": true,
+      "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+    },
+    {
+      "benchmark_id": "REAL100-023",
+      "producer_request_index": 170,
+      "producer_url": "https://demo.grocy.info/api/objects/chores",
+      "producer_response_location_header": [],
+      "producer_response_body_excerpt": "{\"created_object_id\":\"7\"}",
+      "consumer_request_index": 171,
+      "consumer_url": "https://demo.grocy.info/api/chores/executions/calculate-next-assignments",
+      "final_path": "/api/chores/executions/calculate-next-assignments",
+      "final_body_arguments": [
+        "{\"chore_id\": \"${chore_id}\"}"
+      ],
+      "classification": "SERVER_RUNTIME_VALUE_BOUND_TO_CSV",
+      "explanation": "Chore save JSON created_object_id=7. Native calculate-next-assignments body uses CSV chore_id instead of the server-created value.",
+      "known_defect": true,
+      "scorecard_policy": "Supplemental exact source review; does not rewrite frozen primary truth or its denominator."
+    }
+  ]
+}

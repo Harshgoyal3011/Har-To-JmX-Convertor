@@ -1,0 +1,80 @@
+{
+  "application": "CKAN Data.gov.uk",
+  "domain": "Public data discovery",
+  "workflow": "Search health dataset and inspect selected metadata",
+  "steps": [
+    {
+      "path": "/api/3/action/package_search?q=health&rows=2",
+      "inputs": {
+        "q": "health"
+      }
+    },
+    {
+      "path": "/api/3/action/package_show?id={selected}",
+      "select": {
+        "path": [
+          "result",
+          "results",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-050-ckan-data-gov-uk",
+  "permission_url": "https://data.gov.uk/",
+  "started_utc": "2026-10-08T17:10:55.491614+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://ckan.publishing.service.gov.uk/api/3/action/package_search?q=health&rows=2",
+      "inputs": {
+        "q": "health"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:56.599809+00:00",
+      "status": 200,
+      "response_sha256": "bea8926e1d68746ba7f5daa1e7f6a19ccc189f87991190bb8fa6e1e7d686d554",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"help\": \"https://ckan.publishing.service.gov.uk/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 5709, \"facets\": {}, \"results\": [{\"creator_user_id\": \"60e687bf-a6d8-43"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://ckan.publishing.service.gov.uk/api/3/action/package_show?id=d44b4f65-563a-4e3c-9a01-f51b4a4dbdd2",
+      "inputs": {},
+      "selection": {
+        "value": "d44b4f65-563a-4e3c-9a01-f51b4a4dbdd2",
+        "source_step": 0,
+        "source_url": "https://ckan.publishing.service.gov.uk/api/3/action/package_search?q=health&rows=2",
+        "source_response_path": [
+          "result",
+          "results",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:58.473273+00:00",
+      "status": 200,
+      "response_sha256": "c557fc869bdbb353c163443a56670d481df46a7d8f5230123fd313b2dd4396f7",
+      "response_content_type": "application/json;charset=utf-8",
+      "response_excerpt": "{\"help\": \"https://ckan.publishing.service.gov.uk/api/3/action/help_show?name=package_show\", \"success\": true, \"result\": {\"creator_user_id\": \"60e687bf-a6d8-43e2-a50e-efab84b27952\", \"id\": \"d44b4f65-563a-"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://ckan.publishing.service.gov.uk/api/3/action/package_show?id=d44b4f65-563a-4e3c-9a01-f51b4a4dbdd2",
+  "finished_utc": "2026-10-08T17:10:58.788362+00:00",
+  "sha256": "b1eb396c1c57cab5ea7d39e68eff2d76d4df94a83c38ab11e917844fadb7bbe8",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

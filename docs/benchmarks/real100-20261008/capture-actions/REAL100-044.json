@@ -1,0 +1,78 @@
+{
+  "application": "iDigBio",
+  "domain": "Specimen inventory",
+  "workflow": "Search biological specimens and inspect selected museum record",
+  "steps": [
+    {
+      "path": "/v2/search/records/?rq=%7B%22scientificname%22:%22Quercus%20alba%22%7D&limit=2",
+      "inputs": {
+        "rq": "{\"scientificname\":\"Quercus alba\"}"
+      }
+    },
+    {
+      "path": "/v2/view/records/{selected}",
+      "select": {
+        "path": [
+          "items",
+          0,
+          "uuid"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-018-idigbio",
+  "permission_url": "https://github.com/idigbio/idigbio-search-api/wiki",
+  "started_utc": "2026-10-08T17:08:45.916741+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://search.idigbio.org/v2/search/records/?rq=%7B%22scientificname%22:%22Quercus%20alba%22%7D&limit=2",
+      "inputs": {
+        "rq": "{\"scientificname\":\"Quercus alba\"}"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:47.020194+00:00",
+      "status": 200,
+      "response_sha256": "b703642ecfa7e7cabc93e5324ab847d41e01afdfb4bde34edcbc7930254bb910",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"itemCount\":12743,\"lastModified\":\"2026-04-23T18:05:39.736Z\",\"items\":[{\"uuid\":\"9d0283aa-e6be-4b7e-a810-1ad0ec8df79a\",\"type\":\"records\",\"etag\":\"631fc59685ffbe3d1a29618832b2e060de8f85b9\",\"data\":{\"dwc:cou"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://search.idigbio.org/v2/view/records/9d0283aa-e6be-4b7e-a810-1ad0ec8df79a",
+      "inputs": {},
+      "selection": {
+        "value": "9d0283aa-e6be-4b7e-a810-1ad0ec8df79a",
+        "source_step": 0,
+        "source_url": "https://search.idigbio.org/v2/search/records/?rq=%7B%22scientificname%22:%22Quercus%20alba%22%7D&limit=2",
+        "source_response_path": [
+          "items",
+          0,
+          "uuid"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:50.369800+00:00",
+      "status": 200,
+      "response_sha256": "db12f2cfcef09348ee0944f2c4702e6308ead199455394c953a2b925053132e3",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"uuid\":\"9d0283aa-e6be-4b7e-a810-1ad0ec8df79a\",\"type\":\"records\",\"etag\":\"631fc59685ffbe3d1a29618832b2e060de8f85b9\",\"data\":{\"dwc:county\":\"Durham County\",\"dwc:recordedBy\":\"La Roi, George H.\",\"dwc:georefe"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://search.idigbio.org/v2/view/records/9d0283aa-e6be-4b7e-a810-1ad0ec8df79a",
+  "finished_utc": "2026-10-08T17:08:50.786708+00:00",
+  "sha256": "c16818895c9b5461f80825695e75aff5fdb5a2647cf2a8a792624fe892aedb94",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

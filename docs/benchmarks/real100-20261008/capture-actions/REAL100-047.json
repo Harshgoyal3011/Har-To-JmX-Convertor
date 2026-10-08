@@ -1,0 +1,79 @@
+{
+  "application": "NOAA Weather",
+  "domain": "Operations planning",
+  "workflow": "Resolve work-site forecast grid and retrieve forecast",
+  "steps": [
+    {
+      "path": "/points/38.8894,-77.0352",
+      "inputs": {
+        "latitude": "38.8894",
+        "longitude": "-77.0352"
+      }
+    },
+    {
+      "path": "{selected}",
+      "select": {
+        "path": [
+          "properties",
+          "forecast"
+        ],
+        "kind": "EXISTING_DATA",
+        "absolute": true
+      }
+    }
+  ],
+  "id": "api-021-noaa-weather",
+  "permission_url": "https://www.weather.gov/documentation/services-web-api",
+  "started_utc": "2026-10-08T17:09:01.316317+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.weather.gov/points/38.8894,-77.0352",
+      "inputs": {
+        "latitude": "38.8894",
+        "longitude": "-77.0352"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:02.417496+00:00",
+      "status": 200,
+      "response_sha256": "13c2822573c8dd8425bb47353d7cda67eddda9b3030a647f140159e6abd14bdf",
+      "response_content_type": "application/geo+json",
+      "response_excerpt": "{\n    \"@context\": [\n        \"https://geojson.org/geojson-ld/geojson-context.jsonld\",\n        {\n            \"@version\": \"1.1\",\n            \"wx\": \"https://api.weather.gov/ontology#\",\n            \"s\": \"h"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.weather.gov/gridpoints/LWX/97,71/forecast",
+      "inputs": {},
+      "selection": {
+        "value": "https://api.weather.gov/gridpoints/LWX/97,71/forecast",
+        "source_step": 0,
+        "source_url": "https://api.weather.gov/points/38.8894,-77.0352",
+        "source_response_path": [
+          "properties",
+          "forecast"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:03.651334+00:00",
+      "status": 200,
+      "response_sha256": "2e0cfb516bbb839b122b844b6882ccebd4fbaa05c4c58554afe70c9d9160fc04",
+      "response_content_type": "application/geo+json",
+      "response_excerpt": "{\n    \"@context\": [\n        \"https://geojson.org/geojson-ld/geojson-context.jsonld\",\n        {\n            \"@version\": \"1.1\",\n            \"wx\": \"https://api.weather.gov/ontology#\",\n            \"geo\": "
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.weather.gov/gridpoints/LWX/97,71/forecast",
+  "finished_utc": "2026-10-08T17:09:04.174260+00:00",
+  "sha256": "1e315e4922bd5922d2d9e613832532257fc7b5b06fc3610e6e4731fd3920f2e3",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

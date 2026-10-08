@@ -1,0 +1,78 @@
+{
+  "id": "api-reserve-004",
+  "application": "Zenodo",
+  "domain": "Public catalog business research",
+  "workflow": "Browse research communities and inspect selected community governance",
+  "steps": [
+    {
+      "path": "/api/communities?page=1&size=2",
+      "inputs": {}
+    },
+    {
+      "path": "/api/communities/{selected}",
+      "select": {
+        "path": [
+          "hits",
+          "hits",
+          0,
+          "id"
+        ],
+        "kind": "SELECTED_EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://developers.zenodo.org/",
+  "started_utc": "2026-10-08T17:21:03.642143+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://zenodo.org/api/communities?page=1&size=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:21:04.753580+00:00",
+      "status": 200,
+      "response_sha256": "57a4f0363b903620b22dfeee1b0d101c8beacbe143ee5a75395efeae735bac92",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"hits\": {\"hits\": [{\"id\": \"7d1e44a7-2574-45fc-bb7b-0cd20ce39776\", \"created\": \"2026-10-08T17:02:44.409380+00:00\", \"updated\": \"2026-10-08T17:02:44.559095+00:00\", \"links\": {\"self\": \"https://zenodo.org/ap"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://zenodo.org/api/communities/7d1e44a7-2574-45fc-bb7b-0cd20ce39776",
+      "inputs": {},
+      "selection": {
+        "value": "7d1e44a7-2574-45fc-bb7b-0cd20ce39776",
+        "source_step": 0,
+        "source_url": "https://zenodo.org/api/communities?page=1&size=2",
+        "source_response_path": [
+          "hits",
+          "hits",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "known_transform": "identity",
+        "consumer_spelling": "7d1e44a7-2574-45fc-bb7b-0cd20ce39776",
+        "classification": "SELECTED_EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:21:06.590889+00:00",
+      "status": 200,
+      "response_sha256": "58a1bace47fcf8fb7686f1affe8a480ec94b5e86f366c05d739da43d67f41b59",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\": \"7d1e44a7-2574-45fc-bb7b-0cd20ce39776\", \"created\": \"2026-10-08T17:02:44.409380+00:00\", \"updated\": \"2026-10-08T17:02:44.559095+00:00\", \"links\": {\"self\": \"https://zenodo.org/api/communities/7d1e4"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://zenodo.org/api/communities/7d1e44a7-2574-45fc-bb7b-0cd20ce39776",
+  "finished_utc": "2026-10-08T17:21:06.988414+00:00",
+  "sha256": "a57f50f08dd1a315ccde89f28498cae9f0c2149a4c471024a011d1fd5427dc0a",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

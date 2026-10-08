@@ -1,0 +1,37 @@
+{
+  "status": "PARTIAL_SOURCE_LABELS_REVIEW_REQUIRED",
+  "workflows": 100,
+  "input_occurrences": 256,
+  "runtime_evidence_rows": 3231,
+  "unassessed_ui_actions": [
+    {
+      "benchmark_id": "REAL100-003",
+      "action_index": 7,
+      "slot": "projectTitle",
+      "value": "REAL100 Release Approval",
+      "reason": "UI input not located unambiguously in a subsequent business submission"
+    },
+    {
+      "benchmark_id": "REAL100-016",
+      "action_index": 6,
+      "slot": "task-add-textarea-ynh1te2o0",
+      "value": "REAL100 Prepare release approval evidence",
+      "reason": "UI input not located unambiguously in a subsequent business submission"
+    },
+    {
+      "benchmark_id": "REAL100-017",
+      "action_index": 7,
+      "slot": "labelTitle",
+      "value": "REAL100 Approval Required",
+      "reason": "UI input not located unambiguously in a subsequent business submission"
+    },
+    {
+      "benchmark_id": "REAL100-018",
+      "action_index": 7,
+      "slot": "teamName",
+      "value": "REAL100 Release Committee",
+      "reason": "UI input not located unambiguously in a subsequent business submission"
+    }
+  ],
+  "limitations": "Created-object non-runtime/catalog labels, JS-issued IDs, cookie freshness/repeated issuer lineage, and cross-representation ambiguity need independent manual review. These preliminary rows are not benchmark denominator totals."
+}

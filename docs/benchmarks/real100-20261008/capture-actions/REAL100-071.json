@@ -1,0 +1,80 @@
+{
+  "application": "Wikimedia",
+  "domain": "Knowledge research",
+  "workflow": "Search subject and inspect selected article with revisions",
+  "steps": [
+    {
+      "path": "/w/api.php?action=query&list=search&srsearch=Performance+engineering&format=json&srlimit=2",
+      "inputs": {
+        "srsearch": "Performance engineering"
+      }
+    },
+    {
+      "path": "/w/api.php?action=query&prop=info|revisions&pageids={selected}&rvprop=timestamp|ids&format=json",
+      "select": {
+        "path": [
+          "query",
+          "search",
+          0,
+          "pageid"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-052-wikimedia",
+  "permission_url": "https://www.mediawiki.org/wiki/API:Main_page",
+  "started_utc": "2026-10-08T17:11:02.490071+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Performance+engineering&format=json&srlimit=2",
+      "inputs": {
+        "srsearch": "Performance engineering"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:11:03.598932+00:00",
+      "status": 200,
+      "response_sha256": "0d7bce2532e572a3312cce9ca88f1d7e3c88ab44dbb0027a6b25784f7a0f0bdd",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"batchcomplete\":\"\",\"continue\":{\"sroffset\":2,\"continue\":\"-||\"},\"query\":{\"searchinfo\":{\"totalhits\":52519},\"search\":[{\"ns\":0,\"title\":\"Performance engineering\",\"pageid\":6615610,\"size\":14757,\"wordcount\":1"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://en.wikipedia.org/w/api.php?action=query&prop=info|revisions&pageids=6615610&rvprop=timestamp|ids&format=json",
+      "inputs": {},
+      "selection": {
+        "value": 6615610,
+        "source_step": 0,
+        "source_url": "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=Performance+engineering&format=json&srlimit=2",
+        "source_response_path": [
+          "query",
+          "search",
+          0,
+          "pageid"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:11:05.384658+00:00",
+      "status": 200,
+      "response_sha256": "f8c74b6706708cfb36320e2fab2fdc6cd3e04af6c7d29f9f29487cb831b6ead6",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"batchcomplete\":\"\",\"query\":{\"pages\":{\"6615610\":{\"pageid\":6615610,\"ns\":0,\"title\":\"Performance engineering\",\"contentmodel\":\"wikitext\",\"pagelanguage\":\"en\",\"pagelanguagehtmlcode\":\"en\",\"pagelanguagedir\":\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://en.wikipedia.org/w/api.php?action=query&prop=info|revisions&pageids=6615610&rvprop=timestamp|ids&format=json",
+  "finished_utc": "2026-10-08T17:11:05.875773+00:00",
+  "sha256": "038c44f535ffa352408a685898288895ddba47a75cf245fb960c50a23768c51f",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "id": "candidate-booked-accessory-v2",
+  "application": "Booked Scheduler",
+  "workflow": "Create independent accessory configuration and inspect saved result",
+  "permission_url": "https://demo.bookedscheduler.com/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.bookedscheduler.com/"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=email]",
+      "value": "admin"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:5e884898da28]"
+    },
+    {
+      "op": "click",
+      "selector": "button[name=login]"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Application Management')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "#add-accessory-button"
+    },
+    {
+      "op": "check",
+      "selector": "#chkUnlimitedEdit",
+      "value": false
+    },
+    {
+      "op": "fill",
+      "selector": "#editName",
+      "value": "REAL100 Presentation Kit"
+    },
+    {
+      "op": "fill",
+      "selector": "#editQuantity",
+      "value": "4"
+    },
+    {
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Add'):visible"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    }
+  ],
+  "completion_assertion": "REAL100 Presentation Kit",
+  "started_utc": "2026-10-08T17:19:20.142563+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T17:19:20.523745+00:00",
+      "op": "goto",
+      "url": "https://demo.bookedscheduler.com/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.bookedscheduler.com/",
+      "completed_utc": "2026-10-08T17:19:21.425760+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T17:19:21.425778+00:00",
+      "op": "fill",
+      "selector": "input[name=email]",
+      "value": "admin",
+      "url_before": "https://demo.bookedscheduler.com/",
+      "element_evidence": {
+        "name": "email",
+        "id": "email",
+        "type": "text",
+        "value": "admin",
+        "formAction": "https://demo.bookedscheduler.com/Web/index.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.bookedscheduler.com/Web/",
+      "completed_utc": "2026-10-08T17:19:23.010361+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T17:19:23.010378+00:00",
+      "op": "fill",
+      "selector": "input[name=[REDACTED:5e884898da28]]",
+      "value": "[REDACTED:5e884898da28]",
+      "url_before": "https://demo.bookedscheduler.com/Web/",
+      "element_evidence": {
+        "name": "[REDACTED:5e884898da28]",
+        "id": "[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:5e884898da28]",
+        "formAction": "https://demo.bookedscheduler.com/Web/index.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.bookedscheduler.com/Web/",
+      "completed_utc": "2026-10-08T17:19:23.034730+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T17:19:23.034748+00:00",
+      "op": "click",
+      "selector": "button[name=login]",
+      "url_before": "https://demo.bookedscheduler.com/Web/",
+      "url_after": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "completed_utc": "2026-10-08T17:19:24.002477+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T17:19:24.002514+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "completed_utc": "2026-10-08T17:19:27.016499+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T17:19:27.016522+00:00",
+      "op": "click",
+      "selector": "button:has-text('Application Management')",
+      "url_before": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "completed_utc": "2026-10-08T17:19:27.074227+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T17:19:27.074244+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "completed_utc": "2026-10-08T17:19:29.086067+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T17:19:29.086090+00:00",
+      "op": "goto",
+      "url": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "url_before": "https://demo.bookedscheduler.com/Web/dashboard.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:29.646615+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T17:19:29.646635+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:31.655102+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T17:19:31.655135+00:00",
+      "op": "click",
+      "selector": "#add-accessory-button",
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:31.714162+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T17:19:31.714175+00:00",
+      "op": "check",
+      "selector": "#chkUnlimitedEdit",
+      "value": false,
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "element_evidence": {
+        "name": "chkUnlimited",
+        "id": "chkUnlimitedEdit",
+        "type": "checkbox",
+        "value": "",
+        "formAction": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:32.703178+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T17:19:32.703190+00:00",
+      "op": "fill",
+      "selector": "#editName",
+      "value": "REAL100 Presentation Kit",
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "element_evidence": {
+        "name": "accessoryName",
+        "id": "editName",
+        "type": "text",
+        "value": "REAL100 Presentation Kit",
+        "formAction": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:32.719543+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T17:19:32.719561+00:00",
+      "op": "fill",
+      "selector": "#editQuantity",
+      "value": "4",
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "element_evidence": {
+        "name": "accessoryQuantityAvailable",
+        "id": "editQuantity",
+        "type": "number",
+        "value": "4",
+        "formAction": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:32.733180+00:00"
+    },
+    {
+      "index": 13,
+      "started_utc": "2026-10-08T17:19:32.733191+00:00",
+      "op": "click",
+      "selector": "button[type=submit]:has-text('Add'):visible",
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:32.785352+00:00"
+    },
+    {
+      "index": 14,
+      "started_utc": "2026-10-08T17:19:32.785368+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "url_after": "https://demo.bookedscheduler.com/Web/admin/manage_accessories.php",
+      "completed_utc": "2026-10-08T17:19:35.800288+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T17:19:38.179039+00:00",
+  "sha256": "9af9c3b28194dee0881adeefe443c2dac8d64cd68ecd1c3a2aabb69352dfff66",
+  "request_count": 135,
+  "representation_types": [
+    "application/x-www-form-urlencoded",
+    "application/x-www-form-urlencoded; charset=UTF-8"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "application": "CoinGecko",
+  "domain": "Exchange reference",
+  "workflow": "List market exchanges and inspect selected exchange",
+  "steps": [
+    {
+      "path": "/api/v3/exchanges/list"
+    },
+    {
+      "path": "/api/v3/exchanges/{selected}",
+      "select": {
+        "path": [
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-026-coingecko",
+  "permission_url": "https://docs.coingecko.com/reference/introduction",
+  "started_utc": "2026-10-08T17:09:23.259910+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coingecko.com/api/v3/exchanges/list",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:24.367867+00:00",
+      "status": 200,
+      "response_sha256": "bac9916cbeae9784ba7f022467b25e1c339caedb75008035c15afc5c6ede8cc7",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "[{\"id\":\"10kswap-starknet-alpha\",\"name\":\"10KSwap\"},{\"id\":\"9inch\",\"name\":\"9inch\"},{\"id\":\"9mm-v3\",\"name\":\"9mm V3 (Pulsechain)\"},{\"id\":\"9mm-v3-base\",\"name\":\"9mm V3 (Base)\"},{\"id\":\"9mm-v3-sonic\",\"name\":\"9m"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.coingecko.com/api/v3/exchanges/10kswap-starknet-alpha",
+      "inputs": {},
+      "selection": {
+        "value": "10kswap-starknet-alpha",
+        "source_step": 0,
+        "source_url": "https://api.coingecko.com/api/v3/exchanges/list",
+        "source_response_path": [
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:25.947881+00:00",
+      "status": 200,
+      "response_sha256": "ebceacdf51b79bec33bf947d8cc25ef3d07281bc6e17ea641319199eae898960",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"name\":\"10KSwap\",\"year_established\":2023,\"country\":null,\"description\":\"\",\"url\":\"https://10kswap.com/swap\",\"image\":\"https://coin-images.coingecko.com/markets/images/1298/small/10kswap.jpeg?1706865291\""
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.coingecko.com/api/v3/exchanges/10kswap-starknet-alpha",
+  "finished_utc": "2026-10-08T17:09:26.570309+00:00",
+  "sha256": "db8709a4ce37edc9d0d3c134b765e5f0061a91fac89cab48526213a4b5658c92",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

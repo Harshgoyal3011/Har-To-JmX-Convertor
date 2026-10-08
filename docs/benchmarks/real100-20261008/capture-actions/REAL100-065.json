@@ -1,0 +1,74 @@
+{
+  "application": "Lichess",
+  "domain": "Tournament operations",
+  "workflow": "Inspect player and retrieve current public performance summary",
+  "steps": [
+    {
+      "path": "/api/user/thibault",
+      "inputs": {
+        "player": "thibault"
+      }
+    },
+    {
+      "path": "/api/user/{selected}/rating-history",
+      "select": {
+        "path": [
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-045-lichess",
+  "permission_url": "https://lichess.org/api",
+  "started_utc": "2026-10-08T17:10:37.090943+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://lichess.org/api/user/thibault",
+      "inputs": {
+        "player": "thibault"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:38.194627+00:00",
+      "status": 200,
+      "response_sha256": "baebd18323b2c31d8add7bccf5460414f04835d28009ec492ec2be8fb90a5057",
+      "response_content_type": "application/json",
+      "response_excerpt": "{\"id\":\"thibault\",\"username\":\"thibault\",\"perfs\":{\"ultraBullet\":{\"games\":3,\"rating\":1688,\"rd\":362,\"prog\":0,\"prov\":true},\"bullet\":{\"games\":7483,\"rating\":1774,\"rd\":101,\"prog\":-22},\"blitz\":{\"games\":11922,\""
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://lichess.org/api/user/thibault/rating-history",
+      "inputs": {},
+      "selection": {
+        "value": "thibault",
+        "source_step": 0,
+        "source_url": "https://lichess.org/api/user/thibault",
+        "source_response_path": [
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:39.900880+00:00",
+      "status": 200,
+      "response_sha256": "a42527f0dd96765b0404e573c2bf75c9375f1dca250d59ecff99d4c068cfc26f",
+      "response_content_type": "application/json",
+      "response_excerpt": "[{\"name\":\"ultraBullet\",\"points\":[[2017,3,10,1380],[2018,5,28,1688]]},{\"name\":\"bullet\",\"points\":[[2011,6,8,1472],[2011,7,29,1332],[2011,8,12,1314],[2012,0,9,1264],[2012,0,21,1369],[2012,0,29,1484],[201"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://lichess.org/api/user/thibault/rating-history",
+  "finished_utc": "2026-10-08T17:10:40.236193+00:00",
+  "sha256": "e150b62e3abd4172d9188af94d12af8307d38163c253f8c3241de661c20e06f2",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

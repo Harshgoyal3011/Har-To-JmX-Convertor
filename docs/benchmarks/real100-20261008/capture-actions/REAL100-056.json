@@ -1,0 +1,78 @@
+{
+  "application": "Binance",
+  "domain": "Market reference",
+  "workflow": "Inspect trading symbol and retrieve book ticker",
+  "steps": [
+    {
+      "path": "/api/v3/exchangeInfo?symbol=BTCUSDT",
+      "inputs": {
+        "symbol": "BTCUSDT"
+      }
+    },
+    {
+      "path": "/api/v3/ticker/bookTicker?symbol={selected}",
+      "select": {
+        "path": [
+          "symbols",
+          0,
+          "symbol"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-031-binance",
+  "permission_url": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints",
+  "started_utc": "2026-10-08T17:09:43.138069+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data-api.binance.vision/api/v3/exchangeInfo?symbol=BTCUSDT",
+      "inputs": {
+        "symbol": "BTCUSDT"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:09:44.244902+00:00",
+      "status": 200,
+      "response_sha256": "dbf853126e3e542337ab70d09c7bcc300410602e0b4ecd04edf3674c132cad6a",
+      "response_content_type": "application/json;charset=UTF-8",
+      "response_excerpt": "{\"timezone\":\"UTC\",\"serverTime\":1791479383556,\"rateLimits\":[{\"rateLimitType\":\"REQUEST_WEIGHT\",\"interval\":\"MINUTE\",\"intervalNum\":1,\"limit\":6000},{\"rateLimitType\":\"ORDERS\",\"interval\":\"SECOND\",\"intervalNu"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://data-api.binance.vision/api/v3/ticker/bookTicker?symbol=BTCUSDT",
+      "inputs": {},
+      "selection": {
+        "value": "BTCUSDT",
+        "source_step": 0,
+        "source_url": "https://data-api.binance.vision/api/v3/exchangeInfo?symbol=BTCUSDT",
+        "source_response_path": [
+          "symbols",
+          0,
+          "symbol"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:09:45.890512+00:00",
+      "status": 200,
+      "response_sha256": "65ca922dc831c9751aa7ab2ebd60406591eeae1b2a8c39c52b9d9d1969cdb1bd",
+      "response_content_type": "application/json;charset=UTF-8",
+      "response_excerpt": "{\"symbol\":\"BTCUSDT\",\"bidPrice\":\"80816.36000000\",\"bidQty\":\"1.45547000\",\"askPrice\":\"80816.37000000\",\"askQty\":\"2.09484000\"}"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://data-api.binance.vision/api/v3/ticker/bookTicker?symbol=BTCUSDT",
+  "finished_utc": "2026-10-08T17:09:46.131547+00:00",
+  "sha256": "1f2dbdfc8cddb4e8c18af14e707750ac2280ca12aa61a0261e6ca1fb349cf182",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

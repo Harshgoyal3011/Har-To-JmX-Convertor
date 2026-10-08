@@ -1,0 +1,333 @@
+{
+  "id": "candidate-easyappointments-service",
+  "application": "EasyAppointments",
+  "workflow": "Create scheduled service with price and duration",
+  "permission_url": "https://demo.easyappointments.org/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.easyappointments.org/"
+    },
+    {
+      "op": "click",
+      "selector": "button:has-text('Continue'):visible"
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Login')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "selector": "#username",
+      "value": "[REDACTED:4194d1706ed1]"
+    },
+    {
+      "op": "fill",
+      "selector": "#[REDACTED:5e884898da28]",
+      "value": "[REDACTED:4194d1706ed1]"
+    },
+    {
+      "op": "click",
+      "selector": "#login"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "a:has-text('Services') >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 1
+    },
+    {
+      "op": "click",
+      "selector": "a[href$='/services']"
+    },
+    {
+      "op": "wait",
+      "seconds": 3
+    },
+    {
+      "op": "click",
+      "selector": "#add-service"
+    },
+    {
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Review Consultation"
+    },
+    {
+      "op": "fill",
+      "selector": "#duration",
+      "value": "45"
+    },
+    {
+      "op": "fill",
+      "selector": "#price",
+      "value": "90.50"
+    },
+    {
+      "op": "fill",
+      "selector": "#currency",
+      "value": "USD"
+    },
+    {
+      "op": "click",
+      "selector": "#save-service"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "completion_assertion": "REAL100 Review Consultation",
+  "started_utc": "2026-10-08T17:05:21.686021+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T17:05:22.066030+00:00",
+      "op": "goto",
+      "url": "https://demo.easyappointments.org/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.easyappointments.org/",
+      "completed_utc": "2026-10-08T17:05:24.858309+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T17:05:24.858324+00:00",
+      "op": "click",
+      "selector": "button:has-text('Continue'):visible",
+      "url_before": "https://demo.easyappointments.org/",
+      "url_after": "https://demo.easyappointments.org/",
+      "completed_utc": "2026-10-08T17:05:25.466150+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T17:05:25.466164+00:00",
+      "op": "click",
+      "selector": "a:has-text('Login')",
+      "url_before": "https://demo.easyappointments.org/",
+      "url_after": "https://demo.easyappointments.org/index.php/login",
+      "completed_utc": "2026-10-08T17:05:26.165673+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T17:05:26.165688+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.easyappointments.org/index.php/login",
+      "url_after": "https://demo.easyappointments.org/index.php/login",
+      "completed_utc": "2026-10-08T17:05:28.168082+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T17:05:28.168109+00:00",
+      "op": "fill",
+      "selector": "#username",
+      "value": "[REDACTED:4194d1706ed1]",
+      "url_before": "https://demo.easyappointments.org/index.php/login",
+      "element_evidence": {
+        "name": "",
+        "id": "username",
+        "type": "text",
+        "value": "[REDACTED:4194d1706ed1]",
+        "formAction": "https://demo.easyappointments.org/index.php/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.easyappointments.org/index.php/login",
+      "completed_utc": "2026-10-08T17:05:28.243502+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T17:05:28.243523+00:00",
+      "op": "fill",
+      "selector": "#[REDACTED:5e884898da28]",
+      "value": "[REDACTED:4194d1706ed1]",
+      "url_before": "https://demo.easyappointments.org/index.php/login",
+      "element_evidence": {
+        "name": "",
+        "id": "[REDACTED:5e884898da28]",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:4194d1706ed1]",
+        "formAction": "https://demo.easyappointments.org/index.php/login",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.easyappointments.org/index.php/login",
+      "completed_utc": "2026-10-08T17:05:28.274254+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T17:05:28.274275+00:00",
+      "op": "click",
+      "selector": "#login",
+      "url_before": "https://demo.easyappointments.org/index.php/login",
+      "url_after": "https://demo.easyappointments.org/index.php/login",
+      "completed_utc": "2026-10-08T17:05:28.324960+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T17:05:28.325003+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.easyappointments.org/index.php/login",
+      "url_after": "https://demo.easyappointments.org/index.php/calendar",
+      "completed_utc": "2026-10-08T17:05:32.337304+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T17:05:32.337322+00:00",
+      "op": "click",
+      "selector": "a:has-text('Services') >> nth=0",
+      "url_before": "https://demo.easyappointments.org/index.php/calendar",
+      "url_after": "https://demo.easyappointments.org/index.php/calendar",
+      "completed_utc": "2026-10-08T17:05:32.408997+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T17:05:32.409016+00:00",
+      "op": "wait",
+      "seconds": 1,
+      "url_before": "https://demo.easyappointments.org/index.php/calendar",
+      "url_after": "https://demo.easyappointments.org/index.php/calendar",
+      "completed_utc": "2026-10-08T17:05:33.430193+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T17:05:33.430276+00:00",
+      "op": "click",
+      "selector": "a[href$='/services']",
+      "url_before": "https://demo.easyappointments.org/index.php/calendar",
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:33.876686+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T17:05:33.876705+00:00",
+      "op": "wait",
+      "seconds": 3,
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:36.889179+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T17:05:36.889208+00:00",
+      "op": "click",
+      "selector": "#add-service",
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:36.959414+00:00"
+    },
+    {
+      "index": 13,
+      "started_utc": "2026-10-08T17:05:36.959430+00:00",
+      "op": "fill",
+      "selector": "#name",
+      "value": "REAL100 Review Consultation",
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "element_evidence": {
+        "name": "",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Review Consultation",
+        "formAction": null,
+        "formMethod": null,
+        "selectedText": null
+      },
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:37.004153+00:00"
+    },
+    {
+      "index": 14,
+      "started_utc": "2026-10-08T17:05:37.004181+00:00",
+      "op": "fill",
+      "selector": "#duration",
+      "value": "45",
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "element_evidence": {
+        "name": "",
+        "id": "duration",
+        "type": "number",
+        "value": "45",
+        "formAction": null,
+        "formMethod": null,
+        "selectedText": null
+      },
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:37.022960+00:00"
+    },
+    {
+      "index": 15,
+      "started_utc": "2026-10-08T17:05:37.022973+00:00",
+      "op": "fill",
+      "selector": "#price",
+      "value": "90.50",
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "element_evidence": {
+        "name": "",
+        "id": "price",
+        "type": "text",
+        "value": "90.50",
+        "formAction": null,
+        "formMethod": null,
+        "selectedText": null
+      },
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:37.048005+00:00"
+    },
+    {
+      "index": 16,
+      "started_utc": "2026-10-08T17:05:37.048020+00:00",
+      "op": "fill",
+      "selector": "#currency",
+      "value": "USD",
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "element_evidence": {
+        "name": "",
+        "id": "currency",
+        "type": "text",
+        "value": "USD",
+        "formAction": null,
+        "formMethod": null,
+        "selectedText": null
+      },
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:37.075082+00:00"
+    },
+    {
+      "index": 17,
+      "started_utc": "2026-10-08T17:05:37.075094+00:00",
+      "op": "click",
+      "selector": "#save-service",
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:37.199204+00:00"
+    },
+    {
+      "index": 18,
+      "started_utc": "2026-10-08T17:05:37.199231+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.easyappointments.org/index.php/services",
+      "url_after": "https://demo.easyappointments.org/index.php/services",
+      "completed_utc": "2026-10-08T17:05:39.216753+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T17:05:41.462813+00:00",
+  "sha256": "7ebce571cdea9b4184793b063d87081ef99a6f027b975fca906e876d04270688",
+  "request_count": 165,
+  "representation_types": [
+    "application/x-www-form-urlencoded; charset=UTF-8"
+  ]
+}

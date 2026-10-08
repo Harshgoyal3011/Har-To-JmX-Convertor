@@ -1,0 +1,78 @@
+{
+  "application": "iNaturalist",
+  "domain": "Field observation",
+  "workflow": "Search observations and inspect selected public sighting",
+  "steps": [
+    {
+      "path": "/v1/observations?taxon_id=47126&per_page=2&order_by=observed_on",
+      "inputs": {
+        "taxon_id": "47126"
+      }
+    },
+    {
+      "path": "/v1/observations/{selected}",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "id"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "id": "api-017-inaturalist",
+  "permission_url": "https://api.inaturalist.org/v1/docs/",
+  "started_utc": "2026-10-08T17:08:41.206449+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.inaturalist.org/v1/observations?taxon_id=47126&per_page=2&order_by=observed_on",
+      "inputs": {
+        "taxon_id": "47126"
+      },
+      "selection": null,
+      "started_utc": "2026-10-08T17:08:42.308418+00:00",
+      "status": 200,
+      "response_sha256": "ef6cfab7f267a0d2046edd61c1f172bbce1dd21d276cd0abbb195066d285c2b8",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"total_results\":160276728,\"page\":1,\"per_page\":2,\"results\":[{\"quality_grade\":\"casual\",\"time_observed_at\":\"2026-10-09T00:53:55+09:00\",\"taxon_geoprivacy\":null,\"annotations\":[],\"uuid\":\"7848303b-f285-4518"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.inaturalist.org/v1/observations/406809094",
+      "inputs": {},
+      "selection": {
+        "value": 406809094,
+        "source_step": 0,
+        "source_url": "https://api.inaturalist.org/v1/observations?taxon_id=47126&per_page=2&order_by=observed_on",
+        "source_response_path": [
+          "results",
+          0,
+          "id"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:08:45.222453+00:00",
+      "status": 200,
+      "response_sha256": "20bb967d7c4e40c8cfacff7bfe1cb252f1b8047ab79a1c803a59abb165c86127",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\"total_results\":1,\"page\":1,\"per_page\":1,\"results\":[{\"quality_grade\":\"casual\",\"time_observed_at\":\"2026-10-09T00:53:55+09:00\",\"taxon_geoprivacy\":null,\"annotations\":[],\"uuid\":\"7848303b-f285-4518-8c6e-ef"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.inaturalist.org/v1/observations/406809094",
+  "finished_utc": "2026-10-08T17:08:45.696229+00:00",
+  "sha256": "d1bcda29b37fa4a1d033d7cb9fd5e126f145b90c495da5c53b271bdfd3690b13",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

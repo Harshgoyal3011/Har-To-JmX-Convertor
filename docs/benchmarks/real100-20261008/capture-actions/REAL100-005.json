@@ -1,0 +1,329 @@
+{
+  "id": "candidate-openemr-patient-v3",
+  "application": "[REDACTED:30d54e94315a]",
+  "workflow": "Register fictional patient and inspect saved demographics",
+  "permission_url": "https://www.open-emr.org/demo/",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.openemr.io/openemr/index.php"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=authUser]",
+      "value": "admin"
+    },
+    {
+      "op": "fill",
+      "selector": "input[name=clearPass]",
+      "value": "[REDACTED:d74ff0ee8da3]"
+    },
+    {
+      "op": "click",
+      "selector": "button[type=submit]"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "selector": "text=Patient >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "text=New/Search >> nth=0"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "frame": "/new/new.php",
+      "selector": "#form_fname",
+      "value": "Benchmark"
+    },
+    {
+      "op": "fill",
+      "frame": "/new/new.php",
+      "selector": "#form_lname",
+      "value": "PatientREAL100"
+    },
+    {
+      "op": "fill",
+      "frame": "/new/new.php",
+      "selector": "#form_DOB",
+      "value": "1990-01-01"
+    },
+    {
+      "op": "select",
+      "frame": "/new/new.php",
+      "selector": "#form_sex",
+      "value": "Female"
+    },
+    {
+      "op": "click",
+      "frame": "/new/new.php",
+      "selector": "#create"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    },
+    {
+      "op": "click",
+      "frame": "/new_search_popup.php",
+      "selector": "#confirmCreate"
+    },
+    {
+      "op": "wait",
+      "seconds": 4
+    }
+  ],
+  "started_utc": "2026-10-08T12:41:22.705294+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T12:41:22.961353+00:00",
+      "op": "goto",
+      "url": "https://demo.openemr.io/openemr/index.php",
+      "url_before": "about:blank",
+      "url_after": "https://demo.openemr.io/openemr/interface/login/login.php?site=default",
+      "completed_utc": "2026-10-08T12:41:26.286651+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T12:41:26.286671+00:00",
+      "op": "fill",
+      "selector": "input[name=authUser]",
+      "value": "admin",
+      "url_before": "https://demo.openemr.io/openemr/interface/login/login.php?site=default",
+      "element_evidence": {
+        "name": "authUser",
+        "id": "authUser",
+        "type": "text",
+        "value": "admin",
+        "formAction": "https://demo.openemr.io/openemr/interface/main/main_screen.php?auth=login&site=default",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.openemr.io/openemr/interface/login/login.php?site=default",
+      "completed_utc": "2026-10-08T12:41:26.338695+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T12:41:26.338712+00:00",
+      "op": "fill",
+      "selector": "input[name=clearPass]",
+      "value": "[REDACTED:d74ff0ee8da3]",
+      "url_before": "https://demo.openemr.io/openemr/interface/login/login.php?site=default",
+      "element_evidence": {
+        "name": "clearPass",
+        "id": "clearPass",
+        "type": "[REDACTED:5e884898da28]",
+        "value": "[REDACTED:d74ff0ee8da3]",
+        "formAction": "https://demo.openemr.io/openemr/interface/main/main_screen.php?auth=login&site=default",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.openemr.io/openemr/interface/login/login.php?site=default",
+      "completed_utc": "2026-10-08T12:41:26.356086+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T12:41:26.356098+00:00",
+      "op": "click",
+      "selector": "button[type=submit]",
+      "url_before": "https://demo.openemr.io/openemr/interface/login/login.php?site=default",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:27.748655+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T12:41:27.748689+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:31.753502+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T12:41:31.753526+00:00",
+      "op": "click",
+      "selector": "text=Patient >> nth=0",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:31.812845+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T12:41:31.812858+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:33.822593+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T12:41:33.822613+00:00",
+      "op": "click",
+      "selector": "text=New/Search >> nth=0",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:33.862916+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T12:41:33.862932+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:35.874991+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T12:41:35.875039+00:00",
+      "op": "fill",
+      "frame": "/new/new.php",
+      "selector": "#form_fname",
+      "value": "Benchmark",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "element_evidence": {
+        "name": "form_fname",
+        "id": "form_fname",
+        "type": "text",
+        "value": "Benchmark",
+        "formAction": "https://demo.openemr.io/openemr/interface/new/new_comprehensive_save.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:35.958492+00:00"
+    },
+    {
+      "index": 10,
+      "started_utc": "2026-10-08T12:41:35.958513+00:00",
+      "op": "fill",
+      "frame": "/new/new.php",
+      "selector": "#form_lname",
+      "value": "PatientREAL100",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "element_evidence": {
+        "name": "form_lname",
+        "id": "form_lname",
+        "type": "text",
+        "value": "PatientREAL100",
+        "formAction": "https://demo.openemr.io/openemr/interface/new/new_comprehensive_save.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:36.008448+00:00"
+    },
+    {
+      "index": 11,
+      "started_utc": "2026-10-08T12:41:36.008466+00:00",
+      "op": "fill",
+      "frame": "/new/new.php",
+      "selector": "#form_DOB",
+      "value": "1990-01-01",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "element_evidence": {
+        "name": "form_DOB",
+        "id": "form_DOB",
+        "type": "text",
+        "value": "1990-01-01",
+        "formAction": "https://demo.openemr.io/openemr/interface/new/new_comprehensive_save.php",
+        "formMethod": "post",
+        "selectedText": null
+      },
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:36.055347+00:00"
+    },
+    {
+      "index": 12,
+      "started_utc": "2026-10-08T12:41:36.055360+00:00",
+      "op": "select",
+      "frame": "/new/new.php",
+      "selector": "#form_sex",
+      "value": "Female",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "element_evidence": {
+        "name": "form_sex",
+        "id": "form_sex",
+        "type": "select-one",
+        "value": "Female",
+        "formAction": "https://demo.openemr.io/openemr/interface/new/new_comprehensive_save.php",
+        "formMethod": "post",
+        "selectedText": [
+          "Female"
+        ]
+      },
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:36.084126+00:00"
+    },
+    {
+      "index": 13,
+      "started_utc": "2026-10-08T12:41:36.084146+00:00",
+      "op": "click",
+      "frame": "/new/new.php",
+      "selector": "#create",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:36.218875+00:00"
+    },
+    {
+      "index": 14,
+      "started_utc": "2026-10-08T12:41:36.218906+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:40.220877+00:00"
+    },
+    {
+      "index": 15,
+      "started_utc": "2026-10-08T12:41:40.220916+00:00",
+      "op": "click",
+      "frame": "/new_search_popup.php",
+      "selector": "#confirmCreate",
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:40.288345+00:00"
+    },
+    {
+      "index": 16,
+      "started_utc": "2026-10-08T12:41:40.288360+00:00",
+      "op": "wait",
+      "seconds": 4,
+      "url_before": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "url_after": "https://demo.openemr.io/openemr/interface/main/tabs/main.php?token_main=[REDACTED:dbd58df13d33]",
+      "completed_utc": "2026-10-08T12:41:44.299564+00:00"
+    }
+  ],
+  "status": "INSPECTION_ONLY",
+  "finished_utc": "2026-10-08T12:41:46.838922+00:00",
+  "sha256": "db8d924497c949df6f3661524fb81bacc3d800582545c59207993f558ce70981",
+  "request_count": 137,
+  "representation_types": [
+    "application/x-www-form-urlencoded",
+    "application/x-www-form-urlencoded; charset=UTF-8",
+    "multipart/form-data; boundary=----WebKitFormBoundaryFIJzgzNqxVwdaabM",
+    "multipart/form-data; boundary=----WebKitFormBoundaryG1hnnSJqPi2pMqzT",
+    "multipart/form-data; boundary=----WebKitFormBoundaryRpVGx68GAFtCnPCb",
+    "multipart/form-data; boundary=----WebKitFormBoundaryYL7BYzAiTvIAzQ1N",
+    "multipart/form-data; boundary=----WebKitFormBoundaryciNcAz1CsqXLV3t3",
+    "multipart/form-data; boundary=----WebKitFormBoundarydk7HBqAPWkxMwrmR",
+    "multipart/form-data; boundary=----WebKitFormBoundarygL4bk4seWeHMyo6X",
+    "multipart/form-data; boundary=----WebKitFormBoundarywm6WFyA79m3a8aeb"
+  ]
+}

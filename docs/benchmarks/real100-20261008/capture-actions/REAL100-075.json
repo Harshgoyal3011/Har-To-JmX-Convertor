@@ -1,0 +1,74 @@
+{
+  "id": "api-extra-004",
+  "application": "openFDA",
+  "domain": "Medical device reference",
+  "workflow": "Search medical device recalls and inspect selected recall",
+  "steps": [
+    {
+      "path": "/device/enforcement.json?limit=2",
+      "inputs": {}
+    },
+    {
+      "path": "/device/enforcement.json?search=recall_number:{selected}&limit=1",
+      "select": {
+        "path": [
+          "results",
+          0,
+          "recall_number"
+        ],
+        "kind": "EXISTING_DATA"
+      }
+    }
+  ],
+  "permission_url": "https://open.fda.gov/apis/",
+  "started_utc": "2026-10-08T17:10:22.436206+00:00",
+  "capture_method": "Native browser navigation to documented public API; no mocks or fabricated HAR; read-only selection workflows",
+  "actions": [
+    {
+      "index": 0,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.fda.gov/device/enforcement.json?limit=2",
+      "inputs": {},
+      "selection": null,
+      "started_utc": "2026-10-08T17:10:23.538809+00:00",
+      "status": 200,
+      "response_sha256": "17a47d36efae623c4e034d5f53cceac6a2ceb0362a2be7226f68ff37dda0af65",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\n  \"meta\": {\n    \"disclaimer\": \"Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalida"
+    },
+    {
+      "index": 1,
+      "op": "documented_api_navigation",
+      "method": "GET",
+      "url": "https://api.fda.gov/device/enforcement.json?search=recall_number:Z-2372-2023&limit=1",
+      "inputs": {},
+      "selection": {
+        "value": "Z-2372-2023",
+        "source_step": 0,
+        "source_url": "https://api.fda.gov/device/enforcement.json?limit=2",
+        "source_response_path": [
+          "results",
+          0,
+          "recall_number"
+        ],
+        "selected_dict_key_index": null,
+        "classification": "EXISTING_DATA",
+        "reason": "Explicit documented read-workflow selection from the preceding real response; existing catalog identity, except explicitly issued session token."
+      },
+      "started_utc": "2026-10-08T17:10:26.019725+00:00",
+      "status": 200,
+      "response_sha256": "b8a1403b7b3d2cc5221abe4fd7a7f39c704b298bce7d8a2145c48d6ccf5dd7a7",
+      "response_content_type": "application/json; charset=utf-8",
+      "response_excerpt": "{\n  \"meta\": {\n    \"disclaimer\": \"Do not rely on openFDA to make decisions regarding medical care. While we make every effort to ensure that data is accurate, you should assume all results are unvalida"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "final_url": "https://api.fda.gov/device/enforcement.json?search=recall_number:Z-2372-2023&limit=1",
+  "finished_utc": "2026-10-08T17:10:26.514715+00:00",
+  "sha256": "51fefb2d276e9b07605b8eebc56c554da4200dca638035313a90233dbf0b5d3c",
+  "request_count": 2,
+  "representation_types": [
+    "JSON response; URL query/path request"
+  ]
+}

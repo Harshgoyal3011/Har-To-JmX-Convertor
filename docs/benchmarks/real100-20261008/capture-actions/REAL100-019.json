@@ -1,0 +1,193 @@
+{
+  "application": "Grocy",
+  "permission_url": "https://demo.grocy.info/",
+  "workflow": "Create assigned inventory task and verify saved task",
+  "steps": [
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/"
+    },
+    {
+      "op": "goto",
+      "url": "https://demo.grocy.info/tasks"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "click",
+      "selector": "a:text-is('Add')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    },
+    {
+      "op": "fill",
+      "frame": "/task/new",
+      "selector": "#name",
+      "value": "REAL100 Inventory Reconciliation"
+    },
+    {
+      "op": "fill",
+      "frame": "/task/new",
+      "selector": "#description",
+      "value": "Reconcile fictional warehouse counts"
+    },
+    {
+      "op": "select",
+      "frame": "/task/new",
+      "selector": "#category_id",
+      "value": "[REDACTED:6b86b273ff34]"
+    },
+    {
+      "op": "click",
+      "frame": "/task/new",
+      "selector": "button:has-text('Save & close')"
+    },
+    {
+      "op": "wait",
+      "seconds": 2
+    }
+  ],
+  "id": "candidate-grocy-task",
+  "completion_assertion": "REAL100 Inventory Reconciliation",
+  "started_utc": "2026-10-08T16:52:33.518113+00:00",
+  "capture_method": "Playwright native Chromium UI; full embedded HAR; no request interception or fabricated traffic",
+  "actions": [
+    {
+      "index": 0,
+      "started_utc": "2026-10-08T16:52:33.837300+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/",
+      "url_before": "about:blank",
+      "url_after": "https://demo.grocy.info/stockoverview",
+      "completed_utc": "2026-10-08T16:52:37.788666+00:00"
+    },
+    {
+      "index": 1,
+      "started_utc": "2026-10-08T16:52:37.788687+00:00",
+      "op": "goto",
+      "url": "https://demo.grocy.info/tasks",
+      "url_before": "https://demo.grocy.info/stockoverview",
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:38.382746+00:00"
+    },
+    {
+      "index": 2,
+      "started_utc": "2026-10-08T16:52:38.382794+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/tasks",
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:40.390305+00:00"
+    },
+    {
+      "index": 3,
+      "started_utc": "2026-10-08T16:52:40.390330+00:00",
+      "op": "click",
+      "selector": "a:text-is('Add')",
+      "url_before": "https://demo.grocy.info/tasks",
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:40.509727+00:00"
+    },
+    {
+      "index": 4,
+      "started_utc": "2026-10-08T16:52:40.509748+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/tasks",
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:42.521247+00:00"
+    },
+    {
+      "index": 5,
+      "started_utc": "2026-10-08T16:52:42.521293+00:00",
+      "op": "fill",
+      "frame": "/task/new",
+      "selector": "#name",
+      "value": "REAL100 Inventory Reconciliation",
+      "url_before": "https://demo.grocy.info/tasks",
+      "element_evidence": {
+        "name": "name",
+        "id": "name",
+        "type": "text",
+        "value": "REAL100 Inventory Reconciliation",
+        "formAction": "https://demo.grocy.info/task/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:42.625943+00:00"
+    },
+    {
+      "index": 6,
+      "started_utc": "2026-10-08T16:52:42.625972+00:00",
+      "op": "fill",
+      "frame": "/task/new",
+      "selector": "#description",
+      "value": "Reconcile fictional warehouse counts",
+      "url_before": "https://demo.grocy.info/tasks",
+      "element_evidence": {
+        "name": "description",
+        "id": "description",
+        "type": "textarea",
+        "value": "Reconcile fictional warehouse counts",
+        "formAction": "https://demo.grocy.info/task/new?embedded",
+        "formMethod": "get",
+        "selectedText": null
+      },
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:42.670758+00:00"
+    },
+    {
+      "index": 7,
+      "started_utc": "2026-10-08T16:52:42.670786+00:00",
+      "op": "select",
+      "frame": "/task/new",
+      "selector": "#category_id",
+      "value": "[REDACTED:6b86b273ff34]",
+      "url_before": "https://demo.grocy.info/tasks",
+      "element_evidence": {
+        "name": "category_id",
+        "id": "category_id",
+        "type": "select-one",
+        "value": "[REDACTED:6b86b273ff34]",
+        "formAction": "https://demo.grocy.info/task/new?embedded",
+        "formMethod": "get",
+        "selectedText": [
+          "Category1"
+        ]
+      },
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:42.725455+00:00"
+    },
+    {
+      "index": 8,
+      "started_utc": "2026-10-08T16:52:42.725480+00:00",
+      "op": "click",
+      "frame": "/task/new",
+      "selector": "button:has-text('Save & close')",
+      "url_before": "https://demo.grocy.info/tasks",
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:42.871250+00:00"
+    },
+    {
+      "index": 9,
+      "started_utc": "2026-10-08T16:52:42.871286+00:00",
+      "op": "wait",
+      "seconds": 2,
+      "url_before": "https://demo.grocy.info/tasks",
+      "url_after": "https://demo.grocy.info/tasks",
+      "completed_utc": "2026-10-08T16:52:44.872038+00:00"
+    }
+  ],
+  "status": "COMPLETED_PENDING_INDEPENDENT_AUDIT",
+  "finished_utc": "2026-10-08T16:52:47.318403+00:00",
+  "sha256": "6bd42818a7225a769e0ce6ef6dca7140c5ab13464beceaf0d6f105ad044ab6e0",
+  "request_count": 223,
+  "representation_types": [
+    "application/json"
+  ]
+}
