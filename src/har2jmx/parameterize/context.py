@@ -37,7 +37,9 @@ _USER_SEMANTICS = {
 
 
 def credential_kind(field: str) -> str:
-    key = field_key(field)
+    # Qualified form/structured names retain the credential meaning of their
+    # explicit leaf (e.g. pf.username). Do not infer from arbitrary prefixes.
+    key = field_key((field or "").rsplit(".", 1)[-1])
     if key in _IDENTITY:
         return "identity"
     if key in _SECRET_INPUT:

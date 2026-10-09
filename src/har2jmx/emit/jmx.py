@@ -18,6 +18,7 @@ from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qsl, quote_plus, unquote, urlsplit
 from xml.dom import minidom
 from xml.etree.ElementTree import Element, SubElement, tostring
 
@@ -285,10 +286,67 @@ def _sub_raw(text: str, sub: dict[str, str]) -> str:
 
 # ---------------------------------------------------------------- samplers & extractors
 
+def _encoded_form_bindings(result: EngineResult, request_index: int,
+                           sub: dict[str, str]) -> list[tuple[str, str, frozenset]]:
+    """Bind known percent-encoded forms of already accepted dependencies locally.
+
+    HAR params can retain percent escapes even when lineage uses decoded values.
+    HTTPArgument encodes its resolved value, so bind the canonical variable directly.
+    Do not add encoded aliases to the global literal map or discover new edges.
+    """
+    request = result.capture.requests[request_index].request
+    if request.body.kind != BodyKind.FORM:
+        return []
+    checks = {check.variable: check for check in result.extractor_checks}
+    owners: dict[tuple[str, str], set[str]] = {}
+    for correlation in result.correlations:
+        check = checks.get(correlation.variable)
+        if (request_index not in correlation.consumers
+                or correlation.producer_index >= request_index
+                or correlation.extractor == ExtractorType.COOKIE_MANAGER
+                or (check is not None and not check.ok)
+                or sub.get(correlation.value) != f"${{{correlation.variable}}}"):
+            continue
+        for name, raw in request.body.form:
+            if "%" in raw and raw != correlation.value and unquote(raw) == correlation.value:
+                owners.setdefault((name, raw), set()).add(correlation.variable)
+    return [(raw, next(iter(variables)), frozenset({f"request.body:{name}"}))
+            for (name, raw), variables in owners.items() if len(variables) == 1]
+
+
+def _request_path(req: NormalizedRequest, sub: dict[str, str], slot_subs: list) -> str:
+    """Build the URL independently of the body, using authoritative IR pairs.
+
+    Retain captured query spelling only when its decoded pairs agree with IR.
+    Substituted values need the runtime encoding formerly supplied by HTTPArgument.
+    """
+    path = _sub_path(req.request.path, sub, slot_subs)
+    pairs = req.request.query
+    original = urlsplit(req.request.url).query
+    if parse_qsl(original, keep_blank_values=True) == pairs:
+        tokens = original.split("&") if original else []
+    else:
+        tokens = [f"{quote_plus(str(n))}={quote_plus(str(v))}" for n, v in pairs]
+    query = []
+    pair_index = 0
+    for token in tokens:
+        if not token:  # parse_qsl ignores empty separators; retain their spelling
+            query.append(token)
+            continue
+        name, value = pairs[pair_index]
+        pair_index += 1
+        applied = _slot_apply(value, f"request.query:{name}", slot_subs, sub)
+        if applied != str(value):
+            encoded_name = token.partition("=")[0]
+            token = f"{encoded_name}=${{__urlencode({applied})}}"
+        query.append(token)
+    return path + ("?" + "&".join(query) if tokens else "")
+
+
 def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], follow_redirects: bool = True,
                       global_headers: frozenset = frozenset(), cookie_mgr_values: frozenset = frozenset(),
                       primary_host: str = "", slot_subs: list | None = None,
-                      redirect_target: str = "") -> None:
+                      redirect_target: str = "", encoded_form_bindings: list | None = None) -> None:
     slot_subs = slot_subs or []
     http = SubElement(parent_ht, "HTTPSamplerProxy", {
         "guiclass": "HttpTestSampleGui", "testclass": "HTTPSamplerProxy",
@@ -323,22 +381,17 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
         _s(arg, "Argument.value", raw_body)
         _s(arg, "Argument.metadata", "=")
     else:
-        args_list = (
-            [(n, v, f"request.query:{n}") for n, v in req.request.query]
-            + [(n, v, f"request.body:{n}") for n, v in req.request.body.form]
-        )
-        if redirect_target:
-            # Location owns the query; method-preserving redirects retain form bodies.
-            args_list = [(n, v, f"request.body:{n}") for n, v in req.request.body.form]
+        args_list = [(n, v, f"request.body:{n}") for n, v in req.request.body.form]
         for name, value, slot_key in args_list:
             arg = _elem(coll, name, "HTTPArgument")
-            # Query/form values are stored DECODED (parse_qsl), so JMeter must URL-encode them or a value
+            # Form values are stored DECODED (parse_qsl), so JMeter must URL-encode them or a value
             # with a space/&/+/= (e.g. q="red running shoes") ships as a malformed request line. Encoding
             # a ${var} encodes its RESOLVED value, so correlations/parameters stay correct. (The raw
             # JSON/XML body above keeps always_encode=false — a body blob must not be URL-encoded.)
             _b(arg, "HTTPArgument.always_encode", True)
             _s(arg, "Argument.name", name)
-            _s(arg, "Argument.value", _slot_apply(value, slot_key, slot_subs, sub))
+            _s(arg, "Argument.value", _slot_apply(value, slot_key,
+               slot_subs + (encoded_form_bindings or []), sub))
             _s(arg, "Argument.metadata", "=")
             _b(arg, "HTTPArgument.use_equals", True)
 
@@ -348,7 +401,8 @@ def _add_http_sampler(parent_ht, req: NormalizedRequest, sub: dict[str, str], fo
     _s(http, "HTTPSampler.domain", "" if on_primary else req.request.host)
     _s(http, "HTTPSampler.port", req.request.port)
     _s(http, "HTTPSampler.protocol", "" if on_primary else req.request.scheme)
-    _s(http, "HTTPSampler.path", redirect_target or _sub_path(req.request.path, sub, slot_subs))
+    # A redirect's Location owns its complete URL, including its query.
+    _s(http, "HTTPSampler.path", redirect_target or _request_path(req, sub, slot_subs))
     _s(http, "HTTPSampler.method", req.method)
     _b(http, "HTTPSampler.follow_redirects", follow_redirects)
     _b(http, "HTTPSampler.use_keepalive", True)
@@ -777,7 +831,8 @@ def _build_jmx_tree(result: EngineResult, config: dict[str, str] | None = None,
             redirect_target = (f"${{{location_variable(redirect_source)}}}" if redirect_source is not None else "")
             _add_http_sampler(tc_ht, req, sub, follow_redirects=follow, global_headers=global_header_names,
                               cookie_mgr_values=cookie_mgr_values, primary_host=base_url,
-                              slot_subs=_param_slot_subs(result, idx, bindings), redirect_target=redirect_target)
+                              slot_subs=_param_slot_subs(result, idx, bindings), redirect_target=redirect_target,
+                              encoded_form_bindings=_encoded_form_bindings(result, idx, sub))
             # the sampler's own hashTree is the last child of tc_ht
             sampler_ht = list(tc_ht)[-1]
             if idx in redirects.location_targets.values():
@@ -951,10 +1006,10 @@ def _synthesize_rows(cols: list[str], observed: list[tuple], target: int) -> lis
     return out
 
 
-def _manual_review_markdown(result: EngineResult, jmx_name: str) -> str | None:
+def _manual_review_markdown(result: EngineResult, jmx_name: str, jmx_xml: bytes | None = None) -> str | None:
     """Readable checklist of values the engine could not auto-correlate; None when there are none."""
     from har2jmx.webreport import build_manual_correlations
-    items = build_manual_correlations(result)
+    items = build_manual_correlations(result, jmx_xml)
     if not items:
         return None
     lines = [
@@ -962,8 +1017,8 @@ def _manual_review_markdown(result: EngineResult, jmx_name: str) -> str | None:
         "",
         f"**Plan:** {jmx_name}.jmx",
         f"**{len(items)} value(s)** are sent in requests but could not be automatically correlated.",
-        "Left as-is they ship as hardcoded literals and will fail at load (every virtual user reuses one",
-        "recorded value). Wire each one up before running at scale.",
+        "The plan has missing or incomplete runtime bindings for these values. Review the producer",
+        "and each downstream request before running at scale.",
         "",
     ]
     for i, it in enumerate(items, 1):
@@ -1018,7 +1073,7 @@ def emit_jmx(result: EngineResult, out_dir: str | Path, config: dict[str, str] |
         csv_paths.append(path)
 
     report_paths: list[Path] = []
-    review_md = _manual_review_markdown(result, name)
+    review_md = _manual_review_markdown(result, name, xml)
     if review_md:
         review_path = out / f"{name}_manual_review.md"
         review_path.write_text(review_md, encoding="utf-8")

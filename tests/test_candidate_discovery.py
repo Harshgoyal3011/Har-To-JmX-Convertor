@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import json
 import re
+from urllib.parse import parse_qsl
+from xml.etree import ElementTree as ET
 
 from har2jmx.emit import build_jmx_xml
 from har2jmx.engine import analyze
@@ -66,7 +68,15 @@ def _arg_value(xml, name):
         rf'elementProp name="{re.escape(name)}"[^>]*>.*?Argument\.value">([^<]*)<',
         xml, re.S,
     )
-    return m.group(1) if m else None
+    if m:
+        return m.group(1)
+    for path in ET.fromstring(xml).findall(".//stringProp[@name='HTTPSampler.path']"):
+        for key, value in parse_qsl((path.text or "").partition("?")[2], keep_blank_values=True):
+            if key == name:
+                if value.startswith("${__urlencode(") and value.endswith(")}"):
+                    value = value[len("${__urlencode("):-2]
+                return value
+    return None
 
 
 def test_path_only_value_requires_selection_evidence():

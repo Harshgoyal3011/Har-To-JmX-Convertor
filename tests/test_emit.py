@@ -300,11 +300,11 @@ def test_query_and_form_values_are_url_encoded():
     ]}}
     x = build_jmx_xml(analyze(har)).decode()
     import re
-    # the search query argument must be encoded
-    qblock = re.search(r'Argument\.name">q</stringProp>.*?</elementProp>', x, re.S)
-    assert qblock is None or True   # arg order varies; assert on the encode flags across the plan instead
+    # Query values are encoded in the URL after runtime variable resolution.
+    from xml.etree import ElementTree as ET
+    paths = [p.text for p in ET.fromstring(x).findall(".//stringProp[@name='HTTPSampler.path']")]
+    assert "/search?q=${__urlencode(${q})}" in paths
     encodes = re.findall(r'HTTPArgument\.always_encode">(\w+)', x)
-    assert "true" in encodes, "query/form args must be URL-encoded"
     assert "false" in encodes, "the raw JSON body must NOT be URL-encoded"
     # Search term is a candidate → ${q}; JMeter encodes the resolved CSV value at runtime.
     assert "${q}" in x or "red running shoes" in x

@@ -31,7 +31,8 @@ def test_each_page_sends_the_extracted_cursor():
     r = _result()
     x = build_jmx_xml(r).decode()
     # page 2 sends the cursor extracted from page 1; page 3 the one from page 2
-    assert "cursor</stringProp>" in x
+    assert "cursor=${__urlencode(${nextCursor})}" in x
+    assert "cursor=${__urlencode(${nextCursor2})}" in x
     assert "${nextCursor}" in x and "${nextCursor2}" in x
     # the recorded cursor values never ship as literals
     assert "CUR-aaa111" not in x and "CUR-bbb222" not in x

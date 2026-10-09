@@ -63,11 +63,13 @@ def test_csv_and_runtime_owners_receive_their_intended_values(tmp_path):
     rows = list(csv.reader(csvs[0].open(encoding="utf-8", newline="")))
     assert rows == [[name], ["Orders"]]
     args = _arguments(root)
-    assert [a["Argument.value"] for a in args] == [f"${{{name}}}", "${route}"]
+    assert [a["Argument.value"] for a in args] == [f"${{{name}}}"]
+    query_path = list(root.iter("HTTPSamplerProxy"))[2].findtext("stringProp[@name='HTTPSampler.path']")
+    assert query_path == "/status?route=${__urlencode(${route})}"
     # JMeter extracts runtime state after CSV initialization; isolated ownership
     # also works when the engineer supplies a different test-data row.
     variables = {name: "Changed Input", "route": "Fresh Runtime"}
-    resolved = [variables[a["Argument.value"][2:-1]] for a in args]
+    resolved = [variables[a["Argument.value"][2:-1]] for a in args] + [variables["route"]]
     assert resolved == ["Changed Input", "Fresh Runtime"]
     assert frozen == (asdict(result.parameterization), [asdict(c) for c in result.correlations], asdict(result.classification))
 

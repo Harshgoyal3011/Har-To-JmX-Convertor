@@ -136,7 +136,7 @@ function render(d) {
   [
     [rq.business, "Requests scripted"],
     [rq.excluded, "Noise filtered"],
-    [m.correlations, "Required correlations"],
+    [m.correlations, "Implemented correlations"],
     [m.parameters, "Parameters"],
     [m.transactions, "Transactions"],
   ].forEach(([n, l]) => {
@@ -184,12 +184,12 @@ function render(d) {
   });
   const ca = d.correlationAudit || {};
   const required = d.correlations.length;
-  $("#corrCount").textContent = required + " required";
+  $("#corrCount").textContent = required + " implemented";
   const auditEl = $("#corrAudit");
   if (auditEl) {
     const bits = [];
     if (ca.candidates != null) bits.push("Candidates: " + ca.candidates);
-    bits.push("Required: " + required);
+    bits.push("Implemented: " + required);
     if (ca.superseded) bits.push("Superseded: " + ca.superseded);
     if (ca.rejectedConfiguration) bits.push("Configuration: " + ca.rejectedConfiguration);
     if (ca.rejectedProtocol) bits.push("Protocol metadata: " + ca.rejectedProtocol);
@@ -199,7 +199,7 @@ function render(d) {
     if (ca.notRequired) bits.push("Not required: " + ca.notRequired);
     auditEl.textContent = bits.join(" · ");
   }
-  if (!d.correlations.length) cbody.innerHTML = `<tr><td colspan="6" class="val">No required runtime correlations for this flow.</td></tr>`;
+  if (!d.correlations.length) cbody.innerHTML = `<tr><td colspan="6" class="val">No complete runtime correlations verified in this script.</td></tr>`;
 
   // datasets
   const ds = $("#datasets"); ds.innerHTML = "";
@@ -242,7 +242,7 @@ function render(d) {
   $("#manualCount").textContent = mc.length ? mc.length + " to wire up" : "none";
   if (!mc.length) {
     mcCard.classList.remove("warn");
-    mcWrap.innerHTML = `<div class="muted">✓ All dynamic values were correlated automatically — nothing to wire by hand.</div>`;
+    mcWrap.innerHTML = `<div class="muted">No incomplete correlation bindings were found in the generated script.</div>`;
   } else {
     mcCard.classList.add("warn");
     mc.forEach((m) => {

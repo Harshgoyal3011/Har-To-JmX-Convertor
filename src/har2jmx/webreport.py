@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from typing import Any
+from xml.etree import ElementTree as ET
 
 from har2jmx.correlate import ExtractorType, RejectionKind
 from har2jmx.engine import EngineResult
@@ -20,6 +21,92 @@ def _extractor_names_from_jmx(jmx_xml: str | bytes | None) -> set[str] | None:
         return None
     x = jmx_xml.decode("utf-8") if isinstance(jmx_xml, (bytes, bytearray)) else jmx_xml
     return set(_EXTRACTOR_NAME_RE.findall(x)) | set(re.findall(r'referenceNames">([^<]+)<', x))
+
+
+def _correlation_implementation(result: EngineResult, jmx_xml: str | bytes) -> dict[str, dict]:
+    """Verify producer/extractor and consumer references in the final emitted plan.
+
+    Assertions, labels and processor code do not count as request consumers.
+    Redirect Location and CookieManager remain separate execution mechanisms.
+    This inspection never changes decisions or generated requests.
+    """
+    from har2jmx.emit.jmx import _replayable_header
+    from har2jmx.emit.redirects import redirect_execution
+
+    root = ET.fromstring(jmx_xml)
+    redirects = redirect_execution(result, _replayable_header)
+    indices = [index for transaction in result.transactions for index in transaction.request_indices
+               if not result.capture.requests[index].classification.excluded
+               and index not in redirects.automatic_targets]
+    samplers = list(root.iter("HTTPSamplerProxy"))
+    parents = {child: parent for parent in root.iter() for child in parent}
+
+    def adjacent_tree(node):
+        siblings = list(parents[node])
+        position = siblings.index(node) + 1
+        return siblings[position] if position < len(siblings) and siblings[position].tag == "hashTree" else ET.Element("hashTree")
+
+    def enabled(node):
+        return node.get("enabled", "true") != "false"
+
+    def refs(text):
+        return set(re.findall(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}", text or ""))
+
+    def header_refs(node):
+        return set().union(*(refs(p.text) for p in node.findall(".//stringProp[@name='Header.value']")))
+
+    global_refs = set()
+    for manager in root.iter("HeaderManager"):
+        parent = manager
+        while parent in parents and parent.tag != "hashTree":
+            parent = parents[parent]
+        siblings = list(parents.get(parent, ET.Element("empty")))
+        previous = siblings[siblings.index(parent) - 1] if parent in siblings and siblings.index(parent) else None
+        if enabled(manager) and (previous is None or previous.tag != "HTTPSamplerProxy"):
+            global_refs.update(header_refs(manager))
+
+    sources = {}; consumers = {}
+    for index, sampler in zip(indices, samplers):
+        if not enabled(sampler):
+            continue
+        tree = adjacent_tree(sampler)
+        sources[index] = {p.text or "" for node in tree
+                          if node.tag in {"JSONPostProcessor", "RegexExtractor"} and enabled(node)
+                          for p in node if p.get("name") in {"JSONPostProcessor.referenceNames", "RegexExtractor.refname"}}
+        consumer_refs = set(global_refs)
+        for p in sampler.iter("stringProp"):
+            if p.get("name") in {"Argument.value", "HTTPSampler.path"}:
+                consumer_refs.update(refs(p.text))
+        for manager in tree.iter("HeaderManager"):
+            if enabled(manager):
+                consumer_refs.update(header_refs(manager))
+        consumers[index] = consumer_refs
+
+    cookie_manager = any(enabled(node) for node in root.iter("CookieManager"))
+    audit = {}
+    for correlation in result.correlations:
+        if correlation.extractor == ExtractorType.COOKIE_MANAGER:
+            implemented = cookie_manager and bool(correlation.consumers)
+            bound = list(correlation.consumers) if implemented else []
+            mechanism = "cookie_manager"
+        else:
+            implemented = correlation.variable in sources.get(correlation.producer_index, set())
+            bound = [index for index in correlation.consumers
+                     if index > correlation.producer_index and correlation.variable in consumers.get(index, set())]
+            mechanism = "extractor"
+        complete = implemented and bool(bound) and set(bound) == set(correlation.consumers)
+        if not implemented:
+            reason = "The generated JMX has no enabled extractor on the producing request." if mechanism == "extractor" else "The generated JMX has no enabled Cookie Manager."
+        elif not bound:
+            reason = "An extractor was generated, but its variable is not used by any approved downstream request."
+        elif not complete:
+            reason = "The generated JMX uses this variable in only some approved downstream requests."
+        else:
+            reason = "Producer and downstream request bindings are present in the generated JMX."
+        audit[correlation.variable] = {"implemented": complete, "extractorPresent": implemented,
+                                      "boundConsumers": bound, "expectedConsumers": correlation.consumers,
+                                      "mechanism": mechanism, "reason": reason}
+    return audit
 
 
 def _mask(value: str) -> str:
@@ -50,7 +137,7 @@ def _used_in(cap, consumers) -> list[str]:
     return used_in[:8]
 
 
-def build_manual_correlations(result: EngineResult) -> list[dict[str, Any]]:
+def build_manual_correlations(result: EngineResult, jmx_xml: str | bytes | None = None) -> list[dict[str, Any]]:
     """Dynamic values the engine could not auto-correlate — the list a performance engineer must wire
     up by hand before running at load. Two sources: values with no captured producer at all
     (``needs_correlation``), and correlations whose extractor could not be verified against the
@@ -80,6 +167,17 @@ def build_manual_correlations(result: EngineResult) -> list[dict[str, Any]]:
             "usedIn": _used_in(cap, chk.consumers),
             "suggestion": chk.suggestion or _suggestion(chk.reason),
         })
+    if jmx_xml is not None:
+        audit = _correlation_implementation(result, jmx_xml)
+        listed_fields = {item["field"] for item in items}
+        for correlation in result.correlations:
+            implementation = audit[correlation.variable]
+            if implementation["implemented"] or correlation.variable in listed_fields:
+                continue
+            items.append({"field": correlation.variable, "value": _mask(correlation.value),
+                          "reason": implementation["reason"], "usedIn": _used_in(cap, correlation.consumers),
+                          "suggestion": "Review the producer extractor and replace the intended downstream request values with "
+                                        f"${{{correlation.variable}}} using the required request encoding."})
     return items
 
 
@@ -156,11 +254,11 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
         return chk.refined_expression if (chk and chk.refined_expression) else c.expression
 
     shown_correlations = [c for c in result.correlations if _emitted(c)]
-    jmx_extractors = _extractor_names_from_jmx(jmx_xml)
-    if jmx_extractors is not None:
+    implementation = _correlation_implementation(result, jmx_xml) if jmx_xml is not None else None
+    if implementation is not None:
         shown_correlations = [
             c for c in shown_correlations
-            if c.extractor == ExtractorType.COOKIE_MANAGER or c.variable in jmx_extractors
+            if implementation[c.variable]["implemented"]
         ]
 
     reqs = m["requests"]
@@ -209,7 +307,8 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
                 "expression": _shown_expr(c),
                 "confidence": c.confidence,
                 "reason": c.reason,
-                "consumers": len(c.consumers),
+                "consumers": len(implementation[c.variable]["boundConsumers"]) if implementation is not None else len(c.consumers),
+                "implementation": implementation[c.variable] if implementation is not None else None,
                 "producedIn": txn_of(c.producer_index),
                 "entity": c.entity,
             }
@@ -251,7 +350,8 @@ def build_web_summary(result: EngineResult, result_id: str, downloads: dict[str,
             }
             for r in cap.requests if r.classification.excluded
         ][:14],
-        "manualCorrelations": build_manual_correlations(result),
+        "manualCorrelations": build_manual_correlations(result, jmx_xml),
+        "correlationImplementation": implementation,
         "correlationAudit": {
             "candidates": len(result.correlation_audit.candidates),
             "required": len(shown_correlations),

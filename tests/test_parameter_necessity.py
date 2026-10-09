@@ -172,6 +172,48 @@ def test_url_encoded_login_aliases_share_one_logical_column():
             assert arg.findtext('boolProp[@name="HTTPArgument.always_encode"]') == 'true'
 
 
+def test_qualified_username_form_uses_existing_login_csv_owner(tmp_path):
+    import csv
+    from har2jmx.emit import emit_jmx
+    identity = 'load+user@example.test'
+    result, xml = plan([
+        entry('POST', '/login', form={'username': quote(identity, safe='')}),
+        entry('POST', '/sso/login', form={'pf.username': quote(identity, safe=''), 'pf.pass': 'Secret123'}, index=1),
+    ])
+    assert columns(result) == {'username', 'pf_pass'}
+    column = next(c for d in result.parameterization.datasets for c in d.columns if c.name == 'username')
+    assert {(s.request_index, s.location) for s in column.slots} == {
+        (0, 'request.body:username'), (1, 'request.body:pf.username')}
+    path, csvs, _ = emit_jmx(result, tmp_path, {'threads': '1'})
+    args = ET.parse(path).findall('.//elementProp[@elementType="HTTPArgument"]')
+    usernames = [a for a in args if a.findtext('stringProp[@name="Argument.name"]') in {'username', 'pf.username'}]
+    assert len(usernames) == 2
+    assert all(a.findtext('stringProp[@name="Argument.value"]') == '${username}' for a in usernames)
+    assert all(a.findtext('boolProp[@name="HTTPArgument.always_encode"]') == 'true' for a in usernames)
+    rows = list(csv.DictReader(csvs[0].open(encoding='utf-8', newline='')))
+    assert rows[0]['username'] == identity
+    assert not result.correlations
+
+
+def test_qualified_username_with_different_value_keeps_independent_owner():
+    result, xml = plan([
+        entry('POST', '/login', form={'username': 'first@example.test'}),
+        entry('POST', '/sso/login', form={'pf.username': 'second@example.test'}, index=1),
+    ])
+    assert columns(result) == {'username', 'pf_username'}
+    args = ET.fromstring(xml).findall('.//elementProp[@elementType="HTTPArgument"]')
+    bound = {a.findtext('stringProp[@name="Argument.name"]'): a.findtext('stringProp[@name="Argument.value"]') for a in args}
+    assert bound['username'] == '${username}'
+    assert bound['pf.username'] == '${pf_username}'
+
+
+@pytest.mark.parametrize('field,expected', [('pf.username', 'identity'), ('auth.signInName', 'identity'),
+    ('auth.password', 'secret'), ('notusername', ''), ('usernameHinting', ''), ('pf.adapterId', '')])
+def test_credential_namespace_requires_exact_known_leaf(field, expected):
+    from har2jmx.parameterize.context import credential_kind
+    assert credential_kind(field) == expected
+
+
 def test_equal_unrelated_inputs_are_not_merged():
     r, _ = plan([entry('POST', '/delivery/create', {'origin': 'DEL', 'destination': 'DEL'})])
     assert columns(r) == {'origin', 'destination'}
