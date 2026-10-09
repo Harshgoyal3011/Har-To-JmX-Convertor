@@ -9,6 +9,11 @@ Convert a browser **HAR** capture into a correlated, parameterized **Apache JMet
 
 Python 3.10+, **standard library only** at runtime.
 
+## Guides
+
+- [Run locally on Windows, macOS, or Linux](docs/LOCAL_SETUP.md)
+- [Complete application architecture and HAR-to-JMeter flow](docs/ARCHITECTURE.md)
+
 ## Quick start
 
 ```bash
@@ -40,7 +45,7 @@ src/har2jmx/           live converter
   parameterize/        intent + CSV datasets
   validate/            replay + extractor checks
   emit/                JMX + dry-run validate
-  webreport.py         UI JSON (aligned with JMX extractors)
+  webreport.py         UI JSON (verified final JMX bindings)
   server/ + static/    local web UI
 tests/
 examples/
@@ -55,7 +60,8 @@ HAR → analyze (12-stage IR) → emit_jmx → zip
 ```
 
 Correlation path: **discover candidates → downstream dependency → necessity gate → required →
-extractors in JMX**. The UI “Correlations” list is those required variables, not the candidate set.
+extractors in JMX**. The UI's **Implemented correlations** list checks the final
+producer and downstream request bindings; incomplete bindings appear in manual review.
 
 See **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** for each module and
 **[docs/SUPPORTED_PATTERNS.md](docs/SUPPORTED_PATTERNS.md)** for extractor locations and limits.
